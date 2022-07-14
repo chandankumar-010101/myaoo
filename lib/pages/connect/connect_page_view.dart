@@ -283,24 +283,27 @@ class ConnectPageView extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        const Expanded(
-                                            child:
-                                                Divider(color: Colors.white)),
-                                        Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Text(
-                                            L10n.of(context)!.or,
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                        const Expanded(
-                                            child:
-                                                Divider(color: Colors.white)),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     const Expanded(
+                                    //         child:
+                                    //             Divider(color: Colors.white)),
+                                    //     Padding(
+                                    //       padding: const EdgeInsets.all(16.0),
+                                    //       child: Text(
+                                    //         L10n.of(context)!.or,
+                                    //         style: const TextStyle(
+                                    //             color: Colors.black),
+                                    //       ),
+                                    //     ),
+                                    //     const Expanded(
+                                    //         child:
+                                    //             Divider(color: Colors.white)),
+                                    //   ],
+                                    // ),
+                                    SizedBox(
+                                      height: 40,
+                                    )
                                   ],
 
                                   if (controller.supportsSso)
@@ -356,35 +359,35 @@ class ConnectPageView extends StatelessWidget {
                                                   ),
                                           ),
 
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      InkWell(
-                                        child: Image.asset(
-                                          "assets/google.png",
-                                          height: 40,
-                                          width: 40,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20.0),
-                                      Image.asset(
-                                        "assets/google.png",
-                                        height: 40,
-                                        width: 40,
-                                      ),
-                                      const SizedBox(width: 20.0),
-                                      Image.asset(
-                                        "assets/google.png",
-                                        height: 40,
-                                        width: 40,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 40,
-                                  )
+                                  // Row(
+                                  //   crossAxisAlignment:
+                                  //       CrossAxisAlignment.center,
+                                  //   mainAxisAlignment: MainAxisAlignment.center,
+                                  //   children: [
+                                  //     InkWell(
+                                  //       child: Image.asset(
+                                  //         "assets/google.png",
+                                  //         height: 40,
+                                  //         width: 40,
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(width: 20.0),
+                                  //     Image.asset(
+                                  //       "assets/google.png",
+                                  //       height: 40,
+                                  //       width: 40,
+                                  //     ),
+                                  //     const SizedBox(width: 20.0),
+                                  //     Image.asset(
+                                  //       "assets/google.png",
+                                  //       height: 40,
+                                  //       width: 40,
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // const SizedBox(
+                                  //   height: 40,
+                                  // )
                                   // if (controller.supportsLogin)
                                   //   Padding(
                                   //     padding: const EdgeInsets.all(16.0),
