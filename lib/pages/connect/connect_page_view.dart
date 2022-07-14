@@ -6,9 +6,8 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
+import 'package:pangeachat/pages/connect/sso_button.dart';
 import 'package:pangeachat/widgets/matrix.dart';
-
-import 'sso_button.dart';
 
 class ConnectPageView extends StatelessWidget {
   final ConnectPageController controller;
@@ -303,6 +302,7 @@ class ConnectPageView extends StatelessWidget {
                                       ],
                                     ),
                                   ],
+
                                   if (controller.supportsSso)
                                     identityProviders == null
                                         ? const SizedBox(
@@ -341,7 +341,7 @@ class ConnectPageView extends StatelessWidget {
                                                     ),
                                                   )
                                                 : Wrap(
-                                                    children: [
+                                                    children: <Widget>[
                                                       for (final identityProvider
                                                           in identityProviders)
                                                         SsoButton(
@@ -355,6 +355,36 @@ class ConnectPageView extends StatelessWidget {
                                                     ].toList(),
                                                   ),
                                           ),
+
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        child: Image.asset(
+                                          "assets/google.png",
+                                          height: 40,
+                                          width: 40,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20.0),
+                                      Image.asset(
+                                        "assets/google.png",
+                                        height: 40,
+                                        width: 40,
+                                      ),
+                                      const SizedBox(width: 20.0),
+                                      Image.asset(
+                                        "assets/google.png",
+                                        height: 40,
+                                        width: 40,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 40,
+                                  )
                                   // if (controller.supportsLogin)
                                   //   Padding(
                                   //     padding: const EdgeInsets.all(16.0),
