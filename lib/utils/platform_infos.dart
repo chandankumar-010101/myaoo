@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pangeachat/widgets/sentry_switch_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vrouter/vrouter.dart';
 
-import 'package:pangeachat/widgets/sentry_switch_list_tile.dart';
 import '../config/app_config.dart';
 
 abstract class PlatformInfos {
@@ -62,7 +62,8 @@ abstract class PlatformInfos {
         ),
         SentrySwitchListTile.adaptive(label: L10n.of(context)!.sendBugReports),
       ],
-      applicationIcon: Image.asset('assets/logo.png', width: 64, height: 64),
+      applicationIcon: SvgPicture.asset('assets/icons/icon-512x512.png',
+          width: 64, height: 64),
       applicationName: AppConfig.applicationName,
     );
   }
