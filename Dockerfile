@@ -3,7 +3,7 @@ RUN sudo apt update && sudo apt install curl -y
 COPY . /app
 WORKDIR /app
 RUN chmod -R 777 scripts
-RUN sudo ./scripts/prepare-web.sh
+RUN ./scripts/prepare-web.sh
 RUN ./scripts/build-web.sh
 
 FROM docker.io/nginx:alpine
