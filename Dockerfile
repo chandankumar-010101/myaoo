@@ -1,4 +1,4 @@
-ROM cirrusci/flutter as builder
+FROM cirrusci/flutter as builder
 RUN sudo apt update && sudo apt install curl -y
 COPY . /app
 WORKDIR /app
