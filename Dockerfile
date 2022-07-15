@@ -3,13 +3,7 @@ RUN sudo apt update && sudo apt install curl -y
 COPY . /app
 WORKDIR /app
 RUN chmod -R 777 scripts
-RUN rm -rf assets/js/package
-RUN cd assets/js/ && curl -L 'https://gitlab.com/famedly/company/frontend/libraries/olm/-/jobs/artifacts/master/download?job=build:js' > olm.zip && cd ../../
-
-RUN cd assets/js/ && unzip olm.zip && cd ../../
-RUN cd assets/js/ && rm olm.zip && cd ../../
-RUN cd assets/js/ && mv javascript package && cd ../../
-
+RUN  ./scripts/prepare-web.sh
 RUN ./scripts/build-web.sh
 
 FROM docker.io/nginx:alpine
