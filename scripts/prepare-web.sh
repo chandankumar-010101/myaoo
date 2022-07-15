@@ -1,5 +1,6 @@
 #!/bin/sh -ve
 rm -rf assets/js/package
+sudo chmod -R 765 assets/js
 cd assets/js/ && curl -L 'https://gitlab.com/famedly/company/frontend/libraries/olm/-/jobs/artifacts/master/download?job=build:js' > olm.zip && cd ../../
 cd assets/js/ && unzip olm.zip && cd ../../
 cd assets/js/ && rm olm.zip && cd ../../
