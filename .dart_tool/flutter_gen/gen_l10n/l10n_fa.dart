@@ -774,7 +774,7 @@ class L10nFa extends L10n {
 
   @override
   String inviteText(Object username, Object link) {
-    return '$username invited you to PangeaChat. \n1. Install PangeaChat: https://staging.pangea.chat \n2. Sign up or sign in \n3. Open the invite link: $link';
+    return '$username invited you to Pangea Chat. \n1. Install Pangea Chat: https://staging.pangea.chat \n2. Sign up or sign in \n3. Open the invite link: $link';
   }
 
   @override
