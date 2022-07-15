@@ -774,7 +774,7 @@ class L10nPt extends L10n {
 
   @override
   String inviteText(Object username, Object link) {
-    return '$username invited you to FluffyChat. \n1. Install FluffyChat: https://fluffychat.im \n2. Sign up or sign in \n3. Open the invite link: $link';
+    return '$username invited you to PangeaChat. \n1. Install PangeaChat: https://staging.pangea.chat \n2. Sign up or sign in \n3. Open the invite link: $link';
   }
 
   @override
