@@ -1,11 +1,535 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3b168f6-bdaa-4f10-9df7-73826020ccfd" name="Changes" comment="" />
+    <list default="true" id="f3b168f6-bdaa-4f10-9df7-73826020ccfd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/android.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/icon-192x192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/../build/.last_build_id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/4f2a58af27abc49ecf55570043bbf938.cache.dill.track.dill" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/b85de0ae565a2d9e81604c53339744b6/.filecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/b85de0ae565a2d9e81604c53339744b6/gen_l10n_inputs_and_outputs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/b85de0ae565a2d9e81604c53339744b6/gen_localizations.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/b85de0ae565a2d9e81604c53339744b6/gen_localizations.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/b85de0ae565a2d9e81604c53339744b6/outputs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/c8b0cfb68caeda831f8bbb6aef3ad5e8/_composite.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/c8b0cfb68caeda831f8bbb6aef3ad5e8/gen_dart_plugin_registrant.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/c8b0cfb68caeda831f8bbb6aef3ad5e8/gen_l10n_inputs_and_outputs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/c8b0cfb68caeda831f8bbb6aef3ad5e8/gen_localizations.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/c8b0cfb68caeda831f8bbb6aef3ad5e8/gen_localizations.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/AssetManifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/FontManifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/NOTICES" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/backup.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/banner.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/banner_dark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/chat.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/colors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ad.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ae.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/af.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ag.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ai.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/am.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ao.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/aq.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ar.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/as.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/at.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/au.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/aw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ax.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/az.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ba.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bb.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bd.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/be.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bj.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bq.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/br.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bs.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bv.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/by.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/bz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ca.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cc.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cd.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ceb.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ch.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ci.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ck.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/co.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cs.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cv.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cx.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/cy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/da.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/de.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/dj.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/dm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/do.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/dz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ec.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/eg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/eh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/el.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/en.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/en.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/eo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/er.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/es.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/et.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/eu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fa.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fj.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/fy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ga.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gb-eng.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gb-nir.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gb-sct.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gb-wls.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gd.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gp.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gq.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gs.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/gy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ha.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/haw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hmn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ht.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/hy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/id.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ie.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ig.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/im.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/io.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/iq.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/is.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/it.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/iw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ja.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ja.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/je.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/jm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/jo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/jw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ka.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/kg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ki.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/kk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/km.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/kn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ko.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/kp.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ku.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/kw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ky.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lb.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lc.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/li.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ls.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/lv.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ly.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ma.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/md.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/me.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ml.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mp.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mq.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ms.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mv.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mx.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/my.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/mz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/na.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/nc.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ne.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/nf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ni.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/nl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/no.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/np.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/nr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/nu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ny.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/nz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/om.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pa.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pe.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ps.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/pw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/py.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/qa.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/re.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ro.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/rs.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ru.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/rw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sb.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sc.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sd.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/se.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/si.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sj.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/so.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sq.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ss.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/st.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/su.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sv.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sx.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/sz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ta.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tc.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/td.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/te.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/th.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tj.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tl.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/to.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tr.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tv.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/tz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ug.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/uk.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/um.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/un.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/und.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ur.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/us.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/uy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/uz.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/va.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/vc.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ve.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/vg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/vi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/vn.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/vu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/was-ca.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/was-km.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/wf.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ws.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/xh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/ye.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/yi.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/yo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/yt.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/zh.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/zm.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/zu.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/countryFlags/zw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/favicon1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/info-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/info-logo1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/info-logo2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/login_wallpaper.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/logo1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/newAssets/home_wallpaper.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/newAssets/lockIcon.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/newAssets/pangea-bare.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/newAssets/userIcon.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/private_chat_wallpaper.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/sas-emoji.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/share.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/sounds/WoodenBeaver_stereo_message-new-instant.ogg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/sounds/call.ogg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/sounds/phone.ogg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/typing.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/assets/verification.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/fonts/MaterialIcons-Regular.otf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/fonts/NotoEmoji/NotoColorEmoji.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/fonts/Roboto/Roboto-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/fonts/Roboto/Roboto-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/fonts/Roboto/Roboto-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_AMS-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Caligraphic-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Caligraphic-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Fraktur-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Fraktur-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Main-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Main-BoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Main-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Main-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Math-BoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Math-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_SansSerif-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_SansSerif-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_SansSerif-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Script-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Size1-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Size2-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Size3-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Size4-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/flutter_math_fork/lib/katex_fonts/fonts/KaTeX_Typewriter-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/flutter_assets/packages/wakelock_web/assets/no_sleep.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/config/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/config/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/generated_plugin_registrant.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/chat_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/chat_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/connect/connect_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/connect/connect_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/connect/connect_page_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/connect/connect_page_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/connect/sso_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/connect/sso_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/homeserver_picker/homeserver_picker_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/homeserver_picker/homeserver_picker_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/login/login_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/login/login_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/../linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linux/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/../linux/flutter/generated_plugin_registrant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/../windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/../windows/flutter/generated_plugin_registrant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../windows/flutter/generated_plugins.cmake" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="2BpoImqT0GoVve78879I5nunGci" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="pangeachat" type="AndroidRunConfigurationType" factoryName="Android App">
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f3b168f6-bdaa-4f10-9df7-73826020ccfd" name="Changes" comment="" />
+      <created>1657755544877</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1657755544877</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="200" y="106" key="#PSD" timestamp="1657756617354">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="200" y="106" key="#PSD/0.0.1366.720@0.0.1366.720" timestamp="1657756617354" />
+    <state x="163" y="0" key="#Project_Structure" timestamp="1657756066436">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="163" y="0" key="#Project_Structure/0.0.1366.720@0.0.1366.720" timestamp="1657756066436" />
+    <state x="392" y="34" key="#Unnamed" timestamp="1657755682182">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="392" y="34" key="#Unnamed/0.0.1366.720@0.0.1366.720" timestamp="1657755682182" />
+    <state x="137" y="15" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1657755705743">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="137" y="15" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.720@0.0.1366.720" timestamp="1657755705743" />
+    <state x="392" y="34" key="#pangeachat" timestamp="1657755692485">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="392" y="34" key="#pangeachat/0.0.1366.720@0.0.1366.720" timestamp="1657755692485" />
+    <state x="463" y="115" key="FileChooserDialogImpl" timestamp="1657756627198">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="463" y="115" key="FileChooserDialogImpl/0.0.1366.720@0.0.1366.720" timestamp="1657756627198" />
+    <state x="184" y="5" key="SettingsEditor" timestamp="1657755642772">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="184" y="5" key="SettingsEditor/0.0.1366.720@0.0.1366.720" timestamp="1657755642772" />
+  </component>
 </project>

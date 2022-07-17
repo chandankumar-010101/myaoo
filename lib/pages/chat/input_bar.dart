@@ -26,7 +26,7 @@ class InputBar extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final bool? autofocus;
   final bool readOnly;
-
+  final bool? enabled;
   const InputBar({
     required this.room,
     this.minLines,
@@ -39,6 +39,7 @@ class InputBar extends StatelessWidget {
     this.onChanged,
     this.autofocus,
     this.textInputAction,
+    this.enabled,
     this.readOnly = false,
     Key? key,
   }) : super(key: key);
@@ -181,6 +182,7 @@ class InputBar extends StatelessWidget {
   ) {
     const size = 30.0;
     const padding = EdgeInsets.all(4.0);
+
     if (suggestion['type'] == 'command') {
       final command = suggestion['name']!;
       final hint = commandHint(L10n.of(context)!, command);
@@ -391,12 +393,14 @@ class InputBar extends StatelessWidget {
               // it sets the types for the callback incorrectly
               onSubmitted!(text);
             },
+            enabled: enabled!,
             controller: controller,
             decoration: decoration!,
             focusNode: focusNode,
             onChanged: (text) {
               // fix for the library for now
               // it sets the types for the callback incorrectly
+
               onChanged!(text);
             },
             textCapitalization: TextCapitalization.sentences,

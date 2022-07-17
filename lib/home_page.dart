@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pangeachat/config/app_config.dart';
-import 'package:pangeachat/widgets/layouts/login_scaffold.dart';
-import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 

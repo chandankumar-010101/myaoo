@@ -95,7 +95,7 @@ class ConnectPageView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 100),
+                          constraints: const BoxConstraints(maxHeight: 100),
                           child:
                               Image.asset("assets/newAssets/pangea-bare.png")),
                       const SizedBox(
@@ -128,7 +128,7 @@ class ConnectPageView extends StatelessWidget {
                                   if (Matrix.of(context)
                                           .loginRegistrationSupported ??
                                       false) ...[
-                                    SizedBox(height: 20.0),
+                                    const SizedBox(height: 20.0),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Center(

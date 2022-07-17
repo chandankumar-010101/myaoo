@@ -6,8 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/config/app_config.dart';
-import 'package:pangeachat/config/themes.dart';
-import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/widgets/layouts/login_scaffold.dart';
 import 'homeserver_picker.dart';
 
@@ -100,7 +98,7 @@ class HomeserverPickerView extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 5.0),
-                                child: ConstrainedBox(constraints: BoxConstraints(maxHeight: 80),child: Image.asset("assets/newAssets/pangea-bare.png")),
+                                child: ConstrainedBox(constraints: const BoxConstraints(maxHeight: 80),child: Image.asset("assets/newAssets/pangea-bare.png")),
                               ),
                               Column(
                                 children:  [

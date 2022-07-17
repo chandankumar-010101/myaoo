@@ -14,7 +14,7 @@ dependencies:
   cached_network_image: ^3.2.0
   callkeep: ^0.3.2
   chewie: ^1.2.2
-  collection: ^1.15.0-nullsafety.4
+  collection: ^1.16.0
   connectivity_plus: any
   cupertino_icons: any
   desktop_drop: ^0.3.2
@@ -100,7 +100,7 @@ dev_dependencies:
   import_sorter: ^4.6.0
   integration_test:
     sdk: flutter
-
+  
 flutter_native_splash:
   color: "#ffffff"
   color_dark: "#000000"
