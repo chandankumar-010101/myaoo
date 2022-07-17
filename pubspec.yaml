@@ -51,7 +51,7 @@ dependencies:
   geolocator: ^7.6.2
   hive_flutter: ^1.1.0
   image: ^3.1.1
-  image_picker: ^0.8.4+8
+  image_picker: ^0.8.5+3
   intl: any
   just_audio: ^0.9.20
   keyboard_shortcuts: any
@@ -134,6 +134,7 @@ dependency_overrides:
   # Fix for stream fallback for unsupported browsers:
   # https://github.com/fluttercommunity/plus_plugins/pull/746
   # Upstream pull request: https://github.com/fluttercommunity/plus_plugins/pull/746
+  image_picker_android: 0.8.4+13
   connectivity_plus_web:
     git:
       url: https://github.com/TheOneWithTheBraid/plus_plugins.git
