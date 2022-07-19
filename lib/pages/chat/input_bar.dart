@@ -26,7 +26,7 @@ class InputBar extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final bool? autofocus;
   final bool readOnly;
-  final bool? enabled;
+
   const InputBar({
     required this.room,
     this.minLines,
@@ -39,7 +39,6 @@ class InputBar extends StatelessWidget {
     this.onChanged,
     this.autofocus,
     this.textInputAction,
-    this.enabled,
     this.readOnly = false,
     Key? key,
   }) : super(key: key);
@@ -393,7 +392,6 @@ class InputBar extends StatelessWidget {
               // it sets the types for the callback incorrectly
               onSubmitted!(text);
             },
-            enabled: enabled!,
             controller: controller,
             decoration: decoration!,
             focusNode: focusNode,

@@ -6,7 +6,7 @@ import 'package:pangeachat/pages/chat/IT_bar/it_countries.dart';
 import 'package:pangeachat/pages/chat/IT_bar/it_shimmer.dart';
 
 import '../../../config/app_config.dart';
-import 'models.dart';
+import 'models/receive_text_model.dart';
 import 'it_controller.dart';
 import 'it_trg_send_button.dart';
 
@@ -16,52 +16,54 @@ class ItBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      // color: Colors.amber,
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                  flex: 2,
-                  child: translatedTextTablet(context,
-                      selectedTranslations:
-                          itController!.selectedTranslations!)),
-              removeIcon(context, onPress: () {
-                itController!.removeLastSelected();
-              })
-            ],
-          ),
-          itController!.isLoading
-              ? const Center(
-                  child: ItShimmer(),
-                )
-              : Wrap(
-                  alignment: WrapAlignment.center,
+    return itController!.isiTOpen
+        ? Container(
+            width: double.infinity,
+            // color: Colors.amber,
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ...itController!.availTranslations!.last.map(
-                        (e) => transBars(context, continuance: e, onPress: () {
-                              itController!.selectTranslation(e);
-                            }))
+                    Expanded(
+                        flex: 2,
+                        child: translatedTextTablet(context,
+                            selectedTranslations:
+                                itController!.selectedTranslations!)),
+                    removeIcon(context, onPress: () {
+                      itController!.removeLastSelected();
+                    })
                   ],
                 ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [],
-              ),
-              ItTrgSendButton(
-                itController: itController!,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+                itController!.isLoading
+                    ? const Center(
+                        child: ItShimmer(),
+                      )
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          ...itController!.availTranslations!.last.map((e) =>
+                              transBars(context, continuance: e, onPress: () {
+                                itController!.selectTranslation(e);
+                              }))
+                        ],
+                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [],
+                    ),
+                    ItTrgSendButton(
+                      itController: itController!,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
+        : SizedBox();
   }
 
   Widget removeIcon(BuildContext context, {required Function onPress}) {

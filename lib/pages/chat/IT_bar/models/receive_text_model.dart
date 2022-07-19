@@ -1,46 +1,3 @@
-class InitialSendTextModel {
-  String? text;
-  String? src_lang;
-  String? tgt_lang;
-  int? user_id;
-
-  toJson() {
-    return {
-      'text': text,
-      'src_lang': src_lang,
-      'tgt_lang': tgt_lang,
-      'user_id': user_id
-    };
-  }
-
-  fromJson(json) {
-    text = json['text'];
-    src_lang = json['src_lang'];
-    tgt_lang = json['tgt_lang'];
-    user_id = json['user_id'];
-  }
-}
-
-class SubsequentTextModel {
-  int? translation_id;
-  int? next_word_index;
-  int? user_id;
-
-  toJson() {
-    return {
-      'translation_id': translation_id,
-      'next_word_index': next_word_index,
-      'user_id': user_id
-    };
-  }
-
-  fromJson(json) {
-    translation_id = json['translation_id'];
-    next_word_index = json['next_word_index'];
-    user_id = json['user_id'];
-  }
-}
-
 class ReceiveTextModel {
   String? translation;
   List<Continuances>? continuances;
@@ -75,7 +32,7 @@ class Continuances {
   int? level;
   String? description;
   String? text;
-
+  int? index;
   Continuances({this.probability, this.level, this.description, this.text});
 
   Continuances.fromJson(Map<String, dynamic> json) {

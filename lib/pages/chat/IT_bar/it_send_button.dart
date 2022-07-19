@@ -9,6 +9,10 @@ class ItSrcSendButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _country(context, itController);
+  }
+
+  Widget _completeButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -90,14 +94,27 @@ class ItSrcSendButton extends StatelessWidget {
     // );
     const double flagSize = 30;
     return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: SizedBox(
-          height: flagSize,
-          width: flagSize,
-          child: SvgPicture.asset(
-            itController.srcLang!.flagWithPath,
-            fit: BoxFit.contain,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 15,
+              offset: Offset(0, 4), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: SizedBox(
+            height: flagSize,
+            width: flagSize,
+            child: SvgPicture.asset(
+              itController.srcLang!.flagWithPath,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),

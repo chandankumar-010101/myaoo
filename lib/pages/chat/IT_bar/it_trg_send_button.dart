@@ -133,12 +133,10 @@ class ItTrgSendButton extends StatelessWidget {
     findButton();
     _overlayEntry = _overlayEntryBuilder();
     Overlay.of(context)!.insert(_overlayEntry!);
-    itController.openCloseDropDown();
   }
 
   void closeMenu() {
     _overlayEntry!.remove();
-    itController.openCloseDropDown();
   }
 
   Widget _country(BuildContext context, ItController itController) {

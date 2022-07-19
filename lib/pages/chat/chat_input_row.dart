@@ -29,9 +29,7 @@ class ChatInputRow extends StatelessWidget {
     }
     return Column(
       children: [
-        controller.inputText.isNotEmpty
-            ? ItBar(itController: controller.itController)
-            : SizedBox(),
+        ItBar(itController: controller.itController),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,7 +249,6 @@ class ChatInputRow extends StatelessWidget {
                           filled: false,
                         ),
                         onChanged: controller.onInputBarChanged,
-                        enabled: controller.itController.isInputFeildEnabled,
                       ),
                     ),
                   ),
@@ -267,7 +264,7 @@ class ChatInputRow extends StatelessWidget {
                     ),
                   if (!PlatformInfos.isMobile ||
                       controller.inputText.isNotEmpty)
-                    controller.isITEnabled
+                    controller.itController.isiTOpen
                         ? Padding(
                             padding:
                                 const EdgeInsets.only(right: 10, bottom: 10),
@@ -275,13 +272,20 @@ class ChatInputRow extends StatelessWidget {
                               itController: controller.itController,
                             ),
                           )
-                        : Container(
-                            height: 56,
-                            alignment: Alignment.center,
-                            child: IconButton(
-                              icon: const Icon(Icons.send_outlined),
-                              onPressed: controller.send,
-                              tooltip: L10n.of(context)!.send,
+                        : Tooltip(
+                            message: L10n.of(context)!.send,
+                            child: InkWell(
+                              onLongPress: () {
+                                controller.itController.openIt();
+                              },
+                              child: Container(
+                                height: 56,
+                                alignment: Alignment.center,
+                                child: IconButton(
+                                  icon: const Icon(Icons.send_outlined),
+                                  onPressed: controller.send,
+                                ),
+                              ),
                             ),
                           ),
                 ],
