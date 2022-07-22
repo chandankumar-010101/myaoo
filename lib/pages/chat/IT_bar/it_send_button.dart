@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pangeachat/pages/chat/IT_bar/widgets/it_dropdown/it_dropdown.dart';
 import 'it_controller.dart';
 
 class ItSrcSendButton extends StatelessWidget {
@@ -93,27 +94,40 @@ class ItSrcSendButton extends StatelessWidget {
     //   ),
     // );
     const double flagSize = 30;
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 15,
-              offset: Offset(0, 4), // changes position of shadow
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: SizedBox(
-            height: flagSize,
-            width: flagSize,
-            child: SvgPicture.asset(
-              itController.srcLang!.flagWithPath,
-              fit: BoxFit.contain,
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => ItDropDown(
+              title: 'Source language',
+              onPress: (lang) {
+                itController.changeSrcLang(lang);
+              },
+              selectedLang: itController.srcLang!,
+              languages: itController.itLangList),
+          useRootNavigator: false,
+        );
+      },
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 15,
+                offset: Offset(0, 4), // changes position of shadow
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: SizedBox(
+              height: flagSize,
+              width: flagSize,
+              child: Image.asset(itController.srcLang!.flagWithPath,
+                  fit: BoxFit.contain),
             ),
           ),
         ),

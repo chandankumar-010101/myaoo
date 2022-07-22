@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 
 class ItShimmer extends StatelessWidget {
-  const ItShimmer({Key? key}) : super(key: key);
+  final text;
+  const ItShimmer({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _skelton(context, height: 40, width: 100),
-          SizedBox(
-            width: 10,
-          ),
-          _skelton(context, height: 40, width: 60),
-          SizedBox(
-            width: 10,
-          ),
-          _skelton(context, height: 40, width: 70)
-        ],
-      ),
-    );
-  }
-
-  Widget _skelton(BuildContext context,
-      {required double height, required double width}) {
     return Container(
-      height: height,
-      width: width,
+      margin: EdgeInsets.only(top: 5, bottom: 5, right: 2, left: 2),
+      padding: EdgeInsets.zero,
       decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.04),
-          borderRadius: BorderRadius.circular(16)),
+          borderRadius: BorderRadius.circular(10)),
+
+      // boxShadow: [
+      //   BoxShadow(
+      //     color: Colors.grey.withOpacity(0.2),
+      //     spreadRadius: 1,
+      //     blurRadius: 15,
+      //     offset: Offset(0, 4), // changes position of shadow
+      //   ),
+      // ],
+
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 7, vertical: 11),
+        child: Text(
+          text,
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(color: Colors.transparent),
+        ),
+      ),
     );
   }
 }

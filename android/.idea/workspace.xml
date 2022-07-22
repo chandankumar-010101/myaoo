@@ -23,15 +23,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3b168f6-bdaa-4f10-9df7-73826020ccfd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/Repo/it_repo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/Repo/it_repo.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_bar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_countries.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_send_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_send_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_shimmer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_shimmer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_trg_send_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/pages/chat/IT_bar/it_trg_send_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9887bc43534942354b]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>

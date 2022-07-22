@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pangeachat/pages/chat/IT_bar/it_countries.dart';
+import 'package:pangeachat/pages/chat/IT_bar/models/it_countries.dart';
 import 'package:pangeachat/pages/chat/IT_bar/it_shimmer.dart';
 
 import '../../../config/app_config.dart';
@@ -19,7 +19,7 @@ class ItBar extends StatelessWidget {
     return itController!.isiTOpen
         ? Container(
             width: double.infinity,
-            // color: Colors.amber,
+            color: Theme.of(context).secondaryHeaderColor,
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
@@ -36,19 +36,25 @@ class ItBar extends StatelessWidget {
                     })
                   ],
                 ),
-                itController!.isLoading
-                    ? const Center(
-                        child: ItShimmer(),
-                      )
-                    : Wrap(
-                        alignment: WrapAlignment.center,
-                        children: [
-                          ...itController!.availTranslations!.last.map((e) =>
-                              transBars(context, continuance: e, onPress: () {
-                                itController!.selectTranslation(e);
-                              }))
-                        ],
-                      ),
+                Container(
+                  constraints: BoxConstraints(minHeight: 75),
+                  child: Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        ...itController!.availTranslations!.last.map((e) =>
+                            itController!.isLoading
+                                ? ItShimmer(
+                                    text: e.text,
+                                  )
+                                : transBars(context, continuance: e,
+                                    onPress: () {
+                                    itController!.selectTranslation(e);
+                                  }))
+                      ],
+                    ),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -129,34 +135,36 @@ class ItBar extends StatelessWidget {
 
   Widget translatedTextTablet(BuildContext context,
       {required List<Continuances> selectedTranslations}) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 120),
-      child: Scrollbar(
-        child: SingleChildScrollView(
-          child: Wrap(
-            alignment: WrapAlignment.start,
-            runSpacing: 1,
-            spacing: 1,
-            children: [
-              ...selectedTranslations!.map((e) => Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Color(tabledColor(e.probability!))),
-                          child: Center(
-                              child: Text(
-                            e.text!,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )),
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
+    return Container(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 189, minHeight: 30),
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Wrap(
+              alignment: WrapAlignment.start,
+              runSpacing: 1,
+              spacing: 1,
+              children: [
+                ...selectedTranslations!.map((e) => Container(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(tabledColor(e.probability!))),
+                            child: Center(
+                                child: Text(
+                              e.text!,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            )),
+                          ),
+                        ],
+                      ),
+                    ))
+              ],
+            ),
           ),
         ),
       ),

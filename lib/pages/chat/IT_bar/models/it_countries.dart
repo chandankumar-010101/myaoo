@@ -4,7 +4,7 @@ class ItCountryModel {
   String? langCode;
   String? name;
 
-  get flagWithPath => 'assets/countryFlags/' + flag! + '.svg';
+  get flagWithPath => 'assets/newAssets/countryFlagsPngs/' + flag! + '.png';
 }
 
 class ITLanguages {

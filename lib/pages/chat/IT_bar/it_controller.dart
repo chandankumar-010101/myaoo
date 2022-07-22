@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pangeachat/pages/chat/IT_bar/models/initial_send_model.dart';
 import 'package:pangeachat/pages/chat/IT_bar/models/subsequent_model.dart';
 
-import 'it_countries.dart';
+import 'models/it_countries.dart';
 import 'models/receive_text_model.dart';
 import './Repo/it_repo.dart';
 
@@ -30,9 +30,12 @@ class ItController {
   }
 
   openIt() {
-    this.isiTOpen = true;
-    _isEditing = false;
+    Future.delayed(Duration(microseconds: 100), () {
+      isiTOpen = true;
+      _isEditing = false;
+    });
     _firstTranslation();
+    print('Opening IT');
     _setState();
   }
 
@@ -142,7 +145,9 @@ class ItController {
 
       availTranslations!.add(res.continuances!);
       _setState();
-    }).catchError((err) {});
+    }).catchError((err) {
+      print(err);
+    });
     _setState();
   }
 
@@ -164,8 +169,9 @@ class ItController {
   String? get translatedText {
     String? text = '';
     selectedTranslations!.forEach((element) {
-      text = text! + element.text!;
+      text = text! + element.text! + ' ';
     });
+    text!.trim();
 
     return text;
   }
@@ -175,9 +181,16 @@ class ItController {
 
   void _addClearOnEditListener() {
     this._textController!.addListener(() {
+      print('Text Event');
       if (!_isEditing) {
         _clearState();
       }
     });
+  }
+
+  closeIt() {
+    if (!_isEditing) {
+      _clearState();
+    }
   }
 }

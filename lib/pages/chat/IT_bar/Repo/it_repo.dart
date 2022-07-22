@@ -45,7 +45,7 @@ class ItRepo {
         };
       }
     }
-    print(decodedBody);
+
     ReceiveTextModel receiveText = ReceiveTextModel.fromJson(decodedBody);
 
     for (int i = 0; i < receiveText.continuances!.length; i++) {

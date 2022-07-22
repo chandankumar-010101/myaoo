@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pangeachat/pages/chat/IT_bar/widgets/it_dropdown/it_dropdown.dart';
 import 'it_controller.dart';
 
 class ItTrgSendButton extends StatelessWidget {
   final ItController itController;
   ItTrgSendButton({Key? key, required this.itController}) : super(key: key);
-  GlobalKey? _key = LabeledGlobalKey("button_icon");
-  OverlayEntry? _overlayEntry;
-  Size? buttonSize;
-  Offset? buttonPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -84,61 +81,6 @@ class ItTrgSendButton extends StatelessWidget {
     );
   }
 
-  findButton() {
-    RenderBox renderBox = _key!.currentContext!.findRenderObject() as RenderBox;
-    buttonSize = renderBox.size;
-    buttonPosition = renderBox.localToGlobal(Offset.zero);
-    print(buttonPosition);
-  }
-
-  OverlayEntry _overlayEntryBuilder() {
-    print('Building overlay');
-    return OverlayEntry(
-      builder: (context) {
-        return Positioned(
-            //top: buttonPosition!.dy + buttonSize!.height,
-            top: 100,
-            left: 50,
-            //left: buttonPosition!.dx,
-            width: 200,
-            child: Container(
-              height: 100,
-              width: 200,
-              color: Colors.white,
-              child: Material(
-                  color: Colors.transparent,
-                  child: ListView.builder(
-                      itemCount: itController.itLangList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          onTap: () {
-                            // closeMenu();
-                            // itController
-                            //     .changeSrcLang(itController.itLangList[index]);
-                          },
-                          child: ListTile(
-                            leading: Text(
-                              itController.itLangList[index].name!,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        );
-                      })),
-            ));
-      },
-    );
-  }
-
-  void openMenu(BuildContext context) {
-    findButton();
-    _overlayEntry = _overlayEntryBuilder();
-    Overlay.of(context)!.insert(_overlayEntry!);
-  }
-
-  void closeMenu() {
-    _overlayEntry!.remove();
-  }
-
   Widget _country(BuildContext context, ItController itController) {
     // return SizedBox(
 
@@ -149,20 +91,26 @@ class ItTrgSendButton extends StatelessWidget {
     const double flagSize = 30;
     return InkWell(
       onTap: () {
-        print('Opening drawer');
-        openMenu(context);
+        showDialog(
+          context: context,
+          builder: (context) => ItDropDown(
+              title: 'Target language',
+              onPress: (lang) {
+                itController.changeTrgLand(lang);
+              },
+              selectedLang: itController.trgLang!,
+              languages: itController.itLangList),
+          useRootNavigator: false,
+        );
       },
-      key: _key,
       child: Center(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50),
           child: SizedBox(
             height: flagSize,
             width: flagSize,
-            child: SvgPicture.asset(
-              itController.trgLang!.flagWithPath,
-              fit: BoxFit.contain,
-            ),
+            child: Image.asset(itController.trgLang!.flagWithPath,
+                fit: BoxFit.contain),
           ),
         ),
       ),
