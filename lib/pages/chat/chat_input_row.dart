@@ -7,12 +7,11 @@ import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:matrix/matrix.dart';
 
 import 'package:pangeachat/config/app_config.dart';
-import 'package:pangeachat/pages/chat/IT_bar/it_controller.dart';
+
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/matrix.dart';
-import 'IT_bar/it_bar.dart';
-import 'IT_bar/it_send_button.dart';
+import 'package:pangeachat_it/pangeachat_it.dart';
 import 'chat.dart';
 import 'input_bar.dart';
 

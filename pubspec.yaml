@@ -90,6 +90,10 @@ dependencies:
   wakelock: ^0.6.1+1
   tuple: any
 
+  # Pangeachat custom packages
+  pangeachat_it:
+    path: packages/pangeachat_it
+
 dev_dependencies:
   dart_code_metrics: ^4.10.1
   flutter_lints: ^1.0.4

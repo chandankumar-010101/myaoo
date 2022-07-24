@@ -14,11 +14,11 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/pages/chat/IT_bar/it_controller.dart';
+
 import 'package:record/record.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:vrouter/vrouter.dart';
-
+import 'package:pangeachat_it/pangeachat_it.dart';
 import 'package:pangeachat/pages/chat/chat_view.dart';
 import 'package:pangeachat/pages/chat/event_info_dialog.dart';
 import 'package:pangeachat/pages/chat/recording_dialog.dart';
