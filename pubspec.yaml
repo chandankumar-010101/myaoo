@@ -92,7 +92,7 @@ dependencies:
 
   # Pangeachat custom packages
   pangeachat_it:
-    path: packages/pangeachat_it
+    path: pangea_packages/pangeachat_it
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1

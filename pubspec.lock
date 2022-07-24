@@ -1193,7 +1193,7 @@ packages:
   pangeachat_it:
     dependency: "direct main"
     description:
-      path: "packages/pangeachat_it"
+      path: "pangea_packages/pangeachat_it"
       relative: true
     source: path
     version: "0.0.1"
