@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 
-
 import 'models/initial_send_model.dart';
 import 'models/it_countries.dart';
 import 'models/receive_text_model.dart';
 import './Repo/it_repo.dart';
+import 'models/removed_translation.dart';
 import 'models/subsequent_model.dart';
 
 class ItController {
@@ -20,11 +20,12 @@ class ItController {
   bool isLoading = false;
   final StreamController stateListener = StreamController();
   TextEditingController? _textController;
-
+  List<RemovedTranslation> removedTranslations = [];
   Function? _sendCallback;
   int? _translation_id;
-
+  bool isTranslationDone = false;
   List<ItCountryModel> itLangList = [];
+  bool isError = false;
   setTextEditingController(TextEditingController textEditingController) {
     _textController = textEditingController;
     _addClearOnEditListener();
@@ -65,6 +66,8 @@ class ItController {
     _isEditing = true;
     availTranslations = [[]];
     selectedTranslations = [];
+    isError = false;
+    isTranslationDone = false;
     isiTOpen = false;
     _setState();
   }
@@ -114,10 +117,14 @@ class ItController {
       try {
         availTranslations!.add(res.continuances!);
       } catch (err) {
+        _showError();
+        print(err);
         availTranslations = [[]];
       }
       _setState();
     }).catchError((err) {
+      _showError();
+      print(err);
       isLoading = false;
       _setState();
     });
@@ -143,10 +150,14 @@ class ItController {
       ..translation_id = _translation_id;
     ItRepo.subsequentCall(subSeqText).then((res) {
       isLoading = false;
+      isTranslationDone = res.isFinal;
+      if (!res.isFinal) {
+        availTranslations!.add(res.continuances!);
+      }
 
-      availTranslations!.add(res.continuances!);
       _setState();
     }).catchError((err) {
+      _showError();
       print(err);
     });
     _setState();
@@ -158,9 +169,21 @@ class ItController {
   }
 
   void removeLastSelected() {
-    availTranslations!.removeLast();
-    selectedTranslations?.removeLast();
-    _setState();
+    if (!isLoading) {
+      isError = false;
+      if (selectedTranslations!.length > 0 &&
+          availTranslations!.last.isNotEmpty) {
+        if (!isTranslationDone) {
+          availTranslations!.removeLast();
+        }
+        isTranslationDone = false;
+
+        removedTranslations.add(RemovedTranslation()
+          ..lastSelectedContinuance = selectedTranslations!
+          ..removedContinuance = selectedTranslations?.removeLast());
+        _setState();
+      }
+    }
   }
 
   _dismissKeyboard() {
@@ -186,6 +209,15 @@ class ItController {
       if (!_isEditing) {
         _clearState();
       }
+    });
+  }
+
+  void _showError() {
+    isLoading = false;
+    isError = true;
+    _setState();
+    Future.delayed(Duration(seconds: 5), () {
+      isError = false;
     });
   }
 

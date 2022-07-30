@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-
-
-
 import '../models/initial_send_model.dart';
 import '../models/receive_text_model.dart';
 import '../models/subsequent_model.dart';
@@ -18,10 +15,11 @@ class ItRepo {
     final Response res =
         await req.post(url: Urls.firstStep, body: initalText.toJson());
 
-    ReceiveTextModel receiveText =
-        ReceiveTextModel.fromJson(jsonDecode(res.body));
+    ReceiveTextModel receiveText = new ReceiveTextModel()
+      ..fromJson(jsonDecode(res.body));
     for (int i = 0; i < receiveText.continuances!.length; i++) {
-      receiveText.continuances![i].index = i;
+      receiveText.continuances![i].index =
+          receiveText.continuances![i].level! - 1;
     }
     return receiveText;
   }
@@ -36,22 +34,20 @@ class ItRepo {
 
     // TODO
     final decodedBody = jsonDecode(res.body);
-    for (int i = 0; i < decodedBody['continuances'].length; i++) {
-      if (decodedBody['continuances'][i].runtimeType == String) {
-        decodedBody['continuances'][i] = {
-          "probability": Random().nextDouble(),
-          "level": 1,
-          "description": "Unlikely",
-          "text": decodedBody['continuances'][i]
-        };
+    ReceiveTextModel receiveText = new ReceiveTextModel();
+    if (decodedBody['continuances'].runtimeType == String) {
+      receiveText.isFinal = true;
+    }
+
+    receiveText.fromJson(decodedBody);
+
+    if (!receiveText.isFinal) {
+      for (int i = 0; i < receiveText.continuances!.length; i++) {
+        receiveText.continuances![i].index =
+            receiveText.continuances![i].level! - 1;
       }
     }
 
-    ReceiveTextModel receiveText = ReceiveTextModel.fromJson(decodedBody);
-
-    for (int i = 0; i < receiveText.continuances!.length; i++) {
-      receiveText.continuances![i].index = i;
-    }
     return receiveText;
   }
 }

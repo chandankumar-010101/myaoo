@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pangeachat_it/IT_bar/widgets/error_title.dart';
+import 'package:pangeachat_it/IT_bar/widgets/translation_finished.dart';
 
-
-import 'it_shimmer.dart';
+import 'widgets/it_shimmer.dart';
 import 'models/receive_text_model.dart';
 import 'it_controller.dart';
 import 'it_trg_send_button.dart';
@@ -38,20 +39,28 @@ class ItBar extends StatelessWidget {
                 Container(
                   constraints: BoxConstraints(minHeight: 75),
                   child: Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        ...itController!.availTranslations!.last.map((e) =>
-                            itController!.isLoading
-                                ? ItShimmer(
-                                    text: e.text,
-                                  )
-                                : transBars(context, continuance: e,
-                                    onPress: () {
-                                    itController!.selectTranslation(e);
-                                  }))
-                      ],
-                    ),
+                    child: itController!.isTranslationDone
+                        ? const TranslationFinished()
+                        : itController!.isError
+                            ? const ErrorTile()
+                            : Wrap(
+                                alignment: WrapAlignment.center,
+                                children: [
+                                  ...renderShimmerIfListEmpty(context,
+                                          itController: itController!)!
+                                      .map((e) => e),
+                                  ...itController!.availTranslations!.last.map(
+                                      (e) => itController!.isLoading
+                                          ? ItShimmer(
+                                              text: e.text,
+                                            )
+                                          : transBars(context, continuance: e,
+                                              onPress: () {
+                                              itController!
+                                                  .selectTranslation(e);
+                                            }))
+                                ],
+                              ),
                   ),
                 ),
                 Row(
@@ -71,6 +80,22 @@ class ItBar extends StatelessWidget {
         : SizedBox();
   }
 
+  Iterable<Widget> renderShimmerIfListEmpty(BuildContext context,
+      {required ItController itController, int noOfBars = 3}) {
+    if (!itController.isLoading) {
+      return [const SizedBox.shrink()];
+    }
+
+    if (itController.availTranslations!.last.isEmpty) {
+      List<String> dummyStrings = [];
+      for (int i = 0; i < noOfBars; i++) {
+        dummyStrings.add('Dummy');
+      }
+      return dummyStrings.map((e) => ItShimmer(text: e));
+    }
+    return [const SizedBox.shrink()];
+  }
+
   Widget removeIcon(BuildContext context, {required Function onPress}) {
     const double buttonSize = 28;
     return InkWell(
@@ -83,7 +108,8 @@ class ItBar extends StatelessWidget {
           child: SvgPicture.asset(
             'assets/newAssets/undoIcon.svg',
             fit: BoxFit.contain,
-            color: itController!.selectedTranslations!.length == 0
+            color: itController!.selectedTranslations!.length == 0 ||
+                    itController!.isLoading
                 ? Color.fromARGB(255, 211, 211, 211)
                 : Theme.of(context).primaryColor,
           )),

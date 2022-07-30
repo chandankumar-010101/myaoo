@@ -1,17 +1,20 @@
 class ReceiveTextModel {
   String? translation;
   List<Continuances>? continuances;
+  bool isFinal = false;
   int? translationId;
 
   ReceiveTextModel({this.translation, this.continuances, this.translationId});
 
-  ReceiveTextModel.fromJson(Map<String, dynamic> json) {
+  fromJson(Map<String, dynamic> json) {
     translation = json['translation'];
     if (json['continuances'] != null) {
       continuances = <Continuances>[];
-      json['continuances'].forEach((v) {
-        continuances!.add(new Continuances.fromJson(v));
-      });
+      if (!isFinal) {
+        json['continuances'].forEach((v) {
+          continuances!.add(new Continuances.fromJson(v));
+        });
+      }
     }
     translationId = json['translation_id'];
   }

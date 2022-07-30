@@ -7,6 +7,7 @@ class ItShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(minWidth: 50),
       margin: EdgeInsets.only(top: 5, bottom: 5, right: 2, left: 2),
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
