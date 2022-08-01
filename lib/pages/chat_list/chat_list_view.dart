@@ -122,12 +122,12 @@ class ChatListView extends StatelessWidget {
     );
   }
 }
-
-enum ChatListPopupMenuItemActions {
-  createGroup,
-  createSpace,
-  discover,
-  setStatus,
-  inviteContact,
-  settings,
-}
+//
+// enum ChatListPopupMenuItemActions {
+//   createGroup,
+//   createSpace,
+//   discover,
+//   setStatus,
+//   inviteContact,
+//   settings,
+// }

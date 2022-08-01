@@ -1,8 +1,9 @@
 FROM cirrusci/flutter as builder
 RUN sudo apt update && sudo apt install curl -y
-COPY . /app
 WORKDIR /app
-RUN chmod -R 777 scripts
+COPY . .
+
+RUN chmod -R 0777 scripts
 RUN ./scripts/prepare-web.sh
 RUN ./scripts/build-web.sh
 

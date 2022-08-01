@@ -4,18 +4,20 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:collection/collection.dart';
 import 'package:desktop_notifications/desktop_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
+import 'package:pangeachat/model/user_info.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
@@ -29,8 +31,11 @@ import 'package:vrouter/vrouter.dart';
 
 import '../config/app_config.dart';
 import '../config/setting_keys.dart';
+import '../pages/homeserver_picker/home_controller.dart';
 import '../pages/key_verification/key_verification_dialog.dart';
 import '../utils/account_bundles.dart';
+import '../utils/api_helper.dart';
+import '../utils/api_urls.dart';
 import '../utils/background_push.dart';
 import '../utils/famedlysdk_store.dart';
 import '../utils/platform_infos.dart';
@@ -67,6 +72,9 @@ class Matrix extends StatefulWidget {
 }
 
 class MatrixState extends State<Matrix> with WidgetsBindingObserver {
+  final box = GetStorage();
+  final controller = Get.put(HomeController());
+
   int _activeClient = -1;
   String? activeBundle;
   Store store = Store();
@@ -86,7 +94,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     if (_activeClient < 0 || _activeClient >= widget.clients.length) {
       return currentBundle!.first!;
     }
-    log("${widget.clients}");
     return widget.clients[_activeClient];
   }
 
@@ -158,6 +165,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
   Client? _loginClientCandidate;
 
+  /// call on start button
   Client getLoginClient() {
     if (widget.clients.isNotEmpty && !client.isLogged()) {
       return client;
@@ -173,13 +181,24 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           widget.clients.add(_loginClientCandidate!);
         }
         ClientManager.addClientNameToStore(_loginClientCandidate!.clientName);
+
         _registerSubs(_loginClientCandidate!.clientName);
-        _loginClientCandidate = null;
-        widget.router!.currentState!.to('/rooms');
+
+        print(_loginClientCandidate!.userID);
+        print("Login data");
+        print(_loginClientCandidate!.accessToken.toString());
       });
+
     return candidate;
   }
 
+  // U: oodles1
+  // P: KDGSRFxV9kZ8it8
+  // U: oodles2
+  // P: Hgv7g8h8hg98ggP
+  //
+  // U: oodlesadmin
+  // P: PangeaOodles1!
   Client? getClientByName(String name) =>
       widget.clients.firstWhereOrNull((c) => c.clientName == name);
 
@@ -210,6 +229,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             statusMsg: statusMsg,
           );
         }
+        box.write("clientID", client.userID ?? "null");
       }
     } catch (e, s) {
       client.onLoginStateChanged.sink.addError(e, s);
@@ -255,6 +275,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    print("matrix initialized");
     initMatrix();
     if (PlatformInfos.isWeb) {
       initConfig().then((_) => initSettings());
@@ -289,6 +310,9 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           'Attempted to register subscriptions for non-existing client $name');
       return;
     }
+    // print(c.userID);
+    // print(c.clientName);
+
     c.onSyncStatus.stream
         .where((s) => s.status == SyncStatus.error)
         .listen(_reportSyncError);
@@ -302,6 +326,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         await request.forwardKey();
       }
     });
+
     onKeyVerificationRequestSub[name] ??= c.onKeyVerificationRequest.stream
         .listen((KeyVerification request) async {
       var hidPopup = false;
@@ -317,7 +342,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
       hidPopup = true;
       await KeyVerificationDialog(request: request).show(navigatorContext);
     });
-    onLoginStateChanged[name] ??= c.onLoginStateChanged.stream.listen((state) {
+    onLoginStateChanged[name] ??=
+        c.onLoginStateChanged.stream.listen((state) async {
       final loggedInWithMultipleClients = widget.clients.length > 1;
       if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
         _cancelSubs(c.clientName);
@@ -330,18 +356,79 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         );
 
         if (state != LoginState.loggedIn) {
+          print("Logged Out");
           widget.router!.currentState!.to(
-            '/rooms',
+            '/home',
             queryParameters: widget.router!.currentState!.queryParameters,
           );
         }
+      } else if (state == LoginState.loggedIn) {
+        print(state);
+        //print("Logged In");
+
+        //matrix access token and client id
+        box.write("accessToken", client.accessToken.toString());
+        box.write("clientID", client.userID.toString());
+        bool sign_up = box.read("sign_up") ?? false;
+        bool validateStatus = await validateUser();
+
+        if (sign_up || !validateStatus) {
+          print("print 1");
+          widget.router!.currentState!.to(
+            // state == LoginState.loggedIn ? '/rooms' : '/home',
+            '/lang',
+            queryParameters: widget.router!.currentState!.queryParameters,
+          );
+        } else {
+          print("print2");
+          await ApiFunctions()
+              .get(ApiUrls.user_details + "${client.userID}")
+              .then((value) {
+            if (value.statusCode == 200) {
+              UserInfo data = UserInfo.fromJson(value.body);
+              //backend access and refresh token
+              box.write("access", data.access ?? "empty");
+              box.write("refresh", data.refresh ?? "empty");
+              var temp = data.profile;
+
+              box.write("sourcelanguage", temp!.sourceLanguage ?? "empty");
+              box.write("targetlanguage", temp.targetLanguage ?? "empty");
+              box.write("usertype", temp.userType);
+              box.write("sign_up", false);
+              widget.router!.currentState!.to(
+                // state == LoginState.loggedIn ? '/rooms' : '/home',
+                '/rooms',
+                queryParameters: widget.router!.currentState!.queryParameters,
+              );
+            } else {
+              setState(() {
+                // loading = false;
+              });
+              log(value.statusCode.toString());
+              Get.rawSnackbar(
+                  message: "Something went wrong",
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: EdgeInsets.zero,
+                  snackStyle: SnackStyle.GROUNDED,
+                  backgroundColor: Colors.red);
+            }
+          }).catchError((error) {
+            setState(() {
+              // loading = false;
+            });
+            log(error.toString());
+          });
+        }
       } else {
+        print("looged out");
         widget.router!.currentState!.to(
-          state == LoginState.loggedIn ? '/rooms' : '/home',
+          // state == LoginState.loggedIn ? '/rooms' : '/home',
+          '/home',
           queryParameters: widget.router!.currentState!.queryParameters,
         );
       }
     });
+
     // Cache and resend status message
     onOwnPresence[name] ??= c.onPresenceChanged.stream.listen((presence) {
       if (c.isLogged() &&
@@ -433,6 +520,26 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     }
 
     createVoipPlugin();
+  }
+
+  //TODO: validate user
+
+  Future<bool> validateUser() async {
+    String userID = box.read("clientID");
+    if (box.read("clientID") == "null") {
+      print("userID is null from getStorage");
+      return false;
+    }
+    var response = await ApiFunctions().get(ApiUrls.validate_user + userID);
+    bool validateStatus = false;
+    if (response != null) {
+      print(response.body);
+      return response.body["is_user_exist"] ?? false;
+    } else {
+      validateStatus = false;
+    }
+    log("Status is $validateStatus");
+    return validateStatus;
   }
 
   void createVoipPlugin() async {

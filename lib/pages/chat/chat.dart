@@ -600,6 +600,7 @@ class ChatController extends State<Chat> {
       };
     }
     setState(() => selectedEvents.clear());
+
     VRouter.of(context).to('/rooms');
   }
 

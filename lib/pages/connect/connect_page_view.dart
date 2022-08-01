@@ -18,19 +18,19 @@ class ConnectPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = Matrix.of(context).loginAvatar;
     final identityProviders = controller.identityProviders;
-    const String flagsPath = "assets/countryFlags/";
-    const countries = [
-      "zh.svg",
-      "tk.svg",
-      "td.svg",
-      "de.svg",
-      "us.svg",
-      "ko.svg",
-      "ve.svg",
-      "pl.svg",
-      "mv.svg",
-      "no.svg"
-    ];
+    // const String flagsPath = "assets/countryFlags/";
+    // const countries = [
+    //   "zh.svg",
+    //   "tk.svg",
+    //   "td.svg",
+    //   "de.svg",
+    //   "us.svg",
+    //   "ko.svg",
+    //   "ve.svg",
+    //   "pl.svg",
+    //   "mv.svg",
+    //   "no.svg"
+    // ];
 
     return Scaffold(
       extendBodyBehindAppBar: true,
