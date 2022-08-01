@@ -1,4 +1,4 @@
-Pangea Chat is an open, nonprofit and cute matrix messenger app for Ubuntu Touch, Android and iOS.
+PangeaChat is an open, nonprofit and cute matrix messenger app for Ubuntu Touch, Android and iOS.
 
 Open
 Opensource and open development where everyone can join.

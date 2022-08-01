@@ -1562,7 +1562,7 @@ abstract class L10n {
   /// No description provided for @inviteText.
   ///
   /// In en, this message translates to:
-  /// **'{username} invited you to Pangea Chat. \n1. Install Pangea Chat: https://staging.pangea.chat \n2. Sign up or sign in \n3. Open the invite link: {link}'**
+  /// **'{username} invited you to FluffyChat. \n1. Install FluffyChat: https://fluffychat.im \n2. Sign up or sign in \n3. Open the invite link: {link}'**
   String inviteText(Object username, Object link);
 
   /// No description provided for @isDeviceKeyCorrect.

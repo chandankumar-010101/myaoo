@@ -1,23 +1,23 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
+
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:snapping_sheet/snapping_sheet.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:vrouter/vrouter.dart';
+
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_view.dart';
 import 'package:pangeachat/pages/chat_list/spaces_bottom_bar.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
 import 'package:pangeachat/utils/fluffy_share.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:snapping_sheet/snapping_sheet.dart';
-import 'package:uni_links/uni_links.dart';
-import 'package:vrouter/vrouter.dart';
-
 import '../../../utils/account_bundles.dart';
 import '../../main.dart';
 import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
@@ -348,12 +348,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         break;
       case PopupMenuAction.invite:
         FluffyShare.share(
-            L10n.of(context)!.inviteText("" + Matrix.of(context).client.userID!,
+            L10n.of(context)!.inviteText(Matrix.of(context).client.userID!,
                 'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'),
             context);
-        log(L10n.of(context)!.inviteText(Matrix.of(context).client.userID!,
-            'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'));
-        log(Matrix.of(context).client.userID!);
         break;
       case PopupMenuAction.newGroup:
         VRouter.of(context).to('/newgroup');

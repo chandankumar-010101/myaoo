@@ -82,7 +82,7 @@ class LoginView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ConstrainedBox(constraints: const BoxConstraints(maxHeight: 100),child: Image.asset("assets/newAssets/pangea-bare.png")),
+                          ConstrainedBox(constraints: BoxConstraints(maxHeight: 100),child: Image.asset("assets/newAssets/pangea-bare.png")),
                           const SizedBox(
                             width: 10.0,
                           ),

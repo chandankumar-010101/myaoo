@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class EmptyPage extends StatelessWidget {
   final bool loading;
@@ -24,8 +23,8 @@ class EmptyPage extends StatelessWidget {
           Center(
             child: Hero(
               tag: 'info-logo',
-              child: SvgPicture.asset(
-                'assets/icons/icon-512x512.png',
+              child: Image.asset(
+                'assets/info-logo.png',
                 width: _width,
                 height: _width,
               ),

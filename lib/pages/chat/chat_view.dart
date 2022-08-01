@@ -4,7 +4,6 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
-
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:swipe_to_action/swipe_to_action.dart';
 import 'package:vrouter/vrouter.dart';
@@ -13,6 +12,7 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/pages/chat/chat.dart';
 import 'package:pangeachat/pages/chat/chat_app_bar_title.dart';
+import 'package:pangeachat/pages/chat/encryption_button.dart';
 import 'package:pangeachat/pages/chat/pinned_events.dart';
 import 'package:pangeachat/pages/chat/reactions_picker.dart';
 import 'package:pangeachat/pages/chat/reply_display.dart';
@@ -35,7 +35,7 @@ enum _EventContextAction { info, report }
 
 class ChatView extends StatelessWidget {
   final ChatController controller;
- 
+
   const ChatView(this.controller, {Key? key}) : super(key: key);
 
   List<Widget> _appBarActions(BuildContext context) {
@@ -405,10 +405,6 @@ class ChatView extends StatelessWidget {
                                     bottomLeft:
                                         Radius.circular(AppConfig.borderRadius),
                                     bottomRight:
-                                        Radius.circular(AppConfig.borderRadius),
-                                    topLeft:
-                                        Radius.circular(AppConfig.borderRadius),
-                                    topRight:
                                         Radius.circular(AppConfig.borderRadius),
                                   ),
                                   elevation: 6,

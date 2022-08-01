@@ -181,7 +181,6 @@ class InputBar extends StatelessWidget {
   ) {
     const size = 30.0;
     const padding = EdgeInsets.all(4.0);
-
     if (suggestion['type'] == 'command') {
       final command = suggestion['name']!;
       final hint = commandHint(L10n.of(context)!, command);
@@ -398,7 +397,6 @@ class InputBar extends StatelessWidget {
             onChanged: (text) {
               // fix for the library for now
               // it sets the types for the callback incorrectly
-
               onChanged!(text);
             },
             textCapitalization: TextCapitalization.sentences,

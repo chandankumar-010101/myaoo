@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:matrix/matrix.dart';
 import 'package:matrix_homeserver_recommendations/matrix_homeserver_recommendations.dart';
+import 'package:vrouter/vrouter.dart';
+
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_bottom_sheet.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker_view.dart';
 import 'package:pangeachat/widgets/matrix.dart';
-import 'package:vrouter/vrouter.dart';
-
 import '../../utils/localized_exception_extension.dart';
 
 class HomeserverPicker extends StatefulWidget {
@@ -117,8 +118,7 @@ class HomeserverPickerController extends State<HomeserverPicker> {
 
       if (!ssoSupported && matrix.loginRegistrationSupported == false) {
         // Server does not support SSO or registration. We can skip to login page:
-        // VRouter.of(context).to('login');
-        VRouter.of(context).to('connect');
+        VRouter.of(context).to('login');
       } else {
         VRouter.of(context).to('connect');
       }

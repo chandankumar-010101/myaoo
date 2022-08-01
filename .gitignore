@@ -3,11 +3,18 @@
 *.log
 *.pyc
 *.swp
+*.snap
 .DS_Store
+.local/
 .atom/
 .buildlog/
 .history
 .svn/
+lib/generated_plugin_registrant.dart
+prime
+
+# libolm package
+/assets/js/package/*
 
 # IntelliJ related
 *.iml
@@ -22,7 +29,6 @@
 
 # Flutter/Dart/Pub related
 **/doc/api/
-**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -33,9 +39,26 @@
 
 # Web related
 lib/generated_plugin_registrant.dart
+docs/build/
+docs/.jekyll-cache/
+docs/_site/
 
-# Symbolication related
-app.*.symbols
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
-# Obfuscation related
-app.*.map.json
+
+/key.jks
+/android/key.properties
+**/android/app/.cxx
+android/key.jks
+android/keys.json
+android/Gemfile.lock
+lib/l10n_old
+ios/Flutter/.last_build_id
+ios/Podfile.lock
+
+/windows/out
+/winuwp/out
+/linux/out
+/macos/out
+.vs
