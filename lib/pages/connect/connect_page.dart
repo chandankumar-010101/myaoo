@@ -63,8 +63,7 @@ class ConnectPageController extends State<ConnectPage> {
 
   void signUp() async {
     usernameController.text = usernameController.text.trim();
-    final localpart =
-        usernameController.text.toLowerCase().replaceAll(' ', '_');
+    final localpart = usernameController.text.toLowerCase().replaceAll(' ', '_');
     if (localpart.isEmpty) {
       setState(() {
         signupError = L10n.of(context)!.pleaseChooseAUsername;
@@ -80,7 +79,9 @@ class ConnectPageController extends State<ConnectPage> {
     try {
       try {
         await Matrix.of(context).getLoginClient().register(username: localpart);
+        print("success");
       } on MatrixException catch (e) {
+        print("error $e");
         if (!e.requireAdditionalAuthentication) rethrow;
       }
       setState(() {
@@ -186,6 +187,7 @@ class ConnectPageController extends State<ConnectPage> {
             '/client/r0/login',
           )
           .then((loginTypes) => setState(() {
+            print(loginTypes);
                 _rawLoginTypes = loginTypes;
               }));
     }

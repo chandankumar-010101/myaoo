@@ -14,19 +14,19 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String flagsPath = "assets/countryFlags/";
-    const countries = [
-      "zh.svg",
-      "tk.svg",
-      "td.svg",
-      "de.svg",
-      "us.svg",
-      "ko.svg",
-      "ve.svg",
-      "pl.svg",
-      "mv.svg",
-      "no.svg"
-    ];
+    // const String flagsPath = "assets/countryFlags/";
+    // const countries = [
+    //   "zh.svg",
+    //   "tk.svg",
+    //   "td.svg",
+    //   "de.svg",
+    //   "us.svg",
+    //   "ko.svg",
+    //   "ve.svg",
+    //   "pl.svg",
+    //   "mv.svg",
+    //   "no.svg"
+    // ];
     return Scaffold(
       body: Center(
         child: Container(

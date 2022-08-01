@@ -237,6 +237,7 @@ class LoginController extends State<Login> {
 
   @override
   Widget build(BuildContext context) => LoginView(this);
+
 }
 
 extension on String {

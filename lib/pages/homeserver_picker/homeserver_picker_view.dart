@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pangeachat/config/app_config.dart';
+import 'package:pangeachat/widgets/layouts/login_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vrouter/vrouter.dart';
 
-import 'package:pangeachat/config/app_config.dart';
-import 'package:pangeachat/config/themes.dart';
-import 'package:pangeachat/utils/platform_infos.dart';
-import 'package:pangeachat/widgets/layouts/login_scaffold.dart';
 import 'homeserver_picker.dart';
 
 class HomeserverPickerView extends StatelessWidget {
   final HomeserverPickerController controller;
 
-  const HomeserverPickerView(this.controller, {Key? key}) : super(key: key);
+  HomeserverPickerView(this.controller, {Key? key}) : super(key: key);
+  // final homeController = Get.put(HomeController());
 
   static const String flagsPath = "assets/countryFlags/";
   // static const countries = [
@@ -43,8 +41,6 @@ class HomeserverPickerView extends StatelessWidget {
     "es.svg",
   ];
 
-
-
   @override
   Widget build(BuildContext context) {
     final benchmarkResults = controller.benchmarkResults;
@@ -69,10 +65,13 @@ class HomeserverPickerView extends StatelessWidget {
                         radius: 30.0,
                         backgroundColor: Colors.transparent,
                         child: ClipRRect(
-                          child: countries[index]=="en.png" || countries[index]=="ja.png"?Image.asset(fullFlagPath):SvgPicture.asset(
-                            fullFlagPath,
-                            fit: BoxFit.contain,
-                          ),
+                          child: countries[index] == "en.png" ||
+                                  countries[index] == "ja.png"
+                              ? Image.asset(fullFlagPath)
+                              : SvgPicture.asset(
+                                  fullFlagPath,
+                                  fit: BoxFit.contain,
+                                ),
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
@@ -83,7 +82,6 @@ class HomeserverPickerView extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: ListView(
               children: [
@@ -92,7 +90,7 @@ class HomeserverPickerView extends StatelessWidget {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 480),
                     child: Padding(
-                      padding: const EdgeInsets.only(top:60),
+                      padding: const EdgeInsets.only(top: 60),
                       child: Column(
                         children: [
                           Row(
@@ -100,10 +98,13 @@ class HomeserverPickerView extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 5.0),
-                                child: ConstrainedBox(constraints: BoxConstraints(maxHeight: 80),child: Image.asset("assets/newAssets/pangea-bare.png")),
+                                child: ConstrainedBox(
+                                    constraints: BoxConstraints(maxHeight: 80),
+                                    child: Image.asset(
+                                        "assets/newAssets/pangea-bare.png")),
                               ),
                               Column(
-                                children:  [
+                                children: [
                                   Text(AppConfig.applicationName,
                                       style: const TextStyle(
                                           fontSize: 26,
@@ -220,11 +221,13 @@ class HomeserverPickerView extends StatelessWidget {
                       primary: Colors.white.withOpacity(0.2),
                       onPrimary: Colors.white,
                       surfaceTintColor: Colors.white,
-                      side: const BorderSide(width: 2, color: Colors.white)
-                  ),
+                      side: const BorderSide(width: 2, color: Colors.white)),
                   child: controller.isLoading
                       ? const LinearProgressIndicator()
-                      : Text(L10n.of(context)!.start, style: const TextStyle(fontWeight: FontWeight.w700),),
+                      : Text(
+                          L10n.of(context)!.start,
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
                 ),
               ),
             ),

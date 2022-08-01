@@ -4,9 +4,9 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
-import 'package:pangeachat/pages/new_space/new_space_view.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+
+import 'new_space_view.dart';
 
 class NewSpace extends StatefulWidget {
   const NewSpace({Key? key}) : super(key: key);

@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
-
 import 'package:pangeachat/utils/fluffy_share.dart';
 import 'package:pangeachat/widgets/layouts/max_width_body.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+
+import '../homeserver_picker/home_controller.dart';
 import 'settings_account.dart';
 
 class SettingsAccountView extends StatelessWidget {
   final SettingsAccountController controller;
-  const SettingsAccountView(this.controller, {Key? key}) : super(key: key);
+  var dataStorage = GetStorage();
+
+  SettingsAccountView(this.controller, {Key? key}) : super(key: key);
+  HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    print("source value for cou ${dataStorage.read("sourcelanguage")}");
     return Scaffold(
       appBar: AppBar(title: Text(L10n.of(context)!.account)),
       body: ListTileTheme(
@@ -37,6 +43,52 @@ class SettingsAccountView extends StatelessWidget {
                 subtitle: Text(controller.profile?.displayName ??
                     Matrix.of(context).client.userID!.localpart!),
                 onTap: controller.setDisplaynameAction,
+              ),
+              ListTile(
+                title: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Text("Source Language"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(Icons.arrow_right_alt_outlined, size: 20),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Target Language"),
+                    ]),
+                subtitle: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                          "${dataStorage.read("sourcelanguage").toString().toLowerCase().capitalizeFirst}"),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Icon(Icons.arrow_right_alt_outlined, size: 20),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                          "${dataStorage.read("targetlanguage").toString().toLowerCase().capitalizeFirst}"),
+                    ]),
+                trailing: Icon(Icons.navigate_next),
+              ),
+              ListTile(
+                title: const Text("Role"),
+                subtitle: (dataStorage.read("usertype") == 1)
+                    ? const Text("Student")
+                    : (dataStorage.read("usertype") == 2)
+                        ? const Text("Teacher")
+                        : (dataStorage.read("usertype") == 3)
+                            ? const Text("Indie Learner")
+                            : const Text(""),
+                trailing: Icon(Icons.navigate_next),
               ),
               const Divider(height: 1),
               ListTile(

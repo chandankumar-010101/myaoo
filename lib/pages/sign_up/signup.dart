@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/sign_up/signup_view.dart';
@@ -78,7 +79,6 @@ class SignupPageController extends State<SignupPage> {
       error = null;
     });
     if (!formKey.currentState!.validate()) return;
-
     setState(() {
       loading = true;
     });
@@ -87,19 +87,25 @@ class SignupPageController extends State<SignupPage> {
       final client = Matrix.of(context).getLoginClient();
       final email = emailController.text;
       if (email.isNotEmpty) {
-        Matrix.of(context).currentClientSecret =
-            DateTime.now().millisecondsSinceEpoch.toString();
-        Matrix.of(context).currentThreepidCreds =
-            await client.requestTokenToRegisterEmail(
+       // print("yes");
+        Matrix.of(context).currentClientSecret = DateTime.now().millisecondsSinceEpoch.toString();
+      //  print("hello ${ Matrix.of(context).currentClientSecret}");
+
+        Matrix.of(context).currentThreepidCreds =  await client.requestTokenToRegisterEmail(
           Matrix.of(context).currentClientSecret,
           email,
           0,
         );
+      // print(" hello ${Matrix.of(context).currentThreepidCreds}");
       }
 
       final displayname = Matrix.of(context).loginUsername!;
+     // print(displayname);
       final localPart = displayname.toLowerCase().replaceAll(' ', '_');
-
+      final box = GetStorage();
+      box.write("sign_up", true);
+      box.write("full_name", displayname);
+      print("registor");
       await client.uiaRequestBackground(
         (auth) => client.register(
           username: localPart,
@@ -116,6 +122,7 @@ class SignupPageController extends State<SignupPage> {
         );
       }
     } catch (e) {
+      print(e);
       error = (e).toLocalizedString(context);
     } finally {
       if (mounted) {
@@ -123,6 +130,25 @@ class SignupPageController extends State<SignupPage> {
       }
     }
   }
+
+  // void signup([_]) async {
+  //   setState(() {
+  //     error = null;
+  //   });
+  //   if (!formKey.currentState!.validate()) return;
+  //
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   try {} catch (e) {
+  //     print(e);
+  //     error = (e).toLocalizedString(context);
+  //   } finally {
+  //     if (mounted) {
+  //       setState(() => loading = false);
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) => SignupPageView(this);
