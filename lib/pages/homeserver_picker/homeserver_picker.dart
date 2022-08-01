@@ -117,7 +117,8 @@ class HomeserverPickerController extends State<HomeserverPicker> {
 
       if (!ssoSupported && matrix.loginRegistrationSupported == false) {
         // Server does not support SSO or registration. We can skip to login page:
-        VRouter.of(context).to('login');
+        // VRouter.of(context).to('login');
+        VRouter.of(context).to('connect');
       } else {
         VRouter.of(context).to('connect');
       }
