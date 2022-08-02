@@ -92,6 +92,9 @@ dependencies:
   get_storage: ^2.0.3
   get: ^4.6.5
   dropdown_button2: ^1.6.3
+  # Pangeachat custom packages
+  pangeachat_it:
+    path: pangea_packages/pangeachat_it
 
 
 dev_dependencies:
