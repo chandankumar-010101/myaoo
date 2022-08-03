@@ -34,9 +34,10 @@ prime
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
+.pubspec.lock
 .pub/
 /build/
-
+.env
 # Web related
 lib/generated_plugin_registrant.dart
 docs/build/
