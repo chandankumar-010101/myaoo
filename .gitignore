@@ -34,6 +34,7 @@ prime
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
+.pubspec.lock
 .pub/
 /build/
 .env
