@@ -122,7 +122,6 @@ flutter:
     - .env
     - assets/
     - assets/sounds/
-
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
