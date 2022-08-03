@@ -95,6 +95,10 @@ dependencies:
   dropdown_button2: ^1.6.3
   flutter_dotenv: ^5.0.2
 
+  # Pangeachat custom packages
+  pangeachat_it:
+    path: pangea_packages/pangeachat_it
+
 dev_dependencies:
   dart_code_metrics: ^4.10.1
   flutter_lints: ^1.0.4
