@@ -88,8 +88,8 @@ dependencies:
   video_player: ^2.2.18
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
-  tuple: any
 
+  tuple: any
   get_storage: ^2.0.3
   get: ^4.6.5
   dropdown_button2: ^1.6.3
