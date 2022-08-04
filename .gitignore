@@ -14,7 +14,7 @@ lib/generated_plugin_registrant.dart
 prime
 
 # libolm package
-/assets/js/package/*
+
 
 # IntelliJ related
 *.iml
@@ -34,8 +34,11 @@ prime
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
+.pubspec.lock
 .pub/
 /build/
+.env
+.env.development
 
 # Web related
 lib/generated_plugin_registrant.dart

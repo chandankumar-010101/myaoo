@@ -9,17 +9,16 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/config/routes.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
 import 'config/app_config.dart';
+import 'config/environment.dart';
 import 'config/themes.dart';
 import 'utils/background_push.dart';
 import 'utils/custom_scroll_behaviour.dart';
@@ -27,8 +26,10 @@ import 'utils/localized_exception_extension.dart';
 import 'utils/platform_infos.dart';
 import 'widgets/lock_screen.dart';
 import 'widgets/matrix.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  await dotenv.load(fileName: Environment.fileName);
   await GetStorage.init();
   // Our background push shared isolate accesses flutter-internal things very early in the startup proccess
   // To make sure that the parts of flutter needed are started up already, we need to ensure that the
@@ -97,77 +98,76 @@ class _FluffyChatAppState extends State<FluffyChatApp> {
   @override
   void initState() {
     super.initState();
-    _initialUrl =
-        widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
+    _initialUrl = widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
   }
 
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
         builder: (lightColorScheme, darkColorScheme) => AdaptiveTheme(
-          light: FluffyThemes.light(lightColorScheme),
-          dark: FluffyThemes.dark(darkColorScheme),
-          initial: AdaptiveThemeMode.system,
-          builder: (theme, darkTheme) => LayoutBuilder(
-            builder: (context, constraints) {
-              const maxColumns = 3;
-              var newColumns =
-              (constraints.maxWidth / FluffyThemes.columnWidth).floor();
-              if (newColumns > maxColumns) newColumns = maxColumns;
-              columnMode ??= newColumns > 1;
-              _router ??= GlobalKey<VRouterState>();
-              if (columnMode != newColumns > 1) {
-                Logs().v('Set Column Mode = $columnMode');
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  setState(() {
-                    _initialUrl = _router?.currentState?.url;
-                    columnMode = newColumns > 1;
-                    _router = GlobalKey<VRouterState>();
-                  });
-                });
-              }
-              return VRouter(
-                key: _router,
-                title: AppConfig.applicationName,
-                theme: theme,
-                scrollBehavior: CustomScrollBehavior(),
-                logs: kReleaseMode ? VLogs.none : VLogs.info,
-                darkTheme: darkTheme,
-                localizationsDelegates: const [
-                  ...L10n.localizationsDelegates,
-                ],
-                supportedLocales: L10n.supportedLocales,
-                initialUrl: _initialUrl ?? '/',
-                routes: AppRoutes(columnMode ?? false).routes,
-                builder: (context, child) {
-                  LoadingDialog.defaultTitle =
-                      L10n.of(context)!.loadingPleaseWait;
-                  LoadingDialog.defaultBackLabel = L10n.of(context)!.close;
-                  LoadingDialog.defaultOnError =
-                      (e) => (e as Object?)!.toLocalizedString(context);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    SystemChrome.setSystemUIOverlayStyle(
-                      SystemUiOverlayStyle(
-                        statusBarColor: Colors.transparent,
-                        systemNavigationBarColor:
-                        Theme.of(context).appBarTheme.backgroundColor,
-                        systemNavigationBarIconBrightness:
-                        Theme.of(context).brightness == Brightness.light
-                            ? Brightness.dark
-                            : Brightness.light,
-                      ),
-                    );
-                  });
-                  return Matrix(
-                    context: context,
-                    router: _router,
-                    clients: widget.clients,
-                    child: child,
+              light: FluffyThemes.light(lightColorScheme),
+              dark: FluffyThemes.dark(darkColorScheme),
+              initial: AdaptiveThemeMode.system,
+              builder: (theme, darkTheme) => LayoutBuilder(
+                builder: (context, constraints) {
+                  const maxColumns = 3;
+                  var newColumns =
+                      (constraints.maxWidth / FluffyThemes.columnWidth).floor();
+                  if (newColumns > maxColumns) newColumns = maxColumns;
+                  columnMode ??= newColumns > 1;
+                  _router ??= GlobalKey<VRouterState>();
+                  if (columnMode != newColumns > 1) {
+                    Logs().v('Set Column Mode = $columnMode');
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        _initialUrl = _router?.currentState?.url;
+                        columnMode = newColumns > 1;
+                        _router = GlobalKey<VRouterState>();
+                      });
+                    });
+                  }
+                  return VRouter(
+                    key: _router,
+                    title: AppConfig.applicationName,
+                    theme: theme,
+                    scrollBehavior: CustomScrollBehavior(),
+                    logs: kReleaseMode ? VLogs.none : VLogs.info,
+                    darkTheme: darkTheme,
+                    localizationsDelegates: const [
+                      ...L10n.localizationsDelegates,
+                    ],
+                    supportedLocales: L10n.supportedLocales,
+                    initialUrl: _initialUrl ?? '/',
+                    routes: AppRoutes(columnMode ?? false).routes,
+                    builder: (context, child) {
+                      LoadingDialog.defaultTitle =
+                          L10n.of(context)!.loadingPleaseWait;
+                      LoadingDialog.defaultBackLabel = L10n.of(context)!.close;
+                      LoadingDialog.defaultOnError =
+                          (e) => (e as Object?)!.toLocalizedString(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        SystemChrome.setSystemUIOverlayStyle(
+                          SystemUiOverlayStyle(
+                            statusBarColor: Colors.transparent,
+                            systemNavigationBarColor:
+                                Theme.of(context).appBarTheme.backgroundColor,
+                            systemNavigationBarIconBrightness:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Brightness.dark
+                                    : Brightness.light,
+                          ),
+                        );
+                      });
+                      return Matrix(
+                        context: context,
+                        router: _router,
+                        clients: widget.clients,
+                        child: child,
+                      );
+                    },
                   );
                 },
-              );
-            },
-          ),
-        ));
+              ),
+            ));
   }
 }

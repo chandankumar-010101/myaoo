@@ -88,11 +88,16 @@ dependencies:
   video_player: ^2.2.18
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
+
   tuple: any
   get_storage: ^2.0.3
   get: ^4.6.5
   dropdown_button2: ^1.6.3
+  flutter_dotenv: ^5.0.2
 
+  # Pangeachat custom packages
+  pangeachat_it:
+    path: pangea_packages/pangeachat_it
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1
@@ -114,13 +119,15 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
+    - .env
+    - .env.development
+    - .env.example
     - assets/
     - assets/sounds/
-    - assets/js/
-    - assets/js/package/
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
+    - js
 
   fonts:
     - family: Roboto
