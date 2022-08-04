@@ -89,6 +89,8 @@ dependencies:
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
 
+  fluttertoast: ^8.0.9
+
   tuple: any
   get_storage: ^2.0.3
   get: ^4.6.5
@@ -127,7 +129,7 @@ flutter:
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
-    - js
+    - js/
 
   fonts:
     - family: Roboto
