@@ -19,6 +19,7 @@ abstract class AppConfig {
   static const Color primaryColor = Color(0xFF5625BA);
   static const Color primaryColorLight = Color(0xFFCCBDEA);
   static const Color secondaryColor = Color(0xFF41a2bc);
+  static const Color violetColor = Color(0xFF352048);
   static String _privacyUrl = 'https://www.pangeachat.com/privacy';
   static String get privacyUrl => _privacyUrl;
   static const String enablePushTutorial =

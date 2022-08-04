@@ -10,12 +10,11 @@ import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
 import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart';
-import 'package:pangeachat/pages/language_selection_screen/language_selectionView.dart';
 import 'package:pangeachat/pages/login/login.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
-import 'package:pangeachat/pages/new_space/new_space.dart';
 import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
+import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/settings/settings.dart';
 import 'package:pangeachat/pages/settings_3pid/settings_3pid.dart';
@@ -245,7 +244,14 @@ class AppRoutes {
             ),
           ],
         ),
-        VWidget(path: '/lang', widget: LanguageSelection()),
+        VWidget(
+          path: '/lang',
+          widget: LanguageSelection(),
+        ),
+        VWidget(
+          path: '/request',
+          widget: RequestScreenView(),
+        ),
       ];
 
   List<VRouteElement> get _homeRoutes => [
