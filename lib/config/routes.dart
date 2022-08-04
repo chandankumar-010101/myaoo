@@ -36,6 +36,7 @@ import 'package:pangeachat/widgets/layouts/two_column_layout.dart';
 import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../pages/class_analytics/class_analytics.dart';
 import '../pages/language_selection_screen/language_selection.dart';
 
 class AppRoutes {
@@ -252,6 +253,10 @@ class AppRoutes {
           path: '/request',
           widget: RequestScreenView(),
         ),
+        VWidget(
+          path: '/analytics',
+          widget: ClassAnalyticsScreen(),
+        )
       ];
 
   List<VRouteElement> get _homeRoutes => [

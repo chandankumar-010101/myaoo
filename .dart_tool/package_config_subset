@@ -1,8 +1,3 @@
-
-pangeachat
-2.12
-file:///home/naveen/Documents/client-v0/
-file:///home/naveen/Documents/client-v0/lib/
 keyboard_shortcuts
 2.12
 file:///Users/sangamsharma/.pub-cache/git/keyboard_shortcuts-a3d4020911860ff091d90638ab708604b71d2c5a/
@@ -28,37 +23,21 @@ geolocator_android
 file:///Users/sangamsharma/.pub-cache/hosted/hanntech-gmbh.gitlab.io%2547free2pass%2547flutter-geolocator-floss%2547/geolocator_android-1.0.1/
 file:///Users/sangamsharma/.pub-cache/hosted/hanntech-gmbh.gitlab.io%2547free2pass%2547flutter-geolocator-floss%2547/geolocator_android-1.0.1/lib/
 _fe_analyzer_shared
-<<<<<<< HEAD
-2.12
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-40.0.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-40.0.0/lib/
+2.17
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-43.0.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-43.0.0/lib/
 adaptive_dialog
 2.17
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/adaptive_dialog-1.6.4+2/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/adaptive_dialog-1.6.4+2/lib/
-=======
-2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-43.0.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-43.0.0/lib/
-adaptive_dialog
-2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/adaptive_dialog-1.7.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/adaptive_dialog-1.7.0/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/adaptive_dialog-1.7.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/adaptive_dialog-1.7.0/lib/
 adaptive_theme
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/adaptive_theme-2.3.1/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/adaptive_theme-2.3.1/lib/
 analyzer
-<<<<<<< HEAD
-2.15
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/analyzer-4.1.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/analyzer-4.1.0/lib/
-=======
 2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-4.3.1/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-4.3.1/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/analyzer-4.3.1/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/analyzer-4.3.1/lib/
 analyzer_plugin
 2.14
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/analyzer_plugin-0.10.0/
@@ -188,15 +167,9 @@ cupertino_icons
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.5/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.5/lib/
 dart_code_metrics
-<<<<<<< HEAD
-2.14
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dart_code_metrics-4.16.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dart_code_metrics-4.16.0/lib/
-=======
 2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/dart_code_metrics-4.17.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/dart_code_metrics-4.17.0/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dart_code_metrics-4.17.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dart_code_metrics-4.17.0/lib/
 dart_style
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dart_style-2.2.3/
@@ -251,34 +224,20 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/disk_space-0.2.1/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/disk_space-0.2.1/lib/
 dropdown_button2
 2.17
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.6.3/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.6.3/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.7.1/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.7.1/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.7.1/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.7.1/lib/
 dynamic_color
 2.16
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dynamic_color-1.4.0/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/dynamic_color-1.4.0/lib/
 email_validator
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.2/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.2/lib/
-emoji_picker_flutter
-2.12
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/emoji_picker_flutter-1.3.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/emoji_picker_flutter-1.3.0/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.17/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.17/lib/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.17/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.17/lib/
 emoji_picker_flutter
 2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/emoji_picker_flutter-1.3.1/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/emoji_picker_flutter-1.3.1/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/emoji_picker_flutter-1.3.1/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/emoji_picker_flutter-1.3.1/lib/
 encrypt
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/encrypt-5.0.1/
@@ -349,17 +308,12 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_blurhash-0
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_blurhash-0.6.8/lib/
 flutter_cache_manager
 2.12
-<<<<<<< HEAD
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-3.3.0/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-3.3.0/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-3.3.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-3.3.0/lib/
 flutter_dotenv
 2.12
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_dotenv-5.0.2/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_dotenv-5.0.2/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_dotenv-5.0.2/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_dotenv-5.0.2/lib/
 flutter_file_dialog
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_file_dialog-2.3.0/
@@ -390,26 +344,16 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_noti
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-9.7.0/lib/
 flutter_local_notifications_linux
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.0+1/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.0+1/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.1/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.1/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.1/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.1/lib/
 flutter_local_notifications_platform_interface
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_platform_interface-5.0.0/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_platform_interface-5.0.0/lib/
 flutter_map
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_map-2.1.1/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_map-2.1.1/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map-2.2.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map-2.2.0/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_map-2.2.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_map-2.2.0/lib/
 flutter_math_fork
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/flutter_math_fork-0.4.2+2/
@@ -572,13 +516,8 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/image_picker_ios-0
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/image_picker_ios-0.8.5+6/lib/
 image_picker_platform_interface
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.5.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.5.0/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.6.1/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.6.1/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.6.1/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.6.1/lib/
 import_sorter
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/import_sorter-4.6.0/
@@ -620,15 +559,9 @@ latlong2
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/latlong2-0.8.1/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/latlong2-0.8.1/lib/
 lint
-<<<<<<< HEAD
-2.15
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lint-1.8.2/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lint-1.8.2/lib/
-=======
 2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/lint-1.10.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/lint-1.10.0/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lint-1.10.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lint-1.10.0/lib/
 lints
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/
@@ -647,21 +580,12 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/logging-1.0.2/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/logging-1.0.2/lib/
 lottie
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lottie-1.3.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lottie-1.3.0/lib/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lottie-1.4.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/lottie-1.4.0/lib/
 macos_ui
 2.17
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/macos_ui-1.7.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/macos_ui-1.7.0/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/lottie-1.4.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/lottie-1.4.0/lib/
-macos_ui
-2.17
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/macos_ui-1.7.1/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/macos_ui-1.7.1/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/macos_ui-1.7.1/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/macos_ui-1.7.1/lib/
 markdown
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/markdown-4.0.1/
@@ -680,13 +604,8 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix-0.9.12/
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix-0.9.12/lib/
 matrix_api_lite
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix_api_lite-1.1.1/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix_api_lite-1.1.1/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matrix_api_lite-1.1.2/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matrix_api_lite-1.1.2/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix_api_lite-1.1.2/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix_api_lite-1.1.2/lib/
 matrix_homeserver_recommendations
 2.15
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/matrix_homeserver_recommendations-0.2.1/
@@ -777,21 +696,12 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.11/lib/
 path_provider_android
 2.14
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.16/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.16/lib/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.17/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.17/lib/
 path_provider_ios
 2.14
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.10/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.10/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.17/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.17/lib/
-path_provider_ios
-2.14
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.11/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.11/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.11/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.11/lib/
 path_provider_linux
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.7/
@@ -934,13 +844,8 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/sdp_transform-0.3.
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/sdp_transform-0.3.2/lib/
 sentry
 2.12
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/sentry-6.8.0/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/sentry-6.8.0/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/sentry-6.9.0/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/sentry-6.9.0/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/sentry-6.9.0/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/sentry-6.9.0/lib/
 share_plus
 2.12
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/share_plus-4.0.10/
@@ -999,13 +904,8 @@ file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shared_preferences
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.1/lib/
 shelf
 2.16
-<<<<<<< HEAD
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shelf-1.3.1/
-file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shelf-1.3.1/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/shelf-1.3.2/
-file:///home/naveen/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/shelf-1.3.2/lib/
->>>>>>> dev
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shelf-1.3.2/
+file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shelf-1.3.2/lib/
 shelf_packages_handler
 2.14
 file:///Users/sangamsharma/.pub-cache/hosted/pub.dartlang.org/shelf_packages_handler-3.0.1/
@@ -1312,15 +1212,10 @@ file:///Users/sangamsharma/flutter/packages/fuchsia_remote_debug_protocol/
 file:///Users/sangamsharma/flutter/packages/fuchsia_remote_debug_protocol/lib/
 integration_test
 2.12
-<<<<<<< HEAD
 file:///Users/sangamsharma/flutter/packages/integration_test/
 file:///Users/sangamsharma/flutter/packages/integration_test/lib/
-=======
-file:///home/naveen/snap/flutter/common/flutter/packages/integration_test/
-file:///home/naveen/snap/flutter/common/flutter/packages/integration_test/lib/
 pangeachat_it
 2.17
-file:///home/naveen/Documents/client-v0/pangea_packages/pangeachat_it/
-file:///home/naveen/Documents/client-v0/pangea_packages/pangeachat_it/lib/
->>>>>>> dev
+file:///Users/sangamsharma/StudioProjects/client-v0/pangea_packages/pangeachat_it/
+file:///Users/sangamsharma/StudioProjects/client-v0/pangea_packages/pangeachat_it/lib/
 2
