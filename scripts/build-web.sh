@@ -1,4 +1,4 @@
-#!/bin/sh -ve
+#!/bin/bash -ve
 flutter config --enable-web
 flutter clean
 flutter pub get
