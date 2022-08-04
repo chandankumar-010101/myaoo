@@ -121,7 +121,6 @@ flutter:
   assets:
     - .env
     - .env.development
-    - .env.stagging
     - .env.example
     - assets/
     - assets/sounds/
