@@ -120,6 +120,9 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - .env.development
+    - .env.stagging
+    - .env.example
     - assets/
     - assets/sounds/
     - assets/newAssets/
