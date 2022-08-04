@@ -1,11 +1,7 @@
 import '../config/environment.dart';
 
 class ApiUrls {
-  ApiUrls(){
-    print(Environment.baseAPI);
-    print(Environment.basePath);
-    print(Environment.fileName);
-  }
+
   static String get_all_flags = Environment.baseAPI + "/language/list";
   static String create_user = Environment.baseAPI + "/account/create";
   static String validate_user =
