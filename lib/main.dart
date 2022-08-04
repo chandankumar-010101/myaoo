@@ -9,18 +9,16 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/enviroment/pangea_env.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/config/routes.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
 import 'config/app_config.dart';
+import 'config/environment.dart';
 import 'config/themes.dart';
 import 'utils/background_push.dart';
 import 'utils/custom_scroll_behaviour.dart';
@@ -31,7 +29,7 @@ import 'widgets/matrix.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: Environment.fileName);
   await GetStorage.init();
   // Our background push shared isolate accesses flutter-internal things very early in the startup proccess
   // To make sure that the parts of flutter needed are started up already, we need to ensure that the
@@ -100,8 +98,7 @@ class _FluffyChatAppState extends State<FluffyChatApp> {
   @override
   void initState() {
     super.initState();
-    _initialUrl =
-        widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
+    _initialUrl = widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
   }
 
   @override

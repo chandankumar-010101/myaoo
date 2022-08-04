@@ -2,24 +2,20 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:pangeachat/config/controller.dart';
+import 'package:pangeachat/model/flag_model.dart';
 import 'package:pangeachat/pages/new_space/new_class_controller.dart';
-import '../../utils/api_helper.dart';
-import '../../utils/api_urls.dart';
-import '../../utils/language_model.dart';
 import '../homeserver_picker/home_controller.dart';
+import 'new_space.dart';
 
 class WelcomeNewSpace extends StatefulWidget {
-  const WelcomeNewSpace({Key? key}) : super(key: key);
+  final NewSpaceController controller;
+  const WelcomeNewSpace(this.controller, {Key? key}) : super(key: key);
 
   @override
   State<WelcomeNewSpace> createState() => _WelcomeNewSpaceState();
 }
 
 class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
-
-  NewClassController _newClassController = Get.put(NewClassController());
-
   welcomeWidget() {
     final Size size = MediaQuery.of(context).size;
     return Column(
@@ -47,8 +43,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 SizedBox(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/partner.svg",
+                  child: Image.asset(
+                    "png/partner.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -70,8 +66,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 Container(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/grow.svg",
+                  child: Image.asset(
+                    "png/grow.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -101,8 +97,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 Container(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/Comment.svg",
+                  child: Image.asset(
+                    "png/Comment.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -124,8 +120,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 Container(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/time.svg",
+                  child: Image.asset(
+                    "png/time.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -176,66 +172,33 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
 
   chooseLanguageWidget() {
     Size size = MediaQuery.of(context).size;
-
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
           height: size.height * 0.04,
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.1, vertical: size.height * 0.01),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
           child: TextField(
-            controller: _newClassController.nameOfClassController.value,
+            controller: widget.controller.classNameController,
             autofocus: true,
             autocorrect: false,
-            // textInputAction: TextInputAction.go,
-            onSubmitted: (String? value) {},
             decoration: InputDecoration(
-                //labelText: "Class Name",
-                // alignLabelWithHint: true,
-                // prefixIcon: const Icon(Icons.people_outlined),
                 hintText: "Name of Your Class",
                 hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
-
             textAlign: TextAlign.center,
           ),
         ),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.1, vertical: size.height * 0.01),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  "assets/Vector.svg",
-                  width: 40,
-                  height: 40,
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _newClassController.citycontroller.value,
-                    onSubmitted: (String? value) {},
-                    decoration: InputDecoration(
-                        hintText: "Optional: City",
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
-                  ),
-                ),
-              ],
-            )),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.1, vertical: size.height * 0.01),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                "assets/Vector.svg",
+              Image.asset(
+                "png/vector.png",
                 width: 40,
                 height: 40,
               ),
@@ -244,8 +207,36 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               ),
               Expanded(
                 child: TextField(
-                  controller: _newClassController.countryController.value,
-                  onSubmitted: (String? value) {},
+                  controller: widget.controller.cityController,
+                  autofocus: true,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                      hintText: "Optional: City",
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                "png/vector.png",
+                width: 40,
+                height: 40,
+              ),
+              SizedBox(
+                width: 40,
+              ),
+              Expanded(
+                child: TextField(
+                  controller: widget.controller.countryController,
+                  autofocus: true,
+                  autocorrect: false,
                   decoration: InputDecoration(
                       hintText: "Optional: Country",
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -254,14 +245,60 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.1, vertical: size.height * 0.01),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                "assets/md-analytics.svg",
+              Image.asset(
+                "png/md_analyst.png",
+                width: 40,
+                height: 40,
+              ),
+              SizedBox(
+                width: 30,
+              ),
+
+              //language level
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: DropdownButton(
+                    // Initial Value
+                    value: widget.controller.languageLevelDropdownValue,
+                    isExpanded: true,
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    // Array list of items
+                    items: widget.controller.languageLevel.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        widget.controller.languageLevelDropdownValue =
+                            newValue!;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                "png/house.png",
                 width: 40,
                 height: 40,
               ),
@@ -269,297 +306,213 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 width: 30,
               ),
               Expanded(
-                child: TextField(
-                  controller: _newClassController.languageController.value,
-                  onSubmitted: (String? value) {},
-                  decoration: InputDecoration(
-                      hintText: "Language level(s)",
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
-                ),
-              ),
+                  child: TextField(
+                controller: widget.controller.schoolController,
+                onSubmitted: (String? value) {},
+                decoration: InputDecoration(
+                    hintText: "Optional: School",
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
+              )),
             ],
           ),
         ),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.1, vertical: size.height * 0.01),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  "assets/house.svg",
-                  width: 40,
-                  height: 40,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Expanded(
-                    child: TextField(
-                  controller: _newClassController.schoolController.value,
-                  onSubmitted: (String? value) {},
-                  decoration: InputDecoration(
-
-                      //  prefixIcon: const Icon(Icons.house_siding),
-                      // prefixIconColor: Colors.deepPurple,
-                      hintText: "Optional: School",
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
-                )),
-              ],
-            )),
         Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: size.width * 0.1, vertical: size.height * 0.02),
-            child: TextField(
-              controller: _newClassController.textareaController.value,
-              onSubmitted: (String? value) {},
-              decoration: InputDecoration(
-                // border: OutlineInputBorder(),
-                hintText:
-                    "What should prospective students know\nabout your class? Potential exchange\nteachers?",
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-              ),
-              maxLines: 3,
-            )),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.1,
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
+          child: TextField(
+            controller: widget.controller.discriptionController,
+            onSubmitted: (String? value) {},
+            decoration: InputDecoration(
+              // border: OutlineInputBorder(),
+              hintText:
+                  "What should prospective students know\nabout your class? Potential exchange\nteachers?",
+              hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+            maxLines: 3,
           ),
+        ),
+
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 450),
+          padding: EdgeInsets.all(size.height * 0.01),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [Text("1000")],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.1,
-          ),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
           child: Center(
             child: Text("What is the target language of your classroom?"),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.1,
-          ),
-          child: Center(
-            child:     Container(
-              margin: EdgeInsets.symmetric(horizontal: 40),
-              height: 50,
-              width: 300,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3.0),
-                  border: Border.all(color: Colors.grey.shade200)),
-              child: Obx(() => DropdownButton(
-                underline: SizedBox(),
-                icon: Icon(Icons.arrow_drop_down_outlined,
-                    color: Colors.black, size: 20),
-                hint: _controller.selectedLanguageOne.value
-                    .toString()
-                    .isEmpty
-                    ? const Center(
-                  child: Text(
-                    "Select Language",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0,
-                        color: Colors.black),
-                  ),
-                )
-                    : Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment:
-                  CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.network(
-                      _controller.selectedFlag.value,
-                      fit: BoxFit.cover,
-                      width: 40,
-                      height: 50,
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(
-                      _controller.selectedLanguageOne.value,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15.0,
-                          color: Colors.black),
-                    )
-                  ],
-                ),
-                isExpanded: true,
-                items:_controller.countriesList.map(
-                      (val) {
-                    return DropdownMenuItem(
-                      enabled: !_controller.loading.value,
-                      alignment: Alignment.center,
-                      value: "${val.languageName}",
-                      onTap: () {
-                        _controller.selectedFlag.value =
-                        val.languageFlag!;
-                      },
-                      child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.network(
-                                "${val.languageFlag}"),
-                            const SizedBox(
-                              width: 10,
+        Container(
+            constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
+            padding: EdgeInsets.all(size.height * 0.01),
+            child: widget.controller.languageFlagList.isEmpty
+                ? Container()
+                : DropdownButton(
+                    // Initial Value
+                    hint: widget.controller.sourceLanguage == null
+                        ? const Center(
+                            child: Text(
+                              "Select Language",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15.0,
+                                  color: Colors.black),
                             ),
-                            Text("${val.languageName}")
-                          ]),
-                    );
-                  },
-                ).toList(),
-                onChanged: (String? value) {
-                  _controller.selectedLanguageOne.value = value!;
-                },
-              )),
-            ),
-          ),
-          // child: Center(
-          //   child: DropdownButtonHideUnderline(
-          //     child: DropdownButton2(
-          //       buttonDecoration: BoxDecoration(
-          //         border: Border.all(width: 1, color: Colors.grey),
-          //       ),
-          //       hint: Padding(
-          //         padding: EdgeInsets.symmetric(horizontal: 5),
-          //         child: Text(
-          //           'Choose language',
-          //           style: TextStyle(
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //       ),
-          //       items: _controller.countriesList.value
-          //           .map((item) => DropdownMenuItem(
-          //                 value: item.languageName,
-          //                 child: ListTile(
-          //                   leading: CircleAvatar(
-          //                     radius: 20,
-          //                     child: Text("Hellw"),
-          //                   ),
-          //                   // title: Text(
-          //                   //   item.languageName.toString(),
-          //                   // ),
-          //                 ),
-          //               ))
-          //           .toList(),
-          //       value: selectedValue,
-          //       onChanged: (value) {
-          //         setState(() {
-          //           selectedValue = value as String;
-          //         });
-          //       },
-          //       buttonHeight: 40,
-          //       buttonWidth: size.width * 0.2,
-          //       itemHeight: 40,
-          //     ),
-          //   ),
-          // ),
-        ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                widget.controller.sourceLanguage!.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                widget.controller.sourceLanguage!.languageName
+                                    .toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              )
+                            ],
+                          ),
+                    isExpanded: true,
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    underline: Container(),
+                    // Array list of items
+                    items:
+                        widget.controller.languageFlagList.map((languageFlag) {
+                      // print(items.languageFlag);
+                      return DropdownMenuItem(
+                          value: languageFlag,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                languageFlag.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                languageFlag.languageName.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              )
+                            ],
+                          ));
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (LanguageFlag? newValue) {
+                      setState(() {
+                        widget.controller.sourceLanguage = newValue!;
+                      });
+                    },
+                  )),
+
         SizedBox(
           height: size.height * 0.03,
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.1,
-          ),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
           child: Center(
             child: Text("What is the dominant language of your student?"),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.1,
-          ),
-          child: Center(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 40),
-              height: 50,
-              width: 300,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3.0),
-                  border: Border.all(color: Colors.grey.shade200)),
-              child: Obx(() => DropdownButton(
-                underline: SizedBox(),
-                icon: Icon(Icons.arrow_drop_down_outlined,
-                    color: Colors.black, size: 20),
-                hint: _controller.selectedLanguageOne.value
-                    .toString()
-                    .isEmpty
-                    ? const Center(
-                  child: Text(
-                    "Select Language",
-                    style: TextStyle(
+        Container(
+            constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
+            padding: EdgeInsets.all(size.height * 0.01),
+            child: widget.controller.languageFlagList.isEmpty
+                ? Container()
+                : DropdownButton(
+              // Initial Value
+              hint: widget.controller.targetLanguage == null
+                  ? const Center(
+                child: Text(
+                  "Select Language",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15.0,
+                      color: Colors.black),
+                ),
+              )
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.network(
+                    widget.controller.targetLanguage!.languageFlag!,
+                    fit: BoxFit.cover,
+                    width: 40,
+                    height: 40,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    widget.controller.targetLanguage!.languageName
+                        .toString(),
+                    style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15.0,
                         color: Colors.black),
-                  ),
-                )
-                    : Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment:
-                  CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.network(
-                      _controller.selectedFlagTwo.value,
-                      fit: BoxFit.cover,
-                      width: 40,
-                      height: 50,
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(
-                      _controller.selectedLanguageTwo.value,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15.0,
-                          color: Colors.black),
-                    )
-                  ],
-                ),
-                isExpanded: true,
-                items: _controller.countriesList.map(
-                      (val) {
-                    return DropdownMenuItem(
-                      enabled: !_controller.loading.value,
-                      alignment: Alignment.center,
-                      value: "${val.languageName}",
-                      onTap: () {
-                        _controller.selectedFlagTwo.value =
-                        val.languageFlag!;
-                      },
-                      child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.network(
-                                "${val.languageFlag}"),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text("${val.languageName}")
-                          ]),
-                    );
-                  },
-                ).toList(),
-                onChanged: (String? value) {
-                  _controller.selectedLanguageTwo.value = value!;
-                },
-              )),
-            ),
-          ),
-        ),
+                  )
+                ],
+              ),
+              isExpanded: true,
+              // Down Arrow Icon
+              icon: const Icon(Icons.keyboard_arrow_down),
+              underline: Container(),
+              // Array list of items
+              items:
+              widget.controller.languageFlagList.map((languageFlag) {
+                // print(items.languageFlag);
+                return DropdownMenuItem(
+                    value: languageFlag,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          languageFlag.languageFlag!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          languageFlag.languageName.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15.0,
+                              color: Colors.black),
+                        )
+                      ],
+                    ));
+              }).toList(),
+              // After selecting the desired option,it will
+              // change button value to selected value
+              onChanged: (LanguageFlag? newValue) {
+                setState(() {
+                  widget.controller.targetLanguage = newValue!;
+                });
+              },
+            )),
+
         SizedBox(
           height: size.height * 0.03,
         ),
@@ -602,8 +555,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   }
 
   classPermissionsWidget() {
-    print(_newClassController.schoolController.value.text);
-    bool _switchValue = false;
+    // print(_newClassController.schoolController.value.text);
+    // bool _switchValue = false;
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -632,102 +585,75 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Public",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                  Switch(
-                    value: _switchValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValue = value;
-                      });
-                    },
-                    activeTrackColor: Color(0xFFCCBDEA),
-                    activeColor: Colors.deepPurple,
-                  ),
-                ],
+              SwitchListTile.adaptive(
+                title: Text("Public"),
+                value: widget.controller.publicGroup,
+                onChanged: widget.controller.setPublicGroup,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 5),
-                      child: Text(
-                        "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+              Container(
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
+                padding: EdgeInsets.all(size.height * 0.01),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: Text(
+                          "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
+                          style: TextStyle(color: Colors.black, fontSize: 14),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Open Enrollment?",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                  Switch(
-                    value: _switchValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValue = value;
-                      });
-                    },
-                    activeTrackColor: Color(0xFFCCBDEA),
-                    activeColor: Colors.deepPurple,
-                  ),
-                ],
+
+              SwitchListTile.adaptive(
+                title: Text("Open Enrollment?"),
+                value: widget.controller.publicGroup,
+                onChanged: widget.controller.setPublicGroup,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 5),
-                      child: Text(
-                        "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+              Container(
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
+                padding: EdgeInsets.all(size.height * 0.01),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: Text(
+                          "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
+                          style: TextStyle(color: Colors.black, fontSize: 14),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Open to exchanges?",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                  Switch(
-                    value: _switchValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValue = value;
-                      });
-                    },
-                    activeTrackColor: Color(0xFFCCBDEA),
-                    activeColor: Colors.deepPurple,
-                  ),
-                ],
+
+              SwitchListTile.adaptive(
+                title: Text("Open to exchanges?"),
+                value: widget.controller.publicGroup,
+                onChanged: widget.controller.setPublicGroup,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 5),
-                      child: Text(
-                        "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+              Container(
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
+                padding: EdgeInsets.all(size.height * 0.01),
+                child:  Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: Text(
+                          "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
+                          style: TextStyle(color: Colors.black, fontSize: 14),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+
             ],
           ),
         ),
@@ -774,7 +700,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   }
 
   studentPermissionsWidget() {
-    bool _switchValue = false;
+   bool _switchValue = false;
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -803,24 +729,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "1-to-1 chats within class",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: Text("1-to-1 chats within class"),
+                  value: widget.controller.publicGroup,
+                  onChanged: widget.controller.setPublicGroup,
                 ),
                 Row(
                   children: [
@@ -1408,12 +1320,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   // }
 
   @override
-  void initState() {
-    super.initState();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -1422,6 +1328,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              print(_controller.createClass.value);
+            },
+          ),
         ),
         body: Container(
           width: size.width,
