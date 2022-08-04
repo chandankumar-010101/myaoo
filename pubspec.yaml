@@ -120,11 +120,14 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - .env.development
+    - .env.example
     - assets/
     - assets/sounds/
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
+    - js
 
   fonts:
     - family: Roboto

@@ -14,7 +14,7 @@ lib/generated_plugin_registrant.dart
 prime
 
 # libolm package
-/js/package/*
+
 
 # IntelliJ related
 *.iml
@@ -38,6 +38,8 @@ prime
 .pub/
 /build/
 .env
+.env.development
+
 # Web related
 lib/generated_plugin_registrant.dart
 docs/build/

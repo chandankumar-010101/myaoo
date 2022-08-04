@@ -47,8 +47,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 SizedBox(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/partner.svg",
+                  child:Image.asset(
+                    "png/partner.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -70,8 +70,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 Container(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/grow.svg",
+                  child: Image.asset(
+                    "png/grow.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -101,8 +101,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 Container(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/Comment.svg",
+                  child: Image.asset(
+                    "png/Comment.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -124,8 +124,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 Container(
                   height: 70,
                   width: 70,
-                  child: SvgPicture.asset(
-                    "assets/time.svg",
+                  child: Image.asset(
+                    "png/time.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -176,8 +176,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
 
   chooseLanguageWidget() {
     Size size = MediaQuery.of(context).size;
-
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -371,7 +369,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   crossAxisAlignment:
                   CrossAxisAlignment.center,
                   children: [
-                    SvgPicture.network(
+                    Image.network(
                       _controller.selectedFlag.value,
                       fit: BoxFit.cover,
                       width: 40,
@@ -1407,11 +1405,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   //   }
   // }
 
-  @override
-  void initState() {
-    super.initState();
 
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1422,6 +1416,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
+          leading:  IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: (){
+              print(_controller.createClass.value);
+            },
+          ),
         ),
         body: Container(
           width: size.width,
