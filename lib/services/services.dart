@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../model/flag_model.dart';
-import 'api_helper.dart';
-import 'api_urls.dart';
+import '../utils/api_helper.dart';
+import '../utils/api_urls.dart';
 
 class Services{
 

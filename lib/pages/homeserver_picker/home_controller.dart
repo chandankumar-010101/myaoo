@@ -19,7 +19,6 @@ class HomeController extends GetxController {
   RxString selectedLanguageTwo = "".obs;
   RxString selectedFlagTwo = "".obs;
   RxString role = "".obs;
-  RxInt createClass = 0.obs;
 
 
   RxString source = "".obs;

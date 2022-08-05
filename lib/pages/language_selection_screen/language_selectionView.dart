@@ -141,8 +141,7 @@ class LanguageSelectionView extends StatelessWidget {
                               alignment: Alignment.center,
                               value: "${val.languageName}",
                               onTap: () {
-                                controller.getxController.selectedFlag
-                                    .value = val.languageFlag!;
+                                controller.getxController.selectedFlag.value = val.languageFlag!;
                                 log(controller
                                     .getxController.selectedFlag.value
                                     .toString());
