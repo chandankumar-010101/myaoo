@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
-import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/pages/chat_list/chat_list_item.dart';
 import 'package:pangeachat/utils/string_extension.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/contacts_list.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+import 'package:vrouter/vrouter.dart';
+
 import '../../utils/localized_exception_extension.dart';
 import '../../utils/platform_infos.dart';
 import 'search.dart';
@@ -183,54 +182,163 @@ class SearchView extends StatelessWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
+                          childAspectRatio: 0.8,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
                         ),
-                        itemCount: publicRoomsResponse.chunk.length,
+                        itemCount: 4,
                         itemBuilder: (BuildContext context, int i) => Material(
                           elevation: 2,
                           borderRadius: BorderRadius.circular(16),
                           child: InkWell(
-                            onTap: () => controller.joinGroupAction(
-                              publicRoomsResponse.chunk[i],
-                            ),
                             borderRadius: BorderRadius.circular(16),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Avatar(
-                                    mxContent:
-                                        publicRoomsResponse.chunk[i].avatarUrl,
-                                    name: publicRoomsResponse.chunk[i].name,
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        child: Avatar(
+                                          mxContent: Uri.parse(
+                                              "https://cdn.pixabay.com/photo/2022/07/31/20/32/volkswagen-7356817_1280.jpg"),
+                                          name:
+                                              "publicRoomsResponse.chunk[i].name",
+                                        ),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.white,
+                                                width: 2.0),
+                                            shape: BoxShape.circle),
+                                      ),
+                                      Positioned(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(2.0),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 2)),
+                                          child: const Icon(
+                                            Icons.school,
+                                            color: Colors.black,
+                                            size: 15.0,
+                                          ),
+                                        ),
+                                        bottom: 0,
+                                        right: 0,
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    publicRoomsResponse.chunk[i].name!,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
+                                  const SizedBox(
+                                    height: 10.0,
                                   ),
-                                  Text(
-                                    L10n.of(context)!.countParticipants(
-                                        publicRoomsResponse
-                                            .chunk[i].numJoinedMembers),
-                                    style: const TextStyle(fontSize: 10.5),
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
+                                  const Text("Hayao Miyazaki",
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400)),
+                                  const SizedBox(
+                                    height: 10.0,
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      publicRoomsResponse.chunk[i].topic ??
-                                          L10n.of(context)!.noDescription,
-                                      maxLines: 4,
-                                      textAlign: TextAlign.center,
-                                    ),
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.location_pin, size: 12),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Text("Peru",
+                                          style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w400)),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Icon(Icons.star, size: 12),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Text("N/A",
+                                          style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w400)),
+                                    ],
                                   ),
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.supervisor_account_sharp,
+                                          size: 12),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Expanded(
+                                        child: Text("30 students, high school",
+                                            style: TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.w400)),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.query_stats, size: 12),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Text("B1-C1",
+                                          style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w400))
+                                    ],
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.account_balance, size: 12),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Text("Not disclosed",
+                                          style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w400))
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Spacer(),
+                                      Avatar(
+                                        mxContent: Uri.parse(
+                                            "https://cdn.pixabay.com/photo/2017/12/23/23/37/flag-of-turkey-3036191_1280.jpg"),
+                                        name:
+                                            "publicRoomsResponse.chunk[i].name",
+                                        size: 15,
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      const Icon(Icons.arrow_right_alt_outlined,
+                                          size: 17),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      Avatar(
+                                        mxContent: Uri.parse(
+                                            "https://cdn.pixabay.com/photo/2017/12/23/23/37/flag-of-turkey-3036191_1280.jpg"),
+                                        name:
+                                            "publicRoomsResponse.chunk[i].name",
+                                        size: 15,
+                                      ),
+                                      const Spacer(),
+                                      const Text("free",
+                                          style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w400))
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
