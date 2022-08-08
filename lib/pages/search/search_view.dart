@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_item.dart';
+import 'package:pangeachat/pages/search/search_view_controller.dart';
 import 'package:pangeachat/utils/string_extension.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/contacts_list.dart';
@@ -16,7 +19,9 @@ import 'search.dart';
 class SearchView extends StatelessWidget {
   final SearchController controller;
 
-  const SearchView(this.controller, {Key? key}) : super(key: key);
+  SearchView(this.controller, {Key? key}) : super(key: key);
+
+  final searchController = Get.put(SearchViewController());
 
   @override
   Widget build(BuildContext context) {
@@ -175,176 +180,205 @@ class SearchView extends StatelessWidget {
                           ],
                         );
                       }
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(12),
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.8,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int i) => Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(16),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        child: Avatar(
-                                          mxContent: Uri.parse(
-                                              "https://cdn.pixabay.com/photo/2022/07/31/20/32/volkswagen-7356817_1280.jpg"),
-                                          name:
-                                              "publicRoomsResponse.chunk[i].name",
+                      return !searchController.loading.value
+                          ? GridView.builder(
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.all(12),
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.7,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: searchController.classList.length,
+                              itemBuilder: (BuildContext context, int i) =>
+                                  Material(
+                                elevation: 2,
+                                borderRadius: BorderRadius.circular(16),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              child: Avatar(
+                                                mxContent: Uri.parse(
+                                                    "https://cdn.pixabay.com/photo/2022/07/31/20/32/volkswagen-7356817_1280.jpg"),
+                                                name:
+                                                    "publicRoomsResponse.chunk[i].name",
+                                              ),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 2.0),
+                                                  shape: BoxShape.circle),
+                                            ),
+                                            Positioned(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.white,
+                                                    border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 2)),
+                                                child: const Icon(
+                                                  Icons.school,
+                                                  color: Colors.black,
+                                                  size: 15.0,
+                                                ),
+                                              ),
+                                              bottom: 0,
+                                              right: 0,
+                                            )
+                                          ],
                                         ),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.white,
-                                                width: 2.0),
-                                            shape: BoxShape.circle),
-                                      ),
-                                      Positioned(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(2.0),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.white,
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2)),
-                                          child: const Icon(
-                                            Icons.school,
-                                            color: Colors.black,
-                                            size: 15.0,
-                                          ),
+                                        const SizedBox(
+                                          height: 10.0,
                                         ),
-                                        bottom: 0,
-                                        right: 0,
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  const Text("Hayao Miyazaki",
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w400)),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Row(
-                                    children: const [
-                                      Icon(Icons.location_pin, size: 12),
-                                      SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Text("Peru",
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w400)),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Icon(Icons.star, size: 12),
-                                      SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Text("N/A",
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w400)),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: const [
-                                      Icon(Icons.supervisor_account_sharp,
-                                          size: 12),
-                                      SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Expanded(
-                                        child: Text("30 students, high school",
-                                            style: TextStyle(
+                                        Text(
+                                            "${searchController.classList[i].classAuthor}",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400)),
+                                        Text(
+                                            "${searchController.classList[i].className}",
+                                            style: const TextStyle(
                                                 fontSize: 10.0,
                                                 fontWeight: FontWeight.w400)),
-                                      )
-                                    ],
+                                        const SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.location_pin,
+                                                size: 12),
+                                            const SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            searchController.classList[i].city!
+                                                    .isNotEmpty
+                                                ? Text(
+                                                    "${searchController.classList[i].city}",
+                                                    style: const TextStyle(
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w400))
+                                                : const Text("N/A",
+                                                    style: TextStyle(
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            const Icon(Icons.star, size: 12),
+                                            const SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            const Text("N/A",
+                                                style: TextStyle(
+                                                    fontSize: 10.0,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: const [
+                                            Icon(Icons.supervisor_account_sharp,
+                                                size: 12),
+                                            SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Expanded(
+                                              child: Text("N/A",
+                                                  style: TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: const [
+                                            Icon(Icons.query_stats, size: 12),
+                                            SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Text("B1-C1",
+                                                style: TextStyle(
+                                                    fontSize: 10.0,
+                                                    fontWeight:
+                                                        FontWeight.w400))
+                                          ],
+                                        ),
+                                        Row(
+                                          children: const [
+                                            Icon(Icons.account_balance,
+                                                size: 12),
+                                            SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Text("Not disclosed",
+                                                style: TextStyle(
+                                                    fontSize: 10.0,
+                                                    fontWeight:
+                                                        FontWeight.w400))
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Spacer(),
+                                            Avatar(
+                                              mxContent: Uri.parse(
+                                                  "${searchController.classList[i].flags![0]}"),
+                                              name:
+                                                  "publicRoomsResponse.chunk[i].name",
+                                              size: 15,
+                                            ),
+                                            const SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            const Icon(
+                                                Icons.arrow_right_alt_outlined,
+                                                size: 17),
+                                            const SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            Avatar(
+                                              mxContent: Uri.parse(
+                                                  "${searchController.classList[i].flags![1]}"),
+                                              name:
+                                                  "publicRoomsResponse.chunk[i].name",
+                                              size: 15,
+                                            ),
+                                            const Spacer(),
+                                            const Text("free",
+                                                style: TextStyle(
+                                                    fontSize: 10.0,
+                                                    fontWeight:
+                                                        FontWeight.w400))
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    children: const [
-                                      Icon(Icons.query_stats, size: 12),
-                                      SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Text("B1-C1",
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w400))
-                                    ],
-                                  ),
-                                  Row(
-                                    children: const [
-                                      Icon(Icons.account_balance, size: 12),
-                                      SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Text("Not disclosed",
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w400))
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Avatar(
-                                        mxContent: Uri.parse(
-                                            "https://cdn.pixabay.com/photo/2017/12/23/23/37/flag-of-turkey-3036191_1280.jpg"),
-                                        name:
-                                            "publicRoomsResponse.chunk[i].name",
-                                        size: 15,
-                                      ),
-                                      const SizedBox(
-                                        width: 5.0,
-                                      ),
-                                      const Icon(Icons.arrow_right_alt_outlined,
-                                          size: 17),
-                                      const SizedBox(
-                                        width: 5.0,
-                                      ),
-                                      Avatar(
-                                        mxContent: Uri.parse(
-                                            "https://cdn.pixabay.com/photo/2017/12/23/23/37/flag-of-turkey-3036191_1280.jpg"),
-                                        name:
-                                            "publicRoomsResponse.chunk[i].name",
-                                        size: 15,
-                                      ),
-                                      const Spacer(),
-                                      const Text("free",
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w400))
-                                    ],
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      );
+                            )
+                          : const Center(
+                              child: CupertinoActivityIndicator(),
+                            );
                     }),
               ],
             ),

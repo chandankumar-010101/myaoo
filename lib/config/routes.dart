@@ -37,7 +37,6 @@ import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../pages/class_analytics/class_analytics.dart';
-import '../pages/classes_ui/class_ui_screen.dart';
 import '../pages/language_selection_screen/language_selection.dart';
 
 class AppRoutes {
