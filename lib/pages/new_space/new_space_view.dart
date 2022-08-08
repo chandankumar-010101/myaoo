@@ -27,7 +27,7 @@ class NewSpaceView extends StatelessWidget {
                 autofocus: true,
                 autocorrect: false,
                 textInputAction: TextInputAction.go,
-                onSubmitted: controller.submitAction,
+               // onSubmitted: controller.submitAction,
                 decoration: InputDecoration(
                     labelText: L10n.of(context)!.spaceName,
                     prefixIcon: const Icon(Icons.people_outlined),

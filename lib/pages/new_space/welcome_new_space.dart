@@ -1,10 +1,7 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pangeachat/model/flag_model.dart';
-import 'package:pangeachat/pages/new_space/new_class_controller.dart';
-import '../homeserver_picker/home_controller.dart';
 import 'new_space.dart';
 
 class WelcomeNewSpace extends StatefulWidget {
@@ -145,7 +142,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         ),
         InkWell(
           onTap: () {
-            _controller.createClass.value = 1;
+            setState(() {
+              widget.controller.createClass = 1;
+            });
+           // _controller.createClass.value = 1;
           },
           child: Container(
             width: 200,
@@ -167,9 +167,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
     );
   }
 
-  Object? statename;
-  Object? statename2;
-
   chooseLanguageWidget() {
     Size size = MediaQuery.of(context).size;
     return Column(
@@ -185,6 +182,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             controller: widget.controller.classNameController,
             autofocus: true,
             autocorrect: false,
+
             decoration: InputDecoration(
                 hintText: "Name of Your Class",
                 hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -266,7 +264,18 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   padding: EdgeInsets.only(left: 10),
                   child: DropdownButton(
                     // Initial Value
-                    value: widget.controller.languageLevelDropdownValue,
+                    hint:widget.controller.languageLevelDropdownValue.isEmpty
+                        ? const Center(
+                      child: Text(
+                        "Select language level ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Colors.black),
+                      ),
+                    )
+                        : Text(widget.controller.languageLevelDropdownValue),
+                    //value: widget.controller.languageLevelDropdownValue,
                     isExpanded: true,
                     // Down Arrow Icon
                     icon: const Icon(Icons.keyboard_arrow_down),
@@ -529,7 +538,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 ),
                 InkWell(
                   onTap: () {
-                    _controller.createClass.value = 2;
+                  widget.controller.checkFirstStep();
+
                   },
                   child: Container(
                     width: 50.0,
@@ -555,8 +565,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   }
 
   classPermissionsWidget() {
-    // print(_newClassController.schoolController.value.text);
-    // bool _switchValue = false;
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -610,8 +618,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
 
               SwitchListTile.adaptive(
                 title: Text("Open Enrollment?"),
-                value: widget.controller.publicGroup,
-                onChanged: widget.controller.setPublicGroup,
+                value: widget.controller.openEnrollment,
+                onChanged: widget.controller.setOpenEnrollment,
               ),
               Container(
                 constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
@@ -632,15 +640,15 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               ),
 
               SwitchListTile.adaptive(
-                title: Text("Open to exchanges?"),
-                value: widget.controller.publicGroup,
-                onChanged: widget.controller.setPublicGroup,
+                title: const Text("Open to exchanges?"),
+                value: widget.controller.openToExchange,
+                onChanged: widget.controller.setOpentToExchange,
               ),
               Container(
-                constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
+                constraints: const BoxConstraints(minWidth: 100, maxWidth: 700),
                 padding: EdgeInsets.all(size.height * 0.01),
                 child:  Row(
-                  children: [
+                  children: const [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 5),
@@ -674,16 +682,19 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 ),
                 InkWell(
                   onTap: () {
-                    _controller.createClass.value = 3;
+                    setState(() {
+                      widget.controller.createClass = 3;
+                    });
+
                   },
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: new BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.deepPurple,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_right_alt,
                       color: Colors.white,
                       size: 25,
@@ -700,7 +711,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   }
 
   studentPermissionsWidget() {
-   bool _switchValue = false;
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -713,7 +723,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               horizontal: size.width * 0.1, vertical: size.height * 0.02),
           width: size.width,
           height: 40,
-          child: Center(
+          child: const Center(
             child: Text(
               "Student Permissions",
               style: TextStyle(color: Colors.black, fontSize: 14),
@@ -722,7 +732,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         ),
         //switch buttons
         Container(
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             minWidth: 100,
             maxWidth: 500,
           ),
@@ -730,12 +740,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             child: Column(
               children: [
                 SwitchListTile.adaptive(
-                  title: Text("1-to-1 chats within class"),
-                  value: widget.controller.publicGroup,
-                  onChanged: widget.controller.setPublicGroup,
+                  title: const Text("1-to-1 chats within class"),
+                  value: widget.controller.oneToOneChatsWithinClass,
+                  onChanged: widget.controller.setOneToOneChatsWithinClass,
                 ),
                 Row(
-                  children: [
+                  children: const [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 5),
@@ -747,27 +757,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "1-to-1 chats within  exchanges",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("1-to-1 chats within exchanges"),
+                  value: widget.controller.oneToOneChatsWithinExchanges,
+                  onChanged: widget.controller.setOneToOneChatWithinExchanges,
                 ),
                 Row(
-                  children: [
+                  children: const [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 5),
@@ -779,27 +775,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Create rooms",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Create rooms"),
+                  value: widget.controller.createRooms,
+                  onChanged: widget.controller.setCreateRooms,
                 ),
                 Row(
-                  children: [
+                  children: const [
                     Expanded(
                       child: Padding(
                           padding: EdgeInsets.only(right: 5),
@@ -810,24 +792,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Create rooms in exchanges",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Create rooms in exchanges"),
+                  value: widget.controller.createRoomsInExchanges,
+                  onChanged: widget.controller.setCreateRoomsInExchange,
                 ),
                 Row(
                   children: [
@@ -842,24 +810,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Create stories",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Create Stories"),
+                  value: widget.controller.createStories,
+                  onChanged: widget.controller.setCreateStories,
                 ),
                 Row(
                   children: [
@@ -874,24 +828,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Share videos",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Share Video"),
+                  value: widget.controller.shareVideos,
+                  onChanged: widget.controller.setShareVideos,
                 ),
                 Row(
                   children: [
@@ -906,24 +846,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Share photos",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Share Photos"),
+                  value: widget.controller.sharePhotos,
+                  onChanged: widget.controller.setSharePhotos,
                 ),
                 Row(
                   children: [
@@ -938,24 +864,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Share files",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Share Files"),
+                  value: widget.controller.shareFiles,
+                  onChanged: widget.controller.setShareFiles,
                 ),
                 Row(
                   children: [
@@ -970,24 +882,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Share location",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    Switch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeTrackColor: Color(0xFFCCBDEA),
-                      activeColor: Colors.deepPurple,
-                    ),
-                  ],
+                SwitchListTile.adaptive(
+                  title: const Text("Share Location"),
+                  value: widget.controller.shareLocation,
+                  onChanged: widget.controller.setShareLocation,
                 ),
                 Row(
                   children: [
@@ -1023,7 +921,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 ),
                 InkWell(
                   onTap: () {
-                    _controller.createClass.value = 4;
+                    widget.controller.submitAction();
+                    // setState(() {
+                    //   widget.controller.createClass = 4;
+                    // });
                   },
                   child: Container(
                     width: 50.0,
@@ -1048,80 +949,17 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
     );
   }
 
-  // paymentsWidget() {
-  //   Size size = MediaQuery.of(context).size;
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.center,
-  //     children: [
-  //       SizedBox(
-  //         height: size.height * 0.04,
-  //       ),
-  //       Container(
-  //         margin: EdgeInsets.symmetric(
-  //             horizontal: size.width * 0.1, vertical: size.height * 0.02),
-  //         width: size.width,
-  //         height: 40,
-  //         child: Center(
-  //           child: Text(
-  //             "Payments Page",
-  //             style: TextStyle(color: Colors.black, fontSize: 14),
-  //           ),
-  //         ),
-  //       ),
-  //       //switch buttons
-  //
-  //       SizedBox(
-  //         height: size.height * 0.03,
-  //       ),
-  //       Padding(
-  //           padding: EdgeInsets.symmetric(
-  //             horizontal: size.width * 0.1,
-  //             vertical: size.height * 0.02,
-  //           ),
-  //           child: Row(
-  //             children: [
-  //               const Expanded(
-  //                 child: Center(
-  //                   child: Text("4/5"),
-  //                 ),
-  //               ),
-  //               InkWell(
-  //                 onTap: () {
-  //                   _controller.createClass.value = 5;
-  //                 },
-  //                 child: Container(
-  //                   width: 50.0,
-  //                   height: 50.0,
-  //                   decoration: new BoxDecoration(
-  //                     color: Colors.deepPurple,
-  //                     shape: BoxShape.circle,
-  //                   ),
-  //                   child: Icon(
-  //                     Icons.arrow_right_alt,
-  //                     color: Colors.white,
-  //                     size: 25,
-  //                   ),
-  //                 ),
-  //               )
-  //             ],
-  //           )),
-  //       SizedBox(
-  //         height: size.height * 0.03,
-  //       ),
-  //     ],
-  //   );
-  // }
 
   inviteStudentsWidget() {
-    Size size = MediaQuery.of(context).size;
-    return Container(
+    final Size size = MediaQuery.of(context).size;
+    return SizedBox(
       width: size.width,
       height: size.height,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Invite students to enroll\nwith your class.",
             style: TextStyle(
                 color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
@@ -1134,6 +972,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           InkWell(
             onTap: () {
               print("hellow");
+
             },
             child: Container(
               width: 200,
@@ -1143,7 +982,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.deepPurple,
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   "Copy class link",
                   style: TextStyle(color: Colors.white, fontSize: 14),
@@ -1250,8 +1089,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             ),
           ),
 
-          //switch buttons
-
           SizedBox(
             height: size.height * 0.03,
           ),
@@ -1269,7 +1106,9 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ),
                   InkWell(
                     onTap: () {
-                      _controller.createClass.value = 6;
+                      setState(() {
+                        widget.controller.createClass = 6;
+                      });
                     },
                     child: Container(
                       width: 50.0,
@@ -1295,29 +1134,22 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
     );
   }
 
-  HomeController _controller = Get.put(HomeController());
-  //CreateClassController _controller = Get.put(CreateClassController());
-  //
-  // Future getFlags() async {
-  //   var response = await ApiFunctions().get(ApiUrls.get_all_flags);
-  //   log("response is ${response.body}");
-  //   if (response != null) {
-  //     //loading.value = false;
-  //     // var li = jsonDecode(response.body);
-  //     List temp = response.body;
-  //     log("Flag Response is $temp");
-  //     _controller.countriesList.value =
-  //         temp.map((value) => LanguageFlag.fromJson(value)).toList();
-  //   } else {
-  //     // loading.value = false;
-  //     Get.rawSnackbar(
-  //         message: "Something went wrong",
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         margin: EdgeInsets.zero,
-  //         snackStyle: SnackStyle.GROUNDED,
-  //         backgroundColor: Colors.red);
-  //   }
-  // }
+  loadWidget(){
+    switch (widget.controller.createClass) {
+      case 0:
+        return welcomeWidget();
+      case 1:
+        return chooseLanguageWidget();
+      case 2:
+        return classPermissionsWidget();
+      case 3:
+        return studentPermissionsWidget();
+      case 4:
+        return inviteStudentsWidget();
+      default:
+        return welcomeWidget();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1328,10 +1160,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+          leading: widget.controller.createClass ==0?Container(): IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              print(_controller.createClass.value);
+             setState(() {
+              widget.controller.createClass =  widget.controller.createClass-1;
+             });
             },
           ),
         ),
@@ -1339,22 +1173,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           width: size.width,
           height: size.height,
           child: SingleChildScrollView(
-            child: Obx(() {
-              switch (_controller.createClass.value) {
-                case 0:
-                  return welcomeWidget();
-                case 1:
-                  return chooseLanguageWidget();
-                case 2:
-                  return classPermissionsWidget();
-                case 3:
-                  return studentPermissionsWidget();
-                case 4:
-                  return inviteStudentsWidget();
-                default:
-                  return welcomeWidget();
-              }
-            }),
+            child: loadWidget(),
           ),
         ));
   }
