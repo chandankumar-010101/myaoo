@@ -38,7 +38,7 @@ prime
 .pub/
 /build/
 .env.development
-
+.env
 # Web related
 lib/generated_plugin_registrant.dart
 docs/build/
