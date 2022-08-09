@@ -44,21 +44,21 @@ class SearchViewModel {
 }
 
 class Result {
-  Result({
-    this.id,
-    this.className,
-    this.city,
-    this.country,
-    this.dominantLanguage,
-    this.targetLanguage,
-    this.description,
-    this.languageLevel,
-    this.createdAt,
-    this.pangeaClassRoomId,
-    this.flags,
-    this.classAuthor,
-    this.rating,
-  });
+  Result(
+      {this.id,
+      this.className,
+      this.city,
+      this.country,
+      this.dominantLanguage,
+      this.targetLanguage,
+      this.description,
+      this.languageLevel,
+      this.createdAt,
+      this.pangeaClassRoomId,
+      this.flags,
+      this.classAuthor,
+      this.rating,
+      this.profilePic});
 
   int? id;
   String? className;
@@ -73,32 +73,32 @@ class Result {
   List<Flag>? flags;
   String? classAuthor;
   int? rating;
+  dynamic profilePic;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-        id: json["id"] == null ? null : json["id"],
-        className: json["class_name"] == null ? null : json["class_name"],
-        city: json["city"] == null ? null : json["city"],
-        country: json["country"] == null ? null : json["country"],
-        dominantLanguage: json["dominant_language"] == null
-            ? null
-            : json["dominant_language"],
-        targetLanguage:
-            json["target_language"] == null ? null : json["target_language"],
-        description: json["description"] == null ? null : json["description"],
-        languageLevel:
-            json["language_level"] == null ? null : json["language_level"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        pangeaClassRoomId: json["pangea_class_room_id"] == null
-            ? null
-            : json["pangea_class_room_id"],
-        flags: json["flags"] == null
-            ? null
-            : List<Flag>.from(json["flags"].map((x) => Flag.fromJson(x))),
-        classAuthor: json["class_author"] == null ? null : json["class_author"],
-        rating: json["rating"] == null ? null : json["rating"],
-      );
+      id: json["id"] == null ? null : json["id"],
+      className: json["class_name"] == null ? null : json["class_name"],
+      city: json["city"] == null ? null : json["city"],
+      country: json["country"] == null ? null : json["country"],
+      dominantLanguage:
+          json["dominant_language"] == null ? null : json["dominant_language"],
+      targetLanguage:
+          json["target_language"] == null ? null : json["target_language"],
+      description: json["description"] == null ? null : json["description"],
+      languageLevel:
+          json["language_level"] == null ? null : json["language_level"],
+      createdAt: json["created_at"] == null
+          ? null
+          : DateTime.parse(json["created_at"]),
+      pangeaClassRoomId: json["pangea_class_room_id"] == null
+          ? null
+          : json["pangea_class_room_id"],
+      flags: json["flags"] == null
+          ? null
+          : List<Flag>.from(json["flags"].map((x) => Flag.fromJson(x))),
+      classAuthor: json["class_author"] == null ? null : json["class_author"],
+      rating: json["rating"] == null ? null : json["rating"],
+      profilePic: json["profile_pic"] == null ? null : json["profile_pic"]);
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,

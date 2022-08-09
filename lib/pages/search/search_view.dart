@@ -180,7 +180,7 @@ class SearchView extends StatelessWidget {
                           ],
                         );
                       }
-                      return !searchController.loading.value
+                      return Obx(() => !searchController.loading.value
                           ? GridView.builder(
                               shrinkWrap: true,
                               padding: const EdgeInsets.all(12),
@@ -188,7 +188,7 @@ class SearchView extends StatelessWidget {
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                childAspectRatio: 0.7,
+                                childAspectRatio: 0.75,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
                               ),
@@ -207,12 +207,22 @@ class SearchView extends StatelessWidget {
                                         Stack(
                                           children: [
                                             Container(
-                                              child: Avatar(
-                                                mxContent: Uri.parse(
-                                                    "https://cdn.pixabay.com/photo/2022/07/31/20/32/volkswagen-7356817_1280.jpg"),
-                                                name:
-                                                    "publicRoomsResponse.chunk[i].name",
-                                              ),
+                                              child: searchController
+                                                          .classList[i]
+                                                          .profilePic !=
+                                                      null
+                                                  ? Avatar(
+                                                      mxContent: Uri.parse(
+                                                          "${searchController.classList[i].profilePic}"),
+                                                    )
+                                                  : const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(5.0),
+                                                      child: Icon(
+                                                        Icons.people,
+                                                        size: 40,
+                                                      ),
+                                                    ),
                                               decoration: BoxDecoration(
                                                   border: Border.all(
                                                       color: Colors.white,
@@ -283,22 +293,31 @@ class SearchView extends StatelessWidget {
                                             const SizedBox(
                                               width: 10.0,
                                             ),
-                                            const Text("N/A",
-                                                style: TextStyle(
-                                                    fontSize: 10.0,
-                                                    fontWeight:
-                                                        FontWeight.w400)),
+                                            searchController.classList[i].rating
+                                                    .toString()
+                                                    .isNotEmpty
+                                                ? Text(
+                                                    "${searchController.classList[i].rating.toString()}",
+                                                    style: const TextStyle(
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w400))
+                                                : const Text("N/A",
+                                                    style: TextStyle(
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w400)),
                                           ],
                                         ),
                                         Row(
-                                          children: const [
+                                          children: [
                                             Icon(Icons.supervisor_account_sharp,
                                                 size: 12),
                                             SizedBox(
                                               width: 10.0,
                                             ),
                                             Expanded(
-                                              child: Text("N/A",
+                                              child: Text("30 Students",
                                                   style: TextStyle(
                                                       fontSize: 10.0,
                                                       fontWeight:
@@ -307,13 +326,17 @@ class SearchView extends StatelessWidget {
                                           ],
                                         ),
                                         Row(
-                                          children: const [
-                                            Icon(Icons.query_stats, size: 12),
-                                            SizedBox(
+                                          children: [
+                                            const Icon(Icons.query_stats,
+                                                size: 12),
+                                            const SizedBox(
                                               width: 10.0,
                                             ),
-                                            Text("B1-C1",
-                                                style: TextStyle(
+                                            Text(
+                                                level(searchController
+                                                    .classList[i].languageLevel
+                                                    .toString()),
+                                                style: const TextStyle(
                                                     fontSize: 10.0,
                                                     fontWeight:
                                                         FontWeight.w400))
@@ -341,7 +364,8 @@ class SearchView extends StatelessWidget {
                                             const Spacer(),
                                             Avatar(
                                               mxContent: Uri.parse(
-                                                  "${searchController.classList[i].flags![0]}"),
+                                                  "https://staging.api.pangea.chat" +
+                                                      "${searchController.classList[i].flags![0].languageFlag}"),
                                               name:
                                                   "publicRoomsResponse.chunk[i].name",
                                               size: 15,
@@ -357,7 +381,8 @@ class SearchView extends StatelessWidget {
                                             ),
                                             Avatar(
                                               mxContent: Uri.parse(
-                                                  "${searchController.classList[i].flags![1]}"),
+                                                  "https://staging.api.pangea.chat" +
+                                                      "${searchController.classList[i].flags![1].languageFlag}"),
                                               name:
                                                   "publicRoomsResponse.chunk[i].name",
                                               size: 15,
@@ -378,7 +403,7 @@ class SearchView extends StatelessWidget {
                             )
                           : const Center(
                               child: CupertinoActivityIndicator(),
-                            );
+                            ));
                     }),
               ],
             ),
@@ -439,5 +464,23 @@ class SearchView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String level(text) {
+    RxString value = "".obs;
+    if (text == "1") {
+      value.value = "A1";
+    } else if (text == "2") {
+      value.value = "A2";
+    } else if (text == "3") {
+      value.value = "B1";
+    } else if (text == "4") {
+      value.value = "B2";
+    } else if (text == "5") {
+      value.value = "C1";
+    } else if (text == "6") {
+      value.value = "C2";
+    }
+    return value.value.toString();
   }
 }
