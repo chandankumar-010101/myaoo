@@ -115,7 +115,7 @@ class AppRoutes {
             ),
             VWidget(
               path: '/newspace',
-              widget: const WelcomeNewSpace(),
+              widget: const NewSpace(),
             ),
           ],
         ),
@@ -168,7 +168,7 @@ class AppRoutes {
                 ),
                 VWidget(
                   path: '/newspace',
-                  widget: const WelcomeNewSpace(),
+                  widget: const NewSpace(),
                   buildTransition: _fadeTransition,
                 ),
                 VNester(

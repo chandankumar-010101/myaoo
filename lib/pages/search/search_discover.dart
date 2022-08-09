@@ -131,9 +131,6 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                               });
 
                             },
-
-
-
                           ),
                         ),
                       ),

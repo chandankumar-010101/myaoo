@@ -10,6 +10,9 @@ var box=GetStorage();
 
 class UserDetails{
 
+  //String clientId="box.read("clientID")";
+
+
   static userDetails()async{
   var Url="${ApiUrls.user_details}${box.read("clientID")}";
   print(Url);
@@ -21,11 +24,11 @@ class UserDetails{
 
 
       if (response.statusCode == 200) {
-       // var value=jsonDecode(response.body);
+
         UserInfo data = userInfoFromJson(response.body);
-        //backend access and refresh token
-        box.write("accessToken", data.access ?? "empty");
-        print(box.read("accessToken"));
+
+        box.write("access", data.access ?? "empty");
+        print(box.read("access"));
 
         box.write("refresh", data.refresh ?? "empty");
         var temp = data.profile;
@@ -82,6 +85,7 @@ class UserDetails{
           backgroundColor: Colors.red);
     }
   }
+
   updateUserAge(day,month,year)async{
 
     var Url="${ApiUrls.update_user_ages}";
@@ -93,25 +97,17 @@ class UserDetails{
     http.Response response = await http.post(Uri.parse(Url),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${box.read("accessToken")}",
+        "Authorization": "Bearer ${box.read("access")}",
       },
       body: jsonEncode(data)
     );
-    print(box.read("clientID"));
-    print("${day}-${month}-${year}");
-    log("${day}:${month}:${year}");
-    log("update ages "+response.body.toString());
-    log("update ages "+response.statusCode.toString());
     if (response.statusCode == 200) {
-      var value=jsonDecode(response.body);
-
+       log("200"+response.body);
 
 
 
     } else if (response.statusCode == 400) {
-      var value=jsonDecode(response.body);
-
-      // box.write("age", value["age"] ?? "empty");
+      log("400"+response.body);
 
 
 

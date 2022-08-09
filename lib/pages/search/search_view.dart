@@ -29,8 +29,6 @@ class SearchView extends StatelessWidget {
 
     userAgeDetails();
     int age=int.parse(box.read("age").toString());
-    print("age is ${box.read("age")}");
-    print("userType is ${box.read("usertype")}");
     final server = controller.genericSearchTerm?.isValidMatrixId ?? false
         ? controller.genericSearchTerm!.domain
         : controller.server;
@@ -117,8 +115,7 @@ class SearchView extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-           age>=18?
-            SingleChildScrollView(
+           age>=18? SingleChildScrollView(
               child: Column(
                 children:   [
                   const SizedBox(height: 50,),
