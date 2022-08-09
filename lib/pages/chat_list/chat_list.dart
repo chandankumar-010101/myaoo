@@ -359,6 +359,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         VRouter.of(context).to('/newgroup');
         break;
       case PopupMenuAction.newSpace:
+        //Matrix.of(context).client.
+
+        print("will work here");
         VRouter.of(context).to('/newspace');
         break;
       case PopupMenuAction.archive:

@@ -16,6 +16,7 @@ import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
 import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
 import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
 import 'package:pangeachat/pages/search/search.dart';
+import 'package:pangeachat/pages/search/search_discover.dart';
 import 'package:pangeachat/pages/settings/settings.dart';
 import 'package:pangeachat/pages/settings_3pid/settings_3pid.dart';
 import 'package:pangeachat/pages/settings_account/settings_account.dart';
@@ -74,7 +75,9 @@ class AppRoutes {
               widget: const ChatDetails(),
               stackedRoutes: _chatDetailsRoutes,
             ),
-            VWidget(path: ':roomid', widget: const Chat(), stackedRoutes: [
+            VWidget(path: ':roomid',
+                widget: const Chat(),
+                stackedRoutes: [
               VWidget(
                 path: 'encryption',
                 widget: const ChatEncryptionSettings(),
@@ -112,7 +115,7 @@ class AppRoutes {
             ),
             VWidget(
               path: '/newspace',
-              widget: const WelcomeNewSpace(),
+              widget: const NewSpace(),
             ),
           ],
         ),
@@ -165,7 +168,7 @@ class AppRoutes {
                 ),
                 VWidget(
                   path: '/newspace',
-                  widget: const WelcomeNewSpace(),
+                  widget: const NewSpace(),
                   buildTransition: _fadeTransition,
                 ),
                 VNester(
@@ -231,9 +234,17 @@ class AppRoutes {
               path: '/search',
               widget: const TwoColumnLayout(
                 mainView: Search(),
-                sideView: EmptyPage(),
+                sideView: SearchDiscoverView(),
               ),
               buildTransition: _fadeTransition,
+             //  stackedRoutes: [
+             //  VWidget(
+             //   path: '/search/add',
+             //   buildTransition: _fadeTransition,
+             //   widget: const SearchDiscoverView(),
+             //  ),
+             // ],
+
             ),
             VWidget(
               path: '/archive',

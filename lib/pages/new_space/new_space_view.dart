@@ -23,11 +23,11 @@ class NewSpaceView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: TextField(
-                controller: controller.controller,
+                controller: controller.classNameController,
                 autofocus: true,
                 autocorrect: false,
                 textInputAction: TextInputAction.go,
-                onSubmitted: controller.submitAction,
+               // onSubmitted: controller.submitAction,
                 decoration: InputDecoration(
                     labelText: L10n.of(context)!.spaceName,
                     prefixIcon: const Icon(Icons.people_outlined),

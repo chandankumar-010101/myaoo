@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -14,12 +15,13 @@ import '../../widgets/matrix.dart';
 class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
   final ChatListController controller;
 
-  const ChatListHeader({Key? key, required this.controller}) : super(key: key);
+  ChatListHeader({Key? key, required this.controller}) : super(key: key);
 
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     final selectMode = controller.selectMode;
-
+    int userType =  box.read("usertype");
     return AppBar(
       elevation: controller.scrolledToTop ? 0 : null,
       actionsIconTheme: IconThemeData(
@@ -121,6 +123,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         ),
                       ),
+  //new space
                       PopupMenuItem(
                         value: PopupMenuAction.newSpace,
                         child: Row(
