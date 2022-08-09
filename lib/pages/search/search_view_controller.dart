@@ -62,6 +62,7 @@ class SearchViewController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     getClasses();
+
     log("------------");
   }
 }

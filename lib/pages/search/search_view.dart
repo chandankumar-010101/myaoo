@@ -18,12 +18,18 @@ import '../../utils/localized_exception_extension.dart';
 import '../../utils/platform_infos.dart';
 import 'search.dart';
 
-class SearchView extends StatelessWidget {
+class SearchView extends StatefulWidget {
   final SearchController controller;
 
   SearchView(this.controller, {Key? key}) : super(key: key);
 
+  @override
+  State<SearchView> createState() => _SearchViewState();
+}
+
+class _SearchViewState extends State<SearchView> {
   final searchController = Get.put(SearchViewController());
+
   var box = GetStorage();
 
   userAgeDetails() async {
@@ -31,36 +37,42 @@ class SearchView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     userAgeDetails();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // userAgeDetails();
     int age = int.parse(box.read("age").toString());
-    final server = controller.genericSearchTerm?.isValidMatrixId ?? false
-        ? controller.genericSearchTerm!.domain
-        : controller.server;
-    if (controller.lastServer != server) {
-      controller.lastServer = server;
-      controller.publicRoomsResponse = null;
+    final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
+        ? widget.controller.genericSearchTerm!.domain
+        : widget.controller.server;
+    if (widget.controller.lastServer != server) {
+      widget.controller.lastServer = server;
+      widget.controller.publicRoomsResponse = null;
     }
-    controller.publicRoomsResponse ??= Matrix.of(context)
+    widget.controller.publicRoomsResponse ??= Matrix.of(context)
         .client
         .queryPublicRooms(
           server: server,
           filter: PublicRoomQueryFilter(
-            genericSearchTerm: controller.genericSearchTerm,
+            genericSearchTerm: widget.controller.genericSearchTerm,
           ),
         )
         .catchError((error) {
-      if (!(controller.genericSearchTerm?.isValidMatrixId ?? false)) {
+      if (!(widget.controller.genericSearchTerm?.isValidMatrixId ?? false)) {
         throw error;
       }
       return QueryPublicRoomsResponse.fromJson({
         'chunk': [],
       });
     }).then((QueryPublicRoomsResponse res) {
-      final genericSearchTerm = controller.genericSearchTerm;
+      final genericSearchTerm = widget.controller.genericSearchTerm;
       if (genericSearchTerm != null &&
-          !res.chunk.any(
-              (room) => room.canonicalAlias == controller.genericSearchTerm)) {
+          !res.chunk.any((room) =>
+              room.canonicalAlias == widget.controller.genericSearchTerm)) {
         // we have to tack on the original alias
         res.chunk.add(
           PublicRoomsChunk(
@@ -79,26 +91,28 @@ class SearchView extends StatelessWidget {
     rooms.removeWhere(
       (room) =>
           room.lastEvent == null ||
-          !room.displayname.toLowerCase().removeDiacritics().contains(
-              controller.controller.text.toLowerCase().removeDiacritics()),
+          !room.displayname.toLowerCase().removeDiacritics().contains(widget
+              .controller.controller.text
+              .toLowerCase()
+              .removeDiacritics()),
     );
     const tabCount = 3;
     return DefaultTabController(
       length: tabCount,
-      initialIndex: controller.controller.text.startsWith('#') ? 0 : 1,
+      initialIndex: widget.controller.controller.text.startsWith('#') ? 0 : 1,
       child: Scaffold(
         appBar: AppBar(
           leading: const BackButton(),
           titleSpacing: 0,
           title: TextField(
             autofocus: true,
-            controller: controller.controller,
+            controller: widget.controller.controller,
             decoration: InputDecoration(
               suffix: const Icon(Icons.search_outlined),
               hintText: L10n.of(context)!.search,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             ),
-            onChanged: controller.search,
+            onChanged: widget.controller.search,
           ),
           bottom: TabBar(
             indicatorColor: Theme.of(context).colorScheme.secondary,
@@ -404,7 +418,7 @@ class SearchView extends StatelessWidget {
                       //   onTap: controller.setServer,
                       // ),
                       FutureBuilder<QueryPublicRoomsResponse>(
-                          future: controller.publicRoomsResponse,
+                          future: widget.controller.publicRoomsResponse,
                           builder: (BuildContext context,
                               AsyncSnapshot<QueryPublicRoomsResponse>
                                   snapshot) {
@@ -716,14 +730,14 @@ class SearchView extends StatelessWidget {
               itemCount: rooms.length,
               itemBuilder: (_, i) => ChatListItem(rooms[i]),
             ),
-            controller.foundProfiles.isNotEmpty
+            widget.controller.foundProfiles.isNotEmpty
                 ? ListView.builder(
                     keyboardDismissBehavior: PlatformInfos.isIOS
                         ? ScrollViewKeyboardDismissBehavior.onDrag
                         : ScrollViewKeyboardDismissBehavior.manual,
-                    itemCount: controller.foundProfiles.length,
+                    itemCount: widget.controller.foundProfiles.length,
                     itemBuilder: (BuildContext context, int i) {
-                      final foundProfile = controller.foundProfiles[i];
+                      final foundProfile = widget.controller.foundProfiles[i];
                       return ListTile(
                         onTap: () async {
                           final roomID = await showFutureLoadingDialog(
@@ -761,7 +775,7 @@ class SearchView extends StatelessWidget {
                       );
                     },
                   )
-                : ContactsList(searchController: controller.controller),
+                : ContactsList(searchController: widget.controller.controller),
           ],
         ),
       ),

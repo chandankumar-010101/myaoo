@@ -13,7 +13,6 @@ import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart'
 import 'package:pangeachat/pages/login/login.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
-import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
 import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/search/search_discover.dart';
@@ -39,6 +38,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../pages/class_analytics/class_analytics.dart';
 import '../pages/language_selection_screen/language_selection.dart';
+import '../pages/new_space/new_space.dart';
 
 class AppRoutes {
   final bool columnMode;
@@ -75,9 +75,7 @@ class AppRoutes {
               widget: const ChatDetails(),
               stackedRoutes: _chatDetailsRoutes,
             ),
-            VWidget(path: ':roomid',
-                widget: const Chat(),
-                stackedRoutes: [
+            VWidget(path: ':roomid', widget: const Chat(), stackedRoutes: [
               VWidget(
                 path: 'encryption',
                 widget: const ChatEncryptionSettings(),
@@ -237,14 +235,13 @@ class AppRoutes {
                 sideView: SearchDiscoverView(),
               ),
               buildTransition: _fadeTransition,
-             //  stackedRoutes: [
-             //  VWidget(
-             //   path: '/search/add',
-             //   buildTransition: _fadeTransition,
-             //   widget: const SearchDiscoverView(),
-             //  ),
-             // ],
-
+              //  stackedRoutes: [
+              //  VWidget(
+              //   path: '/search/add',
+              //   buildTransition: _fadeTransition,
+              //   widget: const SearchDiscoverView(),
+              //  ),
+              // ],
             ),
             VWidget(
               path: '/archive',
