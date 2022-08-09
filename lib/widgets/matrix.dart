@@ -386,12 +386,11 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             if (value.statusCode == 200) {
               UserInfo data = UserInfo.fromJson(value.body);
               //backend access and refresh token
-              box.write("access", data.access ?? "empty");
-              box.write("refresh", data.refresh ?? "empty");
+              box.write("access", data.access);
+              box.write("refresh", data.refresh);
               var temp = data.profile;
-
-              box.write("sourcelanguage", temp!.sourceLanguage ?? "empty");
-              box.write("targetlanguage", temp.targetLanguage ?? "empty");
+              box.write("sourcelanguage", temp.sourceLanguage);
+              box.write("targetlanguage", temp.targetLanguage);
               box.write("usertype", temp.userType);
               box.write("sign_up", false);
               widget.router!.currentState!.to(
