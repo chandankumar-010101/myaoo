@@ -18,6 +18,7 @@ import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/model/user_info.dart';
+import 'package:pangeachat/utils/api/user_details_api.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
@@ -229,10 +230,11 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             statusMsg: statusMsg,
           );
         }
-        box.write("clientID", client.userID ?? "null");
+       // box.write("clientID", client.userID ?? "null");
       }
     } catch (e, s) {
       client.onLoginStateChanged.sink.addError(e, s);
+      print("error in this line");
       SentryController.captureException(e, s);
       rethrow;
     }
@@ -371,6 +373,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         box.write("clientID", client.userID.toString());
         bool sign_up = box.read("sign_up") ?? false;
         bool validateStatus = await validateUser();
+        box.read("accessToken");
 
         if (sign_up || !validateStatus) {
           print("print 1");
@@ -381,43 +384,44 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           );
         } else {
           print("print2");
-          await ApiFunctions()
-              .get(ApiUrls.user_details + "${client.userID}")
-              .then((value) {
-            if (value.statusCode == 200) {
-              UserInfo data = UserInfo.fromJson(value.body);
-              //backend access and refresh token
-              box.write("access", data.access ?? "empty");
-              box.write("refresh", data.refresh ?? "empty");
-              var temp = data.profile;
-
-              box.write("sourcelanguage", temp!.sourceLanguage ?? "empty");
-              box.write("targetlanguage", temp.targetLanguage ?? "empty");
-              box.write("usertype", temp.userType);
-              box.write("sign_up", false);
+          await UserDetails.userDetails();
+          // await ApiFunctions()
+          //     .get(ApiUrls.user_details + "${client.userID}")
+          //     .then((value) {
+          //
+          //   if (value.statusCode == 200) {
+          //     UserInfo data = userInfoFromJson(value.body);
+          //     //backend access and refresh token
+          //     box.write("access", data.access);
+          //     box.write("refresh", data.refresh );
+          //     var temp = data.profile;
+          //     box.write("sourcelanguage", temp!.sourceLanguage );
+          //     box.write("targetlanguage", temp.targetLanguage );
+          //     box.write("usertype", temp.userType);
+          //     box.write("sign_up", false);
               widget.router!.currentState!.to(
-                // state == LoginState.loggedIn ? '/rooms' : '/home',
                 '/rooms',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
-            } else {
-              setState(() {
-                // loading = false;
-              });
-              log(value.statusCode.toString());
-              Get.rawSnackbar(
-                  message: "Something went wrong",
-                  snackPosition: SnackPosition.BOTTOM,
-                  margin: EdgeInsets.zero,
-                  snackStyle: SnackStyle.GROUNDED,
-                  backgroundColor: Colors.red);
-            }
-          }).catchError((error) {
-            setState(() {
-              // loading = false;
-            });
-            log(error.toString());
-          });
+          //   }
+          //   else {
+          //     setState(() {
+          //       // loading = false;
+          //     });
+          //     log(value.statusCode.toString());
+          //     Get.rawSnackbar(
+          //         message: "Something went wrong",
+          //         snackPosition: SnackPosition.BOTTOM,
+          //         margin: EdgeInsets.zero,
+          //         snackStyle: SnackStyle.GROUNDED,
+          //         backgroundColor: Colors.red);
+          //   }
+          // }).catchError((error) {
+          //   setState(() {
+          //     // loading = false;
+          //   });
+          //   log(error.toString());
+          // });
         }
       } else {
         print("looged out");
