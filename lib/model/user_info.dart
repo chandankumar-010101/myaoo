@@ -30,10 +30,13 @@ class UserInfo {
     "refresh": refresh == null ? null : refresh,
     "profile": profile == null ? null : profile?.toJson(),
   };
+
+  
 }
 
 class Profile {
   Profile({
+
     this.user,
     this.fullName,
     this.isVerified,

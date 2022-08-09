@@ -384,6 +384,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           );
         } else {
           print("print2");
+<<<<<<< HEAD
           await UserDetails.userDetails();
           // await ApiFunctions()
           //     .get(ApiUrls.user_details + "${client.userID}")
@@ -399,6 +400,21 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           //     box.write("targetlanguage", temp.targetLanguage );
           //     box.write("usertype", temp.userType);
           //     box.write("sign_up", false);
+=======
+          await ApiFunctions()
+              .get(ApiUrls.user_details + "${client.userID}")
+              .then((value) {
+            if (value.statusCode == 200) {
+              UserInfo data = UserInfo.fromJson(value.body);
+              //backend access and refresh token
+              box.write("access", data.access);
+              box.write("refresh", data.refresh);
+              var temp = data.profile;
+              box.write("sourcelanguage", temp.sourceLanguage);
+              box.write("targetlanguage", temp.targetLanguage);
+              box.write("usertype", temp.userType);
+              box.write("sign_up", false);
+>>>>>>> 501614c6c143db90331e1f9ab4372b6ed5925ad0
               widget.router!.currentState!.to(
                 '/rooms',
                 queryParameters: widget.router!.currentState!.queryParameters,
