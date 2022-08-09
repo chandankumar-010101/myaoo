@@ -352,7 +352,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         Container(
           constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
           padding: EdgeInsets.all(size.height * 0.01),
-          child: Center(
+          child: const Center(
             child: Text("What is the target language of your classroom?"),
           ),
         ),
@@ -385,8 +385,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                widget.controller.sourceLanguage!.languageName
-                                    .toString(),
+                                widget.controller.sourceLanguage!.languageName.toString().capitalizeFirst??"",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15.0,
@@ -416,7 +415,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                languageFlag.languageName.toString(),
+                               // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
+                                languageFlag.languageName.toString().capitalizeFirst??"",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15.0,
@@ -474,7 +474,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   SizedBox(width: 10),
                   Text(
                     widget.controller.targetLanguage!.languageName
-                        .toString(),
+                        .toString().capitalizeFirst??"",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15.0,
@@ -504,7 +504,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          languageFlag.languageName.toString(),
+                          languageFlag.languageName.toString().capitalizeFirst??"",
                           style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 15.0,

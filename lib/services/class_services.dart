@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/model/class_model.dart';
+import 'package:pangeachat/model/create_class_model.dart';
 import '../model/add_class_permissions_model.dart';
 import '../utils/api_urls.dart';
 
@@ -33,7 +33,9 @@ class ClassServices {
     required bool isCreateRooms,
     required bool isShareVideo,
     required bool oneToOneChatClass,
-    required bool oneToOneChatExchange,}
+    required bool oneToOneChatExchange,
+    required String schoolName,
+  }
   ) async {
     final box = GetStorage();
     final String token = box.read("access");
@@ -45,13 +47,13 @@ class ClassServices {
       headers: {"Authorization": "Bearer $token"},
       body: CreateClassToJson(
         pangeaClassRoomId: roomId,
-        languageLevel: languageLevel.toString() ,
+        languageLevel: languageLevel,
         dominantLanguage: dominantLanguage,
         description: desc,
         country: country,
         className: className,
         city: city,
-        targetLanguage: targetLanguage,
+        targetLanguage: targetLanguage, schoolName: schoolName,
       ).toJson()).then((value) async {
       if (value.statusCode == 201 || value.statusCode == 200) {
         log("Status Code is  ${value.statusCode} and ${value.body} ");
