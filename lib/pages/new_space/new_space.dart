@@ -5,7 +5,7 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/model/class_model.dart';
+import 'package:pangeachat/model/create_class_model.dart';
 import 'package:pangeachat/model/flag_model.dart';
 import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
 import 'package:pangeachat/services/class_services.dart';
@@ -147,6 +147,7 @@ class NewSpaceController extends State<NewSpace> {
       );
       if (roomID.result != null) {
         print(roomID.result);
+
         await ClassServices.createClass(
           isPublic: publicGroup,
           isSharePhoto: sharePhotos,
@@ -168,6 +169,7 @@ class NewSpaceController extends State<NewSpace> {
           country:  countryController.text,
           dominantLanguage:  sourceLanguage!.languageName!,
           targetLanguage: targetLanguage!.languageName!,
+          schoolName: schoolController.text.toString(),
         ).then((value) {
           setState(() {
             createClass = 4;

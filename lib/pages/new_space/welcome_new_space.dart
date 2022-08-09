@@ -352,106 +352,16 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         Container(
           constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
           padding: EdgeInsets.all(size.height * 0.01),
-          child: Center(
+          child: const Center(
             child: Text("What is the target language of your classroom?"),
           ),
         ),
         Container(
             constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
             padding: EdgeInsets.all(size.height * 0.01),
-            child: widget.controller.languageFlagList.isEmpty
-                ? Container()
-                : DropdownButton(
-                    // Initial Value
-                    hint: widget.controller.sourceLanguage == null
-                        ? const Center(
-                            child: Text(
-                              "Select Language",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 15.0,
-                                  color: Colors.black),
-                            ),
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                widget.controller.sourceLanguage!.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                widget.controller.sourceLanguage!.languageName
-                                    .toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15.0,
-                                    color: Colors.black),
-                              )
-                            ],
-                          ),
-                    isExpanded: true,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    underline: Container(),
-                    // Array list of items
-                    items:
-                        widget.controller.languageFlagList.map((languageFlag) {
-                      // print(items.languageFlag);
-                      return DropdownMenuItem(
-                          value: languageFlag,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                languageFlag.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                languageFlag.languageName.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15.0,
-                                    color: Colors.black),
-                              )
-                            ],
-                          ));
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (LanguageFlag? newValue) {
-                      setState(() {
-                        widget.controller.sourceLanguage = newValue!;
-                      });
-                    },
-                  )),
-
-        SizedBox(
-          height: size.height * 0.03,
-        ),
-        Container(
-          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
-          padding: EdgeInsets.all(size.height * 0.01),
-          child: Center(
-            child: Text("What is the dominant language of your student?"),
-          ),
-        ),
-        Container(
-            constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
-            padding: EdgeInsets.all(size.height * 0.01),
-            child: widget.controller.languageFlagList.isEmpty
-                ? Container()
-                : DropdownButton(
+            child: widget.controller.languageFlagList.isNotEmpty?DropdownButton(
               // Initial Value
-              hint: widget.controller.targetLanguage == null
+              hint: widget.controller.sourceLanguage == null
                   ? const Center(
                 child: Text(
                   "Select Language",
@@ -466,15 +376,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.network(
-                    widget.controller.targetLanguage!.languageFlag!,
+                    widget.controller.sourceLanguage!.languageFlag!,
                     fit: BoxFit.cover,
                     width: 40,
                     height: 40,
                   ),
                   SizedBox(width: 10),
                   Text(
-                    widget.controller.targetLanguage!.languageName
-                        .toString(),
+                    widget.controller.sourceLanguage!.languageName.toString().capitalizeFirst??"",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15.0,
@@ -504,7 +413,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          languageFlag.languageName.toString(),
+                          // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
+                          languageFlag.languageName.toString().capitalizeFirst??"",
                           style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 15.0,
@@ -517,10 +427,105 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               // change button value to selected value
               onChanged: (LanguageFlag? newValue) {
                 setState(() {
-                  widget.controller.targetLanguage = newValue!;
+                  widget.controller.sourceLanguage = newValue!;
                 });
               },
-            )),
+            ): Container()
+        ),
+
+        SizedBox(
+          height: size.height * 0.03,
+        ),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+          padding: EdgeInsets.all(size.height * 0.01),
+          child: Center(
+            child: Text("What is the dominant language of your student?"),
+          ),
+        ),
+        Container(
+            constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
+            padding: EdgeInsets.all(size.height * 0.01),
+            child: widget.controller.languageFlagList.isNotEmpty?DropdownButton(
+              // Initial Value
+              hint: widget.controller.targetLanguage == null
+                  ? const Center(
+                child: Text(
+                  "Select Language",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15.0,
+                      color: Colors.black),
+                ),
+              )
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.network(
+                    widget.controller.targetLanguage!.languageFlag!,
+                    fit: BoxFit.cover,
+                    width: 40,
+                    height: 40,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    widget.controller.targetLanguage!.languageName
+                        .toString().capitalizeFirst??"",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15.0,
+                        color: Colors.black),
+                  )
+                ],
+              ),
+              isExpanded: true,
+              // Down Arrow Icon
+              icon: const Icon(Icons.keyboard_arrow_down),
+              underline: Container(),
+              // Array list of items
+              items:
+              widget.controller.languageFlagList.map((languageFlag) {
+                // print(items.languageFlag);
+                return DropdownMenuItem(
+                    value: languageFlag,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          languageFlag.languageFlag!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          languageFlag.languageName.toString().capitalizeFirst??"",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15.0,
+                              color: Colors.black),
+                        )
+                      ],
+                    ));
+              }).toList(),
+              // After selecting the desired option,it will
+              // change button value to selected value
+              onChanged: (LanguageFlag? newValue) {
+                if(newValue ==widget.controller.sourceLanguage){
+                  Fluttertoast.showToast(
+                      msg: "Target and Dominant language cannot be same!", fontSize: 16.0);
+                }else{
+                  setState(() {
+                    widget.controller.targetLanguage = newValue!;
+                  });
+                }
+
+              },
+            ): Container(),
+        ),
+
 
         SizedBox(
           height: size.height * 0.03,
