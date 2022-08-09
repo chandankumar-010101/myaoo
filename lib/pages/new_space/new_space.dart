@@ -147,6 +147,7 @@ class NewSpaceController extends State<NewSpace> {
       );
       if (roomID.result != null) {
         print(roomID.result);
+
         await ClassServices.createClass(
           isPublic: publicGroup,
           isSharePhoto: sharePhotos,
