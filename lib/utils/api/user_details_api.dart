@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/user_info.dart';
@@ -24,6 +25,7 @@ class UserDetails{
 
 
       if (response.statusCode == 200) {
+        userAge();
 
         UserInfo data = userInfoFromJson(response.body);
 
@@ -51,12 +53,12 @@ class UserDetails{
       }
   }
 
-  userAge()async{
+  static userAge()async{
     var Url="${ApiUrls.user_ages}${box.read("clientID")}";
     http.Response response = await http.get(Uri.parse(Url),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${box.read("accessToken")}",
+        "Authorization": "Bearer ${box.read("access")}",
       },
     );
 
@@ -102,8 +104,17 @@ class UserDetails{
       body: jsonEncode(data)
     );
     if (response.statusCode == 200) {
-       log("200"+response.body);
 
+
+       Fluttertoast.showToast(
+           msg: "User Age Updated",
+           toastLength: Toast.LENGTH_SHORT,
+           gravity: ToastGravity.CENTER,
+           timeInSecForIosWeb: 1,
+           backgroundColor: Colors.red,
+           textColor: Colors.white,
+           fontSize: 16.0
+       );
 
 
     } else if (response.statusCode == 400) {

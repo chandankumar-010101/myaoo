@@ -232,7 +232,7 @@ class AppRoutes {
             ),
             VWidget(
               path: '/search',
-              widget: const TwoColumnLayout(
+              widget: TwoColumnLayout(
                 mainView: Search(),
                 sideView: SearchDiscoverView(),
               ),
