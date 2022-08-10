@@ -89,17 +89,18 @@ dependencies:
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
 
-  fluttertoast: ^8.0.9
-
   tuple: any
   get_storage: ^2.0.3
   get: ^4.6.5
   dropdown_button2: ^1.6.3
   flutter_dotenv: ^5.0.2
+  fluttertoast: ^8.0.9
+
 
   # Pangeachat custom packages
   pangeachat_it:
     path: pangea_packages/pangeachat_it
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1
@@ -121,7 +122,7 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-
+    - .env
     - .env.development
     - .env.example
     - assets/

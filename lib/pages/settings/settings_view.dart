@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:pangeachat/config/app_config.dart';
+import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vrouter/vrouter.dart';
 
-import 'package:pangeachat/config/app_config.dart';
-import 'package:pangeachat/utils/platform_infos.dart';
 import '../../config/app_config.dart';
 import '../../widgets/content_banner.dart';
 import 'settings.dart';

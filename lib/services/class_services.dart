@@ -38,7 +38,7 @@ class ClassServices {
   }
   ) async {
     final box = GetStorage();
-    final String token = box.read("access");
+    final String token = box.read("accessToken");
     if (kDebugMode) {
       print("token: $token");
     }

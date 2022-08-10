@@ -17,6 +17,7 @@ class Services{
       log("Flag Response is $temp");
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
     } else {
+
       Fluttertoast.showToast(
           msg: "Something went wrong",
           fontSize: 16.0
