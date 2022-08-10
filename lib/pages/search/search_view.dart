@@ -42,7 +42,7 @@ class _SearchViewState extends State<SearchView> {
   userAgeDetails() async {
     await UserDetails.userAge();
   }
-
+  void addAccountAction() => VRouter.of(context).to('/user');
   int age=0;
   @override
   void initState() {
@@ -170,12 +170,13 @@ class _SearchViewState extends State<SearchView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      VRouter.of(context).to('/search/add');
+                      addAccountAction();
                     },
                     child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Theme.of(context).colorScheme.onPrimary,
+                          border: Border.all(),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -200,6 +201,7 @@ class _SearchViewState extends State<SearchView> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Theme.of(context).colorScheme.onPrimary,
+                          border: Border.all(),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -229,6 +231,7 @@ class _SearchViewState extends State<SearchView> {
                           color: Theme.of(context)
                               .colorScheme
                               .onPrimary,
+                          border: Border.all(),
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
@@ -258,6 +261,7 @@ class _SearchViewState extends State<SearchView> {
                           color: Theme.of(context)
                               .colorScheme
                               .onPrimary,
+                          border: Border.all(),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -416,21 +420,13 @@ class _SearchViewState extends State<SearchView> {
               ),
             )
                 : ListView(
-              keyboardDismissBehavior: PlatformInfos.isIOS
+                 keyboardDismissBehavior: PlatformInfos.isIOS
                   ? ScrollViewKeyboardDismissBehavior.onDrag
                   : ScrollViewKeyboardDismissBehavior.manual,
-              children: [
-                const SizedBox(height: 12),
-                // ListTile(
-                //   leading: CircleAvatar(
-                //     foregroundColor: Theme.of(context).colorScheme.secondary,
-                //     backgroundColor: Theme.of(context).secondaryHeaderColor,
-                //     child: const Icon(Icons.edit_outlined),
-                //   ),
-                //   title: Text(L10n.of(context)!.changeTheServer),
-                //   onTap: controller.setServer,
-                // ),
-                FutureBuilder<QueryPublicRoomsResponse>(
+                   children: [
+                   const SizedBox(height: 12),
+
+                  FutureBuilder<QueryPublicRoomsResponse>(
                     future: widget.controller.publicRoomsResponse,
                     builder: (BuildContext context,
                         AsyncSnapshot<QueryPublicRoomsResponse>

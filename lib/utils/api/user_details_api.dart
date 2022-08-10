@@ -18,7 +18,6 @@ class UserDetails {
 
   static userDetails()async{
   var Url="${ApiUrls.user_details}${box.read("clientID")}";
-  print(Url);
 
   http.Response response = await http.get(Uri.parse(Url),
   );
@@ -26,20 +25,8 @@ class UserDetails {
   log("user details"+response.body);
 
 
-    //   if (response.statusCode == 200) {
-    //     userAge();
-    //
-    //     UserInfo data = userInfoFromJson(response.body);
-    //
-    //     box.write("access", data.access ?? "empty");
-    //     print(box.read("access"));
-    //
-    //     box.write("refresh", data.refresh ?? "empty");
-    //     var temp = data.profile;
-    //
-    // log("user details" + response.body);
-
     if (response.statusCode == 200) {
+      userAge();
       UserInfo data = userInfoFromJson(response.body);
 
       box.write("access", data.access ?? "empty");
