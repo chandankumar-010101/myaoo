@@ -13,6 +13,8 @@ import '../../utils/api_urls.dart';
 class HomeController extends GetxController {
   var dataStorage = GetStorage();
   RxBool loading = true.obs;
+  var countriesList1 = <LanguageFlag>[].obs;
+  var countriesList2 = <LanguageFlag>[].obs;
   var countriesList = <LanguageFlag>[].obs;
   RxString selectedLanguageOne = "".obs;
   RxString selectedFlag = "".obs;
@@ -20,7 +22,6 @@ class HomeController extends GetxController {
   RxString selectedFlagTwo = "".obs;
   RxString role = "".obs;
   RxInt createClass = 0.obs;
-
 
   RxString source = "".obs;
   RxString target = "".obs;
@@ -35,6 +36,13 @@ class HomeController extends GetxController {
       log("Flag Response is $temp");
       countriesList.value =
           temp.map((value) => LanguageFlag.fromJson(value)).toList();
+      countriesList.forEach((element) {
+        if (element.languageType == 1) {
+          countriesList1.add(element);
+        } else if (element.languageType == 2) {
+          countriesList2.add(element);
+        }
+      });
     } else {
       loading.value = false;
       Get.rawSnackbar(
@@ -45,6 +53,7 @@ class HomeController extends GetxController {
           backgroundColor: Colors.red);
     }
   }
+
   // getUserDetails() async {
   //   try {
   //     String name = dataStorage.read("clientID");

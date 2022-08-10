@@ -133,7 +133,7 @@ class LanguageSelectionView extends StatelessWidget {
                                     ),
                                   ),
                             isExpanded: true,
-                            items: controller.getxController.countriesList.map(
+                            items: controller.getxController.countriesList1.map(
                               (val) {
                                 return DropdownMenuItem(
                                   enabled:
@@ -147,35 +147,32 @@ class LanguageSelectionView extends StatelessWidget {
                                         .getxController.selectedFlag.value
                                         .toString());
                                   },
-                                  child: val.languageType == 1
-                                      ? Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                ClipRRect(
-                                                  child: Image.network(
-                                                    "${val.languageFlag}",
-                                                    fit: BoxFit.cover,
-                                                    height: 35,
-                                                    width: 55,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  "${val.languageName.toString().toLowerCase().capitalizeFirst}",
-                                                )
-                                              ]),
-                                        )
-                                      : const SizedBox(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            child: Image.network(
+                                              "${val.languageFlag}",
+                                              fit: BoxFit.cover,
+                                              height: 35,
+                                              width: 55,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "${val.languageName.toString().toLowerCase().capitalizeFirst}",
+                                          )
+                                        ]),
+                                  ),
                                 );
                               },
                             ).toList(),
@@ -265,7 +262,7 @@ class LanguageSelectionView extends StatelessWidget {
                                     ),
                                   ),
                             isExpanded: true,
-                            items: controller.getxController.countriesList.map(
+                            items: controller.getxController.countriesList2.map(
                               (val) {
                                 return DropdownMenuItem(
                                   enabled:
@@ -276,30 +273,28 @@ class LanguageSelectionView extends StatelessWidget {
                                     controller.getxController.selectedFlagTwo
                                         .value = val.languageFlag!;
                                   },
-                                  child: val.languageType == 2
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                              ClipRRect(
-                                                child: Image.network(
-                                                  "${val.languageFlag}",
-                                                  fit: BoxFit.cover,
-                                                  height: 35,
-                                                  width: 55,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              const SizedBox(
-                                                width: 12,
-                                              ),
-                                              Text(
-                                                  "${val.languageName.toString().toLowerCase().capitalizeFirst}")
-                                            ])
-                                      : const SizedBox(),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          child: Image.network(
+                                            "${val.languageFlag}",
+                                            fit: BoxFit.cover,
+                                            height: 35,
+                                            width: 55,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        const SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                            "${val.languageName.toString().toLowerCase().capitalizeFirst}")
+                                      ]),
                                 );
                               },
                             ).toList(),
@@ -383,7 +378,7 @@ class LanguageSelectionView extends StatelessWidget {
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   side: const BorderSide(
-                                      color: Colors.grey, width: 2.0))),
+                                      color: Colors.grey, width: 5.0))),
                         ),
                         onPressed: () {
                           controller.createUser();
