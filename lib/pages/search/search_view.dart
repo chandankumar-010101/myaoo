@@ -43,7 +43,7 @@ class _SearchViewState extends State<SearchView> {
     await UserDetails.userAge();
   }
 
-
+  int age=0;
   @override
   void initState() {
     super.initState();
@@ -54,7 +54,7 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     // userAgeDetails();
-    int age = int.parse(box.read("age").toString());
+    age = int.parse(box.read("age").toString());
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
         : widget.controller.server;

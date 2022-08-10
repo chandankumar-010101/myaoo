@@ -384,6 +384,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             } else {
               print("print2");
               await UserDetails.userDetails();
+              await UserDetails.userAge();
               widget.router!.currentState!.to(
                 '/rooms',
                 queryParameters: widget.router!.currentState!.queryParameters,
