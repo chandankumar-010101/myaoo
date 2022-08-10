@@ -188,6 +188,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         print(_loginClientCandidate!.userID);
         print("Login data");
         print(_loginClientCandidate!.accessToken.toString());
+        _loginClientCandidate = null;
         widget.router!.currentState!.to('/rooms');
       });
 
