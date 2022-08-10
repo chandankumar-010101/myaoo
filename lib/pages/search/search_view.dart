@@ -144,7 +144,7 @@ class _SearchViewState extends State<SearchView> {
           children: [
             age <= 18
                 ? SingleChildScrollView(
-              child: Column(
+                child: Column(
                 children: [
                   const SizedBox(
                     height: 50,
@@ -213,7 +213,8 @@ class _SearchViewState extends State<SearchView> {
                                     .color,
                                 fontSize: 16),
                           ),
-                        )),
+                        ),
+                    ),
                   ),
                   const SizedBox(
                     height: 19,
@@ -249,8 +250,8 @@ class _SearchViewState extends State<SearchView> {
                   ),
                   box.read("usertype") == 2
                       ? GestureDetector(
-                    onTap: () {},
-                    child: Container(
+                       onTap: () {},
+                       child: Container(
                         decoration: BoxDecoration(
                           // borderRadius: BorderRadius.circular(10),
                           borderRadius: BorderRadius.circular(10),
