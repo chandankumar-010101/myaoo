@@ -591,27 +591,92 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     await UserDetails.userAge();
   }
 
-  Object? packId;
+  Object? dayId;
   Object? monthId;
   Object? yearId;
+  int UserAge=0;
 
   verify() async {
-    if (packId == null) {
+
+    if (dayId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Day is empty"),
+        content: Text("Select Day"),
       ));
     } else if (monthId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Month is empty"),
+        content: Text("Select Month"),
       ));
     } else if (yearId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Year is empty"),
+        content: Text("Select Year"),
       ));
     } else {
-      await UserDetails().updateUserAge(packId, monthId, yearId);
+
+      calculateAge();
+      print("value of conditions is ${UserAge>18}");
+      if(UserAge>18){
+      await UserDetails().updateUserAge(dayId, monthId, yearId);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Selected Age is below 18"),
+        ));
+      }
+      if(!mounted) {
+        setState(() {
+
+        });
+      }
     }
   }
+
+  calculateAge() {
+    DateTime currentDate = DateTime.now();
+    var currentDay=int.parse(dayId.toString());
+    var currentmonths=int.parse(monthId.toString());
+    var currentyears=int.parse(yearId.toString());
+
+    UserAge = currentDate.year - currentyears;
+    int month1 = currentDate.month;
+    int month2 = currentmonths;
+    if (month2 > month1) {
+      UserAge--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = currentDay;
+      if (day2 > day1) {
+        UserAge--;
+      }
+    }
+    print("object");
+    print(UserAge);
+    return UserAge;
+  }
+  // currentAge(){
+  //   DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day) ;
+  //   var date = DateTime.parse("${dateToday}");
+  //
+  //   print(date.day);
+  //   print(date.month);
+  //   print(date.year);
+  //   var currentDay=int.parse(dayId.toString());
+  //   var currentmonths=int.parse(monthId.toString());
+  //   var currentyears=int.parse(yearId.toString());
+  //   var days1=date.day-currentDay;
+  //   var months1=date.day-currentmonths;
+  //   var years1=date.year-currentyears;
+  //
+  //   //age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+  //
+  //   var currentage = DateTime.now().year - currentyears - ((currentmonths, currentDay) < (currentmonths, currentDay))
+  //
+  //   print("current day is ${days1}");
+  //   print("current month is ${months1}");
+  //   print("current year is ${years1}");
+  //
+  //   var formate1="${date.day}/${date.month}/${date.year} ";
+  //
+  // }
 
 
   int age = 0;
@@ -619,6 +684,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
   void initState() {
     // TODO: implement initState
     userAgeDetails();
+
 
     age = int.parse(box.read("age").toString());
     super.initState();
@@ -646,7 +712,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).colorScheme.onPrimary),
+                             // color: Theme.of(context).colorScheme.onPrimary
+                          ),
                           child: Column(
                             children: [
                               const SizedBox(
@@ -654,10 +721,9 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text("Welcome to Pangea Chat",
+                                child: Text("Please verify that you are 18 years of age or older to enter",
                                   style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
+                                      color: Theme.of(context).textTheme
                                           .bodyText1!
                                           .color,
                                       fontSize: 16),
@@ -693,7 +759,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           size: 30,
                                         ),
                                         isExpanded: true,
-                                        value: packId,
+                                        value: dayId,
                                         hint: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
@@ -716,12 +782,10 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           );
                                         }).toList(),
                                         onChanged: (value) async {
-                                          packId = value;
+                                          dayId = value;
 
                                           setState(() {
-                                            packId = value;
-
-                                            print("${packId}");
+                                            dayId = value;
                                           });
                                         },
                                       ),
@@ -851,8 +915,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                 child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color:
-                                      Theme.of(context).colorScheme.secondary,
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                      border: Border.all(),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -868,6 +932,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                       ),
                                     )),
                               ),
+
                               const SizedBox(
                                 height: 134,
                               ),
@@ -887,6 +952,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                       ),
                     ),
                   ),
+
             ],
           ),
         ),

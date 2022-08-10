@@ -228,20 +228,71 @@ class AppRoutes {
                 ),
               ],
             ),
-            VWidget(
+            // VWidget(
+            //   path: '/search',
+            //   widget: TwoColumnLayout(
+            //     mainView: Search(),
+            //     sideView: SearchDiscoverView(),
+            //   ),
+            //   buildTransition: _fadeTransition,
+            //   //  stackedRoutes: [
+            //   //  VWidget(
+            //   //   path: '/search/add',
+            //   //   buildTransition: _fadeTransition,
+            //   //   widget: const SearchDiscoverView(),
+            //   //  ),
+            //   // ],
+            // ),
+            VNester(
               path: '/search',
-              widget: TwoColumnLayout(
-                mainView: Search(),
-                sideView: SearchDiscoverView(),
+              widgetBuilder: (child) => TwoColumnLayout(
+                mainView: const Search(),
+                sideView: child,
               ),
-              buildTransition: _fadeTransition,
-              //  stackedRoutes: [
-              //  VWidget(
-              //   path: '/search/add',
-              //   buildTransition: _fadeTransition,
-              //   widget: const SearchDiscoverView(),
-              //  ),
-              // ],
+              buildTransition: _dynamicTransition,
+              stackedRoutes: [
+                VWidget(
+                  path: 'add',
+                  widget: EmptyPage(),
+                  buildTransition: _fadeTransition,
+                  stackedRoutes: [
+                    VWidget(
+                      path: 'age',
+                      widget: SearchDiscoverView(),
+                      buildTransition: _fadeTransition,
+                    ),
+                    VWidget(
+                        path: 'connect',
+                        widget: const ConnectPage(),
+                        buildTransition: _fadeTransition,
+                        stackedRoutes: [
+                          VWidget(
+                            path: 'login',
+                            widget: const Login(),
+                            buildTransition: _fadeTransition,
+                          ),
+                          VWidget(
+                            path: 'signup',
+                            widget: const SignupPage(),
+                            buildTransition: _fadeTransition,
+                          ),
+                        ]),
+                  ],
+                ),
+              ], nestedRoutes: [
+              VWidget(
+                path: '',
+                widget: EmptyPage(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+              VWidget(
+                path: '/user',
+                widget: SearchDiscoverView(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+            ],
             ),
             VWidget(
               path: '/archive',
