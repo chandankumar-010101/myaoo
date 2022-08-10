@@ -10,13 +10,12 @@ import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
 import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart';
-import 'package:pangeachat/pages/language_selection_screen/language_selectionView.dart';
 import 'package:pangeachat/pages/login/login.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
-import 'package:pangeachat/pages/new_space/new_space.dart';
-import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
+import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
 import 'package:pangeachat/pages/search/search.dart';
+import 'package:pangeachat/pages/search/search_discover.dart';
 import 'package:pangeachat/pages/settings/settings.dart';
 import 'package:pangeachat/pages/settings_3pid/settings_3pid.dart';
 import 'package:pangeachat/pages/settings_account/settings_account.dart';
@@ -37,7 +36,9 @@ import 'package:pangeachat/widgets/layouts/two_column_layout.dart';
 import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../pages/class_analytics/class_analytics.dart';
 import '../pages/language_selection_screen/language_selection.dart';
+import '../pages/new_space/new_space.dart';
 
 class AppRoutes {
   final bool columnMode;
@@ -112,7 +113,7 @@ class AppRoutes {
             ),
             VWidget(
               path: '/newspace',
-              widget: NewSpace(),
+              widget: const NewSpace(),
             ),
           ],
         ),
@@ -165,7 +166,7 @@ class AppRoutes {
                 ),
                 VWidget(
                   path: '/newspace',
-                  widget: NewSpace(),
+                  widget: const NewSpace(),
                   buildTransition: _fadeTransition,
                 ),
                 VNester(
@@ -229,11 +230,18 @@ class AppRoutes {
             ),
             VWidget(
               path: '/search',
-              widget: const TwoColumnLayout(
+              widget: TwoColumnLayout(
                 mainView: Search(),
-                sideView: EmptyPage(),
+                sideView: SearchDiscoverView(),
               ),
               buildTransition: _fadeTransition,
+              //  stackedRoutes: [
+              //  VWidget(
+              //   path: '/search/add',
+              //   buildTransition: _fadeTransition,
+              //   widget: const SearchDiscoverView(),
+              //  ),
+              // ],
             ),
             VWidget(
               path: '/archive',
@@ -245,7 +253,18 @@ class AppRoutes {
             ),
           ],
         ),
-        VWidget(path: '/lang', widget: LanguageSelection()),
+        VWidget(
+          path: '/lang',
+          widget: LanguageSelection(),
+        ),
+        VWidget(
+          path: '/request',
+          widget: RequestScreenView(),
+        ),
+        VWidget(
+          path: '/analytics',
+          widget: ClassAnalyticsScreen(),
+        ),
       ];
 
   List<VRouteElement> get _homeRoutes => [
