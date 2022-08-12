@@ -41,7 +41,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   height: 70,
                   width: 70,
                   child: Image.asset(
-                    "assets/png/partner.png",
+                    "png/partner.png",
                     fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
@@ -65,7 +65,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   height: 70,
                   width: 70,
                   child: Image.asset(
-                    "assets/png/grow.png",
+                    "png/grow.png",
                     fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
@@ -97,7 +97,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   height: 70,
                   width: 70,
                   child: Image.asset(
-                    "assets/png/comment.png",
+                    "./png/comment.png",
                     fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
@@ -121,7 +121,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   height: 70,
                   width: 70,
                   child: Image.asset(
-                    "assets/png/time.png",
+                    "png/time.png",
                     fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
