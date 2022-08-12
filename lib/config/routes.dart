@@ -14,6 +14,7 @@ import 'package:pangeachat/pages/login/login.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
 import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
+import 'package:pangeachat/pages/search/invite_screen.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/search/search_discover.dart';
 import 'package:pangeachat/pages/settings/settings.dart';
@@ -289,6 +290,19 @@ class AppRoutes {
               VWidget(
                 path: '/user',
                 widget: SearchDiscoverView(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+              VWidget(
+                path: '/addClass',
+                widget: NewSpace(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+
+              VWidget(
+                path: '/inviteScreen',
+                widget: InviteScreen(),
                 buildTransition: _dynamicTransition,
                 stackedRoutes: _settingsRoutes,
               ),

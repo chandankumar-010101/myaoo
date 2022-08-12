@@ -14,19 +14,19 @@ class AddClassPermissionModel {
     required this.isShareLocation,
     required this.isCreateStories,
   });
-  late final int pangeaClass;
-  late final bool isPublic;
-  late final bool isOpenEnrollment;
-  late final bool isOpenExchange;
-  late final bool oneToOneChatClass;
-  late final bool oneToOneChatExchange;
-  late final bool isCreateRooms;
-  late final bool isCreateRoomsExchange;
-  late final bool isShareVideo;
-  late final bool isSharePhoto;
-  late final bool isShareFiles;
-  late final bool isShareLocation;
-  late final bool isCreateStories;
+  late final String pangeaClass;
+  late final String isPublic;
+  late final String isOpenEnrollment;
+  late final String isOpenExchange;
+  late final String oneToOneChatClass;
+  late final String oneToOneChatExchange;
+  late final String isCreateRooms;
+  late final String isCreateRoomsExchange;
+  late final String isShareVideo;
+  late final String isSharePhoto;
+  late final String isShareFiles;
+  late final String isShareLocation;
+  late final String isCreateStories;
 
   AddClassPermissionModel.fromJson(Map<String, dynamic> json){
     pangeaClass = json['pangea_class'];
