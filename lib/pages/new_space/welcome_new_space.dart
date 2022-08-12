@@ -677,11 +677,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.deepPurple,
+                    decoration:  BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_right_alt,
                       color: Colors.white,
                       size: 25,
@@ -872,8 +872,9 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: const BoxDecoration(
-                      color: Colors.deepPurple,
+                    decoration: BoxDecoration(
+
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -1244,11 +1245,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.deepPurple,
+                    decoration:  BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_right_alt,
                       color: Colors.white,
                       size: 25,
@@ -1466,11 +1467,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     child: Container(
                       width: 50.0,
                       height: 50.0,
-                      decoration: new BoxDecoration(
-                        color: Colors.deepPurple,
+                      decoration:BoxDecoration(
+                        color: Theme.of(context).colorScheme.onPrimary,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child:const  Icon(
                         Icons.arrow_right_alt,
                         color: Colors.white,
                         size: 25,
