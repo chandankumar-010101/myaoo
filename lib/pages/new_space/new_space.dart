@@ -52,13 +52,10 @@ class NewSpaceController extends State<NewSpace> {
   void setPublicGroup(bool b) => setState(() => publicGroup = b);
   void setOpenEnrollment(bool b) => setState(() => openEnrollment = b);
   void setOpentToExchange(bool b) => setState(() => openToExchange = b);
-  void setOneToOneChatsWithinClass(bool b) =>
-      setState(() => oneToOneChatsWithinClass = b);
-  void setOneToOneChatWithinExchanges(bool b) =>
-      setState(() => oneToOneChatsWithinExchanges = b);
+  void setOneToOneChatsWithinClass(bool b) => setState(() => oneToOneChatsWithinClass = b);
+  void setOneToOneChatWithinExchanges(bool b) => setState(() => oneToOneChatsWithinExchanges = b);
   void setCreateRooms(bool b) => setState(() => createRooms = b);
-  void setCreateRoomsInExchange(bool b) =>
-      setState(() => createRoomsInExchanges = b);
+  void setCreateRoomsInExchange(bool b) => setState(() => createRoomsInExchanges = b);
   void setCreateStories(bool b) => setState(() => createStories = b);
   void setShareVideos(bool b) => setState(() => shareVideos = b);
   void setSharePhotos(bool b) => setState(() => sharePhotos = b);
@@ -117,8 +114,8 @@ class NewSpaceController extends State<NewSpace> {
       default:
         langlevel = 0;
         return langlevel;
-    }
-  }
+     }
+   }
 
   void submitAction() async {
     int i = fetchLangLevel();
@@ -135,10 +132,9 @@ class NewSpaceController extends State<NewSpace> {
           creationContent: {'type': RoomCreationTypes.mSpace},
           visibility: publicGroup ? sdk.Visibility.public : null,
           roomAliasName: publicGroup && classNameController.text.isNotEmpty
-              ? classNameController.text
-                  .trim()
-                  .toLowerCase()
-                  .replaceAll(' ', '_')
+              ? classNameController.text.trim()
+                .toLowerCase()
+                .replaceAll(' ', '_')
               : null,
           name: classNameController.text.isNotEmpty
               ? classNameController.text
