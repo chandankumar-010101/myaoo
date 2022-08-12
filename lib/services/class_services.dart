@@ -38,7 +38,7 @@ class ClassServices {
   }
   ) async {
     final box = GetStorage();
-    final String token = box.read("accessToken");
+    final String token = box.read("access");
     if (kDebugMode) {
       print("token: $token");
     }
@@ -47,7 +47,7 @@ class ClassServices {
       headers: {"Authorization": "Bearer $token"},
       body: CreateClassToJson(
         pangeaClassRoomId: roomId,
-        languageLevel: languageLevel,
+        languageLevel: languageLevel.toString(),
         dominantLanguage: dominantLanguage,
         description: desc,
         country: country,
@@ -62,19 +62,19 @@ class ClassServices {
           Uri.parse(ApiUrls.addClassPermissions),
           headers: {"Authorization": "Bearer $token"},
           body: AddClassPermissionModel(
-            pangeaClass: data.id,
-            oneToOneChatExchange: oneToOneChatExchange,
-            oneToOneChatClass:  oneToOneChatClass,
-            isShareVideo: isShareVideo,
-            isCreateRooms: isCreateRooms,
-            isCreateRoomsExchange: isCreateRoomsExchange,
-            isCreateStories: isCreateStories,
-            isOpenEnrollment: isOpenEnrollment,
-            isOpenExchange: isOpenExchange,
-            isSharePhoto: isSharePhoto,
-            isShareLocation: isShareLocation,
-            isShareFiles: isShareFiles,
-            isPublic: isPublic,
+            pangeaClass: data.id.toString(),
+            oneToOneChatExchange: oneToOneChatExchange.toString(),
+            oneToOneChatClass:  oneToOneChatClass.toString(),
+            isShareVideo: isShareVideo.toString(),
+            isCreateRooms: isCreateRooms.toString(),
+            isCreateRoomsExchange: isCreateRoomsExchange.toString(),
+            isCreateStories: isCreateStories.toString(),
+            isOpenEnrollment: isOpenEnrollment.toString(),
+            isOpenExchange: isOpenExchange.toString(),
+            isSharePhoto: isSharePhoto.toString(),
+            isShareLocation: isShareLocation.toString(),
+            isShareFiles: isShareFiles.toString(),
+            isPublic: isPublic.toString(),
           ).toJson(),
         ).then((value) {
           if (value.statusCode == 201 || value.statusCode == 200) {
