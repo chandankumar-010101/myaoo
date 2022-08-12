@@ -144,7 +144,7 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
-            age >= 18
+            age <= 18
                 ? SingleChildScrollView(
                 child: Column(
                 children: [
