@@ -156,14 +156,16 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             decoration: BoxDecoration(
              // border: Border.all(width: 0, color:Theme.of(context).colorScheme.secondaryContainer),
               borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
 
             child: Center(
               child: Text(
                 "Create a Class",
                 style: TextStyle().copyWith(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).textTheme
+                        .bodyText1!
+                        .color,
                     fontSize: 14),
                 overflow: TextOverflow.clip,
                 textAlign: TextAlign.center,
@@ -1495,10 +1497,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
         appBar: AppBar(
-          title: Text("Create a Class" ,style:TextStyle(color: Theme.of(context).colorScheme.secondary,fontSize: 14),
-          overflow: TextOverflow.clip,
+          title: Text("Create a Class" ,style:TextStyle(color: Theme.of(context).textTheme
+              .bodyText1!
+              .color,fontSize: 18),
           textAlign: TextAlign.center,),
           centerTitle: true,
           elevation: 10,
@@ -1506,7 +1509,9 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           leading: widget.controller.createClass == 0
               ? Container()
               : IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme
+                      .bodyText1!
+                      .color),
                   onPressed: () {
                     setState(() {
                       widget.controller.createClass =
@@ -1514,7 +1519,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     });
                   },
                 ),
+          backgroundColor: Theme.of(context).colorScheme.background,
         ),
+
+
         body: Container(
           width: size.width,
           height: size.height,
