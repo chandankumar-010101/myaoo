@@ -181,6 +181,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         if (!widget.clients.contains(_loginClientCandidate)) {
           widget.clients.add(_loginClientCandidate!);
         }
+
         ClientManager.addClientNameToStore(_loginClientCandidate!.clientName);
 
         _registerSubs(_loginClientCandidate!.clientName);
@@ -191,7 +192,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         _loginClientCandidate = null;
         widget.router!.currentState!.to('/rooms');
       });
-
     return candidate;
   }
 
@@ -202,6 +202,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   //
   // U: oodlesadmin
   // P: PangeaOodles1!
+
   Client? getClientByName(String name) =>
       widget.clients.firstWhereOrNull((c) => c.clientName == name);
 

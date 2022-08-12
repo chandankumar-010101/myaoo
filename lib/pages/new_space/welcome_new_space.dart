@@ -97,7 +97,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   height: 70,
                   width: 70,
                   child: Image.asset(
-                    "png/Comment.png",
+                    "png/comment.png",
                     fit: BoxFit.cover,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
@@ -155,17 +155,20 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             width: 200,
             height: 40,
             decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.deepPurple),
+             // border: Border.all(width: 0, color:Theme.of(context).colorScheme.secondaryContainer),
               borderRadius: BorderRadius.circular(10),
-              color: Colors.deepPurple,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
+
             child: Center(
               child: Text(
                 "Create a Class",
                 style: TextStyle().copyWith(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: 14),
                 overflow: TextOverflow.clip,
+                textAlign: TextAlign.center,
+
               ),
             ),
           ),
@@ -1493,13 +1496,9 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text("Create a Class" ,style: TextStyle().copyWith(
-              color: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .color,
-              fontSize: 14),
+          title: Text("Create a Class" ,style:TextStyle(color: Theme.of(context).colorScheme.secondary,fontSize: 14),
           overflow: TextOverflow.clip,
           textAlign: TextAlign.center,),
           centerTitle: true,
