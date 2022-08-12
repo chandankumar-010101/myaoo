@@ -652,31 +652,6 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     print(UserAge);
     return UserAge;
   }
-  // currentAge(){
-  //   DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day) ;
-  //   var date = DateTime.parse("${dateToday}");
-  //
-  //   print(date.day);
-  //   print(date.month);
-  //   print(date.year);
-  //   var currentDay=int.parse(dayId.toString());
-  //   var currentmonths=int.parse(monthId.toString());
-  //   var currentyears=int.parse(yearId.toString());
-  //   var days1=date.day-currentDay;
-  //   var months1=date.day-currentmonths;
-  //   var years1=date.year-currentyears;
-  //
-  //   //age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
-  //
-  //   var currentage = DateTime.now().year - currentyears - ((currentmonths, currentDay) < (currentmonths, currentDay))
-  //
-  //   print("current day is ${days1}");
-  //   print("current month is ${months1}");
-  //   print("current year is ${years1}");
-  //
-  //   var formate1="${date.day}/${date.month}/${date.year} ";
-  //
-  // }
 
 
   int age = 0;
