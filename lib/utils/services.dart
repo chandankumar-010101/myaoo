@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../model/flag_model.dart';
-import '../utils/api_helper.dart';
-import '../utils/api_urls.dart';
+import 'api_helper.dart';
+import 'api_urls.dart';
 
 class Services{
 
@@ -17,7 +17,6 @@ class Services{
       log("Flag Response is $temp");
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
     } else {
-
       Fluttertoast.showToast(
           msg: "Something went wrong",
           fontSize: 16.0

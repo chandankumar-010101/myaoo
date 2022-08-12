@@ -12,14 +12,14 @@ import 'settings_account.dart';
 
 class SettingsAccountView extends StatelessWidget {
   final SettingsAccountController controller;
-  var box = GetStorage();
+  var dataStorage = GetStorage();
 
   SettingsAccountView(this.controller, {Key? key}) : super(key: key);
   HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    print("source value for cou ${box.read("sourcelanguage")}");
+    print("source value for cou ${dataStorage.read("sourcelanguage")}");
     return Scaffold(
       appBar: AppBar(title: Text(L10n.of(context)!.account)),
       body: ListTileTheme(
@@ -66,7 +66,7 @@ class SettingsAccountView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                          "${box.read("sourcelanguage").toString().toLowerCase().capitalizeFirst}"),
+                          "${dataStorage.read("sourcelanguage").toString().toLowerCase().capitalizeFirst}"),
                       const SizedBox(
                         width: 10,
                       ),
@@ -75,17 +75,17 @@ class SettingsAccountView extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                          "${box.read("targetlanguage").toString().toLowerCase().capitalizeFirst}"),
+                          "${dataStorage.read("targetlanguage").toString().toLowerCase().capitalizeFirst}"),
                     ]),
                 trailing: Icon(Icons.navigate_next),
               ),
               ListTile(
                 title: const Text("Role"),
-                subtitle: (box.read("usertype") == 1)
+                subtitle: (dataStorage.read("usertype") == 1)
                     ? const Text("Student")
-                    : (box.read("usertype") == 2)
+                    : (dataStorage.read("usertype") == 2)
                         ? const Text("Teacher")
-                        : (box.read("usertype") == 3)
+                        : (dataStorage.read("usertype") == 3)
                             ? const Text("Indie Learner")
                             : const Text(""),
                 trailing: Icon(Icons.navigate_next),

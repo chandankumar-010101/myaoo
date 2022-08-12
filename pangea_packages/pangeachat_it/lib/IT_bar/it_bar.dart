@@ -12,7 +12,7 @@ import 'it_trg_send_button.dart';
 
 class ItBar extends StatelessWidget {
   final ItController? itController;
-  const ItBar({Key? key, required this.itController}) : super(key: key);
+  ItBar({Key? key, required this.itController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class ItBar extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  constraints: const BoxConstraints(minHeight: 75),
+                  constraints: BoxConstraints(minHeight: 75),
                   child: Center(
                     child: itController!.isTranslationDone
                         ? const TranslationFinished()
@@ -77,7 +77,7 @@ class ItBar extends StatelessWidget {
               ],
             ),
           )
-        : const SizedBox();
+        : SizedBox();
   }
 
   Iterable<Widget> renderShimmerIfListEmpty(BuildContext context,
@@ -110,7 +110,7 @@ class ItBar extends StatelessWidget {
             fit: BoxFit.contain,
             color: itController!.selectedTranslations!.length == 0 ||
                     itController!.isLoading
-                ? const Color.fromARGB(255, 211, 211, 211)
+                ? Color.fromARGB(255, 211, 211, 211)
                 : Theme.of(context).primaryColor,
           )),
     );
@@ -119,7 +119,7 @@ class ItBar extends StatelessWidget {
   Widget transBars(BuildContext context,
       {required Continuances continuance, required Function onPress}) {
     return Container(
-      margin: const EdgeInsets.all(2),
+      margin: EdgeInsets.all(2),
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
@@ -153,41 +153,43 @@ class ItBar extends StatelessWidget {
         onPressed: () {
           itController!.selectTranslation(continuance);
         },
-        child: Text(continuance.text!, style: const TextStyle(color: Colors.black)),
+        child: Text(continuance.text!, style: TextStyle(color: Colors.black)),
       ),
     );
   }
 
   Widget translatedTextTablet(BuildContext context,
       {required List<Continuances> selectedTranslations}) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 189, minHeight: 30),
-      child: Scrollbar(
-        child: SingleChildScrollView(
-          child: Wrap(
-            alignment: WrapAlignment.start,
-            runSpacing: 1,
-            spacing: 1,
-            children: [
-              ...selectedTranslations!.map((e) => Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Color(tabledColor(e.probability!))),
-                          child: Center(
-                              child: Text(
-                            e.text!,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )),
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
+    return Container(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 189, minHeight: 30),
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Wrap(
+              alignment: WrapAlignment.start,
+              runSpacing: 1,
+              spacing: 1,
+              children: [
+                ...selectedTranslations!.map((e) => Container(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(tabledColor(e.probability!))),
+                            child: Center(
+                                child: Text(
+                              e.text!,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            )),
+                          ),
+                        ],
+                      ),
+                    ))
+              ],
+            ),
           ),
         ),
       ),
