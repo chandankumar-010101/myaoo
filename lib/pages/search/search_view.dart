@@ -144,7 +144,7 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
-            age <= 18
+            age >= 18
                 ? SingleChildScrollView(
                 child: Column(
                 children: [
@@ -539,9 +539,9 @@ class _SearchViewState extends State<SearchView> {
                                             offset: Offset(2.0, 2.0),
                                             spreadRadius: 1.0)
                                       ],
-                                      color: Theme.of(context)
+                                      color:Theme.of(context)
                                           .colorScheme
-                                          .background),
+                                          .background ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
