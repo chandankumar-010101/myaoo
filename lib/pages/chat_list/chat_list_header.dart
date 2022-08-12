@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -14,12 +15,13 @@ import '../../widgets/matrix.dart';
 class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
   final ChatListController controller;
 
-  const ChatListHeader({Key? key, required this.controller}) : super(key: key);
+  ChatListHeader({Key? key, required this.controller}) : super(key: key);
 
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     final selectMode = controller.selectMode;
-
+    int userType =  box.read("usertype")?? 0;
     return AppBar(
       elevation: controller.scrolledToTop ? 0 : null,
       actionsIconTheme: IconThemeData(
@@ -40,10 +42,8 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       actions: selectMode == SelectMode.share
           ? null
-          : selectMode == SelectMode.select
-              ? [
-                  if (controller.spaces.isNotEmpty)
-                    IconButton(
+          : selectMode == SelectMode.select? [
+            if (controller.spaces.isNotEmpty)IconButton(
                       tooltip: L10n.of(context)!.addToSpace,
                       icon: const Icon(Icons.group_work_outlined),
                       onPressed: controller.addOrRemoveToSpace,
@@ -89,14 +89,14 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                       onPressed: () => VRouter.of(context).to('/search'),
                     ),
                   ),
-                  if (selectMode == SelectMode.normal)
-                    IconButton(
+                  if (selectMode == SelectMode.normal) IconButton(
                       icon: const Icon(Icons.camera_alt_outlined),
                       tooltip: L10n.of(context)!.addToStory,
                       onPressed: () =>
                           VRouter.of(context).to('/stories/create'),
                     ),
-                  PopupMenuButton<PopupMenuAction>(
+
+        PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,
                     itemBuilder: (_) => [
                       PopupMenuItem(
@@ -121,6 +121,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         ),
                       ),
+
                       PopupMenuItem(
                         value: PopupMenuAction.newSpace,
                         child: Row(
