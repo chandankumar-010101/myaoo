@@ -8,7 +8,7 @@ class ItShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(minWidth: 50),
-      margin: const EdgeInsets.only(top: 5, bottom: 5, right: 2, left: 2),
+      margin: EdgeInsets.only(top: 5, bottom: 5, right: 2, left: 2),
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.04),
@@ -24,7 +24,7 @@ class ItShimmer extends StatelessWidget {
       // ],
 
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 11),
+        padding: EdgeInsets.symmetric(horizontal: 7, vertical: 11),
         child: Text(
           text,
           style: Theme.of(context)

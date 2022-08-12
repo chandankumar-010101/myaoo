@@ -8,9 +8,9 @@ class LanguageSelectionView extends StatelessWidget {
   final LanguageSelectionController controller;
 
   LanguageSelectionView(
-    this.controller, {
-    Key? key,
-  }) : super(key: key);
+      this.controller, {
+        Key? key,
+      }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class LanguageSelectionView extends StatelessWidget {
                       ConstrainedBox(
                           constraints: const BoxConstraints(maxHeight: 100),
                           child:
-                              Image.asset("assets/newAssets/pangea-bare.png")),
+                          Image.asset("assets/newAssets/pangea-bare.png")),
                       const SizedBox(
                         width: 18.0,
                       ),
@@ -84,127 +84,124 @@ class LanguageSelectionView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(3.0),
                           border: Border.all(color: Colors.grey.shade200)),
                       child: Obx(() => DropdownButton(
-                            underline: const SizedBox(),
-                            icon: const Icon(Icons.arrow_drop_down_outlined,
-                                color: Colors.black, size: 20),
-                            hint: controller
-                                    .getxController.selectedLanguageOne.value
+                        underline: const SizedBox(),
+                        icon: const Icon(Icons.arrow_drop_down_outlined,
+                            color: Colors.black, size: 20),
+                        hint: controller
+                            .getxController.selectedLanguageOne.value
+                            .toString()
+                            .isEmpty
+                            ? const Center(
+                          child: Text(
+                            "Select Language",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15.0,
+                                color: Colors.black),
+                          ),
+                        )
+                            : Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                controller.getxController.selectedFlag
+                                    .value,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 50,
+                              ),
+                              const SizedBox(
+                                width: 15.0,
+                              ),
+                              Text(
+                                controller.getxController
+                                    .selectedLanguageOne.value
                                     .toString()
-                                    .isEmpty
-                                ? const Center(
-                                    child: Text(
-                                      "Select Language",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
-                                          color: Colors.black),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Image.network(
-                                          controller.getxController.selectedFlag
-                                              .value,
-                                          fit: BoxFit.cover,
-                                          width: 40,
-                                          height: 50,
-                                        ),
-                                        const SizedBox(
-                                          width: 15.0,
-                                        ),
-                                        Text(
-                                          controller.getxController
-                                              .selectedLanguageOne.value
-                                              .toString()
-                                              .toLowerCase()
-                                              .capitalizeFirst!,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 15.0,
-                                              color: Colors.black),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                            isExpanded: true,
-                            items: controller.getxController.countriesList.map(
+                                    .toLowerCase()
+                                    .capitalizeFirst!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              )
+                            ],
+                          ),
+                        ),
+                        isExpanded: true,
+                        items: controller.getxController.countriesList.map(
                               (val) {
-                                return DropdownMenuItem(
-                                  enabled:
-                                      !controller.getxController.loading.value,
-                                  alignment: Alignment.center,
-                                  value: "${val.languageName}",
-                                  onTap: () {
-                                    controller.getxController.selectedFlag
-                                        .value = val.languageFlag!;
-                                    log(controller
-                                        .getxController.selectedFlag.value
-                                        .toString());
-                                  },
-                                  child: val.languageType == 1
-                                      ? Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                ClipRRect(
-                                                  child: Image.network(
-                                                    "${val.languageFlag}",
-                                                    fit: BoxFit.cover,
-                                                    height: 35,
-                                                    width: 55,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  "${val.languageName.toString().toLowerCase().capitalizeFirst}",
-                                                )
-                                              ]),
-                                        )
-                                      : const SizedBox(),
-                                );
+                            return DropdownMenuItem(
+                              enabled:
+                              !controller.getxController.loading.value,
+                              alignment: Alignment.center,
+                              value: "${val.languageName}",
+                              onTap: () {
+                                controller.getxController.selectedFlag
+                                    .value = val.languageFlag!;
+                                log(controller
+                                    .getxController.selectedFlag.value
+                                    .toString());
                               },
-                            ).toList(),
-                            onChanged: (String? value) {
-                              controller.getxController.selectedLanguageOne
-                                  .value = value!;
-                            },
-                          )),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      ClipRRect(
+                                        child: Image.network(
+                                          "${val.languageFlag}",
+                                          fit: BoxFit.cover,
+                                          height: 35,
+                                          width: 55,
+                                        ),
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "${val.languageName.toString().toLowerCase().capitalizeFirst}",
+                                      )
+                                    ]),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          controller.getxController.selectedLanguageOne
+                              .value = value!;
+                        },
+                      )),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Center(
                       child: Obx(() =>
-                          controller.getxController.role.value == "Teacher"
-                              ? const Text(
-                                  "What do you want to teach",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500),
-                                )
-                              : const Text(
-                                  "What do you want to learn",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500),
-                                )),
+                      controller.getxController.role.value == "Teacher"
+                          ? const Text(
+                        "What do you want to teach",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500),
+                      )
+                          : const Text(
+                        "What do you want to learn",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500),
+                      )),
                     ),
                     const SizedBox(
                       height: 10,
@@ -216,98 +213,96 @@ class LanguageSelectionView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(3.0),
                           border: Border.all(color: Colors.grey.shade200)),
                       child: Obx(() => DropdownButton(
-                            underline: const SizedBox(),
-                            icon: const Icon(Icons.arrow_drop_down_outlined,
-                                color: Colors.black, size: 20),
-                            hint: controller
-                                    .getxController.selectedLanguageTwo.value
+                        underline: const SizedBox(),
+                        icon: const Icon(Icons.arrow_drop_down_outlined,
+                            color: Colors.black, size: 20),
+                        hint: controller
+                            .getxController.selectedLanguageTwo.value
+                            .toString()
+                            .isEmpty
+                            ? const Center(
+                          child: Text(
+                            "Select Language",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15.0,
+                                color: Colors.black),
+                          ),
+                        )
+                            : Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                controller.getxController
+                                    .selectedFlagTwo.value,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 50,
+                              ),
+                              const SizedBox(
+                                width: 15.0,
+                              ),
+                              Text(
+                                controller.getxController
+                                    .selectedLanguageTwo.value
                                     .toString()
-                                    .isEmpty
-                                ? const Center(
-                                    child: Text(
-                                      "Select Language",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
-                                          color: Colors.black),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Image.network(
-                                          controller.getxController
-                                              .selectedFlagTwo.value,
-                                          fit: BoxFit.cover,
-                                          width: 40,
-                                          height: 50,
-                                        ),
-                                        const SizedBox(
-                                          width: 15.0,
-                                        ),
-                                        Text(
-                                          controller.getxController
-                                              .selectedLanguageTwo.value
-                                              .toString()
-                                              .toLowerCase()
-                                              .capitalizeFirst!,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 15.0,
-                                              color: Colors.black),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                            isExpanded: true,
-                            items: controller.getxController.countriesList.map(
+                                    .toLowerCase()
+                                    .capitalizeFirst!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              )
+                            ],
+                          ),
+                        ),
+                        isExpanded: true,
+                        items: controller.getxController.countriesList.map(
                               (val) {
-                                return DropdownMenuItem(
-                                  enabled:
-                                      !controller.getxController.loading.value,
-                                  alignment: Alignment.center,
-                                  value: "${val.languageName}",
-                                  onTap: () {
-                                    controller.getxController.selectedFlagTwo
-                                        .value = val.languageFlag!;
-                                  },
-                                  child: val.languageType == 2
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                              ClipRRect(
-                                                child: Image.network(
-                                                  "${val.languageFlag}",
-                                                  fit: BoxFit.cover,
-                                                  height: 35,
-                                                  width: 55,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              const SizedBox(
-                                                width: 12,
-                                              ),
-                                              Text(
-                                                  "${val.languageName.toString().toLowerCase().capitalizeFirst}")
-                                            ])
-                                      : const SizedBox(),
-                                );
+                            return DropdownMenuItem(
+                              enabled:
+                              !controller.getxController.loading.value,
+                              alignment: Alignment.center,
+                              value: "${val.languageName}",
+                              onTap: () {
+                                controller.getxController.selectedFlagTwo
+                                    .value = val.languageFlag!;
                               },
-                            ).toList(),
-                            onChanged: (String? value) {
-                              controller.getxController.selectedLanguageTwo
-                                  .value = value!;
-                            },
-                          )),
+                              child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
+                                  children: [
+                                    ClipRRect(
+                                      child: Image.network(
+                                        "${val.languageFlag}",
+                                        fit: BoxFit.cover,
+                                        height: 35,
+                                        width: 55,
+                                      ),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0),
+                                    ),
+                                    const SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text(
+                                        "${val.languageName.toString().toLowerCase().capitalizeFirst}")
+                                  ]),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          controller.getxController.selectedLanguageTwo
+                              .value = value!;
+                        },
+                      )),
                     ),
                     const SizedBox(
                       height: 10,
@@ -335,28 +330,28 @@ class LanguageSelectionView extends StatelessWidget {
                         icon: const Icon(Icons.arrow_drop_down_outlined,
                             color: Colors.black, size: 20),
                         hint: Obx(
-                            () => controller.getxController.role.value.isEmpty
+                                () => controller.getxController.role.value.isEmpty
                                 ? const Center(
-                                    child: Text(
-                                      "Select One",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
-                                          color: Colors.black),
-                                    ),
-                                  )
+                              child: Text(
+                                "Select One",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              ),
+                            )
                                 : Center(
-                                    child: Text(
-                                      controller.getxController.role.value,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
-                                          color: Colors.black),
-                                    ),
-                                  )),
+                              child: Text(
+                                controller.getxController.role.value,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              ),
+                            )),
                         isExpanded: true,
                         items: ["Student", "Teacher", "Indie Learner"].map(
-                          (val) {
+                              (val) {
                             return DropdownMenuItem<String>(
                               value: val,
                               child: Center(
@@ -391,10 +386,10 @@ class LanguageSelectionView extends StatelessWidget {
                         child: controller.loading
                             ? const LinearProgressIndicator()
                             : Text(
-                                "Go!",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16.0),
-                              ),
+                          "Go!",
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 16.0),
+                        ),
                       ),
                     )
                   ],

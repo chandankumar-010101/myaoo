@@ -18,7 +18,6 @@ import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/model/user_info.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
@@ -181,17 +180,15 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         if (!widget.clients.contains(_loginClientCandidate)) {
           widget.clients.add(_loginClientCandidate!);
         }
-
         ClientManager.addClientNameToStore(_loginClientCandidate!.clientName);
 
         _registerSubs(_loginClientCandidate!.clientName);
-        _loginClientCandidate = null;
+
         print(_loginClientCandidate!.userID);
         print("Login data");
         print(_loginClientCandidate!.accessToken.toString());
-        _loginClientCandidate = null;
-        widget.router!.currentState!.to('/rooms');
       });
+
     return candidate;
   }
 
@@ -202,7 +199,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   //
   // U: oodlesadmin
   // P: PangeaOodles1!
-
   Client? getClientByName(String name) =>
       widget.clients.firstWhereOrNull((c) => c.clientName == name);
 
@@ -233,11 +229,10 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             statusMsg: statusMsg,
           );
         }
-       // box.write("clientID", client.userID ?? "null");
+        box.write("clientID", client.userID ?? "null");
       }
     } catch (e, s) {
       client.onLoginStateChanged.sink.addError(e, s);
-      print("error in this line");
       SentryController.captureException(e, s);
       rethrow;
     }
@@ -349,58 +344,90 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     });
     onLoginStateChanged[name] ??=
         c.onLoginStateChanged.stream.listen((state) async {
-          final loggedInWithMultipleClients = widget.clients.length > 1;
-          if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
-            _cancelSubs(c.clientName);
-            widget.clients.remove(c);
-            ClientManager.removeClientNameFromStore(c.clientName);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(L10n.of(context)!.oneClientLoggedOut),
-              ),
-            );
+      final loggedInWithMultipleClients = widget.clients.length > 1;
+      if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
+        _cancelSubs(c.clientName);
+        widget.clients.remove(c);
+        ClientManager.removeClientNameFromStore(c.clientName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(L10n.of(context)!.oneClientLoggedOut),
+          ),
+        );
 
-            if (state != LoginState.loggedIn) {
-              print("Logged Out");
-              widget.router!.currentState!.to(
-                '/home',
-                queryParameters: widget.router!.currentState!.queryParameters,
-              );
-            }
-          } else if (state == LoginState.loggedIn) {
-            print(state);
+        if (state != LoginState.loggedIn) {
+          print("Logged Out");
+          widget.router!.currentState!.to(
+            '/home',
+            queryParameters: widget.router!.currentState!.queryParameters,
+          );
+        }
+      } else if (state == LoginState.loggedIn) {
+        print(state);
+        //print("Logged In");
 
-            //matrix access token and client id
-            box.write("accessToken", client.accessToken.toString());
-            box.write("clientID", client.userID.toString());
-            bool sign_up = box.read("sign_up") ?? false;
-            bool validateStatus = await validateUser();
-            box.read("accessToken");
+        //matrix access token and client id
+        box.write("accessToken", client.accessToken.toString());
+        box.write("clientID", client.userID.toString());
+        bool sign_up = box.read("sign_up") ?? false;
+        bool validateStatus = await validateUser();
 
-            if (sign_up || !validateStatus) {
-              print("print 1");
+        if (sign_up || !validateStatus) {
+          print("print 1");
+          widget.router!.currentState!.to(
+            // state == LoginState.loggedIn ? '/rooms' : '/home',
+            '/lang',
+            queryParameters: widget.router!.currentState!.queryParameters,
+          );
+        } else {
+          print("print2");
+          await ApiFunctions()
+              .get(ApiUrls.user_details + "${client.userID}")
+              .then((value) {
+            if (value.statusCode == 200) {
+              UserInfo data = UserInfo.fromJson(value.body);
+              //backend access and refresh token
+              box.write("access", data.access ?? "empty");
+              box.write("refresh", data.refresh ?? "empty");
+              var temp = data.profile;
+
+              box.write("sourcelanguage", temp!.sourceLanguage ?? "empty");
+              box.write("targetlanguage", temp.targetLanguage ?? "empty");
+              box.write("usertype", temp.userType);
+              box.write("sign_up", false);
               widget.router!.currentState!.to(
-                '/lang',
-                queryParameters: widget.router!.currentState!.queryParameters,
-              );
-            } else {
-              print("print2");
-              await UserDetails.userDetails();
-              await UserDetails.userAge();
-              widget.router!.currentState!.to(
+                // state == LoginState.loggedIn ? '/rooms' : '/home',
                 '/rooms',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
+            } else {
+              setState(() {
+                // loading = false;
+              });
+              log(value.statusCode.toString());
+              Get.rawSnackbar(
+                  message: "Something went wrong",
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: EdgeInsets.zero,
+                  snackStyle: SnackStyle.GROUNDED,
+                  backgroundColor: Colors.red);
             }
-          } else {
-            print("looged out");
-            widget.router!.currentState!.to(
-              // state == LoginState.loggedIn ? '/rooms' : '/home',
-              '/home',
-              queryParameters: widget.router!.currentState!.queryParameters,
-            );
-          }
-        });
+          }).catchError((error) {
+            setState(() {
+              // loading = false;
+            });
+            log(error.toString());
+          });
+        }
+      } else {
+        print("looged out");
+        widget.router!.currentState!.to(
+          // state == LoginState.loggedIn ? '/rooms' : '/home',
+          '/home',
+          queryParameters: widget.router!.currentState!.queryParameters,
+        );
+      }
+    });
 
     // Cache and resend status message
     onOwnPresence[name] ??= c.onPresenceChanged.stream.listen((presence) {
