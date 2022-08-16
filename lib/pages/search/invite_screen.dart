@@ -143,7 +143,6 @@ class _InviteScreenState extends State<InviteScreen> {
                           ),
                         )),
                   ),
-
                   const SizedBox(
                     height: 134,
                   ),

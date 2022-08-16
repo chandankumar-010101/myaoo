@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pangeachat/model/flag_model.dart';
+import 'package:vrouter/vrouter.dart';
+import '../../config/app_config.dart';
+import '../../utils/fluffy_share.dart';
+import '../../widgets/matrix.dart';
 import 'new_space.dart';
+import 'package:flutter/services.dart';
 
 class WelcomeNewSpace extends StatefulWidget {
   final NewSpaceController controller;
@@ -13,6 +18,8 @@ class WelcomeNewSpace extends StatefulWidget {
 }
 
 class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
+
+
   welcomeWidget() {
     final Size size = MediaQuery.of(context).size;
     return Column(
@@ -42,7 +49,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   width: 70,
                   child: Image.asset(
                     "png/partner.png",
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
@@ -66,7 +73,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   width: 70,
                   child: Image.asset(
                     "png/grow.png",
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
@@ -97,8 +104,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   height: 70,
                   width: 70,
                   child: Image.asset(
-                    "png/comment.png",
-                    fit: BoxFit.cover,
+                    "./png/comment.png",
+                    fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
@@ -122,7 +129,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   width: 70,
                   child: Image.asset(
                     "png/time.png",
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
@@ -154,22 +161,20 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             width: 200,
             height: 40,
             decoration: BoxDecoration(
-             // border: Border.all(width: 0, color:Theme.of(context).colorScheme.secondaryContainer),
+              // border: Border.all(width: 0, color:Theme.of(context).colorScheme.secondaryContainer),
               borderRadius: BorderRadius.circular(10),
               color: Theme.of(context).colorScheme.onPrimary,
-            ),
 
+              border: Border.all(),
+            ),
             child: Center(
               child: Text(
                 "Create a Class",
                 style: TextStyle().copyWith(
-                    color: Theme.of(context).textTheme
-                        .bodyText1!
-                        .color,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 14),
                 overflow: TextOverflow.clip,
                 textAlign: TextAlign.center,
-
               ),
             ),
           ),
@@ -194,13 +199,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             autofocus: true,
             autocorrect: false,
             decoration: InputDecoration(
-                hintText: "Name of Your Class",
-                hintStyle:TextStyle().copyWith(
-    color: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .color,
-    fontSize: 14),),
+              hintText: "Name of Your Class",
+              hintStyle: TextStyle().copyWith(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSize: 14),
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -214,6 +217,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 "png/vector.png",
                 width: 40,
                 height: 40,
+                fit: BoxFit.fill,
+                color: Theme.of(context).textTheme.bodyText1!.color,
               ),
               SizedBox(
                 width: 40,
@@ -224,13 +229,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   autofocus: true,
                   autocorrect: false,
                   decoration: InputDecoration(
-                      hintText: "Optional: City",
-                      hintStyle:  TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
+                    hintText: "Optional: City",
+                    hintStyle: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
                   ),
                 ),
               ),
@@ -247,6 +249,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 "png/vector.png",
                 width: 40,
                 height: 40,
+                fit: BoxFit.fill,
+                color: Theme.of(context).textTheme.bodyText1!.color,
               ),
               SizedBox(
                 width: 40,
@@ -257,13 +261,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   autofocus: true,
                   autocorrect: false,
                   decoration: InputDecoration(
-                      hintText: "Optional: Country",
-                      hintStyle:  TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),),
+                    hintText: "Optional: Country",
+                    hintStyle: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                  ),
                 ),
               ),
             ],
@@ -279,6 +281,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 "png/md_analyst.png",
                 width: 40,
                 height: 40,
+                fit: BoxFit.fill,
+                color: Theme.of(context).textTheme.bodyText1!.color,
               ),
               SizedBox(
                 width: 30,
@@ -313,14 +317,15 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     items: widget.controller.languageLevel.map((String items) {
                       return DropdownMenuItem(
                         value: items,
-                        child: Text(items, style: TextStyle().copyWith(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .color,
-                            fontSize: 14),
+                        child: Text(
+                          items,
+                          style: TextStyle().copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14),
                           overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,),
+                          textAlign: TextAlign.center,
+                        ),
                       );
                     }).toList(),
                     // After selecting the desired option,it will
@@ -347,7 +352,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 "png/house.png",
                 width: 40,
                 height: 40,
-
+                fit: BoxFit.fill,
+                // color: Theme.of(context).textTheme.bodyText1!.color,
               ),
               SizedBox(
                 width: 30,
@@ -357,13 +363,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 controller: widget.controller.schoolController,
                 onSubmitted: (String? value) {},
                 decoration: InputDecoration(
-                    hintText: "Optional: School",
-                    hintStyle:  TextStyle().copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color,
-                    fontSize: 14),),
+                  hintText: "Optional: School",
+                  hintStyle: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                ),
               )),
             ],
           ),
@@ -379,11 +383,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               hintText:
                   "What should prospective students know\nabout your class? Potential exchange\nteachers?",
               hintStyle: TextStyle().copyWith(
-    color: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .color,
-    fontSize: 14),
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSize: 14),
             ),
             maxLines: 3,
           ),
@@ -393,28 +394,30 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           padding: EdgeInsets.all(size.height * 0.01),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [Text("1000",style:  TextStyle().copyWith(
-              color: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .color,
-              fontSize: 14),
-            overflow: TextOverflow.clip,
-            textAlign: TextAlign.center,)],
+            children: [
+              Text(
+                "1000",
+                style: TextStyle().copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontSize: 14),
+                overflow: TextOverflow.clip,
+                textAlign: TextAlign.center,
+              )
+            ],
           ),
         ),
         Container(
           constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
           padding: EdgeInsets.all(size.height * 0.01),
-          child:  Center(
-            child: Text("What is the target language of your classroom?", style: TextStyle().copyWith(
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .color,
-                fontSize: 14),
+          child: Center(
+            child: Text(
+              "What is the target language of your classroom?",
+              style: TextStyle().copyWith(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSize: 14),
               overflow: TextOverflow.clip,
-              textAlign: TextAlign.center,),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         Container(
@@ -424,17 +427,17 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 ? DropdownButton(
                     // Initial Value
                     hint: widget.controller.sourceLanguage == null
-                        ?  Center(
+                        ? Center(
                             child: Text(
                               "Select Language",
                               style: TextStyle().copyWith(
-    color: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .color,
-    fontSize: 14),
-    overflow: TextOverflow.clip,
-    textAlign: TextAlign.center,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 14),
+                              overflow: TextOverflow.clip,
+                              textAlign: TextAlign.center,
                             ),
                           )
                         : Row(
@@ -491,14 +494,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                                         .toString()
                                         .capitalizeFirst ??
                                     "",
-                                 style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 14),
-                        overflow: TextOverflow.clip,
-                        textAlign: TextAlign.center,
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
                               )
                             ],
                           ));
@@ -519,14 +522,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
           padding: EdgeInsets.all(size.height * 0.01),
           child: Center(
-            child: Text("What is the dominant language of your student?", style: TextStyle().copyWith(
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .color,
-                fontSize: 14),
+            child: Text(
+              "What is the dominant language of your student?",
+              style: TextStyle().copyWith(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSize: 14),
               overflow: TextOverflow.clip,
-              textAlign: TextAlign.center,),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         Container(
@@ -539,14 +542,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                       ? Center(
                           child: Text(
                             "Select Language",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 14),
-                              overflow: TextOverflow.clip,
-                              textAlign: TextAlign.center,
+                            style: TextStyle().copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 14),
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,
                           ),
                         )
                       : Row(
@@ -625,10 +628,9 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                       Fluttertoast.showToast(
                           msg: "Target and Dominant language cannot be same!",
                           fontSize: 16.0,
-                      backgroundColor: Colors.red,
+                          backgroundColor: Colors.red,
                           textColor: Colors.white,
-                        timeInSecForIosWeb: 4
-                      );
+                          timeInSecForIosWeb: 4);
                     } else {
                       setState(() {
                         widget.controller.targetLanguage = newValue!;
@@ -649,14 +651,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               children: [
                 Expanded(
                   child: Center(
-                    child: Text("1/4", style: TextStyle().copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .color,
-                        fontSize: 14),
+                    child: Text(
+                      "1/4",
+                      style: TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 14),
                       overflow: TextOverflow.clip,
-                      textAlign: TextAlign.center,),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 InkWell(
@@ -666,11 +668,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.deepPurple,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_right_alt,
                       color: Colors.white,
                       size: 25,
@@ -703,10 +705,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             child: Text(
               "Class Permissions",
               style: TextStyle().copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSize: 14),
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
@@ -723,13 +722,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SwitchListTile.adaptive(
-                title: Text("Public", style: TextStyle().copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color,
-                    fontSize: 14),
-                  overflow: TextOverflow.clip,),
+                title: Text(
+                  "Public",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                ),
                 value: widget.controller.publicGroup,
                 onChanged: widget.controller.setPublicGroup,
               ),
@@ -744,10 +743,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -758,13 +755,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 ),
               ),
               SwitchListTile.adaptive(
-                title: Text("Open Enrollment?", style: TextStyle().copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color,
-                    fontSize: 14),
-                  overflow: TextOverflow.clip,),
+                title: Text(
+                  "Open Enrollment?",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                ),
                 value: widget.controller.openEnrollment,
                 onChanged: widget.controller.setOpenEnrollment,
               ),
@@ -779,10 +776,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -793,13 +788,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 ),
               ),
               SwitchListTile.adaptive(
-                title:  Text("Open to exchanges?", style: TextStyle().copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color,
-                    fontSize: 14),
-                  overflow: TextOverflow.clip,),
+                title: Text(
+                  "Open to exchanges?",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                ),
                 value: widget.controller.openToExchange,
                 onChanged: widget.controller.setOpentToExchange,
               ),
@@ -807,17 +802,15 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 constraints: const BoxConstraints(minWidth: 100, maxWidth: 700),
                 padding: EdgeInsets.all(size.height * 0.01),
                 child: Row(
-                  children:[
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 5),
                         child: Text(
                           "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -840,16 +833,16 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             ),
             child: Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Center(
-                    child: Text("2/4", style: TextStyle().copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .color,
-                        fontSize: 14),
+                    child: Text(
+                      "2/4",
+                      style: TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 14),
                       overflow: TextOverflow.clip,
-                      textAlign: TextAlign.center,),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 InkWell(
@@ -861,8 +854,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: const BoxDecoration(
-                      color: Colors.deepPurple,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -894,14 +887,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               horizontal: size.width * 0.1, vertical: size.height * 0.02),
           width: size.width,
           height: 40,
-          child:  Center(
+          child: Center(
             child: Text(
               "Student Permissions",
               style: TextStyle().copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSize: 14),
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
@@ -918,12 +908,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             child: Column(
               children: [
                 SwitchListTile.adaptive(
-                  title:Text("1-to-1 chats within class", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
+                  title: Text(
+                    "1-to-1 chats within class",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
                     overflow: TextOverflow.clip,
                     textAlign: TextAlign.left,
                   ),
@@ -931,17 +920,15 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   onChanged: widget.controller.setOneToOneChatsWithinClass,
                 ),
                 Row(
-                  children:[
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 5),
                         child: Text(
                           "If you allow 1-to-1 chats, your students can send and receive individual chats with other students within your class. Otherwise, they can only chat in rooms.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -951,13 +938,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title: Text("1-to-1 chats within exchanges",style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "1-to-1 chats within exchanges",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.oneToOneChatsWithinExchanges,
                   onChanged: widget.controller.setOneToOneChatWithinExchanges,
                 ),
@@ -969,10 +956,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "If you allow 1-to-1 chats within exchanges, your students can send and receive individual chats with students in exchange-connected classes.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -982,13 +967,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title:Text("Create rooms", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Create rooms",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.createRooms,
                   onChanged: widget.controller.setCreateRooms,
                 ),
@@ -1012,13 +997,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title: Text("Create rooms in exchanges", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Create rooms in exchanges",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.createRoomsInExchanges,
                   onChanged: widget.controller.setCreateRoomsInExchange,
                 ),
@@ -1030,10 +1015,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Toggle this on to allow students to create rooms within exchanges.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -1043,13 +1026,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title: Text("Create Stories", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Create Stories",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.createStories,
                   onChanged: widget.controller.setCreateStories,
                 ),
@@ -1061,10 +1044,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Toggle this on to allow students to create stories.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -1074,13 +1055,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title: Text("Share Video", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Share Video",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.shareVideos,
                   onChanged: widget.controller.setShareVideos,
                 ),
@@ -1092,10 +1073,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Toggle this on to allow students to share videos chats/rooms",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -1105,13 +1084,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title:  Text("Share Photos", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Share Photos",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.sharePhotos,
                   onChanged: widget.controller.setSharePhotos,
                 ),
@@ -1123,10 +1102,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Toggle this on to allow students to share photos in chats/rooms.",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -1136,13 +1113,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title: Text("Share Files", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Share Files",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.shareFiles,
                   onChanged: widget.controller.setShareFiles,
                 ),
@@ -1154,10 +1131,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Toggle this on to allow students to share files in chats/rooms",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -1167,13 +1142,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   ],
                 ),
                 SwitchListTile.adaptive(
-                  title:  Text("Share Location", style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
-                    overflow: TextOverflow.clip,),
+                  title: Text(
+                    "Share Location",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                  ),
                   value: widget.controller.shareLocation,
                   onChanged: widget.controller.setShareLocation,
                 ),
@@ -1185,10 +1160,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                         child: Text(
                           "Toggle this on to allow students to share their location in chats/rooms",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
@@ -1211,16 +1184,16 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             ),
             child: Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Center(
-                    child: Text("3/4", style: TextStyle().copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .color,
-                        fontSize: 14),
+                    child: Text(
+                      "3/4",
+                      style: TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 14),
                       overflow: TextOverflow.clip,
-                      textAlign: TextAlign.center,),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 InkWell(
@@ -1233,11 +1206,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.deepPurple,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_right_alt,
                       color: Colors.white,
                       size: 25,
@@ -1264,22 +1237,21 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         children: [
           Text(
             "Invite students to enroll\nwith your class.",
-        style: TextStyle().copyWith(
-            color: Theme.of(context)
-                .textTheme
-                .bodyText1!
-                .color,
-            fontSize: 14,
-        fontWeight: FontWeight.bold),
-        overflow: TextOverflow.clip,
-        textAlign: TextAlign.center,
+            style: TextStyle().copyWith(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                fontSize: 14,
+                fontWeight: FontWeight.bold),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
           ),
           SizedBox(
             height: 10,
           ),
           InkWell(
             onTap: () {
-              print("hellow");
+              FluffyShare.share(
+                  AppConfig.inviteLinkPrefix + widget.controller.room.canonicalAlias,
+                  context);
             },
             child: Container(
               width: 200,
@@ -1293,17 +1265,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 child: Text(
                   "Copy class link",
                   style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),
                   overflow: TextOverflow.clip,
-                  textAlign: TextAlign.center,),
-              ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-
+          ),
           SizedBox(
             height: 10,
           ),
@@ -1323,10 +1292,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 child: Text(
                   "Copy class code",
                   style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
@@ -1353,10 +1319,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 child: Text(
                   "Invite from phone contacts",
                   style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
@@ -1383,10 +1346,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 child: Text(
                   "Invite with email",
                   style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
@@ -1413,10 +1373,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 child: Text(
                   "Add from Clever",
                   style: TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
@@ -1436,14 +1393,14 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 children: [
                   Expanded(
                     child: Center(
-                      child: Text("4/4",style: TextStyle().copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .color,
-                  fontSize: 14),
-                overflow: TextOverflow.clip,
-                textAlign: TextAlign.center,),
+                      child: Text(
+                        "4/4",
+                        style: TextStyle().copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 14),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   InkWell(
@@ -1455,11 +1412,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     child: Container(
                       width: 50.0,
                       height: 50.0,
-                      decoration: new BoxDecoration(
-                        color: Colors.deepPurple,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.onPrimary,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_right_alt,
                         color: Colors.white,
                         size: 25,
@@ -1497,21 +1454,25 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-
+        //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text("Create a Class" ,style:TextStyle(color: Theme.of(context).textTheme
-              .bodyText1!
-              .color,fontSize: 18),
-          textAlign: TextAlign.center,),
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: Text(
+            "Create a Class",
+            style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                fontSize: 14),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
+          ),
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: widget.controller.createClass == 0
               ? Container()
               : IconButton(
-                  icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme
-                      .bodyText1!
-                      .color),
+                  icon: Icon(Icons.arrow_back,
+                      color: Theme.of(context).textTheme.bodyText1!.color),
                   onPressed: () {
                     setState(() {
                       widget.controller.createClass =
@@ -1519,10 +1480,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     });
                   },
                 ),
-          backgroundColor: Theme.of(context).colorScheme.background,
         ),
-
-
         body: Container(
           width: size.width,
           height: size.height,

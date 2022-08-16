@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
@@ -49,16 +50,16 @@ class NewSpaceController extends State<NewSpace> {
   bool shareFiles = false;
   bool shareLocation = false;
 
+  late final room;
+
+
   void setPublicGroup(bool b) => setState(() => publicGroup = b);
   void setOpenEnrollment(bool b) => setState(() => openEnrollment = b);
   void setOpentToExchange(bool b) => setState(() => openToExchange = b);
-  void setOneToOneChatsWithinClass(bool b) =>
-      setState(() => oneToOneChatsWithinClass = b);
-  void setOneToOneChatWithinExchanges(bool b) =>
-      setState(() => oneToOneChatsWithinExchanges = b);
+  void setOneToOneChatsWithinClass(bool b) => setState(() => oneToOneChatsWithinClass = b);
+  void setOneToOneChatWithinExchanges(bool b) => setState(() => oneToOneChatsWithinExchanges = b);
   void setCreateRooms(bool b) => setState(() => createRooms = b);
-  void setCreateRoomsInExchange(bool b) =>
-      setState(() => createRoomsInExchanges = b);
+  void setCreateRoomsInExchange(bool b) => setState(() => createRoomsInExchanges = b);
   void setCreateStories(bool b) => setState(() => createStories = b);
   void setShareVideos(bool b) => setState(() => shareVideos = b);
   void setSharePhotos(bool b) => setState(() => sharePhotos = b);
@@ -117,8 +118,8 @@ class NewSpaceController extends State<NewSpace> {
       default:
         langlevel = 0;
         return langlevel;
-    }
-  }
+     }
+   }
 
   void submitAction() async {
     int i = fetchLangLevel();
@@ -135,10 +136,9 @@ class NewSpaceController extends State<NewSpace> {
           creationContent: {'type': RoomCreationTypes.mSpace},
           visibility: publicGroup ? sdk.Visibility.public : null,
           roomAliasName: publicGroup && classNameController.text.isNotEmpty
-              ? classNameController.text
-                  .trim()
-                  .toLowerCase()
-                  .replaceAll(' ', '_')
+              ? classNameController.text.trim()
+                .toLowerCase()
+                .replaceAll(' ', '_')
               : null,
           name: classNameController.text.isNotEmpty
               ? classNameController.text
@@ -146,7 +146,7 @@ class NewSpaceController extends State<NewSpace> {
         ),
       );
       if (roomID.result != null) {
-        print(roomID.result);
+        print(roomID);
 
         await ClassServices.createClass(
           isPublic: publicGroup,
@@ -171,6 +171,8 @@ class NewSpaceController extends State<NewSpace> {
           targetLanguage: targetLanguage!.languageName!,
           schoolName: schoolController.text.toString(),
         ).then((value) {
+          print(roomID);
+         room =  Matrix.of(context).client.getRoomById(roomID.result!);
           setState(() {
             createClass = 4;
           });
