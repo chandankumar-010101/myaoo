@@ -16,7 +16,7 @@ class CreateClassToJson {
   late final String dominantLanguage;
   late final String targetLanguage;
   late final String description;
-  late final int languageLevel;
+  late final String languageLevel;
   late final String pangeaClassRoomId;
   late final String schoolName;
 

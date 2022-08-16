@@ -125,6 +125,7 @@ flutter:
     - .env.development
     - .env.example
     - assets/
+    - assets/png/
     - assets/sounds/
     - assets/newAssets/
     - assets/countryFlags/

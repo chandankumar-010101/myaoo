@@ -38,7 +38,7 @@ class ClassServices {
   }
   ) async {
     final box = GetStorage();
-    final String token = box.read("accessToken");
+    final String token = box.read("access");
     if (kDebugMode) {
       print("token: $token");
     }
@@ -47,7 +47,7 @@ class ClassServices {
       headers: {"Authorization": "Bearer $token"},
       body: CreateClassToJson(
         pangeaClassRoomId: roomId,
-        languageLevel: languageLevel,
+        languageLevel: languageLevel.toString(),
         dominantLanguage: dominantLanguage,
         description: desc,
         country: country,

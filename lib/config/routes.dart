@@ -14,6 +14,7 @@ import 'package:pangeachat/pages/login/login.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
 import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
+import 'package:pangeachat/pages/search/invite_screen.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/search/search_discover.dart';
 import 'package:pangeachat/pages/settings/settings.dart';
@@ -228,20 +229,84 @@ class AppRoutes {
                 ),
               ],
             ),
-            VWidget(
+            // VWidget(
+            //   path: '/search',
+            //   widget: TwoColumnLayout(
+            //     mainView: Search(),
+            //     sideView: SearchDiscoverView(),
+            //   ),
+            //   buildTransition: _fadeTransition,
+            //   //  stackedRoutes: [
+            //   //  VWidget(
+            //   //   path: '/search/add',
+            //   //   buildTransition: _fadeTransition,
+            //   //   widget: const SearchDiscoverView(),
+            //   //  ),
+            //   // ],
+            // ),
+            VNester(
               path: '/search',
-              widget: const TwoColumnLayout(
-                mainView: Search(),
-                sideView: SearchDiscoverView(),
+              widgetBuilder: (child) => TwoColumnLayout(
+                mainView: const Search(),
+                sideView: child,
               ),
-              buildTransition: _fadeTransition,
-              //  stackedRoutes: [
-              //  VWidget(
-              //   path: '/search/add',
-              //   buildTransition: _fadeTransition,
-              //   widget: const SearchDiscoverView(),
-              //  ),
-              // ],
+              buildTransition: _dynamicTransition,
+              stackedRoutes: [
+                VWidget(
+                  path: 'add',
+                  widget: EmptyPage(),
+                  buildTransition: _fadeTransition,
+                  stackedRoutes: [
+                    VWidget(
+                      path: 'age',
+                      widget: SearchDiscoverView(),
+                      buildTransition: _fadeTransition,
+                    ),
+                    VWidget(
+                        path: 'connect',
+                        widget: const ConnectPage(),
+                        buildTransition: _fadeTransition,
+                        stackedRoutes: [
+                          VWidget(
+                            path: 'login',
+                            widget: const Login(),
+                            buildTransition: _fadeTransition,
+                          ),
+                          VWidget(
+                            path: 'signup',
+                            widget: const SignupPage(),
+                            buildTransition: _fadeTransition,
+                          ),
+                        ]),
+                  ],
+                ),
+              ], nestedRoutes: [
+              VWidget(
+                path: '',
+                widget: EmptyPage(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+              VWidget(
+                path: '/user',
+                widget: SearchDiscoverView(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+              VWidget(
+                path: '/addClass',
+                widget: NewSpace(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+
+              VWidget(
+                path: '/inviteScreen',
+                widget: InviteScreen(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
+            ],
             ),
             VWidget(
               path: '/archive',

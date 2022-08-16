@@ -33,7 +33,7 @@ class _SearchViewState extends State<SearchView> {
   var box = GetStorage();
 
   userAgeDetails() async {
-    await UserDetails().userAge();
+    await UserDetails.userAge();
   }
 
   @override
