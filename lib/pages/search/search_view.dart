@@ -45,6 +45,7 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     // userAgeDetails();
+    searchController.getClasses();
     int age = int.parse(box.read("age").toString());
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
