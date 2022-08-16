@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
@@ -48,6 +49,9 @@ class NewSpaceController extends State<NewSpace> {
   bool sharePhotos = false;
   bool shareFiles = false;
   bool shareLocation = false;
+
+  late final room;
+
 
   void setPublicGroup(bool b) => setState(() => publicGroup = b);
   void setOpenEnrollment(bool b) => setState(() => openEnrollment = b);
@@ -142,7 +146,7 @@ class NewSpaceController extends State<NewSpace> {
         ),
       );
       if (roomID.result != null) {
-        print(roomID.result);
+        print(roomID);
 
         await ClassServices.createClass(
           isPublic: publicGroup,
@@ -167,6 +171,8 @@ class NewSpaceController extends State<NewSpace> {
           targetLanguage: targetLanguage!.languageName!,
           schoolName: schoolController.text.toString(),
         ).then((value) {
+          print(roomID);
+         room =  Matrix.of(context).client.getRoomById(roomID.result!);
           setState(() {
             createClass = 4;
           });
