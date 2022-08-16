@@ -37,7 +37,6 @@ prime
 .pubspec.lock
 .pub/
 /build/
-.env
 .env.development
 
 # Web related
