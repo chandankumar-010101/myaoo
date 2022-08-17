@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/model/flag_model.dart';
+import 'package:pangeachat/utils/fluffy_share.dart';
 import 'new_space.dart';
 
 class WelcomeNewSpace extends StatefulWidget {
@@ -200,13 +202,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             autofocus: true,
             autocorrect: false,
             decoration: InputDecoration(
-                hintText: "Name of Your Class",
-                hintStyle:TextStyle().copyWith(
-    color: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .color,
-    fontSize: 14),),
+              hintText: "Name of Your Class",
+              hintStyle:TextStyle().copyWith(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .color,
+                  fontSize: 14),),
             textAlign: TextAlign.center,
           ),
         ),
@@ -233,13 +235,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   autofocus: true,
                   autocorrect: false,
                   decoration: InputDecoration(
-                      hintText: "Optional: City",
-                      hintStyle:  TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),
+                    hintText: "Optional: City",
+                    hintStyle:  TextStyle().copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color,
+                        fontSize: 14),
                   ),
                 ),
               ),
@@ -269,13 +271,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   autofocus: true,
                   autocorrect: false,
                   decoration: InputDecoration(
-                      hintText: "Optional: Country",
-                      hintStyle:  TextStyle().copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color,
-                      fontSize: 14),),
+                    hintText: "Optional: Country",
+                    hintStyle:  TextStyle().copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color,
+                        fontSize: 14),),
                 ),
               ),
             ],
@@ -295,7 +297,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 color: Theme.of(context).textTheme.bodyText1!.color,
 
               ),
-             SizedBox(
+              SizedBox(
                 width: 30,
               ),
 
@@ -309,18 +311,18 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                       // Initial Value
                       hint: widget.controller.languageLevelDropdownValue.isEmpty
                           ? Center(
-                              child: Text(
-                                "Select language level ",
-                                style: TextStyle().copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontSize: 14),
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                              ),
-                            )
+                        child: Text(
+                          "Select language level ",
+                          style: TextStyle().copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .color,
+                              fontSize: 14),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.center,
+                        ),
+                      )
                           : Text(widget.controller.languageLevelDropdownValue),
                       //value: widget.controller.languageLevelDropdownValue,
                       isExpanded: true,
@@ -345,7 +347,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                       onChanged: (String? newValue) {
                         setState(() {
                           widget.controller.languageLevelDropdownValue =
-                              newValue!;
+                          newValue!;
                         });
                       },
                     ),
@@ -375,17 +377,17 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               ),
               Expanded(
                   child: TextField(
-                controller: widget.controller.schoolController,
-                onSubmitted: (String? value) {},
-                decoration: InputDecoration(
-                    hintText: "Optional: School",
-                    hintStyle:  TextStyle().copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color,
-                    fontSize: 14),),
-              )),
+                    controller: widget.controller.schoolController,
+                    onSubmitted: (String? value) {},
+                    decoration: InputDecoration(
+                      hintText: "Optional: School",
+                      hintStyle:  TextStyle().copyWith(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                          fontSize: 14),),
+                  )),
             ],
           ),
         ),
@@ -398,13 +400,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             decoration: InputDecoration(
               // border: OutlineInputBorder(),
               hintText:
-                  "What should prospective students know\nabout your class? Potential exchange\nteachers?",
+              "What should prospective students know\nabout your class? Potential exchange\nteachers?",
               hintStyle: TextStyle().copyWith(
-    color: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .color,
-    fontSize: 14),
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .color,
+                  fontSize: 14),
             ),
             maxLines: 3,
           ),
@@ -415,13 +417,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [Text("1000",style:  TextStyle().copyWith(
-              color: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .color,
-              fontSize: 14),
-            overflow: TextOverflow.clip,
-            textAlign: TextAlign.center,)],
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .color,
+                fontSize: 14),
+              overflow: TextOverflow.clip,
+              textAlign: TextAlign.center,)],
           ),
         ),
         Container(
@@ -443,103 +445,103 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             padding: EdgeInsets.all(size.height * 0.01),
             child: widget.controller.languageFlagList.isNotEmpty
                 ? Container(
-                   decoration: BoxDecoration(
-                   border: Border.all(
-                     color: Theme.of(context)
-                         .primaryColorLight
-                     ),
-                   ),
-                  child: DropdownButton(
-                      // Initial Value
-                      hint: widget.controller.sourceLanguage == null
-                          ?  Center(
-                              child: Text(
-                                "Select Language",
-                                style: TextStyle().copyWith(
-    color: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .color,
-    fontSize: 14),
-    overflow: TextOverflow.clip,
-    textAlign: TextAlign.center,
-                              ),
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.network(
-                                  widget.controller.sourceLanguage!.languageFlag!,
-                                  fit: BoxFit.cover,
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  widget.controller.sourceLanguage!.languageName
-                                          .toString()
-                                          .capitalizeFirst ??
-                                      "",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 14),
-                                  overflow: TextOverflow.clip,
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                      isExpanded: true,
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      underline: Container(),
-                      // Array list of items
-                      items:
-                          widget.controller.languageFlagList.map((languageFlag) {
-                        // print(items.languageFlag);
-                        return DropdownMenuItem(
-                            value: languageFlag,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.network(
-                                  languageFlag.languageFlag!,
-                                  fit: BoxFit.cover,
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
-                                  languageFlag.languageName
-                                          .toString()
-                                          .capitalizeFirst ??
-                                      "",
-                                   style: TextStyle().copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontSize: 14),
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
-                                )
-                              ],
-                            ));
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (LanguageFlag? newValue) {
-                        setState(() {
-                          widget.controller.sourceLanguage = newValue!;
-                        });
-                      },
-                    ),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: Theme.of(context)
+                        .primaryColorLight
+                ),
+              ),
+              child: DropdownButton(
+                // Initial Value
+                hint: widget.controller.sourceLanguage == null
+                    ?  Center(
+                  child: Text(
+                    "Select Language",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color,
+                        fontSize: 14),
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.center,
+                  ),
                 )
+                    : Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.network(
+                      widget.controller.sourceLanguage!.languageFlag!,
+                      fit: BoxFit.cover,
+                      width: 40,
+                      height: 40,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      widget.controller.sourceLanguage!.languageName
+                          .toString()
+                          .capitalizeFirst ??
+                          "",
+                      style: TextStyle().copyWith(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                          fontSize: 14),
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
+                isExpanded: true,
+                // Down Arrow Icon
+                icon: const Icon(Icons.keyboard_arrow_down),
+                underline: Container(),
+                // Array list of items
+                items:
+                widget.controller.languageFlagList.map((languageFlag) {
+                  // print(items.languageFlag);
+                  return DropdownMenuItem(
+                      value: languageFlag,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            languageFlag.languageFlag!,
+                            fit: BoxFit.cover,
+                            width: 40,
+                            height: 40,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
+                            languageFlag.languageName
+                                .toString()
+                                .capitalizeFirst ??
+                                "",
+                            style: TextStyle().copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 14),
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ));
+                }).toList(),
+                // After selecting the desired option,it will
+                // change button value to selected value
+                onChanged: (LanguageFlag? newValue) {
+                  setState(() {
+                    widget.controller.sourceLanguage = newValue!;
+                  });
+                },
+              ),
+            )
                 : Container()),
         SizedBox(
           height: size.height * 0.03,
@@ -564,116 +566,116 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
 
           child: widget.controller.languageFlagList.isNotEmpty
               ? Container(
-                decoration: BoxDecoration(
-                 border: Border.all(
-                   color: Theme.of(context)
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(context)
                       .primaryColorLight
-                   ),
-                 ),
-                child: DropdownButton(
-                    // Initial Value
-                    hint: widget.controller.targetLanguage == null
-                        ? Center(
-                            child: Text(
-                              "Select Language",
-                                style: TextStyle().copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontSize: 14),
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                widget.controller.targetLanguage!.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                widget.controller.targetLanguage!.languageName
-                                        .toString()
-                                        .capitalizeFirst ??
-                                    "",
-                                style: TextStyle().copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontSize: 16),
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-
-                                // style: const TextStyle(
-                                //     fontWeight: FontWeight.w600,
-                                //     fontSize: 15.0,
-                                //     color: Colors.black),
-                              )
-                            ],
-                          ),
-                    isExpanded: true,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    underline: Container(),
-                    // Array list of items
-                    items: widget.controller.languageFlagList.map((languageFlag) {
-                      // print(items.languageFlag);
-                      return DropdownMenuItem(
-                          value: languageFlag,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                languageFlag.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                languageFlag.languageName
-                                        .toString()
-                                        .capitalizeFirst ??
-                                    "",
-                                style: TextStyle().copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontSize: 14),
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ));
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (LanguageFlag? newValue) {
-                      if (newValue == widget.controller.sourceLanguage) {
-                        Fluttertoast.showToast(
-                            msg: "Target and Dominant language cannot be same!",
-                            fontSize: 16.0,
-                        backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                          timeInSecForIosWeb: 4
-                        );
-                      } else {
-                        setState(() {
-                          widget.controller.targetLanguage = newValue!;
-                        });
-                      }
-                    },
-                  ),
+              ),
+            ),
+            child: DropdownButton(
+              // Initial Value
+              hint: widget.controller.targetLanguage == null
+                  ? Center(
+                child: Text(
+                  "Select Language",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
               )
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.network(
+                    widget.controller.targetLanguage!.languageFlag!,
+                    fit: BoxFit.cover,
+                    width: 40,
+                    height: 40,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    widget.controller.targetLanguage!.languageName
+                        .toString()
+                        .capitalizeFirst ??
+                        "",
+                    style: TextStyle().copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color,
+                        fontSize: 16),
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.center,
+
+                    // style: const TextStyle(
+                    //     fontWeight: FontWeight.w600,
+                    //     fontSize: 15.0,
+                    //     color: Colors.black),
+                  )
+                ],
+              ),
+              isExpanded: true,
+              // Down Arrow Icon
+              icon: const Icon(Icons.keyboard_arrow_down),
+              underline: Container(),
+              // Array list of items
+              items: widget.controller.languageFlagList.map((languageFlag) {
+                // print(items.languageFlag);
+                return DropdownMenuItem(
+                    value: languageFlag,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          languageFlag.languageFlag!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          languageFlag.languageName
+                              .toString()
+                              .capitalizeFirst ??
+                              "",
+                          style: TextStyle().copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .color,
+                              fontSize: 14),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ));
+              }).toList(),
+              // After selecting the desired option,it will
+              // change button value to selected value
+              onChanged: (LanguageFlag? newValue) {
+                if (newValue == widget.controller.sourceLanguage) {
+                  Fluttertoast.showToast(
+                      msg: "Target and Dominant language cannot be same!",
+                      fontSize: 16.0,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      timeInSecForIosWeb: 4
+                  );
+                } else {
+                  setState(() {
+                    widget.controller.targetLanguage = newValue!;
+                  });
+                }
+              },
+            ),
+          )
               : Container(),
         ),
         SizedBox(
@@ -706,11 +708,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     width: 50.0,
                     height: 50.0,
                     decoration:  BoxDecoration(
-                      color: Theme.of(context).colorScheme.onPrimary==Colors.white?
-                      Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
-                      Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
+                        color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                        Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                        Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
                     ),
                     child: Icon(
                       Icons.arrow_right_alt,
@@ -883,7 +885,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             ),
             child: Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Center(
                     child: Text("2/4", style: TextStyle().copyWith(
                         color: Theme.of(context)
@@ -1257,7 +1259,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             ),
             child: Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Center(
                     child: Text("3/4", style: TextStyle().copyWith(
                         color: Theme.of(context)
@@ -1302,7 +1304,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
     );
   }
 
-  inviteStudentsWidget() {
+  inviteStudentsWidget1() {
     final Size size = MediaQuery.of(context).size;
     return SizedBox(
       width: size.width,
@@ -1313,15 +1315,15 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         children: [
           Text(
             "Invite students to enroll\nwith your class.",
-        style: TextStyle().copyWith(
-            color: Theme.of(context)
-                .textTheme
-                .bodyText1!
-                .color,
-            fontSize: 14,
-        fontWeight: FontWeight.bold),
-        overflow: TextOverflow.clip,
-        textAlign: TextAlign.center,
+            style: TextStyle().copyWith(
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .color,
+                fontSize: 14,
+                fontWeight: FontWeight.bold),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
           ),
           SizedBox(
             height: 10,
@@ -1357,8 +1359,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,),
               ),
-              ),
             ),
+          ),
 
           SizedBox(
             height: 10,
@@ -1521,13 +1523,13 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   Expanded(
                     child: Center(
                       child: Text("4/4",style: TextStyle().copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .color,
-                  fontSize: 14),
-                overflow: TextOverflow.clip,
-                textAlign: TextAlign.center,),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                          fontSize: 14),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.center,),
                     ),
                   ),
                   InkWell(
@@ -1547,6 +1549,223 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                           Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
                       ),
                       child:const  Icon(
+                        Icons.arrow_right_alt,
+                        color: Colors.white,
+                        size: 25,
+                      ),
+                    ),
+                  )
+                ],
+              )),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+        ],
+      ),
+    );
+  }
+  inviteStudentsWidget() {
+    final Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: size.width,
+      height: size.height,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Invite students to enroll\nwith your class.",
+            style: TextStyle().copyWith(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                fontSize: 14,
+                fontWeight: FontWeight.bold),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          InkWell(
+            onTap: () {
+              FluffyShare.share(
+                  AppConfig.inviteLinkPrefix + widget.controller.room.canonicalAlias,
+                  context);
+            },
+            child: Container(
+              width: 200,
+              height: 40,
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.deepPurple),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.deepPurple,
+              ),
+              child: Center(
+                child: Text(
+                  "Copy class link",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          InkWell(
+            onTap: () {
+              print("hellow");
+            },
+            child: Container(
+              width: 200,
+              height: 40,
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
+              ),
+              child: Center(
+                child: Text(
+                  "Copy class code",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          InkWell(
+            onTap: () {
+              print("hellow");
+            },
+            child: Container(
+              width: 200,
+              height: 40,
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
+              ),
+              child: Center(
+                child: Text(
+                  "Invite from phone contacts",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          InkWell(
+            onTap: () {
+              print("hellow");
+            },
+            child: Container(
+              width: 200,
+              height: 40,
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
+              ),
+              child: Center(
+                child: Text(
+                  "Invite with email",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          InkWell(
+            onTap: () {
+              print("hellow");
+            },
+            child: Container(
+              width: 200,
+              height: 40,
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
+              ),
+              child: Center(
+                child: Text(
+                  "Add from Clever",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.1,
+                vertical: size.height * 0.02,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        "4/4",
+                        style: TextStyle().copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 14),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        widget.controller.createClass = 6;
+                      });
+                    },
+                    child: Container(
+                      width: 50.0,
+                      height: 50.0,
+                      decoration:  BoxDecoration(
+                          color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                          Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                          Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
+                      ),
+                      child: const Icon(
                         Icons.arrow_right_alt,
                         color: Colors.white,
                         size: 25,
@@ -1584,28 +1803,28 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text("Create a Class" ,style:TextStyle(color: Theme.of(context).textTheme
               .bodyText1!
               .color,fontSize: 14),
-          overflow: TextOverflow.clip,
-          textAlign: TextAlign.center,),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,),
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: widget.controller.createClass == 0
               ? Container()
               : IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
-                  onPressed: () {
-                    setState(() {
-                      widget.controller.createClass =
-                          widget.controller.createClass - 1;
-                    });
-                  },
-                ),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              setState(() {
+                widget.controller.createClass =
+                    widget.controller.createClass - 1;
+              });
+            },
+          ),
         ),
         body: Container(
           width: size.width,
