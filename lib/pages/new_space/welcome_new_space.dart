@@ -223,11 +223,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset(
-                "png/vector.png",
+                "assets/png/vector.png",
                 width: 40,
                 height: 40,
                 fit: BoxFit.fill,
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
 
               ),
               SizedBox(
@@ -259,11 +260,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset(
-                "png/vector.png",
+                "assets/png/vector.png",
                 width: 40,
                 height: 40,
                 fit: BoxFit.fill,
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
 
               ),
               SizedBox(
@@ -294,11 +296,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset(
-                "png/md_analyst.png",
+                "assets/png/md_analyst.png",
                 width: 40,
                 height: 40,
                 fit: BoxFit.fill,
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
 
               ),
               SizedBox(
@@ -368,11 +371,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset(
-                "png/house.png",
+                "assets/png/house.png",
                 width: 40,
                 height: 40,
                 fit: BoxFit.fill,
-                // color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
 
 
               ),
