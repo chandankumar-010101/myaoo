@@ -120,8 +120,8 @@ class NewClassController extends State<NewClass> {
       default:
         langlevel = 0;
         return langlevel;
-     }
-   }
+    }
+  }
 
   void submitAction() async {
     int i = fetchLangLevel();
@@ -139,8 +139,8 @@ class NewClassController extends State<NewClass> {
           visibility: publicGroup ? sdk.Visibility.public : null,
           roomAliasName: publicGroup && classNameController.text.isNotEmpty
               ? classNameController.text.trim()
-                .toLowerCase()
-                .replaceAll(' ', '_')
+              .toLowerCase()
+              .replaceAll(' ', '_')
               : null,
           name: classNameController.text.isNotEmpty
               ? classNameController.text
@@ -152,7 +152,7 @@ class NewClassController extends State<NewClass> {
 
         class_code = roomID.result!;
 
-        final room = Matrix.of(context).client.getRoomById(class_code);
+        var room = Matrix.of(context).client.getRoomById(class_code);
         ///print(roomID);
         print(roomID.result);
         if(room !=null){
@@ -192,6 +192,9 @@ class NewClassController extends State<NewClass> {
           targetLanguage: targetLanguage!.languageName!,
           schoolName: schoolController.text.toString(),
         ).then((value) {
+
+          print(roomID);
+          room =  Matrix.of(context).client.getRoomById(roomID.result!);
           setState(() {
             createClass = 4;
           });
