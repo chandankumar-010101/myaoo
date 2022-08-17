@@ -1602,10 +1602,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             child: Container(
               width: 200,
               height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.deepPurple,
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
               ),
               child: Center(
                 child: Text(
