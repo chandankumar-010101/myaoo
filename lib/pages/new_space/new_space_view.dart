@@ -47,7 +47,11 @@ class NewSpaceView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: controller.submitAction,
-        child: const Icon(Icons.arrow_forward_outlined),
+        child:  Icon(Icons.arrow_forward_outlined,
+        color: Theme.of(context).textTheme
+            .bodyText1!
+            .color
+          ,),
       ),
     );
   }

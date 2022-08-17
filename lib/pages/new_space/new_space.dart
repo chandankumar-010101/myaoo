@@ -120,8 +120,8 @@ class NewSpaceController extends State<NewSpace> {
       default:
         langlevel = 0;
         return langlevel;
-     }
-   }
+    }
+  }
 
   void submitAction() async {
     int i = fetchLangLevel();
@@ -139,8 +139,8 @@ class NewSpaceController extends State<NewSpace> {
           visibility: publicGroup ? sdk.Visibility.public : null,
           roomAliasName: publicGroup && classNameController.text.isNotEmpty
               ? classNameController.text.trim()
-                .toLowerCase()
-                .replaceAll(' ', '_')
+              .toLowerCase()
+              .replaceAll(' ', '_')
               : null,
           name: classNameController.text.isNotEmpty
               ? classNameController.text
@@ -192,6 +192,9 @@ class NewSpaceController extends State<NewSpace> {
           targetLanguage: targetLanguage!.languageName!,
           schoolName: schoolController.text.toString(),
         ).then((value) {
+
+          print(roomID);
+          room =  Matrix.of(context).client.getRoomById(roomID.result!);
           setState(() {
             createClass = 4;
           });
