@@ -153,11 +153,18 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           child: Container(
             width: 200,
             height: 40,
-            decoration: BoxDecoration(
-             // border: Border.all(width: 0, color:Theme.of(context).colorScheme.secondaryContainer),
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).colorScheme.onPrimary,
-              border: Border.all(),
+            // decoration: BoxDecoration(
+            //  // border: Border.all(width: 0, color:Theme.of(context).colorScheme.secondaryContainer),
+            //   borderRadius: BorderRadius.circular(10),
+            //   color: Theme.of(context).colorScheme.onPrimary,
+            //   border: Border.all(),
+            // ),
+            decoration:  BoxDecoration(
+                color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
             ),
 
             child: Center(
@@ -296,49 +303,52 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(left: 10),
-                  child: DropdownButton(
-                    // Initial Value
-                    hint: widget.controller.languageLevelDropdownValue.isEmpty
-                        ? Center(
-                            child: Text(
-                              "Select language level ",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 14),
-                              overflow: TextOverflow.clip,
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Text(widget.controller.languageLevelDropdownValue),
-                    //value: widget.controller.languageLevelDropdownValue,
-                    isExpanded: true,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    // Array list of items
-                    items: widget.controller.languageLevel.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items, style: TextStyle().copyWith(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .color,
-                            fontSize: 14),
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,),
-                      );
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        widget.controller.languageLevelDropdownValue =
-                            newValue!;
-                      });
-                    },
+                  child: Container(
+
+                    child: DropdownButton(
+                      // Initial Value
+                      hint: widget.controller.languageLevelDropdownValue.isEmpty
+                          ? Center(
+                              child: Text(
+                                "Select language level ",
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : Text(widget.controller.languageLevelDropdownValue),
+                      //value: widget.controller.languageLevelDropdownValue,
+                      isExpanded: true,
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      // Array list of items
+                      items: widget.controller.languageLevel.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items, style: TextStyle().copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .color,
+                              fontSize: 14),
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,),
+                        );
+                      }).toList(),
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          widget.controller.languageLevelDropdownValue =
+                              newValue!;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -432,13 +442,20 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
             padding: EdgeInsets.all(size.height * 0.01),
             child: widget.controller.languageFlagList.isNotEmpty
-                ? DropdownButton(
-                    // Initial Value
-                    hint: widget.controller.sourceLanguage == null
-                        ?  Center(
-                            child: Text(
-                              "Select Language",
-                              style: TextStyle().copyWith(
+                ? Container(
+                   decoration: BoxDecoration(
+                   border: Border.all(
+                     color: Theme.of(context)
+                         .primaryColorLight
+                     ),
+                   ),
+                  child: DropdownButton(
+                      // Initial Value
+                      hint: widget.controller.sourceLanguage == null
+                          ?  Center(
+                              child: Text(
+                                "Select Language",
+                                style: TextStyle().copyWith(
     color: Theme.of(context)
         .textTheme
         .bodyText1!
@@ -446,82 +463,83 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
     fontSize: 14),
     overflow: TextOverflow.clip,
     textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                widget.controller.sourceLanguage!.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                widget.controller.sourceLanguage!.languageName
-                                        .toString()
-                                        .capitalizeFirst ??
-                                    "",
-                                style: TextStyle().copyWith(
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.network(
+                                  widget.controller.sourceLanguage!.languageFlag!,
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  widget.controller.sourceLanguage!.languageName
+                                          .toString()
+                                          .capitalizeFirst ??
+                                      "",
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 14),
+                                  overflow: TextOverflow.clip,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                      isExpanded: true,
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      underline: Container(),
+                      // Array list of items
+                      items:
+                          widget.controller.languageFlagList.map((languageFlag) {
+                        // print(items.languageFlag);
+                        return DropdownMenuItem(
+                            value: languageFlag,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.network(
+                                  languageFlag.languageFlag!,
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
+                                  languageFlag.languageName
+                                          .toString()
+                                          .capitalizeFirst ??
+                                      "",
+                                   style: TextStyle().copyWith(
                                     color: Theme.of(context)
                                         .textTheme
                                         .bodyText1!
                                         .color,
                                     fontSize: 14),
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                    isExpanded: true,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    underline: Container(),
-                    // Array list of items
-                    items:
-                        widget.controller.languageFlagList.map((languageFlag) {
-                      // print(items.languageFlag);
-                      return DropdownMenuItem(
-                          value: languageFlag,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                languageFlag.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
-                                languageFlag.languageName
-                                        .toString()
-                                        .capitalizeFirst ??
-                                    "",
-                                 style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 14),
-                        overflow: TextOverflow.clip,
-                        textAlign: TextAlign.center,
-                              )
-                            ],
-                          ));
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (LanguageFlag? newValue) {
-                      setState(() {
-                        widget.controller.sourceLanguage = newValue!;
-                      });
-                    },
-                  )
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.center,
+                                )
+                              ],
+                            ));
+                      }).toList(),
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (LanguageFlag? newValue) {
+                        setState(() {
+                          widget.controller.sourceLanguage = newValue!;
+                        });
+                      },
+                    ),
+                )
                 : Container()),
         SizedBox(
           height: size.height * 0.03,
@@ -543,110 +561,119 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
         Container(
           constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
           padding: EdgeInsets.all(size.height * 0.01),
-          child: widget.controller.languageFlagList.isNotEmpty
-              ? DropdownButton(
-                  // Initial Value
-                  hint: widget.controller.targetLanguage == null
-                      ? Center(
-                          child: Text(
-                            "Select Language",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 14),
-                              overflow: TextOverflow.clip,
-                              textAlign: TextAlign.center,
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              widget.controller.targetLanguage!.languageFlag!,
-                              fit: BoxFit.cover,
-                              width: 40,
-                              height: 40,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              widget.controller.targetLanguage!.languageName
-                                      .toString()
-                                      .capitalizeFirst ??
-                                  "",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 16),
-                              overflow: TextOverflow.clip,
-                              textAlign: TextAlign.center,
 
-                              // style: const TextStyle(
-                              //     fontWeight: FontWeight.w600,
-                              //     fontSize: 15.0,
-                              //     color: Colors.black),
-                            )
-                          ],
-                        ),
-                  isExpanded: true,
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  underline: Container(),
-                  // Array list of items
-                  items: widget.controller.languageFlagList.map((languageFlag) {
-                    // print(items.languageFlag);
-                    return DropdownMenuItem(
-                        value: languageFlag,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              languageFlag.languageFlag!,
-                              fit: BoxFit.cover,
-                              width: 40,
-                              height: 40,
+          child: widget.controller.languageFlagList.isNotEmpty
+              ? Container(
+                decoration: BoxDecoration(
+                 border: Border.all(
+                   color: Theme.of(context)
+                      .primaryColorLight
+                   ),
+                 ),
+                child: DropdownButton(
+                    // Initial Value
+                    hint: widget.controller.targetLanguage == null
+                        ? Center(
+                            child: Text(
+                              "Select Language",
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
                             ),
-                            SizedBox(width: 10),
-                            Text(
-                              languageFlag.languageName
-                                      .toString()
-                                      .capitalizeFirst ??
-                                  "",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 14),
-                              overflow: TextOverflow.clip,
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ));
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (LanguageFlag? newValue) {
-                    if (newValue == widget.controller.sourceLanguage) {
-                      Fluttertoast.showToast(
-                          msg: "Target and Dominant language cannot be same!",
-                          fontSize: 16.0,
-                      backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                        timeInSecForIosWeb: 4
-                      );
-                    } else {
-                      setState(() {
-                        widget.controller.targetLanguage = newValue!;
-                      });
-                    }
-                  },
-                )
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                widget.controller.targetLanguage!.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                widget.controller.targetLanguage!.languageName
+                                        .toString()
+                                        .capitalizeFirst ??
+                                    "",
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 16),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+
+                                // style: const TextStyle(
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 15.0,
+                                //     color: Colors.black),
+                              )
+                            ],
+                          ),
+                    isExpanded: true,
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    underline: Container(),
+                    // Array list of items
+                    items: widget.controller.languageFlagList.map((languageFlag) {
+                      // print(items.languageFlag);
+                      return DropdownMenuItem(
+                          value: languageFlag,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                languageFlag.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                languageFlag.languageName
+                                        .toString()
+                                        .capitalizeFirst ??
+                                    "",
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ));
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (LanguageFlag? newValue) {
+                      if (newValue == widget.controller.sourceLanguage) {
+                        Fluttertoast.showToast(
+                            msg: "Target and Dominant language cannot be same!",
+                            fontSize: 16.0,
+                        backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                          timeInSecForIosWeb: 4
+                        );
+                      } else {
+                        setState(() {
+                          widget.controller.targetLanguage = newValue!;
+                        });
+                      }
+                    },
+                  ),
+              )
               : Container(),
         ),
         SizedBox(
@@ -673,15 +700,19 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                 InkWell(
                   onTap: () {
                     widget.controller.checkFirstStep();
+
                   },
                   child: Container(
                     width: 50.0,
                     height: 50.0,
                     decoration:  BoxDecoration(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                      Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
                       shape: BoxShape.circle,
+                      border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                      Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_right_alt,
                       color: Colors.white,
                       size: 25,
@@ -706,6 +737,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           height: size.height * 0.04,
         ),
         Container(
+
           margin: EdgeInsets.symmetric(
               horizontal: size.width * 0.1, vertical: size.height * 0.02),
           width: size.width,
@@ -872,10 +904,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Container(
                     width: 50.0,
                     height: 50.0,
-                    decoration: BoxDecoration(
-
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      shape: BoxShape.circle,
+                    decoration:  BoxDecoration(
+                        color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                        Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                        Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
                     ),
                     child: const Icon(
                       Icons.arrow_right_alt,
@@ -928,6 +962,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           ),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SwitchListTile.adaptive(
                   title:Text("1-to-1 chats within class", style: TextStyle().copyWith(
@@ -937,7 +972,6 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                           .color,
                       fontSize: 14),
                     overflow: TextOverflow.clip,
-                    textAlign: TextAlign.left,
                   ),
                   value: widget.controller.oneToOneChatsWithinClass,
                   onChanged: widget.controller.setOneToOneChatsWithinClass,
@@ -1018,7 +1052,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                                     .color,
                                 fontSize: 14),
                             overflow: TextOverflow.clip,
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                           )),
                     ),
                   ],
@@ -1048,7 +1082,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                                   .color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.left,
                         ),
                       ),
                     ),
@@ -1246,8 +1280,11 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     width: 50.0,
                     height: 50.0,
                     decoration:  BoxDecoration(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                        Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                        Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
                     ),
                     child: const Icon(
                       Icons.arrow_right_alt,
@@ -1291,15 +1328,22 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           ),
           InkWell(
             onTap: () {
-              print("hellow");
+              print("hello");
             },
             child: Container(
               width: 200,
               height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.deepPurple,
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1, color: Colors.deepPurple),
+              //   borderRadius: BorderRadius.circular(10),
+              //   color: Colors.deepPurple,
+              // ),
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
               ),
               child: Center(
                 child: Text(
@@ -1321,15 +1365,22 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           ),
           InkWell(
             onTap: () {
-              print("hellow");
+              print("hello");
             },
             child: Container(
               width: 200,
               height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.deepPurple,
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1, color: Colors.deepPurple),
+              //   borderRadius: BorderRadius.circular(10),
+              //     color:Theme.of(context).colorScheme.onPrimary
+              // ),
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
               ),
               child: Center(
                 child: Text(
@@ -1351,15 +1402,22 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           ),
           InkWell(
             onTap: () {
-              print("hellow");
+              print("hello");
             },
             child: Container(
               width: 200,
               height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.deepPurple,
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1, color: Colors.deepPurple),
+              //   borderRadius: BorderRadius.circular(10),
+              //   color:Theme.of(context).colorScheme.onPrimary
+              // ),
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
               ),
               child: Center(
                 child: Text(
@@ -1381,15 +1439,22 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           ),
           InkWell(
             onTap: () {
-              print("hellow");
+              print("hello");
             },
             child: Container(
               width: 200,
               height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.deepPurple,
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1, color: Colors.deepPurple),
+              //   borderRadius: BorderRadius.circular(10),
+              //   color:  Theme.of(context).colorScheme.onPrimary
+              // ),
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
               ),
               child: Center(
                 child: Text(
@@ -1416,10 +1481,17 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             child: Container(
               width: 200,
               height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.deepPurple,
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1, color: Colors.deepPurple),
+              //   borderRadius: BorderRadius.circular(10),
+              //   color:Theme.of(context).colorScheme.onPrimary,
+              // ),
+              decoration:  BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                  Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
               ),
               child: Center(
                 child: Text(
@@ -1467,9 +1539,12 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                     child: Container(
                       width: 50.0,
                       height: 50.0,
-                      decoration:BoxDecoration(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        shape: BoxShape.circle,
+                      decoration:  BoxDecoration(
+                          color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                          Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                          Theme.of(context).primaryColorLight:Theme.of(context).colorScheme.onPrimary)
                       ),
                       child:const  Icon(
                         Icons.arrow_right_alt,
