@@ -360,9 +360,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         break;
       case PopupMenuAction.newSpace:
         //Matrix.of(context).client.
-
-        print("will work here");
-        VRouter.of(context).to('/newspace');
+        VRouter.of(context).to('/newclass');
         break;
       case PopupMenuAction.archive:
         VRouter.of(context).to('/archive');

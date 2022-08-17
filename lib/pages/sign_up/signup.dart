@@ -96,7 +96,7 @@ class SignupPageController extends State<SignupPage> {
           email,
           0,
         );
-      // print(" hello ${Matrix.of(context).currentThreepidCreds}");
+
       }
 
       final displayname = Matrix.of(context).loginUsername!;

@@ -6,19 +6,19 @@ import 'package:vrouter/vrouter.dart';
 import '../../config/app_config.dart';
 import '../../utils/fluffy_share.dart';
 import '../../widgets/matrix.dart';
-import 'new_space.dart';
+import 'new_class.dart';
 import 'package:flutter/services.dart';
 
 
-class WelcomeNewSpace extends StatefulWidget {
-  final NewSpaceController controller;
-  const WelcomeNewSpace(this.controller, {Key? key}) : super(key: key);
+class NewClassView extends StatefulWidget {
+  final NewClassController controller;
+  const NewClassView(this.controller, {Key? key}) : super(key: key);
 
   @override
-  State<WelcomeNewSpace> createState() => _WelcomeNewSpaceState();
+  State<NewClassView> createState() => _NewClassViewState();
 }
 
-class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
+class _NewClassViewState extends State<NewClassView> {
 
 
   welcomeWidget() {
@@ -515,7 +515,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                       });
                     },
                   )
-                : Container()),
+                : Container(
+              child: Text("Unable to load Flags"),
+            ),
+        ),
         SizedBox(
           height: size.height * 0.03,
         ),

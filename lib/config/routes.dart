@@ -39,7 +39,8 @@ import 'package:vrouter/vrouter.dart';
 
 import '../pages/class_analytics/class_analytics.dart';
 import '../pages/language_selection_screen/language_selection.dart';
-import '../pages/new_space/new_space.dart';
+
+import '../pages/new_class/new_class.dart';
 
 class AppRoutes {
   final bool columnMode;
@@ -113,8 +114,8 @@ class AppRoutes {
               widget: const NewGroup(),
             ),
             VWidget(
-              path: '/newspace',
-              widget: const NewSpace(),
+              path: '/newclass',
+              widget: const NewClass(),
 
             ),
 
@@ -168,8 +169,8 @@ class AppRoutes {
                   buildTransition: _fadeTransition,
                 ),
                 VWidget(
-                  path: '/newspace',
-                  widget: const NewSpace(),
+                  path: '/newclass',
+                  widget: const NewClass(),
                   buildTransition: _fadeTransition,
                 ),
                 VNester(
@@ -297,7 +298,7 @@ class AppRoutes {
               ),
               VWidget(
                 path: '/addClass',
-                widget: NewSpace(),
+                widget: NewClass(),
                 buildTransition: _dynamicTransition,
                 stackedRoutes: _settingsRoutes,
               ),
