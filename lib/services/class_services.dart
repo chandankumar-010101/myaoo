@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/create_class_model.dart';
 import '../model/add_class_permissions_model.dart';
@@ -40,6 +41,11 @@ class ClassServices {
     final box = GetStorage();
     final String token = box.read("access");
     if (kDebugMode) {
+      if(token.isEmpty){
+        Fluttertoast.showToast(msg: "Token expired please logout and login again");
+        return;
+      }
+
       print("token: $token");
     }
     http.post(
@@ -90,6 +96,7 @@ class ClassServices {
 
       }
     }).catchError((onError) {
+
       log("Error: $onError");
 
     });

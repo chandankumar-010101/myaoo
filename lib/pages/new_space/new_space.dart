@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/model/create_class_model.dart';
 import 'package:pangeachat/model/flag_model.dart';
 import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
 import 'package:pangeachat/services/class_services.dart';
@@ -50,7 +48,8 @@ class NewSpaceController extends State<NewSpace> {
   bool shareFiles = false;
   bool shareLocation = false;
 
-  late final room;
+  late String class_url;
+  late String class_code;
 
 
   void setPublicGroup(bool b) => setState(() => publicGroup = b);
@@ -65,6 +64,8 @@ class NewSpaceController extends State<NewSpace> {
   void setSharePhotos(bool b) => setState(() => sharePhotos = b);
   void setShareFiles(bool b) => setState(() => shareFiles = b);
   void setShareLocation(bool b) => setState(() => shareLocation = b);
+
+  String? get roomId => VRouter.of(context).pathParameters['roomid'];
 
   getFlags() async {
     languageFlagList = await Services.getFlags();
@@ -85,6 +86,7 @@ class NewSpaceController extends State<NewSpace> {
       });
     }
   }
+
 
   final box = GetStorage();
   @override
@@ -146,7 +148,26 @@ class NewSpaceController extends State<NewSpace> {
         ),
       );
       if (roomID.result != null) {
-        print(roomID);
+      //  print(roomID.result);
+
+        class_code = roomID.result!;
+
+        final room = Matrix.of(context).client.getRoomById(class_code);
+        ///print(roomID);
+        print(roomID.result);
+        if(room !=null){
+          print("working");
+          print(room.canonicalAlias);
+          if(room.canonicalAlias.isEmpty){
+            print("rerr");
+          }else{
+            print("work");
+            class_url = room.canonicalAlias;
+          }
+
+        }else{
+          print("test");
+        }
 
         await ClassServices.createClass(
           isPublic: publicGroup,
@@ -171,8 +192,6 @@ class NewSpaceController extends State<NewSpace> {
           targetLanguage: targetLanguage!.languageName!,
           schoolName: schoolController.text.toString(),
         ).then((value) {
-          print(roomID);
-         room =  Matrix.of(context).client.getRoomById(roomID.result!);
           setState(() {
             createClass = 4;
           });

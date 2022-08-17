@@ -18,10 +18,40 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
   ChatListHeader({Key? key, required this.controller}) : super(key: key);
 
   final box = GetStorage();
+  checkUser(BuildContext context){
+    final int userType =  box.read("usertype")?? 0;
+    if(userType ==2){
+      return PopupMenuItem(
+        value: PopupMenuAction.newSpace,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.group_work_outlined),
+            const SizedBox(width: 12),
+            Text(L10n.of(context)!.createNewSpace),
+          ],
+        ),
+      );
+    }else{
+      return PopupMenuItem(
+        value: PopupMenuAction.newSpace,
+        enabled: false,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.group_work_outlined),
+            const SizedBox(width: 12),
+            Text(L10n.of(context)!.createNewSpace),
+          ],
+        ),
+      );
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     final selectMode = controller.selectMode;
-    int userType =  box.read("usertype")?? 0;
+
     return AppBar(
       elevation: controller.scrolledToTop ? 0 : null,
       actionsIconTheme: IconThemeData(
@@ -121,18 +151,8 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         ),
                       ),
+                      checkUser(context),
 
-                      PopupMenuItem(
-                        value: PopupMenuAction.newSpace,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.group_work_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.createNewSpace),
-                          ],
-                        ),
-                      ),
                       PopupMenuItem(
                         value: PopupMenuAction.invite,
                         child: Row(

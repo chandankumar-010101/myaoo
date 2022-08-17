@@ -38,7 +38,9 @@ prime
 .pub/
 /build/
 .env.development
-
+.flutter-plugins-dependencies
+.packages
+package_config.json
 # Web related
 lib/generated_plugin_registrant.dart
 docs/build/

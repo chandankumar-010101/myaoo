@@ -115,7 +115,9 @@ class AppRoutes {
             VWidget(
               path: '/newspace',
               widget: const NewSpace(),
+
             ),
+
           ],
         ),
       ];

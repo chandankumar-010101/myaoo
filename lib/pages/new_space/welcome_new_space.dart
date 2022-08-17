@@ -9,6 +9,7 @@ import '../../widgets/matrix.dart';
 import 'new_space.dart';
 import 'package:flutter/services.dart';
 
+
 class WelcomeNewSpace extends StatefulWidget {
   final NewSpaceController controller;
   const WelcomeNewSpace(this.controller, {Key? key}) : super(key: key);
@@ -1228,6 +1229,9 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
 
   inviteStudentsWidget() {
     final Size size = MediaQuery.of(context).size;
+    print(widget.controller.class_code);
+    final room = Matrix.of(context).client.getRoomById(widget.controller.class_code!);
+
     return SizedBox(
       width: size.width,
       height: size.height,
@@ -1250,7 +1254,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
           InkWell(
             onTap: () {
               FluffyShare.share(
-                  AppConfig.inviteLinkPrefix + widget.controller.room.canonicalAlias,
+                  AppConfig.inviteLinkPrefix + room!.canonicalAlias,
                   context);
             },
             child: Container(
@@ -1277,8 +1281,10 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
             height: 10,
           ),
           InkWell(
-            onTap: () {
-              print("hellow");
+            onTap: () async {
+             await  Clipboard.setData(ClipboardData(text: widget.controller.class_code.toString()));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Copied to clipboard")));
             },
             child: Container(
               width: 200,
