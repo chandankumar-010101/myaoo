@@ -45,7 +45,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Image.asset(
                     "png/partner.png",
                     fit: BoxFit.fill,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                    Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 const SizedBox(
@@ -69,7 +70,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Image.asset(
                     "png/grow.png",
                     fit: BoxFit.fill,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                    Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 SizedBox(
@@ -101,7 +103,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Image.asset(
                     "./png/comment.png",
                     fit: BoxFit.fill,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                    Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 SizedBox(
@@ -125,7 +128,8 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                   child: Image.asset(
                     "png/time.png",
                     fit: BoxFit.fill,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).colorScheme.onPrimary==Colors.white?
+                    Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 SizedBox(
