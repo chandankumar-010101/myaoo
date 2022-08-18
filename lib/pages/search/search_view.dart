@@ -502,13 +502,11 @@ class _SearchViewState extends State<SearchView> {
                                     itemBuilder:
                                         (BuildContext context, int i) =>
                                             Material(
-                                      elevation: 15,
-                                      color: const Color(0xffF6F6F6),
-                                      borderRadius: BorderRadius.circular(16),
-                                      // shadowColor: Theme.of(context)
-                                      //     .colorScheme
-                                      //     .shadow,
-                                      child: InkWell(
+                                             elevation: 15,
+                                             color: const Color(0xffF6F6F6),
+                                            borderRadius: BorderRadius.circular(16),
+
+                                       child: InkWell(
                                         onTap: () {
 
                                           // createClassDetailsAction();
