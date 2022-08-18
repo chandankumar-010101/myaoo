@@ -1,7 +1,8 @@
 #!/bin/bash -ve
 rm -rf js/package
 DIR="js/";
-if [ ! -d "$DIR"] then
+if [ ! -d "$DIR" ] 
+then
     mkdir $DIR
 fi
 cd js/ && curl -L 'https://gitlab.com/famedly/company/frontend/libraries/olm/-/jobs/artifacts/master/download?job=build:js' > olm.zip && cd ../
