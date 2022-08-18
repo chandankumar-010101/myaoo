@@ -7,8 +7,7 @@ import 'package:vrouter/vrouter.dart';
 class RequestScreenView extends StatelessWidget {
   RequestScreenView({Key? key}) : super(key: key);
 
-  String text =
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. ";
+  String text =  "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. ";
 
   // final ScreenArguments screenArguments ;
 

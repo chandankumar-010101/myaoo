@@ -335,8 +335,7 @@ class ChatDetailsController extends State<ChatDetails> {
 
   @override
   Widget build(BuildContext context) {
-    members ??=
-        Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
+    members ??= Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
     return SizedBox(
       width: fixedWidth,
       child: ChatDetailsView(this),
