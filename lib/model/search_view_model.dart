@@ -58,7 +58,8 @@ class Result {
       this.flags,
       this.classAuthor,
       this.rating,
-      this.profilePic});
+      this.profilePic,
+      this.total_student});
 
   int? id;
   String? className;
@@ -74,6 +75,7 @@ class Result {
   String? classAuthor;
   int? rating;
   dynamic profilePic;
+  dynamic total_student;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
       id: json["id"] == null ? null : json["id"],
@@ -98,7 +100,9 @@ class Result {
           : List<Flag>.from(json["flags"].map((x) => Flag.fromJson(x))),
       classAuthor: json["class_author"] == null ? null : json["class_author"],
       rating: json["rating"] == null ? null : json["rating"],
-      profilePic: json["profile_pic"] == null ? null : json["profile_pic"]);
+      profilePic: json["profile_pic"] == null ? null : json["profile_pic"],
+      total_student:
+          json["total_student"] == null ? null : json["total_student"]);
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
