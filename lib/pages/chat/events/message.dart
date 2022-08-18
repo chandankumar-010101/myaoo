@@ -214,6 +214,7 @@ class Message extends StatelessWidget {
                                           status: EventStatus.sent,
                                           originServerTs: DateTime.now(),
                                         );
+
                                   return InkWell(
                                     onTap: () {
                                       if (scrollToEventId != null) {

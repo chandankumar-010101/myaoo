@@ -98,8 +98,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
 
   # Pangeachat custom packages
-  pangeachat_it:
-    path: pangea_packages/pangeachat_it
+  pangeachat_choregrapher:
+    path: pangea_packages/pangea_choregrapher
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1
@@ -119,10 +119,10 @@ flutter_native_splash:
 
 flutter:
   generate: true
-  uses-material-design: true
+  uses-material-design: true 
   assets:
 
-    - .env.development
+    - .env
     - .env.example
     - assets/
     - assets/sounds/

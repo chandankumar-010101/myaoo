@@ -14,6 +14,8 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat_choregrapher/choreographer/controller/choreo_controller.dart';
+
 import 'package:record/record.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:vrouter/vrouter.dart';
@@ -46,7 +48,7 @@ class Chat extends StatefulWidget {
 
 class ChatController extends State<Chat> {
   Room? room;
-
+  final ChoreoController choreoController = ChoreoController();
   Client? sendingClient;
 
   Timeline? timeline;
@@ -176,6 +178,14 @@ class ChatController extends State<Chat> {
         CallKeepManager().initialize().catchError((_) => true);
       });
     }
+    Future.delayed(Duration.zero, () {
+      choreoController.setRoomId(roomId);
+      choreoController.setTextEditingController(sendController);
+      choreoController.setSendCallback(send);
+      choreoController.stateListener.stream.listen((event) {
+        setState(() {});
+      });
+    });
     super.initState();
   }
 
