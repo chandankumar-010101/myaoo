@@ -310,6 +310,12 @@ class AppRoutes {
                 buildTransition: _dynamicTransition,
                 stackedRoutes: _settingsRoutes,
               ),
+              VWidget(
+                path: '/classDetails',
+                widget: RequestScreenView(),
+                buildTransition: _dynamicTransition,
+                stackedRoutes: _settingsRoutes,
+              ),
             ],
 
             ),
