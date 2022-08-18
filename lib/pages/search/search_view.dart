@@ -496,18 +496,41 @@ class _SearchViewState extends State<SearchView> {
                                         (BuildContext context, int i) =>
                                             Material(
                                       elevation: 15,
-                                      color: Color(0xffF6F6F6),
+                                      color: const Color(0xffF6F6F6),
                                       borderRadius: BorderRadius.circular(16),
                                       // shadowColor: Theme.of(context)
                                       //     .colorScheme
                                       //     .shadow,
                                       child: InkWell(
+                                        onTap: () => VRouter.of(context)
+                                            .to('/request', queryParameters: {
+                                          "name":
+                                              "${searchController.classList[i].classAuthor}",
+                                          "profile_pic": searchController
+                                                      .classList[i]
+                                                      .profilePic !=
+                                                  null
+                                              ? "${searchController.classList[i].profilePic}"
+                                              : "",
+                                          "rating":
+                                              "${searchController.classList[i].rating.toString()}",
+                                          "students":
+                                              "${searchController.classList[i].total_student}",
+                                          "source_language":
+                                              "${searchController.classList[i].dominantLanguage}",
+                                          "target_language":
+                                              "${searchController.classList[i].targetLanguage}",
+                                          "about":
+                                              "${searchController.classList[i].description}",
+                                          "city":
+                                              "${searchController.classList[i].city}"
+                                        }),
                                         borderRadius: BorderRadius.circular(16),
                                         child: Container(
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(16.0),
-                                              boxShadow: [
+                                              boxShadow: const [
                                                 BoxShadow(
                                                     color: Colors.black12,
                                                     blurRadius: 1.0,
@@ -713,7 +736,8 @@ class _SearchViewState extends State<SearchView> {
                                                       width: 10.0,
                                                     ),
                                                     Expanded(
-                                                      child: Text("30 Students",
+                                                      child: Text(
+                                                          "${searchController.classList[i].total_student.toString()} Students",
                                                           style: TextStyle()
                                                               .copyWith(
                                                             color: Theme.of(

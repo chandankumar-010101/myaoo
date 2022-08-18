@@ -280,33 +280,33 @@ class AppRoutes {
                         ]),
                   ],
                 ),
-              ], nestedRoutes: [
-              VWidget(
-                path: '',
-                widget: EmptyPage(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-              VWidget(
-                path: '/user',
-                widget: SearchDiscoverView(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-              VWidget(
-                path: '/addClass',
-                widget: NewSpace(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-
-              VWidget(
-                path: '/inviteScreen',
-                widget: InviteScreen(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-            ],
+              ],
+              nestedRoutes: [
+                VWidget(
+                  path: '',
+                  widget: EmptyPage(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/user',
+                  widget: SearchDiscoverView(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/addClass',
+                  widget: NewSpace(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/inviteScreen',
+                  widget: InviteScreen(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+              ],
             ),
             VWidget(
               path: '/archive',
