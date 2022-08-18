@@ -59,7 +59,8 @@ class Result {
       this.classAuthor,
       this.rating,
       this.profilePic,
-      this.total_student});
+      this.total_student,
+      this.pangea_class_room_id});
 
   int? id;
   String? className;
@@ -76,6 +77,7 @@ class Result {
   int? rating;
   dynamic profilePic;
   dynamic total_student;
+  String? pangea_class_room_id;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
       id: json["id"] == null ? null : json["id"],
@@ -102,7 +104,10 @@ class Result {
       rating: json["rating"] == null ? null : json["rating"],
       profilePic: json["profile_pic"] == null ? null : json["profile_pic"],
       total_student:
-          json["total_student"] == null ? null : json["total_student"]);
+          json["total_student"] == null ? null : json["total_student"],
+      pangea_class_room_id: json["pangea_class_room_id"] == null
+          ? null
+          : json["pangea_class_room_id"]);
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
@@ -121,6 +126,7 @@ class Result {
             : List<dynamic>.from(flags!.map((x) => x.toJson())),
         "class_author": classAuthor == null ? null : classAuthor,
         "rating": rating == null ? null : rating,
+        "pangea_class_room_id": pangea_class_room_id
       };
 }
 

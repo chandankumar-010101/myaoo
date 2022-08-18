@@ -42,6 +42,14 @@ class _SearchViewState extends State<SearchView> {
     userAgeDetails();
   }
 
+  void addAgesAction() => VRouter.of(context).to('/user');
+
+  void createInviteAction() => VRouter.of(context).to('/inviteScreen');
+
+  void createNewClassAction() => VRouter.of(context).to('/addClass');
+
+  void createClassDetailsAction() => VRouter.of(context).to('/classDetails');
+
   @override
   Widget build(BuildContext context) {
     // userAgeDetails();
@@ -160,7 +168,7 @@ class _SearchViewState extends State<SearchView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            VRouter.of(context).to('/search/add');
+                            addAgesAction();
                           },
                           child: Container(
                               decoration: BoxDecoration(
@@ -185,7 +193,9 @@ class _SearchViewState extends State<SearchView> {
                           height: 134,
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            createInviteAction();
+                          },
                           child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
@@ -239,7 +249,9 @@ class _SearchViewState extends State<SearchView> {
                         ),
                         box.read("usertype") == 2
                             ? GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  createNewClassAction();
+                                },
                                 child: Container(
                                     decoration: BoxDecoration(
                                       // borderRadius: BorderRadius.circular(10),
@@ -502,29 +514,18 @@ class _SearchViewState extends State<SearchView> {
                                       //     .colorScheme
                                       //     .shadow,
                                       child: InkWell(
-                                        onTap: () => VRouter.of(context)
-                                            .to('/request', queryParameters: {
-                                          "name":
-                                              "${searchController.classList[i].classAuthor}",
-                                          "profile_pic": searchController
-                                                      .classList[i]
-                                                      .profilePic !=
-                                                  null
-                                              ? "${searchController.classList[i].profilePic}"
-                                              : "",
-                                          "rating":
-                                              "${searchController.classList[i].rating.toString()}",
-                                          "students":
-                                              "${searchController.classList[i].total_student}",
-                                          "source_language":
-                                              "${searchController.classList[i].dominantLanguage}",
-                                          "target_language":
-                                              "${searchController.classList[i].targetLanguage}",
-                                          "about":
-                                              "${searchController.classList[i].description}",
-                                          "city":
-                                              "${searchController.classList[i].city}"
-                                        }),
+                                        onTap: () {
+                                          // createClassDetailsAction();
+
+                                          VRouter.of(context).to(
+                                              '/classDetails',
+                                              queryParameters: {
+                                                "id": searchController
+                                                    .classList[i]
+                                                    .pangea_class_room_id
+                                                    .toString()
+                                              });
+                                        },
                                         borderRadius: BorderRadius.circular(16),
                                         child: Container(
                                           decoration: BoxDecoration(

@@ -10,6 +10,7 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/class_services.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/chat/cupertino_widgets_bottom_sheet.dart';
@@ -153,6 +154,9 @@ class _ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                   final box = GetStorage();
                   String token = box.read("access");
                   print(token);
+                  ClassServices.deleteClass(roomId: widget.room.id);
+                  print(widget.room.id);
+
                  //Todo
                  //  final success = await showFutureLoadingDialog(
                  //      context: context, future: () => widget.room.leave());

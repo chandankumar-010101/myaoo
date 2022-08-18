@@ -14,16 +14,14 @@ var box = GetStorage();
 class UserDetails {
   //String clientId="box.read("clientID")";
 
+  static userDetails() async {
+    var Url = "${ApiUrls.user_details}${box.read("clientID")}";
 
+    http.Response response = await http.get(
+      Uri.parse(Url),
+    );
 
-  static userDetails()async{
-  var Url="${ApiUrls.user_details}${box.read("clientID")}";
-
-  http.Response response = await http.get(Uri.parse(Url),
-  );
-
-  log("user details"+response.body);
-
+    log("user details" + response.body);
 
     if (response.statusCode == 200) {
       userAge();
@@ -49,11 +47,10 @@ class UserDetails {
     }
   }
 
-
-  static userAge()async{
-    var Url="${ApiUrls.user_ages}${box.read("clientID")}";
-    http.Response response = await http.get(Uri.parse(Url),
-
+  static userAge() async {
+    var Url = "${ApiUrls.user_ages}${box.read("clientID")}";
+    http.Response response = await http.get(
+      Uri.parse(Url),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${box.read("access")}",
@@ -67,14 +64,7 @@ class UserDetails {
       var value = jsonDecode(response.body);
 
       box.write("age", value["age"] ?? "empty");
-    } else {
-      // Get.rawSnackbar(
-      //     message: "Something went wrong",
-      //     snackPosition: SnackPosition.BOTTOM,
-      //     margin: EdgeInsets.zero,
-      //     snackStyle: SnackStyle.GROUNDED,
-      //     backgroundColor: Colors.red);
-    }
+    } else {}
   }
 
   updateUserAge(day, month, year) async {
@@ -91,23 +81,16 @@ class UserDetails {
         },
         body: jsonEncode(data));
     if (response.statusCode == 200) {
-
-
-
-       Fluttertoast.showToast(
-           msg: "User Age Updated",
-           toastLength: Toast.LENGTH_SHORT,
-           gravity: ToastGravity.CENTER,
-           timeInSecForIosWeb: 1,
-           backgroundColor: Colors.red,
-           textColor: Colors.white,
-           fontSize: 16.0
-       );
-
-
+      Fluttertoast.showToast(
+          msg: "User Age Updated",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
 
       log("200" + response.body);
-
     } else if (response.statusCode == 400) {
       log("400" + response.body);
     } else {
