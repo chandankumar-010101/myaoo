@@ -12,6 +12,7 @@ import '../../model/class_detail_model.dart';
 class RequestScreenView extends StatefulWidget {
   RequestScreenView({Key? key}) : super(key: key);
 
+
   @override
   State<RequestScreenView> createState() => _RequestScreenViewState();
 }
@@ -19,6 +20,7 @@ class RequestScreenView extends StatefulWidget {
 class _RequestScreenViewState extends State<RequestScreenView> {
   String text =
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. ";
+
 
   // final ScreenArguments screenArguments ;
   ClassDetails classDetails = ClassDetails();

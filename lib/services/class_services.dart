@@ -11,10 +11,7 @@ import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
 class ClassServices {
-
-  static Future<void> createClass(
-
-  {
+  static Future<void> createClass({
     required String roomId,
     required String className,
     required String city,
@@ -36,41 +33,44 @@ class ClassServices {
     required bool oneToOneChatClass,
     required bool oneToOneChatExchange,
     required String schoolName,
-  }
-  ) async {
+  }) async {
     final box = GetStorage();
     final String token = box.read("access");
     if (kDebugMode) {
-      if(token.isEmpty){
-        Fluttertoast.showToast(msg: "Token expired please logout and login again");
+      if (token.isEmpty) {
+        Fluttertoast.showToast(
+            msg: "Token expired please logout and login again");
         return;
       }
 
       print("token: $token");
     }
-    http.post(
-      Uri.parse(ApiUrls.create_class),
-      headers: {"Authorization": "Bearer $token"},
-      body: CreateClassToJson(
-        pangeaClassRoomId: roomId,
-        languageLevel: languageLevel.toString(),
-        dominantLanguage: dominantLanguage,
-        description: desc,
-        country: country,
-        className: className,
-        city: city,
-        targetLanguage: targetLanguage, schoolName: schoolName,
-      ).toJson()).then((value) async {
+    http
+        .post(Uri.parse(ApiUrls.create_class),
+            headers: {"Authorization": "Bearer $token"},
+            body: CreateClassToJson(
+              pangeaClassRoomId: roomId,
+              languageLevel: languageLevel.toString(),
+              dominantLanguage: dominantLanguage,
+              description: desc,
+              country: country,
+              className: className,
+              city: city,
+              targetLanguage: targetLanguage,
+              schoolName: schoolName,
+            ).toJson())
+        .then((value) async {
       if (value.statusCode == 201 || value.statusCode == 200) {
         log("Status Code is  ${value.statusCode} and ${value.body} ");
-         final  data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-        http.post(
+        final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
+        http
+            .post(
           Uri.parse(ApiUrls.addClassPermissions),
           headers: {"Authorization": "Bearer $token"},
           body: AddClassPermissionModel(
             pangeaClass: data.id.toString(),
             oneToOneChatExchange: oneToOneChatExchange.toString(),
-            oneToOneChatClass:  oneToOneChatClass.toString(),
+            oneToOneChatClass: oneToOneChatClass.toString(),
             isShareVideo: isShareVideo.toString(),
             isCreateRooms: isCreateRooms.toString(),
             isCreateRoomsExchange: isCreateRoomsExchange.toString(),
@@ -82,10 +82,11 @@ class ClassServices {
             isShareFiles: isShareFiles.toString(),
             isPublic: isPublic.toString(),
           ).toJson(),
-        ).then((value) {
+        )
+            .then((value) {
           if (value.statusCode == 201 || value.statusCode == 200) {
             log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
-          }else{
+          } else {
             log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
           }
         }).catchError((onError) {
@@ -93,13 +94,25 @@ class ClassServices {
         });
       } else {
         log("Status Code is  ${value.statusCode} and ${value.body} ");
-
       }
     }).catchError((onError) {
-
       log("Error: $onError");
-
     });
+  }
 
+  static Future<void> deleteClass({
+    required String roomId,
+  }) async {
+    final box = GetStorage();
+    final token = box.read("access");
+    if(token != null){
+      try{
+
+      }catch(e){
+        print("Error: $e");
+      }
+    }else{
+      print("JWT Token is null");
+    }
   }
 }
