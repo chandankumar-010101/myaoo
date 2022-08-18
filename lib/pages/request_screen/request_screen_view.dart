@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
+import 'package:vrouter/vrouter.dart';
 
 class RequestScreenView extends StatelessWidget {
   RequestScreenView({Key? key}) : super(key: key);
@@ -9,8 +10,11 @@ class RequestScreenView extends StatelessWidget {
   String text =
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. ";
 
+  // final ScreenArguments screenArguments ;
+
   @override
   Widget build(BuildContext context) {
+    final routes = VRouter.of(context).queryParameters;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -25,27 +29,47 @@ class RequestScreenView extends StatelessWidget {
               children: [
                 Stack(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 10.0),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            "https://cdn.pixabay.com/photo/2022/07/11/05/39/goose-7314199_1280.jpg",
-                        fit: BoxFit.cover,
-                        color: Colors.grey,
-                        imageBuilder: (context, imageProvider) {
-                          return Container(
+                    routes["profile_pic"]!.isNotEmpty
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            child: CachedNetworkImage(
+                              imageUrl: routes["profile_pic"].toString(),
+                              fit: BoxFit.cover,
+                              color: Colors.grey,
+                              imageBuilder: (context, imageProvider) {
+                                return Container(
+                                  height: 90,
+                                  width: 90,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: imageProvider)),
+                                );
+                              },
+                            ),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black, width: 2.0),
+                                shape: BoxShape.circle),
+                          )
+                        : Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(image: imageProvider)),
-                          );
-                        },
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 2.0),
-                          shape: BoxShape.circle),
-                    ),
+                                border: Border.all(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    width: 2.0),
+                                shape: BoxShape.circle),
+                            child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.people,
+                                size: 40,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
                     Positioned(
                         bottom: 4,
                         left: 60,
@@ -74,8 +98,8 @@ class RequestScreenView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Hiyano Miyazaki",
+                    Text(
+                      "${routes["name"]}",
                       style: TextStyle(
                           color: AppConfig.violetColor,
                           fontWeight: FontWeight.w600,
@@ -85,7 +109,7 @@ class RequestScreenView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.location_pin,
                           color: AppConfig.violetColor,
@@ -95,7 +119,7 @@ class RequestScreenView extends StatelessWidget {
                           width: 6.0,
                         ),
                         Text(
-                          "Peru",
+                          "${routes["city"]}",
                           style: TextStyle(
                               color: AppConfig.violetColor,
                               fontWeight: FontWeight.normal,
@@ -140,14 +164,14 @@ class RequestScreenView extends StatelessWidget {
                       children: [
                         StarRating(
                           color: const Color(0xffFFC403),
-                          rating: 2.5,
+                          rating: double.parse(routes["rating"].toString()),
                           starCount: 5,
                         ),
                         const SizedBox(
                           width: 5,
                         ),
                         const Text(
-                          "(45 Peoples)",
+                          "",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 12.0,
@@ -177,7 +201,7 @@ class RequestScreenView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.people,
                           color: Colors.grey,
@@ -187,7 +211,7 @@ class RequestScreenView extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          "50",
+                          "${routes["students"]}",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 12.0,
@@ -239,8 +263,14 @@ class RequestScreenView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Icon(Icons.flag, color: Colors.red, size: 20.0),
+                      children: [
+                        Text(
+                          "${routes["source_language"]}",
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0),
+                        ),
                         SizedBox(
                           width: 10,
                         ),
@@ -252,7 +282,13 @@ class RequestScreenView extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Icon(Icons.flag, color: Colors.green, size: 20.0),
+                        Text(
+                          "${routes["target_language"]}",
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0),
+                        ),
                       ],
                     )
                   ],
@@ -270,7 +306,7 @@ class RequestScreenView extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(50, 10, 50, 0),
-            child: Text("$text",
+            child: Text("${routes["about"]}",
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w400,

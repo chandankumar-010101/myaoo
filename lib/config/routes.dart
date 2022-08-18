@@ -283,6 +283,7 @@ class AppRoutes {
                         ]),
                   ],
                 ),
+
               ], nestedRoutes: [
               VWidget(
                 path: '',
@@ -310,6 +311,7 @@ class AppRoutes {
                 stackedRoutes: _settingsRoutes,
               ),
             ],
+
             ),
             VWidget(
               path: '/archive',

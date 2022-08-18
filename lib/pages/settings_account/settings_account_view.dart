@@ -77,7 +77,6 @@ class SettingsAccountView extends StatelessWidget {
                       Text(
                           "${box.read("targetlanguage").toString().toLowerCase().capitalizeFirst}"),
                     ]),
-                trailing: Icon(Icons.navigate_next),
               ),
               ListTile(
                 title: const Text("Role"),
@@ -88,7 +87,6 @@ class SettingsAccountView extends StatelessWidget {
                         : (box.read("usertype") == 3)
                             ? const Text("Indie Learner")
                             : const Text(""),
-                trailing: Icon(Icons.navigate_next),
               ),
               const Divider(height: 1),
               ListTile(
