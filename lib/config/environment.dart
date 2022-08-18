@@ -6,7 +6,7 @@ class Environment {
     // if(kReleaseMode){
     //   return ".env.production";
     // }
-    return ".env";
+    return ".env.development";
   }
 
   static String get baseAPI {
