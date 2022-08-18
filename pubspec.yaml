@@ -129,7 +129,6 @@ flutter:
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
-    - js/
 
   fonts:
     - family: Roboto
