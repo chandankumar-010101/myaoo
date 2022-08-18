@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
@@ -11,6 +12,7 @@ import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../widgets/matrix.dart';
+import '../homeserver_picker/home_controller.dart';
 import 'new_class_view.dart';
 
 class NewClass extends StatefulWidget {
@@ -27,10 +29,13 @@ class NewClassController extends State<NewClass> {
   TextEditingController countryController = TextEditingController();
   TextEditingController discriptionController = TextEditingController();
 
+  final getxController = Get.put(HomeController());
+
   int createClass = 0;
   var languageLevel = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
   String languageLevelDropdownValue = '';
   List<LanguageFlag> languageFlagList = [];
+  List<LanguageFlag> languageFlag2List = [];
   LanguageFlag? targetLanguage;
   LanguageFlag? sourceLanguage;
 
@@ -69,6 +74,7 @@ class NewClassController extends State<NewClass> {
 
   getFlags() async {
     languageFlagList = await Services.getFlags();
+    languageFlag2List = await Services.getFlags2();
   }
 
   void checkFirstStep() {
@@ -94,6 +100,7 @@ class NewClassController extends State<NewClass> {
     super.initState();
     getFlags();
     print(box.read("access"));
+
   }
 
   int fetchLangLevel() {
