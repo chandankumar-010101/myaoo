@@ -98,8 +98,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
 
   # Pangeachat custom packages
-  pangeachat_choregrapher:
-    path: pangea_packages/pangea_choregrapher
+  pangea_choreographer:
+    path: pangea_packages/pangea_choreographer
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1
@@ -129,7 +129,7 @@ flutter:
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
-    - js/
+#    - js/
 
   fonts:
     - family: Roboto

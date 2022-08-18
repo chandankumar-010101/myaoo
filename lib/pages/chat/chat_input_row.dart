@@ -10,9 +10,10 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/matrix.dart';
-import 'package:pangeachat_choregrapher/pangea_choreographer.dart';
+
 import 'chat.dart';
 import 'input_bar.dart';
+import 'package:pangea_choreographer/pangea_choreographer.dart';
 
 class ChatInputRow extends StatelessWidget {
   final ChatController controller;

@@ -14,7 +14,6 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat_choregrapher/choreographer/controller/choreo_controller.dart';
 
 import 'package:record/record.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -36,6 +35,7 @@ import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
 import 'send_file_dialog.dart';
 import 'send_location_dialog.dart';
 import 'sticker_picker_dialog.dart';
+import 'package:pangea_choreographer/pangea_choreographer.dart';
 
 class Chat extends StatefulWidget {
   final Widget? sideView;
@@ -858,7 +858,7 @@ class ChatController extends State<Chat> {
   }
 
   void onInputBarSubmitted(_) {
-    send();
+    choreoController.openIt();
     FocusScope.of(context).requestFocus(inputFocus);
   }
 

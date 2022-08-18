@@ -1225,10 +1225,10 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
-  pangeachat_choregrapher:
+  pangea_choreographer:
     dependency: "direct main"
     description:
-      path: "pangea_packages/pangea_choregrapher"
+      path: "pangea_packages/pangea_choreographer"
       relative: true
     source: path
     version: "0.0.1"
