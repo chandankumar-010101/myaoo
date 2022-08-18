@@ -151,7 +151,7 @@ class AppRoutes {
                 ),
                 VWidget(
                   path: '/classes/:roomid',
-                  widget: const ChatDetails(),
+                  widget: RequestScreenView(),
                   buildTransition: _fadeTransition,
                   stackedRoutes: _chatDetailsRoutes,
                 ),
