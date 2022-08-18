@@ -6,21 +6,21 @@ import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/flag_model.dart';
-import 'package:pangeachat/pages/new_space/welcome_new_space.dart';
 import 'package:pangeachat/services/class_services.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../widgets/matrix.dart';
+import 'new_class_view.dart';
 
-class NewSpace extends StatefulWidget {
-  const NewSpace({Key? key}) : super(key: key);
+class NewClass extends StatefulWidget {
+  const NewClass({Key? key}) : super(key: key);
 
   @override
-  NewSpaceController createState() => NewSpaceController();
+  NewClassController createState() => NewClassController();
 }
 
-class NewSpaceController extends State<NewSpace> {
+class NewClassController extends State<NewClass> {
   TextEditingController classNameController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController schoolController = TextEditingController();
@@ -152,7 +152,7 @@ class NewSpaceController extends State<NewSpace> {
 
         class_code = roomID.result!;
 
-        final room = Matrix.of(context).client.getRoomById(class_code);
+        var room = Matrix.of(context).client.getRoomById(class_code);
         ///print(roomID);
         print(roomID.result);
         if(room !=null){
@@ -208,5 +208,5 @@ class NewSpaceController extends State<NewSpace> {
   }
 
   @override
-  Widget build(BuildContext context) => WelcomeNewSpace(this);
+  Widget build(BuildContext context) => NewClassView(this);
 }

@@ -3,20 +3,29 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/model/flag_model.dart';
-import 'package:pangeachat/utils/fluffy_share.dart';
-import 'new_space.dart';
+import 'package:vrouter/vrouter.dart';
+import '../../config/app_config.dart';
+import '../../utils/fluffy_share.dart';
+import '../../widgets/matrix.dart';
+import 'new_class.dart';
+import 'package:flutter/services.dart';
 
 
-class WelcomeNewSpace extends StatefulWidget {
-  final NewSpaceController controller;
-  const WelcomeNewSpace(this.controller, {Key? key}) : super(key: key);
+class NewClassView extends StatefulWidget {
+  final NewClassController controller;
+  const NewClassView(this.controller, {Key? key}) : super(key: key);
 
   @override
-  State<WelcomeNewSpace> createState() => _WelcomeNewSpaceState();
+  State<NewClassView> createState() => _NewClassViewState();
 }
 
-class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
-  welcomeWidget() {
+
+class _NewClassViewState extends State<NewClassView> {
+
+
+
+
+ welcomeWidget() {
     final Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -523,6 +532,7 @@ class _WelcomeNewSpaceState extends State<WelcomeNewSpace> {
                             width: 40,
                             height: 40,
                           ),
+
                           SizedBox(width: 10),
                           Text(
                             // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
