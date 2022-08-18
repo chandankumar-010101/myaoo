@@ -18,4 +18,6 @@ class ApiUrls {
   static String create_class = Environment.baseAPI + "/class/create";
   static String addClassPermissions =
       Environment.baseAPI + "/class/permissions/add";
+
+  static String getClassDetails = Environment.baseAPI + "/class/detail/";
 }
