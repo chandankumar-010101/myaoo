@@ -39,7 +39,6 @@ import 'package:vrouter/vrouter.dart';
 
 import '../pages/class_analytics/class_analytics.dart';
 import '../pages/language_selection_screen/language_selection.dart';
-
 import '../pages/new_class/new_class.dart';
 
 class AppRoutes {
@@ -116,9 +115,7 @@ class AppRoutes {
             VWidget(
               path: '/newclass',
               widget: const NewClass(),
-
             ),
-
           ],
         ),
       ];
@@ -283,41 +280,39 @@ class AppRoutes {
                         ]),
                   ],
                 ),
-
-              ], nestedRoutes: [
-              VWidget(
-                path: '',
-                widget: EmptyPage(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-              VWidget(
-                path: '/user',
-                widget: SearchDiscoverView(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-              VWidget(
-                path: '/addClass',
-                widget: NewClass(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-
-              VWidget(
-                path: '/inviteScreen',
-                widget: InviteScreen(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-              VWidget(
-                path: '/classDetails',
-                widget: RequestScreenView(),
-                buildTransition: _dynamicTransition,
-                stackedRoutes: _settingsRoutes,
-              ),
-            ],
-
+              ],
+              nestedRoutes: [
+                VWidget(
+                  path: '',
+                  widget: EmptyPage(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/user',
+                  widget: SearchDiscoverView(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/addClass',
+                  widget: NewClass(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/inviteScreen',
+                  widget: InviteScreen(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: '/classDetails',
+                  widget: RequestScreenView(),
+                  buildTransition: _dynamicTransition,
+                  stackedRoutes: _settingsRoutes,
+                ),
+              ],
             ),
             VWidget(
               path: '/archive',
