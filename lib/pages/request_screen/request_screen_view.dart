@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pangeachat/config/app_config.dart';
@@ -25,12 +27,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
   callMethod(context) async {
     final routes = VRouter.of(context).queryParameters;
-    classDetailUi = await classDetails.updateUserAge(routes["id"]);
+    if (routes["id"] != null) {
+      classDetailUi = await classDetails.updateUserAge(routes["id"]);
+    } else {
+      // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+      classDetailUi = await classDetails
+          .updateUserAge(VRouter.of(context).pathParameters['roomid']);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final routes = VRouter.of(context).queryParameters;
+    log("User type${box.read("usertype")}");
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder(
@@ -623,47 +632,69 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(50, 30, 50, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MaterialButton(
-                      onPressed: () {},
-                      height: 40,
-                      color: AppConfig.violetColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      child: const Text("Request an Exchange",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12.0)),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: const Center(
-                        child: Text(
-                          "Message Hayao",
-                          style: TextStyle(
-                              color: AppConfig.violetColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12.0),
-                        ),
+              box.read("usertype") == 2
+                  ? Container(
+                      margin: const EdgeInsets.fromLTRB(50, 30, 50, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MaterialButton(
+                            onPressed: () {},
+                            height: 40,
+                            color: AppConfig.violetColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            child: const Text("Request an Exchange",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.0)),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            height: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: const Center(
+                              child: Text(
+                                "Message Hayao",
+                                style: TextStyle(
+                                    color: AppConfig.violetColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.0),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25.0),
+                                border: Border.all(
+                                    color: AppConfig.violetColor, width: 2.0)),
+                          )
+                        ],
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
-                          border: Border.all(
-                              color: AppConfig.violetColor, width: 2.0)),
                     )
-                  ],
-                ),
-              ),
+                  : Container(
+                      margin: const EdgeInsets.fromLTRB(50, 30, 50, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MaterialButton(
+                            onPressed: () {},
+                            height: 40,
+                            color: AppConfig.violetColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            child: const Text("Request enroll",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.0)),
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           );
         },
