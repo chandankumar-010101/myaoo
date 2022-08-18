@@ -307,8 +307,8 @@ class AppRoutes {
                   stackedRoutes: _settingsRoutes,
                 ),
                 VWidget(
-                  path: '/classdetails',
-                  widget: InviteScreen(),
+                  path: '/classDetails',
+                  widget: RequestScreenView(),
                   buildTransition: _dynamicTransition,
                   stackedRoutes: _settingsRoutes,
                 ),

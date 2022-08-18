@@ -41,7 +41,10 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     userAgeDetails();
   }
-
+  void addAgesAction() => VRouter.of(context).to('/user');
+  void createInviteAction() => VRouter.of(context).to('/inviteScreen');
+  void createNewClassAction() => VRouter.of(context).to('/addClass');
+  void createClassDetailsAction() => VRouter.of(context).to('/classDetails');
   @override
   Widget build(BuildContext context) {
     // userAgeDetails();
@@ -160,7 +163,7 @@ class _SearchViewState extends State<SearchView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            VRouter.of(context).to('/search/add');
+                            addAgesAction();
                           },
                           child: Container(
                               decoration: BoxDecoration(
@@ -185,7 +188,9 @@ class _SearchViewState extends State<SearchView> {
                           height: 134,
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            createInviteAction();
+                          },
                           child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
@@ -239,7 +244,9 @@ class _SearchViewState extends State<SearchView> {
                         ),
                         box.read("usertype") == 2
                             ? GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  createNewClassAction();
+                                },
                                 child: Container(
                                     decoration: BoxDecoration(
                                       // borderRadius: BorderRadius.circular(10),
@@ -502,8 +509,12 @@ class _SearchViewState extends State<SearchView> {
                                       //     .colorScheme
                                       //     .shadow,
                                       child: InkWell(
-                                        onTap: () => VRouter.of(context)
-                                            .to('/request', queryParameters: {
+                                        onTap: () {
+
+                                          // createClassDetailsAction();
+
+                                          VRouter.of(context)
+                                            .to('/classDetails', queryParameters: {
                                           "name":
                                               "${searchController.classList[i].classAuthor}",
                                           "profile_pic": searchController
@@ -524,7 +535,8 @@ class _SearchViewState extends State<SearchView> {
                                               "${searchController.classList[i].description}",
                                           "city":
                                               "${searchController.classList[i].city}"
-                                        }),
+                                        });
+                                        },
                                         borderRadius: BorderRadius.circular(16),
                                         child: Container(
                                           decoration: BoxDecoration(

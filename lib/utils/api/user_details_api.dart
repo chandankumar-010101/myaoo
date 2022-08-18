@@ -68,12 +68,7 @@ class UserDetails {
 
       box.write("age", value["age"] ?? "empty");
     } else {
-      // Get.rawSnackbar(
-      //     message: "Something went wrong",
-      //     snackPosition: SnackPosition.BOTTOM,
-      //     margin: EdgeInsets.zero,
-      //     snackStyle: SnackStyle.GROUNDED,
-      //     backgroundColor: Colors.red);
+
     }
   }
 
