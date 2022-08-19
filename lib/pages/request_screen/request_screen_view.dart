@@ -659,9 +659,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               height: 40,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40),
-                              child: const Center(
+                              child:  Center(
                                 child: Text(
-                                  "Message Hayao",
+                                  "Message ${classDetailUi?.classAuthor}",
                                   style: TextStyle(
                                       color: AppConfig.violetColor,
                                       fontWeight: FontWeight.w400,

@@ -195,13 +195,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     return candidate;
   }
 
-  // U: oodles1
-  // P: KDGSRFxV9kZ8it8
-  // U: oodles2
-  // P: Hgv7g8h8hg98ggP
-  //
-  // U: oodlesadmin
-  // P: PangeaOodles1!
+
 
   Client? getClientByName(String name) =>
       widget.clients.firstWhereOrNull((c) => c.clientName == name);
