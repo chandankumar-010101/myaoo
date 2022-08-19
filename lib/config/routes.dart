@@ -151,9 +151,14 @@ class AppRoutes {
                 ),
                 VWidget(
                   path: '/classes/:roomid',
-                  widget: RequestScreenView(),
+                  widget: ChatDetails(),
                   buildTransition: _fadeTransition,
                   stackedRoutes: _chatDetailsRoutes,
+                ),
+                VWidget(
+                  path: '/classDetails',
+                  widget: RequestScreenView(),
+                  buildTransition: _dynamicTransition,
                 ),
                 VWidget(
                   path: '/newprivatechat',
@@ -229,21 +234,7 @@ class AppRoutes {
                 ),
               ],
             ),
-            // VWidget(
-            //   path: '/search',
-            //   widget: TwoColumnLayout(
-            //     mainView: Search(),
-            //     sideView: SearchDiscoverView(),
-            //   ),
-            //   buildTransition: _fadeTransition,
-            //   //  stackedRoutes: [
-            //   //  VWidget(
-            //   //   path: '/search/add',
-            //   //   buildTransition: _fadeTransition,
-            //   //   widget: const SearchDiscoverView(),
-            //   //  ),
-            //   // ],
-            // ),
+
             VNester(
               path: '/search',
               widgetBuilder: (child) => TwoColumnLayout(
@@ -262,6 +253,7 @@ class AppRoutes {
                       widget: SearchDiscoverView(),
                       buildTransition: _fadeTransition,
                     ),
+
                     VWidget(
                         path: 'connect',
                         widget: const ConnectPage(),
@@ -280,6 +272,7 @@ class AppRoutes {
                         ]),
                   ],
                 ),
+
               ],
               nestedRoutes: [
                 VWidget(
@@ -307,11 +300,15 @@ class AppRoutes {
                   stackedRoutes: _settingsRoutes,
                 ),
                 VWidget(
-                  path: '/classDetails',
+                  path: 'allclassDetails',
                   widget: RequestScreenView(),
                   buildTransition: _dynamicTransition,
-                  stackedRoutes: _settingsRoutes,
                 ),
+                // VWidget(
+                //   path: '/classDetails',
+                //   widget: RequestScreenView(),
+                //   buildTransition: _dynamicTransition,
+                // ),
               ],
             ),
             VWidget(
@@ -324,18 +321,8 @@ class AppRoutes {
             ),
           ],
         ),
-        VWidget(
-          path: '/lang',
-          widget: LanguageSelection(),
-        ),
-        VWidget(
-          path: '/request',
-          widget: RequestScreenView(),
-        ),
-        VWidget(
-          path: '/analytics',
-          widget: ClassAnalyticsScreen(),
-        ),
+
+
       ];
 
   List<VRouteElement> get _homeRoutes => [

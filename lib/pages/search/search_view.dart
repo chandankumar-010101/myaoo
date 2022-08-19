@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -31,7 +32,7 @@ class _SearchViewState extends State<SearchView> {
   final searchController = Get.put(SearchViewController());
 
   var box = GetStorage();
-
+  String id="";
   userAgeDetails() async {
     await UserDetails.userAge();
   }
@@ -41,14 +42,16 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     userAgeDetails();
   }
-
+  Rx<bool> firstTime=true.obs;
   void addAgesAction() => VRouter.of(context).to('/user');
 
   void createInviteAction() => VRouter.of(context).to('/inviteScreen');
 
   void createNewClassAction() => VRouter.of(context).to('/addClass');
 
-  void createClassDetailsAction() => VRouter.of(context).to('/classDetails');
+  void createClassDetailsAction() => VRouter.of(context).to('/allclassDetails',queryParameters:{
+    "id":id,
+  } );
 
   @override
   Widget build(BuildContext context) {
@@ -512,17 +515,30 @@ class _SearchViewState extends State<SearchView> {
                                             borderRadius: BorderRadius.circular(16),
 
                                        child: InkWell(
-                                        onTap: () {
+                                        onTap: () async{
                                           // createClassDetailsAction();
+                                            id= searchController
+                                                .classList[i]
+                                                .pangea_class_room_id
+                                                .toString();
 
-                                          VRouter.of(context).to(
-                                              '/classDetails',
+                                            //createClassDetailsAction();
+
+                                            print("value of ${firstTime}");
+
+                                            firstTime==true?VRouter.of(context).to(
+                                              'allclassDetails',
                                               queryParameters: {
-                                                "id": searchController
-                                                    .classList[i]
-                                                    .pangea_class_room_id
-                                                    .toString()
-                                              });
+                                                "id": id
+                                              }):VRouter.of(context).to(
+                                                '',
+                                                queryParameters: {
+                                                  "id": id
+                                                });
+                                            firstTime.value=false;
+                                            print("value of 2 ${firstTime}");
+
+
                                         },
                                         borderRadius: BorderRadius.circular(16),
                                         child: Container(
