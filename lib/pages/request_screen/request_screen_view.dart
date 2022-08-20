@@ -1208,259 +1208,259 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ],
                             ),
 
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.loose,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Class analytics",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox( width: 10,),
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Add students",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox( width: 10,),
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Find a language exchange",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox( width: 10,),
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Class permissions",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Students permissions",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox( width: 10,),
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Class Info",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox( width: 10,),
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Payment Info",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox( width: 10,),
-                                Flexible(
-                                  flex: 0,
-                                  fit: FlexFit.tight,
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    height: 40,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0)),
-                                    child: Text(
-                                      "Delete Class",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   mainAxisAlignment:
+                            //   MainAxisAlignment.spaceEvenly,
+                            //   children: [
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.loose,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Class analytics",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox( width: 10,),
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Add students",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox( width: 10,),
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Find a language exchange",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox( width: 10,),
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Class permissions",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // SizedBox(height: 10,),
+                            // Row(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            //   children: [
+                            //
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Students permissions",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox( width: 10,),
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Class Info",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox( width: 10,),
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Payment Info",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox( width: 10,),
+                            //     Flexible(
+                            //       flex: 0,
+                            //       fit: FlexFit.tight,
+                            //       child: MaterialButton(
+                            //         onPressed: () {},
+                            //         height: 40,
+                            //         color: Theme.of(context)
+                            //             .colorScheme
+                            //             .onPrimary,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //             BorderRadius.circular(
+                            //                 25.0)),
+                            //         child: Text(
+                            //           "Delete Class",
+                            //           style: TextStyle().copyWith(
+                            //               color: Theme.of(context)
+                            //                   .textTheme
+                            //                   .bodyText1!
+                            //                   .color,
+                            //               fontWeight: FontWeight.w400,
+                            //               fontSize: 12),
+                            //           // style: TextStyle(
+                            //           //     color: Colors.white,
+                            //           //     fontWeight: FontWeight.w400,
+                            //           //     fontSize: 12.0)
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
