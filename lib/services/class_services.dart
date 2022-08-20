@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/create_class_model.dart';
+import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
 import '../utils/api_urls.dart';
 
@@ -12,6 +15,7 @@ import 'package:http/http.dart' as http;
 
 class ClassServices {
   static Future<void> createClass({
+    required BuildContext context,
     required String roomId,
     required String className,
     required String city,
@@ -61,10 +65,8 @@ class ClassServices {
             ).toJson())
         .then((value) async {
       if (value.statusCode == 201 || value.statusCode == 200) {
-        log("Status Code is  ${value.statusCode} and ${value.body} ");
         final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-        http
-            .post(
+        http.post(
           Uri.parse(ApiUrls.addClassPermissions),
           headers: {"Authorization": "Bearer $token"},
           body: AddClassPermissionModel(
@@ -85,7 +87,19 @@ class ClassServices {
         )
             .then((value) {
           if (value.statusCode == 201 || value.statusCode == 200) {
-            log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
+            box.remove('className');
+            box.remove('cityName');
+            box.remove('countryName');
+            box.remove('languageLevel');
+            box.remove('scoolName');
+            box.remove('targetLanguage');
+            box.remove('sourceLanage');
+            box.remove('publicGroup');
+            box.remove('openEnrollment');
+            box.remove('openToExchange');
+
+            print("Class Created Successfully");
+            context.vRouter.to("/invite_students");
           } else {
             log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
           }

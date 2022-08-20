@@ -11,6 +11,10 @@ import 'package:pangeachat/pages/device_settings/device_settings.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
 import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart';
 import 'package:pangeachat/pages/login/login.dart';
+import 'package:pangeachat/pages/new_class/class_permissions.dart';
+import 'package:pangeachat/pages/new_class/invite_students.dart';
+import 'package:pangeachat/pages/new_class/language_selection.dart';
+import 'package:pangeachat/pages/new_class/student_permissions.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
 import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
@@ -115,10 +119,28 @@ class AppRoutes {
             VWidget(
               path: '/newclass',
               widget: const NewClass(),
+              stackedRoutes: [
+                VWidget(
+                  path: 'class_permissions',
+                  widget: const LogViewer(),
+                  buildTransition: _dynamicTransition,
+                ),
+                VWidget(
+                  path: 'language',
+                  widget: const ClassLanguage(),
+                  buildTransition: _dynamicTransition,
+                ),
+                VWidget(
+                  path: '/students_permissions',
+                  widget: const LogViewer(),
+                  buildTransition: _dynamicTransition,
+                ),
+              ]
             ),
           ],
         ),
       ];
+
   List<VRouteElement> get _tabletRoutes => [
         VNester(
           path: '/rooms',
@@ -170,11 +192,42 @@ class AppRoutes {
                   widget: const NewGroup(),
                   buildTransition: _fadeTransition,
                 ),
+                //Todo: newClass
                 VWidget(
                   path: '/newclass',
                   widget: const NewClass(),
                   buildTransition: _fadeTransition,
+                    stackedRoutes: [
+                      VWidget(
+                        path: 'language',
+                        widget: const ClassLanguage(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                      VWidget(
+                        path: 'class_permissions',
+                        widget: const ClassPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+
+                      VWidget(
+                        path: 'student_permissions',
+                        widget: const StudentPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                    ]
                 ),
+                VWidget(
+                  path: '/invite_students',
+                  widget: const InviteStudent(),
+                  buildTransition: _dynamicTransition,
+                ),
+                VWidget(
+                  path: 'allclassDetails',
+                  widget: RequestScreenView(),
+                  buildTransition: _dynamicTransition,
+                ),
+
+
                 VNester(
                   path: ':roomid',
                   widgetBuilder: (child) => SideViewLayout(
@@ -210,6 +263,7 @@ class AppRoutes {
             ),
           ],
         ),
+
         VWidget(
           path: '/rooms',
           widget: const TwoColumnLayout(
@@ -234,7 +288,6 @@ class AppRoutes {
                 ),
               ],
             ),
-
             VNester(
               path: '/search',
               widgetBuilder: (child) => TwoColumnLayout(
@@ -288,7 +341,7 @@ class AppRoutes {
                   stackedRoutes: _settingsRoutes,
                 ),
                 VWidget(
-                  path: '/addClass',
+                  path: '/newClass',
                   widget: NewClass(),
                   buildTransition: _dynamicTransition,
                   stackedRoutes: _settingsRoutes,
@@ -299,6 +352,7 @@ class AppRoutes {
                   buildTransition: _dynamicTransition,
                   stackedRoutes: _settingsRoutes,
                 ),
+                //todo
                 VWidget(
                   path: 'allclassDetails',
                   widget: RequestScreenView(),
