@@ -17,8 +17,8 @@ class SearchViewController extends GetxController {
 
   ScrollController controller = ScrollController();
 
-  Future getClasses(pageNumber) async {
-    log("URL is ${ApiUrls.class_list + "?p=${pageNumber.toString()}&page_size=10"}");
+  Future getClasses() async {
+    log("URL is ${ApiUrls.class_list + "?p=${pageNo.value.toString()}&page_size=10"}");
     try {
       var response = await ApiFunctions().get(
         ApiUrls.class_list + "?p=${pageNo.value.toString()}&page_size=10",
@@ -38,14 +38,14 @@ class SearchViewController extends GetxController {
         log("list is $loadData");
 
         log("Page No. is ${pageNo.value}");
-        // if (response.body["next"] != null) {
-        //   log("Next :${response.body["next"]}");
-        //   pageNo.value++;
-        //   getClasses();
-        // } else if (response.body["next"] == null) {
-        //   log("Final List is $loadData");
-        //   classList.value = loadData.map((e) => Result.fromJson(e)).toList();
-        // }
+        if (response.body["next"] != null) {
+          log("Next :${response.body["next"]}");
+          pageNo.value++;
+          getClasses();
+        } else if (response.body["next"] == null) {
+          log("Final List is $loadData");
+          classList.value = loadData.map((e) => Result.fromJson(e)).toList();
+        }
       } else {
         loading.value = false;
         Get.rawSnackbar(
@@ -64,11 +64,11 @@ class SearchViewController extends GetxController {
   void onInit() {
     // TODO: implement onInit
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      //write or call your logic
-      //code will run when widget rendering complete
-      addItems();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   //write or call your logic
+    //   //code will run when widget rendering complete
+    //   addItems();
+    // });
     super.onInit();
     // getClasses(pageNo.value);
 

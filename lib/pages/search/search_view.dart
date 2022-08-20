@@ -497,7 +497,7 @@ class _SearchViewState extends State<SearchView> {
                             }
                             return Obx(() => !searchController.loading.value
                                 ? GridView.builder(
-                                    controller: searchController.controller,
+                                    // controller: searchController.controller,
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(12),
                                     physics:
