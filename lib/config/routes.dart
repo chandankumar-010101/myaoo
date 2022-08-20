@@ -178,11 +178,6 @@ class AppRoutes {
                   stackedRoutes: _chatDetailsRoutes,
                 ),
                 VWidget(
-                  path: '/classDetails',
-                  widget: RequestScreenView(),
-                  buildTransition: _dynamicTransition,
-                ),
-                VWidget(
                   path: '/newprivatechat',
                   widget: const NewPrivateChat(),
                   buildTransition: _fadeTransition,
@@ -192,42 +187,6 @@ class AppRoutes {
                   widget: const NewGroup(),
                   buildTransition: _fadeTransition,
                 ),
-                //Todo: newClass
-                VWidget(
-                  path: '/newclass',
-                  widget: const NewClass(),
-                  buildTransition: _fadeTransition,
-                    stackedRoutes: [
-                      VWidget(
-                        path: 'language',
-                        widget: const ClassLanguage(),
-                        buildTransition: _dynamicTransition,
-                      ),
-                      VWidget(
-                        path: 'class_permissions',
-                        widget: const ClassPermissions(),
-                        buildTransition: _dynamicTransition,
-                      ),
-
-                      VWidget(
-                        path: 'student_permissions',
-                        widget: const StudentPermissions(),
-                        buildTransition: _dynamicTransition,
-                      ),
-                    ]
-                ),
-                VWidget(
-                  path: '/invite_students',
-                  widget: const InviteStudent(),
-                  buildTransition: _dynamicTransition,
-                ),
-                VWidget(
-                  path: 'allclassDetails',
-                  widget: RequestScreenView(),
-                  buildTransition: _dynamicTransition,
-                ),
-
-
                 VNester(
                   path: ':roomid',
                   widgetBuilder: (child) => SideViewLayout(
@@ -259,6 +218,61 @@ class AppRoutes {
                     ),
                   ],
                 ),
+                //Todo classDetails
+                VWidget(
+                  path: '/classDetails',
+                  widget: RequestScreenView(),
+                  buildTransition: _dynamicTransition,
+                    stackedRoutes: [
+                      VWidget(
+                        path: 'update_language',
+                        widget: const ClassLanguage(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                      VWidget(
+                        path: 'update_class_permissions',
+                        widget: const ClassPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                      VWidget(
+                        path: 'update_student_permissions',
+                        widget: const StudentPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                    ]
+                ),
+                //Todo: newClass
+                VWidget(
+                  path: '/newclass',
+                  widget: const NewClass(),
+                  buildTransition: _fadeTransition,
+                    stackedRoutes: [
+                      VWidget(
+                        path: 'language',
+                        widget: const ClassLanguage(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                      VWidget(
+                        path: 'class_permissions',
+                        widget: const ClassPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                      VWidget(
+                        path: 'student_permissions',
+                        widget: const StudentPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                    ]
+                ),
+                //Todo: invite_students
+                VWidget(
+                  path: '/invite_students',
+                  widget: const InviteStudent(),
+                  buildTransition: _dynamicTransition,
+                ),
+
+
+
               ],
             ),
           ],
@@ -358,11 +372,6 @@ class AppRoutes {
                   widget: RequestScreenView(),
                   buildTransition: _dynamicTransition,
                 ),
-                // VWidget(
-                //   path: '/classDetails',
-                //   widget: RequestScreenView(),
-                //   buildTransition: _dynamicTransition,
-                // ),
               ],
             ),
             VWidget(
