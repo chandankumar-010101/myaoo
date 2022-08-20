@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/language_selection_screen/language_selection.dart';
 
 class LanguageSelectionView extends StatelessWidget {
@@ -230,7 +231,7 @@ class LanguageSelectionView extends StatelessWidget {
                                     ),
                                   )
                                 : Padding(
-                                    padding: EdgeInsets.all(5.0),
+                                    padding: const EdgeInsets.all(5.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -371,24 +372,21 @@ class LanguageSelectionView extends StatelessWidget {
                     Container(
                       width: Get.width,
                       height: 45,
-                      margin: EdgeInsets.fromLTRB(40, 30, 40, 40),
-                      child: OutlinedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: const BorderSide(
-                                      color: Colors.grey, width: 5.0))),
-                        ),
+                      margin: const EdgeInsets.fromLTRB(40, 30, 40, 40),
+                      child: MaterialButton(
+                        elevation: 5.0,
+                        color: AppConfig.primaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
                         onPressed: () {
                           controller.createUser();
                         },
                         child: controller.loading
                             ? const LinearProgressIndicator()
-                            : Text(
+                            : const Text(
                                 "Go!",
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 16.0),
+                                    color: Colors.white, fontSize: 16.0),
                               ),
                       ),
                     )
