@@ -15,8 +15,10 @@ class SearchViewController extends GetxController {
   var pageNo = 1.obs;
   final box = GetStorage();
 
-  Future getClasses() async {
-    log("URL is ${ApiUrls.class_list + "?p=${pageNo.value.toString()}&page_size=10"}");
+  ScrollController controller = ScrollController();
+
+  Future getClasses(pageNumber) async {
+    log("URL is ${ApiUrls.class_list + "?p=${pageNumber.toString()}&page_size=10"}");
     try {
       var response = await ApiFunctions().get(
         ApiUrls.class_list + "?p=${pageNo.value.toString()}&page_size=10",
@@ -32,17 +34,18 @@ class SearchViewController extends GetxController {
         List temp = response.body["results"];
 
         loadData.addAll(temp);
+        classList.value = loadData.map((e) => Result.fromJson(e)).toList();
         log("list is $loadData");
 
         log("Page No. is ${pageNo.value}");
-        if (response.body["next"] != null) {
-          log("Next :${response.body["next"]}");
-          pageNo.value++;
-          getClasses();
-        } else if (response.body["next"] == null) {
-          log("Final List is $loadData");
-          classList.value = loadData.map((e) => Result.fromJson(e)).toList();
-        }
+        // if (response.body["next"] != null) {
+        //   log("Next :${response.body["next"]}");
+        //   pageNo.value++;
+        //   getClasses();
+        // } else if (response.body["next"] == null) {
+        //   log("Final List is $loadData");
+        //   classList.value = loadData.map((e) => Result.fromJson(e)).toList();
+        // }
       } else {
         loading.value = false;
         Get.rawSnackbar(
@@ -60,9 +63,25 @@ class SearchViewController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      //write or call your logic
+      //code will run when widget rendering complete
+      addItems();
+    });
     super.onInit();
-    getClasses();
+    // getClasses(pageNo.value);
 
     log("------------");
+  }
+
+  addItems() async {
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.position.pixels) {
+        pageNo.value++;
+        log("Pagination Called with ${pageNo.value}");
+        getClasses(pageNo.value);
+      }
+    });
   }
 }
