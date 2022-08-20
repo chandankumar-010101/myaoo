@@ -129,4 +129,32 @@ class ClassServices {
       print("JWT Token is null");
     }
   }
+
+  static Future<void> updateClassPermission()async{
+    final box = GetStorage();
+    String token = box.read("access");
+    if(token.isEmpty){
+      print("JWT Token is null");
+      Fluttertoast.showToast(
+          msg: "Token expired please logout and login again");
+      return;
+    }
+
+    http
+        .put(Uri.parse(ApiUrls.updateClassPermissions),
+        headers: {"Authorization": "Bearer $token"},
+        body: AddClassPermissionModel(
+
+          isPublic: true.toString()
+        ).toJson()).then((value) {
+
+    }).catchError((e){
+
+    });
+
+
+  }
+  static Future<void> updateClassDetails() async{
+
+  }
 }

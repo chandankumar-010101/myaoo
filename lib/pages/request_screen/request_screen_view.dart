@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/utils/api/class_details.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
@@ -17,8 +18,7 @@ class RequestScreenView extends StatefulWidget {
 }
 
 class _RequestScreenViewState extends State<RequestScreenView> {
-  String text =
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. ";
+  String text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. ";
 
   // final ScreenArguments screenArguments ;
   ClassDetails classDetails = ClassDetails();
@@ -31,8 +31,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
       classDetailUi = await classDetails.updateUserAge(routes["id"]);
     } else {
       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-      classDetailUi = await classDetails
-          .updateUserAge(VRouter.of(context).pathParameters['roomid']);
+      classDetailUi = await classDetails.updateUserAge(VRouter.of(context).pathParameters['roomid']);
     }
   }
 
@@ -42,6 +41,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     print(widthscreen);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+        title: Text("Class Permissions"),
+        actions: [
+          InkWell(
+            onTap: (){
+              print(context.vRouter.queryParameters['id']);
+            //  context.vRouter.pathParameters['Id'];
+            // context.vRouter.to("update_class_permissions");
+            },
+            child:Text("Hello")
+          )
+        ],
+      ),
       body: FutureBuilder(
         future: callMethod(context),
         builder: (context, AsyncSnapshot snapshot) {
@@ -437,7 +449,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(50, 10, 50, 0),
-                      child: Text(
+                      child: InkWell(
+                          onTap: (){
+                            print("working");
+                            context.vRouter.to("update_class_permissions");
+                      },
+                      child:Text(
                         "Class Permissions",
                         style: TextStyle().copyWith(
                             color: Theme.of(context).textTheme.bodyText1!.color,
@@ -447,6 +464,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         //     color: Colors.black,
                         //     fontWeight: FontWeight.w700,
                         //     fontSize: 14.0)
+                      ),
                       ),
                     ),
                     Container(
@@ -804,8 +822,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         ],
                       ),
                     ),
-                    box.read("usertype") == 2
-                        ? Container(
+                    box.read("usertype") == 2 ? Container(
                       margin: const EdgeInsets.fromLTRB(50, 30, 50, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1053,7 +1070,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   flex: 0,
                                   fit: FlexFit.tight,
                                   child: MaterialButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print("helo");
+                                    },
                                     height: 40,
                                     color: Theme.of(context)
                                         .colorScheme
@@ -1541,7 +1560,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             ),
                           ),
                           MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              print("wekl");
+                            },
                             height: 40,
                             color:
                             Theme.of(context).colorScheme.onPrimary,
@@ -1648,7 +1669,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     )
                         : Container(),
                   ],
-                ):Column(
+                ):
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -2029,16 +2051,21 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(50, 10, 50, 0),
-                      child: Text(
-                        "Class Permissions",
-                        style: TextStyle().copyWith(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14),
-                        // style: TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 14.0)
+                      child: InkWell(
+                          onTap:(){
+                            print("wst");
+                          },
+                          child:Text(
+                            "Class Permissions",
+                            style: TextStyle().copyWith(
+                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14),
+                            // style: TextStyle(
+                            //     color: Colors.black,
+                            //     fontWeight: FontWeight.w700,
+                            //     fontSize: 14.0)
+                          ),
                       ),
                     ),
                     Container(
@@ -2645,7 +2672,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   flex: 0,
                                   fit: FlexFit.tight,
                                   child: MaterialButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print("haay haay");
+                                      final String id = context.vRouter.queryParameters['id']??"";
+                                      final box = GetStorage();
+                                      if(id.isEmpty){
+                                        print("Unable to find class id");
+                                      }else{
+                                        box.write("public", classDetailUi!.permissions!.isPublic);
+                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
+                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
+                                        context.vRouter.to("/classDetails/update_class_permissions",queryParameters: {"class_id": id, });
+                                      }
+                                       },
                                     height: 40,
                                     color: Theme.of(context)
                                         .colorScheme
@@ -2682,7 +2721,26 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   flex: 0,
                                   fit: FlexFit.tight,
                                   child: MaterialButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print("haay");
+                                      final String id = context.vRouter.queryParameters['id']??"";
+                                      final box = GetStorage();
+                                      if(id.isEmpty){
+                                        print("Unable to find class id");
+                                      }else{
+                                        box.write("public", classDetailUi!.permissions!.isPublic);
+                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
+                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
+                                        box.write("public", classDetailUi!.permissions!.isPublic);
+                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
+                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
+                                        box.write("public", classDetailUi!.permissions!.isPublic);
+                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
+                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
+
+                                        context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
+                                      }
+                                    },
                                     height: 40,
                                     color: Theme.of(context)
                                         .colorScheme
@@ -2988,7 +3046,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   ],
                 ),
               ],
-            ) : Column(
+            ) :
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

@@ -10,9 +10,9 @@ class ClassPermissions extends StatefulWidget {
 }
 
 class _ClassPermissionsState extends State<ClassPermissions> {
-  bool publicGroup = false;
-  bool openEnrollment = false;
-  bool openToExchange = false;
+  late bool publicGroup;
+  late bool openEnrollment;
+  late bool openToExchange;
 
 
 
@@ -24,9 +24,9 @@ class _ClassPermissionsState extends State<ClassPermissions> {
   void setOpenEnrollment(bool b) => setState(() => openEnrollment = b);
   void setOpentToExchange(bool b) => setState(() => openToExchange = b);
 
-
+  final box = GetStorage();
   createClassPermissions(){
-    final box = GetStorage();
+
     box.write("publicGroup", publicGroup);
     box.write("openEnrollment", openEnrollment);
     box.write("openToExchange", openToExchange);
@@ -34,8 +34,21 @@ class _ClassPermissionsState extends State<ClassPermissions> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    box.read("public")==null?publicGroup =false:publicGroup= box.read("public");
+    box.read("openEnrollment")==null?openEnrollment =false:openEnrollment= box.read("openEnrollment");
+    box.read("openExchange")==null?openToExchange =false:openToExchange= box.read("openExchange");
+    box.remove("public");
+    box.remove("openEnrollment");
+    box.remove("openExchange");
+
+  }
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String id = context.vRouter.queryParameters['class_id']??"";
+    print(id);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
@@ -50,12 +63,12 @@ class _ClassPermissionsState extends State<ClassPermissions> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
-          leading:  IconButton(
+          leading: id.isEmpty?  IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               context.vRouter.to("/newclass/language");
             },
-          ),
+          ):null,
         ),
         body: Container(
           width: size.width,
@@ -92,6 +105,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       SwitchListTile.adaptive(
                         title: Text(
                           "Public",

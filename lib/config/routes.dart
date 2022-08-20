@@ -234,6 +234,7 @@ class AppRoutes {
                         widget: const ClassPermissions(),
                         buildTransition: _dynamicTransition,
                       ),
+
                       VWidget(
                         path: 'update_student_permissions',
                         widget: const StudentPermissions(),
@@ -262,6 +263,7 @@ class AppRoutes {
                         widget: const StudentPermissions(),
                         buildTransition: _dynamicTransition,
                       ),
+
                     ]
                 ),
                 //Todo: invite_students

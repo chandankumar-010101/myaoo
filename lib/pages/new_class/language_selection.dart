@@ -104,11 +104,13 @@ class _ClassLanguageState extends State<ClassLanguage> {
   @override
   Widget build(BuildContext context) {
      Size size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Create a Class",
+            ModalRoute.of(context)!.settings.name =="language"?
+            "Create a Class":"Update Class Info",
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
                 fontSize: 14),
@@ -118,12 +120,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
-          leading:  IconButton(
+          leading: ModalRoute.of(context)!.settings.name =="language"? IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               context.vRouter.to("/newclass");
             },
-          ),
+          ):null,
         ),
         body: SingleChildScrollView(
           child: Column(
