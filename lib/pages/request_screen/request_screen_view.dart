@@ -1,7 +1,6 @@
-import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/utils/api/class_details.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
@@ -41,7 +40,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     double widthscreen = MediaQuery.of(context).size.width;
     print(widthscreen);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FutureBuilder(
         future: callMethod(context),
         builder: (context, AsyncSnapshot snapshot) {
@@ -75,8 +74,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   imageUrl:
                                   classDetailUi!.profilePic.toString(),
                                   fit: BoxFit.cover,
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                   imageBuilder: (context, imageProvider) {
                                     return Container(
                                       height: 90,
@@ -111,7 +112,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   child: Icon(
                                     Icons.people,
                                     size: 40,
-                                    color: Theme.of(context).primaryColor,
+                                    color:  Theme.of(context).textTheme.bodyText1!.color,
                                   ),
                                 ),
                               ),
@@ -132,9 +133,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   .colorScheme
                                                   .onPrimary,
                                               width: 2)),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.school,
-                                        color: Colors.black,
+                                        color: Theme.of(context).textTheme.bodyText1!.color,
                                         size: 15.0,
                                       ),
                                     ),
@@ -164,7 +165,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 children: [
                                   Icon(
                                     Icons.location_pin,
-                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                     size: 20.0,
                                   ),
                                   const SizedBox(
@@ -178,10 +182,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .bodyText1!
                                             .color,
                                         fontSize: 12),
-                                    // style: TextStyle(
-                                    //     color: AppConfig.violetColor,
-                                    //     fontWeight: FontWeight.normal,
-                                    //     fontSize: 12.0),
                                   )
                                 ],
                               )
@@ -215,10 +215,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .color,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: Colors.black,
-                                //     fontSize: 12.0,
-                                //     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 height: 10.0,
@@ -244,12 +240,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .bodyText1!
                                             .color,
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                    // style: TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontSize: 12.0,
-                                    //     fontWeight: FontWeight.w400),
-                                  )
+                                    ),
+                                  ),
                                 ],
                               )
                             ],
@@ -270,10 +262,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .color,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: Colors.black,
-                                //     fontSize: 12.0,
-                                //     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 height: 10.0,
@@ -282,9 +270,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.people,
-                                    color: Colors.grey,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                     size: 20,
                                   ),
                                   const SizedBox(
@@ -326,19 +317,18 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12),
                                     ),
-                                    // style: TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontSize: 12.0,
-                                    //     fontWeight: FontWeight.bold)),
-                                    SizedBox(
+                                  const  SizedBox(
                                       width: 10,
                                     ),
                                     Icon(
                                       Icons.arrow_right_alt_outlined,
                                       size: 20,
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
                                     ),
-                                    SizedBox(
+                                  const  SizedBox(
                                       width: 10,
                                     ),
                                     Text(
@@ -368,20 +358,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
-                                    // style: const TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.w400,
-                                    //     fontSize: 14.0),
                                   ),
-                                  SizedBox(
+                                const  SizedBox(
                                     width: 10,
                                   ),
                                   Icon(
                                     Icons.arrow_right_alt_outlined,
                                     size: 20,
-                                    color: Colors.black,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                   ),
-                                  SizedBox(
+                                 const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
@@ -394,10 +383,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
-                                    // style: const TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.w400,
-                                    //     fontSize: 14.0),
                                   ),
                                 ],
                               )
@@ -415,10 +400,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             fontWeight: FontWeight.w700,
                             fontSize: 14),
 
-                        // style: TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 14.0),
                       ),
                     ),
                     Container(
@@ -429,10 +410,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontWeight: FontWeight.w400,
                             fontSize: 14),
-                        // style: const TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w400,
-                        //     fontSize: 14.0),
                       ),
                     ),
                     Container(
@@ -443,10 +420,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontWeight: FontWeight.w700,
                             fontSize: 14),
-                        // style: TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 14.0)
                       ),
                     ),
                     Container(
@@ -811,7 +784,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
+                          box.read("clientID") == classDetailUi!.classAuthorId
+                              ?Container(): MaterialButton(
                             onPressed: () {},
                             height: 40,
                             color: Theme.of(context).colorScheme.onPrimary,
@@ -835,8 +809,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           const SizedBox(
                             width: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
+                          box.read("clientID") == classDetailUi!.classAuthorId
+                              ?Container(): GestureDetector(
+                              onTap: () {
                               final routes =
                                   VRouter.of(context).queryParameters;
                               final routes1 = VRouter.of(context)
@@ -848,43 +823,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 UrlLauncher(context,
                                     'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                     .openMatrixToUrl();
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes["id"]}',
-                                //     // queryParameters: {
-                                //     //   "id": routes["id"].toString(),
-                                //     // }
-                                //     );
+
                               } else {
                                 // String? get roomId => VRouter.of(context).pathParameters['roomid'];
                                 UrlLauncher(context,
                                     'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                     .openMatrixToUrl();
 
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                //   // routes["id"].toString()
-                                //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes1.toString()}',
-                                //     // queryParameters: {
-                                //     //   "id": routes1.toString(),
-                                //     // }
-                                //     );
                               }
                             },
                             child: Container(
@@ -901,10 +846,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: AppConfig.violetColor,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     fontSize: 12.0),
                                 ),
                               ),
                               decoration: BoxDecoration(
@@ -963,7 +904,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   flex: 0,
                                   fit: FlexFit.loose,
                                   child: MaterialButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print("ahello");
+                                    },
                                     height: 40,
                                     color: Theme.of(context)
                                         .colorScheme
@@ -1472,7 +1415,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              print("ahello");
+                            },
                             height: 40,
                             color:
                             Theme.of(context).colorScheme.onPrimary,
@@ -1648,7 +1593,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     )
                         : Container(),
                   ],
-                ):Column(
+                ):
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -1667,8 +1613,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   imageUrl:
                                   classDetailUi!.profilePic.toString(),
                                   fit: BoxFit.cover,
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                   imageBuilder: (context, imageProvider) {
                                     return Container(
                                       height: 90,
@@ -1703,7 +1651,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   child: Icon(
                                     Icons.people,
                                     size: 40,
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                   ),
                                 ),
                               ),
@@ -1717,8 +1668,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                              .textTheme
+                                              .bodyText1!
+                                              .color,
                                           border: Border.all(
                                               color: Theme.of(context)
                                                   .colorScheme
@@ -1756,7 +1708,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 children: [
                                   Icon(
                                     Icons.location_pin,
-                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                     size: 20.0,
                                   ),
                                   const SizedBox(
@@ -1770,10 +1725,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .bodyText1!
                                             .color,
                                         fontSize: 12),
-                                    // style: TextStyle(
-                                    //     color: AppConfig.violetColor,
-                                    //     fontWeight: FontWeight.normal,
-                                    //     fontSize: 12.0),
                                   )
                                 ],
                               )
@@ -1807,10 +1758,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .color,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: Colors.black,
-                                //     fontSize: 12.0,
-                                //     fontWeight: FontWeight.bold),
+
                               ),
                               const SizedBox(
                                 height: 10.0,
@@ -1837,10 +1785,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 12),
-                                    // style: TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontSize: 12.0,
-                                    //     fontWeight: FontWeight.w400),
                                   )
                                 ],
                               )
@@ -1862,10 +1806,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .color,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: Colors.black,
-                                //     fontSize: 12.0,
-                                //     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 height: 10.0,
@@ -1874,9 +1814,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(
+                                 Icon(
                                     Icons.people,
-                                    color: Colors.grey,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                     size: 20,
                                   ),
                                   const SizedBox(
@@ -1918,19 +1861,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12),
                                     ),
-                                    // style: TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontSize: 12.0,
-                                    //     fontWeight: FontWeight.bold)),
-                                    SizedBox(
+
+                                  const  SizedBox(
                                       width: 10,
                                     ),
                                     Icon(
                                       Icons.arrow_right_alt_outlined,
                                       size: 20,
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
                                     ),
-                                    SizedBox(
+                                 const   SizedBox(
                                       width: 10,
                                     ),
                                     Text(
@@ -1960,20 +1903,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
-                                    // style: const TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.w400,
-                                    //     fontSize: 14.0),
                                   ),
-                                  SizedBox(
+                                 const SizedBox(
                                     width: 10,
                                   ),
                                   Icon(
                                     Icons.arrow_right_alt_outlined,
                                     size: 20,
-                                    color: Colors.black,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                   ),
-                                  SizedBox(
+                                 const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
@@ -1986,10 +1928,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
-                                    // style: const TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.w400,
-                                    //     fontSize: 14.0),
                                   ),
                                 ],
                               )
@@ -2006,11 +1944,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontWeight: FontWeight.w700,
                             fontSize: 14),
-
-                        // style: TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 14.0),
                       ),
                     ),
                     Container(
@@ -2021,10 +1954,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontWeight: FontWeight.w400,
                             fontSize: 14),
-                        // style: const TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w400,
-                        //     fontSize: 14.0),
                       ),
                     ),
                     Container(
@@ -2035,10 +1964,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontWeight: FontWeight.w700,
                             fontSize: 14),
-                        // style: TextStyle(
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 14.0)
                       ),
                     ),
                     Container(
@@ -2403,7 +2328,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
+                          box.read("clientID") == classDetailUi!.classAuthorId
+                              ?Container():  MaterialButton(
                             onPressed: () {},
                             height: 40,
                             color: Theme.of(context).colorScheme.onPrimary,
@@ -2418,16 +2344,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .color,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12),
-                              // style: TextStyle(
-                              //     color: Colors.white,
-                              //     fontWeight: FontWeight.w400,
-                              //     fontSize: 12.0)
+
                             ),
                           ),
                           const SizedBox(
                             width: 20,
                           ),
-                          GestureDetector(
+                          box.read("clientID") == classDetailUi!.classAuthorId
+                              ?Container(): GestureDetector(
                             onTap: () {
                               final routes =
                                   VRouter.of(context).queryParameters;
@@ -2440,43 +2364,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 UrlLauncher(context,
                                     'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                     .openMatrixToUrl();
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes["id"]}',
-                                //     // queryParameters: {
-                                //     //   "id": routes["id"].toString(),
-                                //     // }
-                                //     );
+
                               } else {
                                 // String? get roomId => VRouter.of(context).pathParameters['roomid'];
                                 UrlLauncher(context,
                                     'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                     .openMatrixToUrl();
 
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                //   // routes["id"].toString()
-                                //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes1.toString()}',
-                                //     // queryParameters: {
-                                //     //   "id": routes1.toString(),
-                                //     // }
-                                //     );
+
                               }
                             },
                             child: Container(
@@ -2493,10 +2388,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: AppConfig.violetColor,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     fontSize: 12.0),
+
                                 ),
                               ),
                               decoration: BoxDecoration(
@@ -2512,8 +2404,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       ),
                     )
                         : Container(
-                      margin: const EdgeInsets.fromLTRB(50, 30, 50, 0),
-                      child: Row(
+                        margin: const EdgeInsets.fromLTRB(50, 30, 50, 0),
+                         child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -2555,7 +2447,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   flex: 0,
                                   fit: FlexFit.loose,
                                   child: MaterialButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print("ahello");
+                                    },
                                     height: 40,
                                     color: Theme.of(context)
                                         .colorScheme
@@ -2662,14 +2556,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                               .bodyText1!
                                               .color,
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
                                     ),
                                   ),
-                                ),
+                                ),),
                               ],
                             ),
                             SizedBox(height: 10,),
@@ -2700,10 +2589,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                               .color,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
                                     ),
                                   ),
                                 ),
@@ -2730,10 +2615,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                               .color,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
                                     ),
                                   ),
                                 ),
@@ -2760,10 +2641,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                               .color,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12),
-                                      // style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.w400,
-                                      //     fontSize: 12.0)
+
                                     ),
                                   ),
                                 ),
@@ -2988,7 +2866,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   ],
                 ),
               ],
-            ) : Column(
+            ) :
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -3002,51 +2881,54 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         children: [
                           classDetailUi!.profilePic != null
                               ? Container(
-                                  margin: const EdgeInsets.only(top: 10.0),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        classDetailUi!.profilePic.toString(),
-                                    fit: BoxFit.cover,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    imageBuilder: (context, imageProvider) {
-                                      return Container(
-                                        height: 90,
-                                        width: 90,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: imageProvider)),
-                                      );
-                                    },
-                                  ),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          width: 2.0),
-                                      shape: BoxShape.circle),
-                                )
-                              : Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                              classDetailUi!.profilePic.toString(),
+                              fit: BoxFit.cover,
+                              color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).colorScheme.onPrimary,
+                              imageBuilder: (context, imageProvider) {
+                                return Container(
                                   height: 90,
                                   width: 90,
                                   decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          width: 2.0),
-                                      shape: BoxShape.circle),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Icon(
-                                      Icons.people,
-                                      size: 40,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ),
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: imageProvider)),
+                                );
+                              },
+                            ),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                        ? Theme.of(context).primaryColor
+                                        : Theme.of(context).colorScheme.onPrimary,
+                                    width: 2.0),
+                                shape: BoxShape.circle),
+                          )
+                              : Container(
+                            height: 90,
+                            width: 90,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                        ? Theme.of(context).primaryColor
+                                        : Theme.of(context).colorScheme.onPrimary,
+                                    width: 2.0),
+                                shape: BoxShape.circle),
+                            child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.people,
+                                size: 40,
+                                color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
                           Positioned(
                               bottom: 4,
                               left: 60,
@@ -3056,17 +2938,18 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   padding: const EdgeInsets.all(2.0),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                                      color: Theme.of(context).scaffoldBackgroundColor,
                                       border: Border.all(
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
                                           width: 2)),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.school,
-                                    color: Colors.black,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                     size: 15.0,
                                   ),
                                 ),
@@ -3096,7 +2979,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             children: [
                               Icon(
                                 Icons.location_pin,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
                                 size: 20.0,
                               ),
                               const SizedBox(
@@ -3110,10 +2996,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .bodyText1!
                                         .color,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: AppConfig.violetColor,
-                                //     fontWeight: FontWeight.normal,
-                                //     fontSize: 12.0),
                               )
                             ],
                           )
@@ -3150,10 +3032,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .color,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12),
-                              // style: TextStyle(
-                              //     color: Colors.black,
-                              //     fontSize: 12.0,
-                              //     fontWeight: FontWeight.bold),
+
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -3180,10 +3059,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0,
-                                  //     fontWeight: FontWeight.w400),
                                 )
                               ],
                             )
@@ -3205,10 +3080,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .color,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12),
-                              // style: TextStyle(
-                              //     color: Colors.black,
-                              //     fontSize: 12.0,
-                              //     fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -3217,9 +3088,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(
+                                 Icon(
                                   Icons.people,
-                                  color: Colors.grey,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                   size: 20,
                                 ),
                                 const SizedBox(
@@ -3268,10 +3142,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                  const SizedBox(
                                     width: 10,
                                   ),
-                                 const Icon(
+                                  Icon(
                                     Icons.arrow_right_alt_outlined,
                                     size: 20,
-                                    color: Colors.black,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                   ),
                                  const SizedBox(
                                     width: 10,
@@ -3310,10 +3187,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               const  SizedBox(
                                   width: 10,
                                 ),
-                              const  Icon(
+                                Icon(
                                   Icons.arrow_right_alt_outlined,
                                   size: 20,
-                                  color: Colors.black,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
                                 ),
                                const SizedBox(
                                   width: 10,
@@ -3494,11 +3374,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-
-                                  // style: TextStyle(
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0),
                                 )
                               ],
                             )
@@ -3582,10 +3457,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0),
+
                                 )
                               ],
                             )
@@ -3611,10 +3483,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0),
                                 )
                               ],
                             )
@@ -3640,11 +3508,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-
-                                  // style: TextStyle(
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0),
                                 )
                               ],
                             )
@@ -3670,10 +3533,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0),
                                 )
                               ],
                             )
@@ -3699,10 +3558,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     fontWeight: FontWeight.w400,
-                                  //     color: Colors.black,
-                                  //     fontSize: 12.0),
                                 )
                               ],
                             )
@@ -3756,43 +3611,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   UrlLauncher(context,
                                       'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                       .openMatrixToUrl();
-                                  // FluffyShare.share(
-                                  //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                  //   context,
-                                  // );
-                                  // VRouter.of(context).toSegments([
-                                  //   'rooms',
-                                  //   classDetailUi!.pangeaClassRoomId.toString()
-                                  // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                  // ]);
-                                  // VRouter.of(context).to(
-                                  //     'rooms/${routes["id"]}',
-                                  //     // queryParameters: {
-                                  //     //   "id": routes["id"].toString(),
-                                  //     // }
-                                  //     );
+
                                 } else {
                                   // String? get roomId => VRouter.of(context).pathParameters['roomid'];
                                   UrlLauncher(context,
                                       'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                       .openMatrixToUrl();
 
-                                  // FluffyShare.share(
-                                  //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                  //   context,
-                                  // );
-                                  // VRouter.of(context).toSegments([
-                                  //   'rooms',
-                                  //   classDetailUi!.pangeaClassRoomId.toString()
-                                  //   // routes["id"].toString()
-                                  //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                  // ]);
-                                  // VRouter.of(context).to(
-                                  //     'rooms/${routes1.toString()}',
-                                  //     // queryParameters: {
-                                  //     //   "id": routes1.toString(),
-                                  //     // }
-                                  //     );
+
                                 }
                               },
                               child: Container(
@@ -3809,10 +3635,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 12),
-                                    // style: TextStyle(
-                                    //     color: AppConfig.violetColor,
-                                    //     fontWeight: FontWeight.w400,
-                                    //     fontSize: 12.0),
+
                                   ),
                                 ),
                                 decoration: BoxDecoration(
@@ -3824,7 +3647,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         width: 2.0)),
                               ),
                             ),
-                            MaterialButton(
+                            box.read("clientID") == classDetailUi!.classAuthorId
+                                ?Container(): MaterialButton(
                               onPressed: () {},
                               height: 40,
                               color: Theme.of(context).colorScheme.onPrimary,
@@ -3839,10 +3663,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .color,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: Colors.white,
-                                //     fontWeight: FontWeight.w400,
-                                //     fontSize: 12.0)
                               ),
                             ),
                             const SizedBox(
@@ -3862,43 +3682,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   UrlLauncher(context,
                                       'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                       .openMatrixToUrl();
-                                  // FluffyShare.share(
-                                  //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                  //   context,
-                                  // );
-                                  // VRouter.of(context).toSegments([
-                                  //   'rooms',
-                                  //   classDetailUi!.pangeaClassRoomId.toString()
-                                  // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                  // ]);
-                                  // VRouter.of(context).to(
-                                  //     'rooms/${routes["id"]}',
-                                  //     // queryParameters: {
-                                  //     //   "id": routes["id"].toString(),
-                                  //     // }
-                                  //     );
+
                                 } else {
                                   // String? get roomId => VRouter.of(context).pathParameters['roomid'];
                                   UrlLauncher(context,
                                       'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
                                       .openMatrixToUrl();
 
-                                  // FluffyShare.share(
-                                  //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                  //   context,
-                                  // );
-                                  // VRouter.of(context).toSegments([
-                                  //   'rooms',
-                                  //   classDetailUi!.pangeaClassRoomId.toString()
-                                  //   // routes["id"].toString()
-                                  //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                  // ]);
-                                  // VRouter.of(context).to(
-                                  //     'rooms/${routes1.toString()}',
-                                  //     // queryParameters: {
-                                  //     //   "id": routes1.toString(),
-                                  //     // }
-                                  //     );
+
                                 }
                               },
                               child: Container(
@@ -3977,7 +3768,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               flex: 0,
                               fit: FlexFit.loose,
                               child: MaterialButton(
-                                onPressed: () {},
+                                minWidth:80,
+                                  onPressed: () {},
                                 height: 40,
                                 color: Theme.of(context)
                                     .colorScheme
@@ -4192,10 +3984,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: Colors.white,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     fontSize: 12.0)
+
                                 ),
                               ),
                             ),
@@ -4203,29 +3992,31 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             Flexible(
                               flex: 0,
                               fit: FlexFit.tight,
-                              child: MaterialButton(
-                                onPressed: () {},
-                                height: 40,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        25.0)),
-                                child: Text(
-                                  "Delete Class",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: Colors.white,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     fontSize: 12.0)
+                              child: SizedBox(
+                                width: 120,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    print("hello");
+                                  },
+                                  height: 40,
+                                  minWidth: 120,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          25.0)),
+                                  child: Text(
+                                    "Delete Class",
+                                    style: TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
+                                  ),
                                 ),
                               ),
                             ),
@@ -4241,185 +4032,199 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                           MaterialButton(
-                               onPressed: () {},
-                               height: 40,
-                               color:
-                               Theme.of(context).colorScheme.onPrimary,
-                               shape: RoundedRectangleBorder(
-                                   borderRadius:
-                                   BorderRadius.circular(25.0)),
-                               child: Text(
-                                 "Class analytics",
-                                 style: TextStyle().copyWith(
-                                     color: Theme.of(context)
-                                         .textTheme
-                                         .bodyText1!
-                                         .color,
-                                     fontWeight: FontWeight.w400,
-                                     fontSize: 12),
-                                 // style: TextStyle(
-                                 //     color: Colors.white,
-                                 //     fontWeight: FontWeight.w400,
-                                 //     fontSize: 12.0)
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
+                                 onPressed: () {},
+                                 height: 40,
+                                 color:
+                                 Theme.of(context).colorScheme.onPrimary,
+                                 shape: RoundedRectangleBorder(
+                                     borderRadius:
+                                     BorderRadius.circular(25.0)),
+                                 child: Text(
+                                   "Class analytics",
+                                   style: TextStyle().copyWith(
+                                       color: Theme.of(context)
+                                           .textTheme
+                                           .bodyText1!
+                                           .color,
+                                       fontWeight: FontWeight.w400,
+                                       fontSize: 12),
+
+                                 ),
                                ),
-                             ),
+                           ),
                            SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Add students",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                          // style: TextStyle(
-                          //     color: Colors.white,
-                          //     fontWeight: FontWeight.w400,
-                          //     fontSize: 12.0)
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
+
                       ),
                     ),
-                           SizedBox(height: 10,),
-                           MaterialButton(
+                           ),
+                           const SizedBox(height: 10,),
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Find a language exchange",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                          // style: TextStyle(
-                          //     color: Colors.white,
-                          //     fontWeight: FontWeight.w400,
-                          //     fontSize: 12.0)
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
+
                       ),
                     ),
-                           SizedBox(height: 10,),
-                           MaterialButton(
+                           ),
+                           const SizedBox(height: 10,),
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Class permissions",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
-                           SizedBox(height: 10,),
-                           MaterialButton(
+                           ),
+                           const SizedBox(height: 10,),
+                           SizedBox(
+          width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Students permissions",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
-                           SizedBox(height: 10,),
-                           MaterialButton(
+                           ),
+                           const SizedBox(height: 10,),
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Class Info",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
-                           SizedBox(height: 10,),
-                           MaterialButton(
+                           ),
+                           const SizedBox(height: 10,),
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Payment Info",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
-                           SizedBox(height: 10,),
-                           MaterialButton(
-                      onPressed: () {},
+                           ),
+                           const SizedBox(height: 10,),
+                           SizedBox(
+          width:220,
+                             child: MaterialButton(
+                      onPressed: () {
+                        print("hello 123");
+                      },
                       height: 40,
+
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Delete Class",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                          // style: TextStyle(
-                          //     color: Colors.white,
-                          //     fontWeight: FontWeight.w400,
-                          //     fontSize: 12.0)
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
                       ),
                     ),
+                           ),
                   ],
                 ),
                         )
