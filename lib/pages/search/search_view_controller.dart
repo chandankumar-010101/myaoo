@@ -34,7 +34,7 @@ class SearchViewController extends GetxController {
         List temp = response.body["results"];
 
         loadData.addAll(temp);
-        classList.value = loadData.map((e) => Result.fromJson(e)).toList();
+        // classList.value = loadData.map((e) => Result.fromJson(e)).toList();
         log("list is $loadData");
 
         log("Page No. is ${pageNo.value}");
