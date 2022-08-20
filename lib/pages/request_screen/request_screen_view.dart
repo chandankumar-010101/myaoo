@@ -3768,7 +3768,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               flex: 0,
                               fit: FlexFit.loose,
                               child: MaterialButton(
-                                onPressed: () {},
+                                minWidth:80,
+                                  onPressed: () {},
                                 height: 40,
                                 color: Theme.of(context)
                                     .colorScheme
@@ -3991,25 +3992,31 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             Flexible(
                               flex: 0,
                               fit: FlexFit.tight,
-                              child: MaterialButton(
-                                onPressed: () {},
-                                height: 40,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        25.0)),
-                                child: Text(
-                                  "Delete Class",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12),
+                              child: SizedBox(
+                                width: 120,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    print("hello");
+                                  },
+                                  height: 40,
+                                  minWidth: 120,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          25.0)),
+                                  child: Text(
+                                    "Delete Class",
+                                    style: TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
+                                  ),
                                 ),
                               ),
                             ),
@@ -4025,172 +4032,199 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                           MaterialButton(
-                               onPressed: () {},
-                               height: 40,
-                               color:
-                               Theme.of(context).colorScheme.onPrimary,
-                               shape: RoundedRectangleBorder(
-                                   borderRadius:
-                                   BorderRadius.circular(25.0)),
-                               child: Text(
-                                 "Class analytics",
-                                 style: TextStyle().copyWith(
-                                     color: Theme.of(context)
-                                         .textTheme
-                                         .bodyText1!
-                                         .color,
-                                     fontWeight: FontWeight.w400,
-                                     fontSize: 12),
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
+                                 onPressed: () {},
+                                 height: 40,
+                                 color:
+                                 Theme.of(context).colorScheme.onPrimary,
+                                 shape: RoundedRectangleBorder(
+                                     borderRadius:
+                                     BorderRadius.circular(25.0)),
+                                 child: Text(
+                                   "Class analytics",
+                                   style: TextStyle().copyWith(
+                                       color: Theme.of(context)
+                                           .textTheme
+                                           .bodyText1!
+                                           .color,
+                                       fontWeight: FontWeight.w400,
+                                       fontSize: 12),
 
+                                 ),
                                ),
-                             ),
+                           ),
                            SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Add students",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
+                           ),
                            const SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Find a language exchange",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
+                           ),
                            const SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Class permissions",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
+                           ),
                            const SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+          width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Students permissions",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
+                           ),
                            const SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Class Info",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
+                           ),
                            const SizedBox(height: 10,),
-                           MaterialButton(
+                           SizedBox(
+                             width:220,
+                             child: MaterialButton(
                       onPressed: () {},
                       height: 40,
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Payment Info",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
 
                       ),
                     ),
+                           ),
                            const SizedBox(height: 10,),
-                           MaterialButton(
-                      onPressed: () {},
+                           SizedBox(
+          width:220,
+                             child: MaterialButton(
+                      onPressed: () {
+                        print("hello 123");
+                      },
                       height: 40,
+
                       color:
                       Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(25.0)),
+                              borderRadius:
+                              BorderRadius.circular(25.0)),
                       child: Text(
                           "Delete Class",
                           style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
                       ),
                     ),
+                           ),
                   ],
                 ),
                         )
