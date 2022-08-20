@@ -15,6 +15,8 @@ class SearchViewController extends GetxController {
   var pageNo = 1.obs;
   final box = GetStorage();
 
+  ScrollController controller = ScrollController();
+
   Future getClasses() async {
     log("URL is ${ApiUrls.class_list + "?p=${pageNo.value.toString()}&page_size=10"}");
     try {
@@ -32,6 +34,7 @@ class SearchViewController extends GetxController {
         List temp = response.body["results"];
 
         loadData.addAll(temp);
+        // classList.value = loadData.map((e) => Result.fromJson(e)).toList();
         log("list is $loadData");
 
         log("Page No. is ${pageNo.value}");
@@ -60,9 +63,25 @@ class SearchViewController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   //write or call your logic
+    //   //code will run when widget rendering complete
+    //   addItems();
+    // });
     super.onInit();
-    getClasses();
+    // getClasses(pageNo.value);
 
     log("------------");
+  }
+
+  addItems() async {
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.position.pixels) {
+        pageNo.value++;
+        log("Pagination Called with ${pageNo.value}");
+        getClasses(pageNo.value);
+      }
+    });
   }
 }
