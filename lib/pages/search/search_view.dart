@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -32,7 +31,8 @@ class _SearchViewState extends State<SearchView> {
   final searchController = Get.put(SearchViewController());
 
   var box = GetStorage();
-  String id="";
+  String id = "";
+
   userAgeDetails() async {
     await UserDetails.userAge();
   }
@@ -42,21 +42,24 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     userAgeDetails();
   }
-  Rx<bool> firstTime=true.obs;
+
+  Rx<bool> firstTime = true.obs;
+
   void addAgesAction() => VRouter.of(context).to('/user');
 
   void createInviteAction() => VRouter.of(context).to('/inviteScreen');
 
   void createNewClassAction() => VRouter.of(context).to('/addClass');
 
-  void createClassDetailsAction() => VRouter.of(context).to('/allclassDetails',queryParameters:{
-    "id":id,
-  } );
+  void createClassDetailsAction() =>
+      VRouter.of(context).to('/allclassDetails', queryParameters: {
+        "id": id,
+      });
 
   @override
   Widget build(BuildContext context) {
     // userAgeDetails();
-    searchController.getClasses();
+    searchController.getClasses(searchController.pageNo.value);
     int age = int.parse(box.read("age").toString());
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
@@ -494,6 +497,7 @@ class _SearchViewState extends State<SearchView> {
                             }
                             return Obx(() => !searchController.loading.value
                                 ? GridView.builder(
+                                    // controller: searchController.controller,
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(12),
                                     physics:
@@ -510,35 +514,28 @@ class _SearchViewState extends State<SearchView> {
                                     itemBuilder:
                                         (BuildContext context, int i) =>
                                             Material(
-                                             elevation: 15,
-                                             color: const Color(0xffF6F6F6),
-                                            borderRadius: BorderRadius.circular(16),
-
-                                       child: InkWell(
-                                        onTap: () async{
+                                      elevation: 15,
+                                      color: const Color(0xffF6F6F6),
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: InkWell(
+                                        onTap: () async {
                                           // createClassDetailsAction();
-                                            id= searchController
-                                                .classList[i]
-                                                .pangea_class_room_id
-                                                .toString();
+                                          id = searchController
+                                              .classList[i].pangea_class_room_id
+                                              .toString();
 
-                                            //createClassDetailsAction();
+                                          //createClassDetailsAction();
 
-                                            print("value of ${firstTime}");
+                                          print("value of ${firstTime}");
 
-                                            firstTime==true?VRouter.of(context).to(
-                                              'allclassDetails',
-                                              queryParameters: {
-                                                "id": id
-                                              }):VRouter.of(context).to(
-                                                '',
-                                                queryParameters: {
-                                                  "id": id
-                                                });
-                                            firstTime.value=false;
-                                            print("value of 2 ${firstTime}");
-
-
+                                          firstTime == true
+                                              ? VRouter.of(context).to(
+                                                  'allclassDetails',
+                                                  queryParameters: {"id": id})
+                                              : VRouter.of(context).to('',
+                                                  queryParameters: {"id": id});
+                                          firstTime.value = false;
+                                          print("value of 2 ${firstTime}");
                                         },
                                         borderRadius: BorderRadius.circular(16),
                                         child: Container(

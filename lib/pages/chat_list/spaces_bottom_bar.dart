@@ -1,14 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_list/spaces_drawer.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 const kSpacesBottomBarHeight = 56.0;
 
