@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pangea_choreographer/choreographer/config/colors.dart';
 
 class TranslationFinished extends StatelessWidget {
   const TranslationFinished({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class TranslationFinished extends StatelessWidget {
           padding: MaterialStateProperty.all(
               const EdgeInsets.symmetric(horizontal: 7)),
           backgroundColor: MaterialStateProperty.all(
-            Colors.white,
+            ChoreoColor.containerBG(context),
           ),
           textStyle: MaterialStateProperty.all(
             Theme.of(context).textTheme.bodyMedium,
@@ -38,8 +39,8 @@ class TranslationFinished extends StatelessWidget {
           )),
         ),
         onPressed: null,
-        child: const Text('Translation done',
-            style: TextStyle(color: Colors.black)),
+        child: Text('Translation done',
+            style: TextStyle(color: ChoreoColor.textColor(context))),
       ),
     );
   }

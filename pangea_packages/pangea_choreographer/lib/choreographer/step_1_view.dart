@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pangea_choreographer/choreographer/config/colors.dart';
 
 import '../pangea_choreographer.dart';
 import 'it_trg_send_button.dart';
@@ -30,7 +31,6 @@ class Step1View extends StatelessWidget {
           Text(
             controller.step1!.feedbackText,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(
             height: 15,
@@ -77,10 +77,7 @@ class Step1View extends StatelessWidget {
           padding: MaterialStateProperty.all(
               const EdgeInsets.symmetric(horizontal: 7)),
           backgroundColor: MaterialStateProperty.all(
-            Colors.white,
-          ),
-          textStyle: MaterialStateProperty.all(
-            Theme.of(context).textTheme.bodyMedium,
+            ChoreoColor.containerBG(context),
           ),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
@@ -89,7 +86,10 @@ class Step1View extends StatelessWidget {
         onPressed: () {
           onPress();
         },
-        child: Text(text, style: TextStyle(color: Colors.black)),
+        child: Text(
+          text,
+          style: TextStyle(color: ChoreoColor.textColor(context)),
+        ),
       ),
     );
   }
@@ -121,12 +121,11 @@ class Step1View extends StatelessWidget {
                           padding: const EdgeInsets.all(5),
                           margin: const EdgeInsets.only(left: 2, right: 2),
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: ChoreoColor.containerBG(context),
                               borderRadius: BorderRadius.circular(5)),
                           child: Center(
                               child: Text(
                             e.token!,
-                            style: Theme.of(context).textTheme.bodyMedium,
                           )),
                         ),
                       ],

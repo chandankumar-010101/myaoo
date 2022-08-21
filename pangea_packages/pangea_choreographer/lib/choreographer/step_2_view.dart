@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pangea_choreographer/choreographer/config/colors.dart';
 import 'package:pangea_choreographer/choreographer/widgets/error_title.dart';
 
 import 'widgets/it_shimmer.dart';
@@ -107,7 +108,7 @@ class Step2View extends StatelessWidget {
             fit: BoxFit.contain,
             color: controller.step2!.selectedTranslations!.isEmpty ||
                     controller.step2!.isLoading
-                ? const Color.fromARGB(255, 211, 211, 211)
+                ? ChoreoColor.disabled(context)
                 : Theme.of(context).primaryColor,
           )),
     );
@@ -138,7 +139,7 @@ class Step2View extends StatelessWidget {
           padding: MaterialStateProperty.all(
               const EdgeInsets.symmetric(horizontal: 7)),
           backgroundColor: MaterialStateProperty.all(
-            Colors.white,
+            Theme.of(context).colorScheme.surface,
           ),
           textStyle: MaterialStateProperty.all(
             Theme.of(context).textTheme.bodyMedium,
@@ -150,7 +151,10 @@ class Step2View extends StatelessWidget {
         onPressed: () {
           controller.step2!.selectTranslation(continuance);
         },
-        child: Text(continuance.text!, style: TextStyle(color: Colors.black)),
+        child: Text(
+          continuance.text!,
+          style: TextStyle(color: ChoreoColor.textColor(context)),
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pangea_choreographer/choreographer/constants/lang_list.dart';
 
 import '../../pangea_choreographer.dart';
 import '../Repo/chreo_repo.dart';
@@ -24,9 +25,14 @@ class Step1Controller extends LoaderState {
         ..room_id = controller.state!.roomId
         ..text = controller.originalText;
       _choreoResponse = await ChoreoRepo.chereoInit(initCall);
+      if (_choreoResponse!.payload_id != null) {
+        controller.state!.payLoadIds.add(_choreoResponse!.payload_id!);
+      }
       if (_choreoResponse!.route == ChoreoRoute.SEND) {
         controller.send();
       } else {
+        controller.lang!
+            .changeSrcLang(LangList.byLangCode(_choreoResponse!.detectedLang!));
         controller.state!.changeRoute(ChoreoRoute.STEP1);
       }
     } catch (err) {
