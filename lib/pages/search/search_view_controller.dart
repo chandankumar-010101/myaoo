@@ -80,7 +80,7 @@ class SearchViewController extends GetxController {
       if (controller.position.maxScrollExtent == controller.position.pixels) {
         pageNo.value++;
         log("Pagination Called with ${pageNo.value}");
-        getClasses(pageNo.value);
+        getClasses();
       }
     });
   }

@@ -24,6 +24,7 @@ class ClassDetails {
     if (response.statusCode == 200) {
       log("200" + response.body);
       ClassDetailUi p = classDetailUiFromJson(response.body);
+
       return p;
     } else if (response.statusCode == 400) {
       log("400" + response.body);

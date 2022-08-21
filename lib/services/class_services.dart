@@ -2,16 +2,22 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/create_class_model.dart';
+import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
 import '../utils/api_urls.dart';
 
 import 'package:http/http.dart' as http;
 
 class ClassServices {
+  static GetStorage box = GetStorage();
   static Future<void> createClass({
+    required BuildContext context,
     required String roomId,
     required String className,
     required String city,
@@ -34,7 +40,6 @@ class ClassServices {
     required bool oneToOneChatExchange,
     required String schoolName,
   }) async {
-    final box = GetStorage();
     final String token = box.read("access");
     if (kDebugMode) {
       if (token.isEmpty) {
@@ -61,7 +66,6 @@ class ClassServices {
             ).toJson())
         .then((value) async {
       if (value.statusCode == 201 || value.statusCode == 200) {
-        log("Status Code is  ${value.statusCode} and ${value.body} ");
         final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
         http
             .post(
@@ -85,7 +89,19 @@ class ClassServices {
         )
             .then((value) {
           if (value.statusCode == 201 || value.statusCode == 200) {
-            log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
+            box.remove('className');
+            box.remove('cityName');
+            box.remove('countryName');
+            box.remove('languageLevel');
+            box.remove('scoolName');
+            box.remove('targetLanguage');
+            box.remove('sourceLanage');
+            box.remove('publicGroup');
+            box.remove('openEnrollment');
+            box.remove('openToExchange');
+
+            print("Class Created Successfully");
+            context.vRouter.to("/invite_students");
           } else {
             log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
           }
@@ -103,16 +119,141 @@ class ClassServices {
   static Future<void> deleteClass({
     required String roomId,
   }) async {
-    final box = GetStorage();
     final token = box.read("access");
-    if(token != null){
-      try{
-
-      }catch(e){
+    if (token != null) {
+      try {} catch (e) {
         print("Error: $e");
       }
-    }else{
+    } else {
       print("JWT Token is null");
     }
+  }
+
+  static Future<bool?> updateClassPermission({
+    required String classId,
+    required String isPublic,
+    required String openEnrollment,
+    required String openToExchange,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      print("JWT Token is null");
+      Fluttertoast.showToast(
+          msg: "Token expired please logout and login again");
+      return null;
+    }
+    http
+        .put(
+      Uri.parse(ApiUrls.updateClassPermissions + classId),
+      headers: {
+        "Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          'is_public': isPublic,
+          'is_open_enrollment': openEnrollment,
+          'is_open_exchange': openToExchange,
+        },
+      ),
+    )
+        .then((value) {
+      Fluttertoast.showToast(msg: "Permissions updated successfully");
+      return true;
+    }).catchError((e) {
+      print("Error accured: $e");
+    });
+  }
+
+  static Future<bool?> updateStudentPermission({
+    required String classId,
+    required String oneToOneChatsWithinClass,
+    required String oneToOneChatsWithinExchanges,
+    required String createRooms,
+    required String createRoomsInExchanges,
+    required String createStories,
+    required String shareVideos,
+    required String sharePhotos,
+    required String shareFiles,
+    required String shareLocation,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      Fluttertoast.showToast(
+          msg: "Token expired please logout and login again");
+      return null;
+    }
+    http
+        .put(
+      Uri.parse(ApiUrls.updateClassPermissions + classId),
+      headers: {
+        "Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          'one_to_one_chat_class': oneToOneChatsWithinClass,
+          'one_to_one_chat_exchange': oneToOneChatsWithinExchanges,
+          'is_create_rooms': createRooms,
+          'is_create_rooms_exchange': createRoomsInExchanges,
+          'is_share_video': shareVideos,
+          'is_share_photo': sharePhotos,
+          'is_share_files': shareFiles,
+          'is_share_location': shareLocation,
+          'is_create_stories': createStories,
+        },
+      ),
+    )
+        .then((value) {
+      Fluttertoast.showToast(msg: "Permissions updated successfully");
+      return true;
+    }).catchError((e) {
+      print("Error accured: $e");
+    });
+  }
+
+  static Future<bool?> updateClassDetails({
+    required String roomId,
+   // required String className,
+    required String city,
+    required String country,
+    //required String dominantLanguage,
+    //required String targetLanguage,
+    required String desc,
+    required int languageLevel,
+    required String schoolName,
+  }) async {
+    final String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      Fluttertoast.showToast(
+          msg: "Token expired please logout and login again");
+      return null;
+    }
+    http.put(Uri.parse(ApiUrls.updateClassDetail + roomId),
+            headers: {
+              "Authorization": "Bearer $token",
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+        body: jsonEncode(
+          <String, String>{
+            'city': city,
+            'country': country,
+            'language_level': languageLevel.toString(),
+            'description': desc,
+            'school_name': schoolName,
+            'pangea_class_room_id': roomId,
+          }),)
+        .then((value) {
+       Fluttertoast.showToast(msg: "Class Details updated successfully");
+      return true;
+    }).catchError((e) {
+      print(e);
+    });
   }
 }
