@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/create_class_model.dart';
@@ -14,6 +15,7 @@ import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
 class ClassServices {
+  static GetStorage box = GetStorage();
   static Future<void> createClass({
     required BuildContext context,
     required String roomId,
@@ -38,7 +40,6 @@ class ClassServices {
     required bool oneToOneChatExchange,
     required String schoolName,
   }) async {
-    final box = GetStorage();
     final String token = box.read("access");
     if (kDebugMode) {
       if (token.isEmpty) {
@@ -66,7 +67,8 @@ class ClassServices {
         .then((value) async {
       if (value.statusCode == 201 || value.statusCode == 200) {
         final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-        http.post(
+        http
+            .post(
           Uri.parse(ApiUrls.addClassPermissions),
           headers: {"Authorization": "Bearer $token"},
           body: AddClassPermissionModel(
@@ -117,44 +119,89 @@ class ClassServices {
   static Future<void> deleteClass({
     required String roomId,
   }) async {
-    final box = GetStorage();
     final token = box.read("access");
-    if(token != null){
-      try{
-
-      }catch(e){
+    if (token != null) {
+      try {} catch (e) {
         print("Error: $e");
       }
-    }else{
+    } else {
       print("JWT Token is null");
     }
   }
 
-  static Future<void> updateClassPermission()async{
-    final box = GetStorage();
+  static Future<bool?> updateClassPermission({
+    required String classId,
+    required String isPublic,
+    required String openEnrollment,
+    required String openToExchange,
+  }) async {
     String token = box.read("access");
-    if(token.isEmpty){
+    if (token.isEmpty) {
       print("JWT Token is null");
       Fluttertoast.showToast(
           msg: "Token expired please logout and login again");
-      return;
+      return null;
     }
-
-    http
-        .put(Uri.parse(ApiUrls.updateClassPermissions),
-        headers: {"Authorization": "Bearer $token"},
-        body: AddClassPermissionModel(
-
-          isPublic: true.toString()
-        ).toJson()).then((value) {
-
-    }).catchError((e){
-
+    http.put(
+      Uri.parse(ApiUrls.updateClassPermissions + classId),
+      headers: {"Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',},
+      body: jsonEncode(
+        <String, String>{
+          'is_public': isPublic,
+          'is_open_enrollment':openEnrollment,
+          'is_open_exchange':openToExchange,
+        },
+      ),
+    ).then((value) {
+      return true;
+    }).catchError((e) {
+      print("Error accured: $e");
     });
-
-
   }
-  static Future<void> updateClassDetails() async{
 
+  static Future<bool?> updateStudentPermission({
+    required String classId,
+   required String oneToOneChatsWithinClass,
+    required String oneToOneChatsWithinExchanges,
+    required String createRooms,
+   required String createRoomsInExchanges,
+   required String createStories,
+   required String shareVideos,
+   required String sharePhotos,
+   required String shareFiles,
+   required String shareLocation,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      print("JWT Token is null");
+      Fluttertoast.showToast(
+          msg: "Token expired please logout and login again");
+      return null;
+    }
+    http.put(
+      Uri.parse(ApiUrls.updateClassPermissions + classId),
+      headers: {"Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',},
+      body: jsonEncode(
+        <String, String>{
+          'one_to_one_chat_class': oneToOneChatsWithinClass,
+          'one_to_one_chat_exchange':oneToOneChatsWithinExchanges,
+          'is_create_rooms':createRooms,
+          'is_create_rooms_exchange':createRoomsInExchanges,
+          'is_share_video':shareVideos,
+          'is_share_photo':sharePhotos,
+          'is_share_files':shareFiles,
+          'is_share_location':shareLocation,
+          'is_create_stories':createStories,
+        },
+      ),
+    ).then((value) {
+      return true;
+    }).catchError((e) {
+      print("Error accured: $e");
+    });
   }
+
+  static Future<void> updateClassDetails() async {}
 }

@@ -2728,16 +2728,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       if(id.isEmpty){
                                         print("Unable to find class id");
                                       }else{
-                                        box.write("public", classDetailUi!.permissions!.isPublic);
-                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
-                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
-                                        box.write("public", classDetailUi!.permissions!.isPublic);
-                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
-                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
-                                        box.write("public", classDetailUi!.permissions!.isPublic);
-                                        box.write("openEnrollment", classDetailUi!.permissions!.isOpenEnrollment);
-                                        box.write("openExchange", classDetailUi!.permissions!.isOpenExchange);
-
+                                        box.write("oneToOneClass", classDetailUi!.permissions!.oneToOneChatClass);
+                                        box.write("oneToOneExchange", classDetailUi!.permissions!.oneToOneChatExchange);
+                                        box.write("createRoom", classDetailUi!.permissions!.isCreateRooms);
+                                        box.write("createRoomExchange", classDetailUi!.permissions!.isCreateRoomsExchange);
+                                        box.write("createStories", classDetailUi!.permissions!.isCreateStories);
+                                        box.write("shareVideo", classDetailUi!.permissions!.isShareVideo);
+                                        box.write("sharePhotos", classDetailUi!.permissions!.isSharePhoto);
+                                        box.write("shareFiles", classDetailUi!.permissions!.isShareFiles);
+                                        box.write("shareLocation", classDetailUi!.permissions!.isShareLocation);
                                         context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                                       }
                                     },
