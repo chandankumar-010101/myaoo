@@ -8,11 +8,13 @@ class ChoreoState {
   bool _isEditing = true;
   String? _roomId;
   String get userId => 0.toString();
+  List<int> payLoadIds = [];
   String currentRoute = ChoreoRoute.INITAL_LOADING;
   void reset() {
     this.currentRoute = ChoreoRoute.INITAL_LOADING;
   }
 
+  get classId => null;
   get roomId => _roomId;
   void setRoomId(String? roomId) {
     _roomId = roomId ?? '';
@@ -42,7 +44,7 @@ class ChoreoState {
 
   void clearState() {
     this.currentRoute = ChoreoRoute.INITAL_LOADING;
-
+    payLoadIds = [];
     startEditing();
     closeBar();
   }

@@ -14,13 +14,17 @@ class Step2Controller extends LoaderState {
   List<Continuances>? selectedTranslations = [];
 
   // ignore: non_constant_identifier_names
-  int? _translation_id;
+  List<int> _translationIds = [];
   bool _isTranslationDone = false;
   List<RemovedTranslation> removedTranslations = [];
   Step2Controller(this.controller);
   void initialize() {
     controller.state!.changeRoute(ChoreoRoute.STEP2);
     _firstTranslation();
+  }
+
+  int get translationId {
+    return _translationIds.last;
   }
 
   void _firstTranslation() {
@@ -30,12 +34,13 @@ class Step2Controller extends LoaderState {
       ..src_lang = controller.lang!.srcLang!.langCode
       ..text = controller.textController!.text
       ..tgt_lang = controller.lang!.trgLang!.langCode
+      ..room_id = controller.state!.roomId
+      ..class_id = controller.state!.classId
       ..user_id = controller.state!.userId;
     ChoreoRepo.firstCall(initialTextModel).then((res) {
+      _addPayloadId(res);
       stopLoading();
-
-      _translation_id = res.translationId;
-
+      _translationIds.add(res.translationId!);
       try {
         availTranslations!.add(res.continuances!);
       } catch (err) {
@@ -60,9 +65,14 @@ class Step2Controller extends LoaderState {
     SubsequentTextModel subSeqText = SubsequentTextModel()
       ..user_id = controller.state!.userId
       ..next_word_index = selectedTranslations!.last.index
-      ..translation_id = _translation_id;
+      ..room_id = controller.state!.roomId
+      ..translation_id = translationId;
     ChoreoRepo.subsequentCall(subSeqText).then((res) {
       stopLoading();
+      _addPayloadId(res);
+      if (res.translationId != null) {
+        _translationIds.add(res.translationId!);
+      }
       _isTranslationDone = res.isFinal;
       if (!res.isFinal) {
         availTranslations!.add(res.continuances!);
@@ -89,7 +99,7 @@ class Step2Controller extends LoaderState {
   void removeLastSelected() {
     if (!isLoading) {
       controller.errorService!.resetError();
-
+      _translationIds.removeLast();
       if (selectedTranslations!.length > 0 &&
           availTranslations!.last.isNotEmpty) {
         if (!_isTranslationDone) {
@@ -115,9 +125,16 @@ class Step2Controller extends LoaderState {
     return text;
   }
 
+  void _addPayloadId(ReceiveTextModel res) {
+    if (res.payload_id != null) {
+      controller.state!.payLoadIds.add(res.payload_id!);
+    }
+  }
+
   void clearState() {
     _isTranslationDone = false;
     availTranslations = [[]];
     selectedTranslations = [];
+    _translationIds = [];
   }
 }

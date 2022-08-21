@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'config/colors.dart';
 import 'controller/choreo_controller.dart';
 import 'widgets/it_dropdown/it_dropdown.dart';
 
@@ -12,7 +13,7 @@ class ItTrgSendButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ChoreoColor.containerBG(context),
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(10),
@@ -45,7 +46,7 @@ class ItTrgSendButton extends StatelessWidget {
                   padding: MaterialStateProperty.all(
                       const EdgeInsets.symmetric(horizontal: 7)),
                   backgroundColor: MaterialStateProperty.all(
-                    Colors.white,
+                    Colors.transparent,
                   ),
                   textStyle: MaterialStateProperty.all(
                     Theme.of(context).textTheme.bodyMedium,
@@ -59,7 +60,12 @@ class ItTrgSendButton extends StatelessWidget {
                     : () {
                         controller.send();
                       },
-                child: const Text('Send'),
+                child: Text('Send',
+                    style: TextStyle(
+                      color: controller.step2!.selectedTranslations!.isEmpty
+                          ? ChoreoColor.disabled(context)
+                          : ChoreoColor.textColor(context),
+                    )),
               ),
             ),
             Padding(

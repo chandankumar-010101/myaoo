@@ -3,7 +3,7 @@ class ReceiveTextModel {
   List<Continuances>? continuances;
   bool isFinal = false;
   int? translationId;
-
+  int? payload_id;
   ReceiveTextModel({this.translation, this.continuances, this.translationId});
 
   fromJson(Map<String, dynamic> json) {
@@ -17,6 +17,7 @@ class ReceiveTextModel {
       }
     }
     translationId = json['translation_id'];
+    payload_id = json['payload_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,6 +27,7 @@ class ReceiveTextModel {
       data['continuances'] = this.continuances!.map((v) => v.toJson()).toList();
     }
     data['translation_id'] = this.translationId;
+    data['payload_id'] = payload_id;
     return data;
   }
 }
