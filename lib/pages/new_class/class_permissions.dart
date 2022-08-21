@@ -34,9 +34,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
   @override
   void initState() {
     super.initState();
-    box.read("public") == null
-        ? publicGroup = false
-        : publicGroup = box.read("public");
+    box.read("public") == null? publicGroup = false : publicGroup = box.read("public");
     box.read("openEnrollment") == null
         ? openEnrollment = false
         : openEnrollment = box.read("openEnrollment");

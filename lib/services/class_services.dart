@@ -142,18 +142,23 @@ class ClassServices {
           msg: "Token expired please logout and login again");
       return null;
     }
-    http.put(
+    http
+        .put(
       Uri.parse(ApiUrls.updateClassPermissions + classId),
-      headers: {"Authorization": "Bearer $token",
-        'Content-Type': 'application/json; charset=UTF-8',},
+      headers: {
+        "Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
       body: jsonEncode(
         <String, String>{
           'is_public': isPublic,
-          'is_open_enrollment':openEnrollment,
-          'is_open_exchange':openToExchange,
+          'is_open_enrollment': openEnrollment,
+          'is_open_exchange': openToExchange,
         },
       ),
-    ).then((value) {
+    )
+        .then((value) {
+      Fluttertoast.showToast(msg: "Permissions updated successfully");
       return true;
     }).catchError((e) {
       print("Error accured: $e");
@@ -162,46 +167,93 @@ class ClassServices {
 
   static Future<bool?> updateStudentPermission({
     required String classId,
-   required String oneToOneChatsWithinClass,
+    required String oneToOneChatsWithinClass,
     required String oneToOneChatsWithinExchanges,
     required String createRooms,
-   required String createRoomsInExchanges,
-   required String createStories,
-   required String shareVideos,
-   required String sharePhotos,
-   required String shareFiles,
-   required String shareLocation,
+    required String createRoomsInExchanges,
+    required String createStories,
+    required String shareVideos,
+    required String sharePhotos,
+    required String shareFiles,
+    required String shareLocation,
   }) async {
     String token = box.read("access");
     if (token.isEmpty) {
-      print("JWT Token is null");
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
       Fluttertoast.showToast(
           msg: "Token expired please logout and login again");
       return null;
     }
-    http.put(
+    http
+        .put(
       Uri.parse(ApiUrls.updateClassPermissions + classId),
-      headers: {"Authorization": "Bearer $token",
-        'Content-Type': 'application/json; charset=UTF-8',},
+      headers: {
+        "Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
       body: jsonEncode(
         <String, String>{
           'one_to_one_chat_class': oneToOneChatsWithinClass,
-          'one_to_one_chat_exchange':oneToOneChatsWithinExchanges,
-          'is_create_rooms':createRooms,
-          'is_create_rooms_exchange':createRoomsInExchanges,
-          'is_share_video':shareVideos,
-          'is_share_photo':sharePhotos,
-          'is_share_files':shareFiles,
-          'is_share_location':shareLocation,
-          'is_create_stories':createStories,
+          'one_to_one_chat_exchange': oneToOneChatsWithinExchanges,
+          'is_create_rooms': createRooms,
+          'is_create_rooms_exchange': createRoomsInExchanges,
+          'is_share_video': shareVideos,
+          'is_share_photo': sharePhotos,
+          'is_share_files': shareFiles,
+          'is_share_location': shareLocation,
+          'is_create_stories': createStories,
         },
       ),
-    ).then((value) {
+    )
+        .then((value) {
+      Fluttertoast.showToast(msg: "Permissions updated successfully");
       return true;
     }).catchError((e) {
       print("Error accured: $e");
     });
   }
 
-  static Future<void> updateClassDetails() async {}
+  static Future<bool?> updateClassDetails({
+    required String roomId,
+   // required String className,
+    required String city,
+    required String country,
+    //required String dominantLanguage,
+    //required String targetLanguage,
+    required String desc,
+    required int languageLevel,
+    required String schoolName,
+  }) async {
+    final String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      Fluttertoast.showToast(
+          msg: "Token expired please logout and login again");
+      return null;
+    }
+    http.put(Uri.parse(ApiUrls.updateClassDetail + roomId),
+            headers: {
+              "Authorization": "Bearer $token",
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+        body: jsonEncode(
+          <String, String>{
+            'city': city,
+            'country': country,
+            'language_level': languageLevel.toString(),
+            'description': desc,
+            'school_name': schoolName,
+            'pangea_class_room_id': roomId,
+          }),)
+        .then((value) {
+       Fluttertoast.showToast(msg: "Class Details updated successfully");
+      return true;
+    }).catchError((e) {
+      print(e);
+    });
+  }
 }
