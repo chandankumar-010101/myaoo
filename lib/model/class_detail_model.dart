@@ -29,6 +29,7 @@ class ClassDetailUi {
     this.rating,
     this.profilePic,
     this.totalStudent,
+    this.flags,
   });
 
   int? id;
@@ -49,6 +50,7 @@ class ClassDetailUi {
   int? rating;
   String? profilePic;
   int? totalStudent;
+  List<Flag>? flags;
 
   factory ClassDetailUi.fromJson(Map<String, dynamic> json) => ClassDetailUi(
         id: json["id"] == null ? null : json["id"],
@@ -72,6 +74,7 @@ class ClassDetailUi {
         permissions: json["permissions"] == null
             ? null
             : Permissions.fromJson(json["permissions"]),
+        flags: List<Flag>.from(json["flags"].map((x) => Flag.fromJson(x))),
         classAuthor: json["class_author"] == null ? null : json["class_author"],
         classAuthorId:
             json["class_author_id"] == null ? null : json["class_author_id"],
@@ -101,9 +104,36 @@ class ClassDetailUi {
         "rating": rating == null ? null : rating,
         "profile_pic": profilePic == null ? null : profilePic,
         "total_student": totalStudent == null ? null : totalStudent,
+        "flags": List<dynamic>.from(flags!.map((x) => x.toJson())),
       };
 }
+class Flag {
+  Flag({
+    this.id,
+    this.languageName,
+    this.languageType,
+    this.languageFlag,
+  });
 
+  int? id;
+  String? languageName;
+  int? languageType;
+  String? languageFlag;
+
+  factory Flag.fromJson(Map<String, dynamic> json) => Flag(
+    id: json["id"],
+    languageName: json["language_name"],
+    languageType: json["language_type"],
+    languageFlag: json["language_flag"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "language_name": languageName,
+    "language_type": languageType,
+    "language_flag": languageFlag,
+  };
+}
 class Permissions {
   Permissions({
     this.pangeaClass,

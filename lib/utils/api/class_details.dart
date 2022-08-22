@@ -21,8 +21,12 @@ class ClassDetails {
         "Authorization": "Bearer ${box.read("access")}",
       },
     );
+    print(response.body);
+    log(response.body);
+    log(response.body);
+    log(response.body);
     if (response.statusCode == 200) {
-      log("200" + response.body);
+
       ClassDetailUi p = classDetailUiFromJson(response.body);
 
       return p;
