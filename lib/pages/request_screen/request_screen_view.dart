@@ -1,6 +1,9 @@
 import 'dart:developer';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/config/app_config.dart';
@@ -9,6 +12,10 @@ import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/class_detail_model.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+
+import '../../services/class_services.dart';
+import '../../widgets/matrix.dart';
 
 class RequestScreenView extends StatefulWidget {
   RequestScreenView({Key? key}) : super(key: key);
@@ -3359,7 +3366,40 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                         flex: 0,
                                                         fit: FlexFit.tight,
                                                         child: MaterialButton(
-                                                          onPressed: () {},
+                                                          onPressed: () async {
+                                                            final String id = context.vRouter.queryParameters['id'] ??"";
+                                                            final confirmed = await showOkCancelAlertDialog(
+                                                              useRootNavigator: false,
+                                                              context: context,
+                                                              title: L10n.of(context)!.areYouSure,
+                                                              okLabel: L10n.of(context)!.ok,
+                                                              cancelLabel: L10n.of(context)!.cancel,
+                                                            );
+                                                            if (confirmed == OkCancelResult.ok) {
+                                                              final room = Matrix.of(context).client.getRoomById(id);
+                                                              if(room != null){
+                                                                final success = await showFutureLoadingDialog(
+                                                                    context: context, future: () => room.leave());
+                                                                if (success.error == null) {
+                                                                  final box = GetStorage();
+                                                                  String token = box.read("access");
+                                                                  if (kDebugMode) {
+                                                                    print(token);
+                                                                  }
+                                                                  ClassServices.deleteClass(roomId: room.id);
+                                                                  if (kDebugMode) {
+                                                                    print(room.id);
+                                                                  }
+
+                                                                  VRouter.of(context).to('/rooms');
+                                                                }
+                                                              }else{
+                                                                print("room is null");
+                                                              }
+
+
+                                                            }
+                                                          },
                                                           height: 40,
                                                           color:
                                                               Theme.of(context)
