@@ -693,7 +693,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                       oneToOneChatsWithinExchanges: oneToOneChatsWithinExchanges.toString(),
                                       createRooms: createRooms.toString(),
                                       shareVideos: shareVideos.toString(),
-                                      shareLocation: shareLocation.toString(),
+                                      shareLocation: shareLocation.toString(), context: context,
                                     ),
                                   );
                                   if (result != null) {

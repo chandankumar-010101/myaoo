@@ -1731,7 +1731,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             ClassServices
                                                 .deleteClass(
                                                 roomId: room
-                                                    .id);
+                                                    .id, context: context);
                                             if (kDebugMode) {
                                               print(room.id);
                                             }
@@ -3402,6 +3402,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                 }
                                                 ClassServices
                                                     .deleteClass(
+                                                    context: context,
                                                     roomId:
                                                     room.id);
                                                 if (kDebugMode) {
@@ -4953,6 +4954,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             }
                                             ClassServices
                                                 .deleteClass(
+                                                context: context,
                                                 roomId:
                                                 room.id);
                                             if (kDebugMode) {
@@ -5529,6 +5531,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       }
                                       ClassServices
                                           .deleteClass(
+                                          context: context,
                                           roomId:
                                           room.id);
                                       if (kDebugMode) {
