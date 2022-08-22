@@ -34,6 +34,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final routes = VRouter.of(context).queryParameters;
     if (routes["id"] != null) {
       classDetailUi = await classDetails.updateUserAge(routes["id"]);
+
     } else {
       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
       classDetailUi = await classDetails
@@ -386,6 +387,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.start,
                                   children: [
+
                                     Text(
                                       "Source Language",
                                       style: TextStyle().copyWith(
@@ -434,6 +436,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                      children:[
+                                        SizedBox(
+                              width:20,
+                              height:20,
+                                        child: Image.network("https://staging.api.pangea.chat/media/flags-png/km.png")),
+
+                                      ]
+                                  ),
                                   Text(
                                     "${classDetailUi?.dominantLanguage}",
                                     style: TextStyle().copyWith(
@@ -459,18 +470,29 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   const  SizedBox(
                                     width: 10,
                                   ),
-                                  Text(
-                                    "${classDetailUi?.targetLanguage}",
 
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14),
+                                  Row(
+                                      children:[
+                                        SizedBox(
+                                            width:20,
+                                            height:20,
+                                            child: Image.network("https://staging.api.pangea.chat/media/flags-png/en.png")),
+                                        
+                                        Text(
+                                          "${classDetailUi?.targetLanguage}",
 
+                                          style: TextStyle().copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .color,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14),
+
+                                        ),
+                                      ]
                                   ),
+
                                 ],
                               )
                             ],
@@ -974,97 +996,132 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisAlignment:
                         MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            height: 40,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimary,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    25.0)),
-                            child: Text(
-                              "Request an Exchange",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                              // style: TextStyle(
-                              //     color: Colors.white,
-                              //     fontWeight: FontWeight.w400,
-                              //     fontSize: 12.0)
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {},
+                                child: Text(
+                                    "Request an Exchange",
+                                    style: TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
+                              ),
                             ),
-                          ),
+                          ),),
+                          // MaterialButton(
+                          //   onPressed: () {},
+                          //   height: 40,
+                          //   color: Theme.of(context)
+                          //       .colorScheme
+                          //       .onPrimary,
+                          //   shape: RoundedRectangleBorder(
+                          //       borderRadius:
+                          //       BorderRadius.circular(
+                          //           25.0)),
+                          //   child: Text(
+                          //     "Request an Exchange",
+                          //     style: TextStyle().copyWith(
+                          //         color: Theme.of(context)
+                          //             .textTheme
+                          //             .bodyText1!
+                          //             .color,
+                          //         fontWeight: FontWeight.w400,
+                          //         fontSize: 12),
+                          //     // style: TextStyle(
+                          //     //     color: Colors.white,
+                          //     //     fontWeight: FontWeight.w400,
+                          //     //     fontSize: 12.0)
+                          //   ),
+                          // ),
                           const SizedBox(
                             width: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              final routes =
-                                  VRouter.of(context)
-                                      .queryParameters;
-                              final routes1 = VRouter.of(
-                                  context)
-                                  .pathParameters['roomid'];
-                              print(classDetailUi!
-                                  .classAuthorId
-                                  .toString());
-                              print(classDetailUi!.classAuthor
-                                  .toString());
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  final routes =
+                                      VRouter
+                                          .of(context)
+                                          .queryParameters;
+                                  final routes1 = VRouter
+                                      .of(
+                                      context)
+                                      .pathParameters['roomid'];
+                                  print(classDetailUi!
+                                      .classAuthorId
+                                      .toString());
+                                  print(classDetailUi!.classAuthor
+                                      .toString());
 
-                              if (routes["id"] != null) {
-                                UrlLauncher(context,
-                                    'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                                    .openMatrixToUrl();
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes["id"]}',
-                                //     // queryParameters: {
-                                //     //   "id": routes["id"].toString(),
-                                //     // }
-                                //     );
-                              } else {
-                                // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                                UrlLauncher(context,
-                                    'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                                    .openMatrixToUrl();
+                                  if (routes["id"] != null) {
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  } else {
+                                    // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  }
 
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                //   // routes["id"].toString()
-                                //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes1.toString()}',
-                                //     // queryParameters: {
-                                //     //   "id": routes1.toString(),
-                                //     // }
-                                //     );
-                              }
-                            },
-                            child: Container(
-                              height: 40,
-                              padding:
-                              const EdgeInsets.symmetric(
-                                  horizontal: 40),
-                              child: Center(
+                                },
                                 child: Text(
                                   "Message ${classDetailUi?.classAuthor}",
                                   style: TextStyle().copyWith(
@@ -1072,26 +1129,101 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .textTheme
                                           .bodyText1!
                                           .color,
-                                      fontWeight:
-                                      FontWeight.w400,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: AppConfig.violetColor,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     fontSize: 12.0),
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      25.0),
-                                  border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      width: 2.0)),
-                            ),
-                          )
+                            ),),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     final routes =
+                          //         VRouter.of(context)
+                          //             .queryParameters;
+                          //     final routes1 = VRouter.of(
+                          //         context)
+                          //         .pathParameters['roomid'];
+                          //     print(classDetailUi!
+                          //         .classAuthorId
+                          //         .toString());
+                          //     print(classDetailUi!.classAuthor
+                          //         .toString());
+                          //
+                          //     if (routes["id"] != null) {
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes["id"]}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes["id"].toString(),
+                          //       //     // }
+                          //       //     );
+                          //     } else {
+                          //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       //   // routes["id"].toString()
+                          //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes1.toString()}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes1.toString(),
+                          //       //     // }
+                          //       //     );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     height: 40,
+                          //     padding:
+                          //     const EdgeInsets.symmetric(
+                          //         horizontal: 40),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "Message ${classDetailUi?.classAuthor}",
+                          //         style: TextStyle().copyWith(
+                          //             color: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodyText1!
+                          //                 .color,
+                          //             fontWeight:
+                          //             FontWeight.w400,
+                          //             fontSize: 12),
+                          //         // style: TextStyle(
+                          //         //     color: AppConfig.violetColor,
+                          //         //     fontWeight: FontWeight.w400,
+                          //         //     fontSize: 12.0),
+                          //       ),
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //         borderRadius:
+                          //         BorderRadius.circular(
+                          //             25.0),
+                          //         border: Border.all(
+                          //             color: Theme.of(context)
+                          //                 .colorScheme
+                          //                 .onPrimary,
+                          //             width: 2.0)),
+                          //   ),
+                          // )
                         ],
                       ),
                     ):Container(
@@ -1102,27 +1234,234 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisAlignment:
                         MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            height: 40,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimary,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    25.0)),
-                            child: Text(
-                              "Request enroll",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {},
+                                child: Text(
+                                  "Request an Exchange",
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),),
+                          // MaterialButton(
+                          //   onPressed: () {},
+                          //   height: 40,
+                          //   color: Theme.of(context)
+                          //       .colorScheme
+                          //       .onPrimary,
+                          //   shape: RoundedRectangleBorder(
+                          //       borderRadius:
+                          //       BorderRadius.circular(
+                          //           25.0)),
+                          //   child: Text(
+                          //     "Request an Exchange",
+                          //     style: TextStyle().copyWith(
+                          //         color: Theme.of(context)
+                          //             .textTheme
+                          //             .bodyText1!
+                          //             .color,
+                          //         fontWeight: FontWeight.w400,
+                          //         fontSize: 12),
+                          //     // style: TextStyle(
+                          //     //     color: Colors.white,
+                          //     //     fontWeight: FontWeight.w400,
+                          //     //     fontSize: 12.0)
+                          //   ),
+                          // ),
+                          const SizedBox(
+                            width: 20,
                           ),
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  final routes =
+                                      VRouter
+                                          .of(context)
+                                          .queryParameters;
+                                  final routes1 = VRouter
+                                      .of(
+                                      context)
+                                      .pathParameters['roomid'];
+                                  print(classDetailUi!
+                                      .classAuthorId
+                                      .toString());
+                                  print(classDetailUi!.classAuthor
+                                      .toString());
+
+                                  if (routes["id"] != null) {
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  } else {
+                                    // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  }
+
+                                },
+                                child: Text(
+                                  "Message ${classDetailUi?.classAuthor}",
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     final routes =
+                          //         VRouter.of(context)
+                          //             .queryParameters;
+                          //     final routes1 = VRouter.of(
+                          //         context)
+                          //         .pathParameters['roomid'];
+                          //     print(classDetailUi!
+                          //         .classAuthorId
+                          //         .toString());
+                          //     print(classDetailUi!.classAuthor
+                          //         .toString());
+                          //
+                          //     if (routes["id"] != null) {
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes["id"]}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes["id"].toString(),
+                          //       //     // }
+                          //       //     );
+                          //     } else {
+                          //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       //   // routes["id"].toString()
+                          //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes1.toString()}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes1.toString(),
+                          //       //     // }
+                          //       //     );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     height: 40,
+                          //     padding:
+                          //     const EdgeInsets.symmetric(
+                          //         horizontal: 40),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "Message ${classDetailUi?.classAuthor}",
+                          //         style: TextStyle().copyWith(
+                          //             color: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodyText1!
+                          //                 .color,
+                          //             fontWeight:
+                          //             FontWeight.w400,
+                          //             fontSize: 12),
+                          //         // style: TextStyle(
+                          //         //     color: AppConfig.violetColor,
+                          //         //     fontWeight: FontWeight.w400,
+                          //         //     fontSize: 12.0),
+                          //       ),
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //         borderRadius:
+                          //         BorderRadius.circular(
+                          //             25.0),
+                          //         border: Border.all(
+                          //             color: Theme.of(context)
+                          //                 .colorScheme
+                          //                 .onPrimary,
+                          //             width: 2.0)),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
@@ -2694,97 +3033,132 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisAlignment:
                         MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            height: 40,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimary,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    25.0)),
-                            child: Text(
-                              "Request an Exchange",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                              // style: TextStyle(
-                              //     color: Colors.white,
-                              //     fontWeight: FontWeight.w400,
-                              //     fontSize: 12.0)
-                            ),
-                          ),
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {},
+                                child: Text(
+                                  "Request an Exchange",
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),),
+                          // MaterialButton(
+                          //   onPressed: () {},
+                          //   height: 40,
+                          //   color: Theme.of(context)
+                          //       .colorScheme
+                          //       .onPrimary,
+                          //   shape: RoundedRectangleBorder(
+                          //       borderRadius:
+                          //       BorderRadius.circular(
+                          //           25.0)),
+                          //   child: Text(
+                          //     "Request an Exchange",
+                          //     style: TextStyle().copyWith(
+                          //         color: Theme.of(context)
+                          //             .textTheme
+                          //             .bodyText1!
+                          //             .color,
+                          //         fontWeight: FontWeight.w400,
+                          //         fontSize: 12),
+                          //     // style: TextStyle(
+                          //     //     color: Colors.white,
+                          //     //     fontWeight: FontWeight.w400,
+                          //     //     fontSize: 12.0)
+                          //   ),
+                          // ),
                           const SizedBox(
                             width: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              final routes =
-                                  VRouter.of(context)
-                                      .queryParameters;
-                              final routes1 = VRouter.of(
-                                  context)
-                                  .pathParameters['roomid'];
-                              print(classDetailUi!
-                                  .classAuthorId
-                                  .toString());
-                              print(classDetailUi!.classAuthor
-                                  .toString());
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  final routes =
+                                      VRouter
+                                          .of(context)
+                                          .queryParameters;
+                                  final routes1 = VRouter
+                                      .of(
+                                      context)
+                                      .pathParameters['roomid'];
+                                  print(classDetailUi!
+                                      .classAuthorId
+                                      .toString());
+                                  print(classDetailUi!.classAuthor
+                                      .toString());
 
-                              if (routes["id"] != null) {
-                                UrlLauncher(context,
-                                    'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                                    .openMatrixToUrl();
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes["id"]}',
-                                //     // queryParameters: {
-                                //     //   "id": routes["id"].toString(),
-                                //     // }
-                                //     );
-                              } else {
-                                // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                                UrlLauncher(context,
-                                    'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                                    .openMatrixToUrl();
+                                  if (routes["id"] != null) {
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  } else {
+                                    // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  }
 
-                                // FluffyShare.share(
-                                //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                                //   context,
-                                // );
-                                // VRouter.of(context).toSegments([
-                                //   'rooms',
-                                //   classDetailUi!.pangeaClassRoomId.toString()
-                                //   // routes["id"].toString()
-                                //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                                // ]);
-                                // VRouter.of(context).to(
-                                //     'rooms/${routes1.toString()}',
-                                //     // queryParameters: {
-                                //     //   "id": routes1.toString(),
-                                //     // }
-                                //     );
-                              }
-                            },
-                            child: Container(
-                              height: 40,
-                              padding:
-                              const EdgeInsets.symmetric(
-                                  horizontal: 40),
-                              child: Center(
+                                },
                                 child: Text(
                                   "Message ${classDetailUi?.classAuthor}",
                                   style: TextStyle().copyWith(
@@ -2792,26 +3166,101 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .textTheme
                                           .bodyText1!
                                           .color,
-                                      fontWeight:
-                                      FontWeight.w400,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 12),
-                                  // style: TextStyle(
-                                  //     color: AppConfig.violetColor,
-                                  //     fontWeight: FontWeight.w400,
-                                  //     fontSize: 12.0),
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      25.0),
-                                  border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      width: 2.0)),
-                            ),
-                          )
+                            ),),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     final routes =
+                          //         VRouter.of(context)
+                          //             .queryParameters;
+                          //     final routes1 = VRouter.of(
+                          //         context)
+                          //         .pathParameters['roomid'];
+                          //     print(classDetailUi!
+                          //         .classAuthorId
+                          //         .toString());
+                          //     print(classDetailUi!.classAuthor
+                          //         .toString());
+                          //
+                          //     if (routes["id"] != null) {
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes["id"]}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes["id"].toString(),
+                          //       //     // }
+                          //       //     );
+                          //     } else {
+                          //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       //   // routes["id"].toString()
+                          //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes1.toString()}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes1.toString(),
+                          //       //     // }
+                          //       //     );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     height: 40,
+                          //     padding:
+                          //     const EdgeInsets.symmetric(
+                          //         horizontal: 40),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "Message ${classDetailUi?.classAuthor}",
+                          //         style: TextStyle().copyWith(
+                          //             color: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodyText1!
+                          //                 .color,
+                          //             fontWeight:
+                          //             FontWeight.w400,
+                          //             fontSize: 12),
+                          //         // style: TextStyle(
+                          //         //     color: AppConfig.violetColor,
+                          //         //     fontWeight: FontWeight.w400,
+                          //         //     fontSize: 12.0),
+                          //       ),
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //         borderRadius:
+                          //         BorderRadius.circular(
+                          //             25.0),
+                          //         border: Border.all(
+                          //             color: Theme.of(context)
+                          //                 .colorScheme
+                          //                 .onPrimary,
+                          //             width: 2.0)),
+                          //   ),
+                          // )
                         ],
                       ),
                     ):Container(
@@ -2822,27 +3271,234 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         mainAxisAlignment:
                         MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            height: 40,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimary,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    25.0)),
-                            child: Text(
-                              "Request enroll",
-                              style: TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {},
+                                child: Text(
+                                  "Request an Exchange",
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),),
+                          // MaterialButton(
+                          //   onPressed: () {},
+                          //   height: 40,
+                          //   color: Theme.of(context)
+                          //       .colorScheme
+                          //       .onPrimary,
+                          //   shape: RoundedRectangleBorder(
+                          //       borderRadius:
+                          //       BorderRadius.circular(
+                          //           25.0)),
+                          //   child: Text(
+                          //     "Request an Exchange",
+                          //     style: TextStyle().copyWith(
+                          //         color: Theme.of(context)
+                          //             .textTheme
+                          //             .bodyText1!
+                          //             .color,
+                          //         fontWeight: FontWeight.w400,
+                          //         fontSize: 12),
+                          //     // style: TextStyle(
+                          //     //     color: Colors.white,
+                          //     //     fontWeight: FontWeight.w400,
+                          //     //     fontSize: 12.0)
+                          //   ),
+                          // ),
+                          const SizedBox(
+                            width: 20,
                           ),
+                          SizedBox(
+                            width: 200,
+                            child: Flexible(
+                              flex: 0,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                style: OutlinedButton
+                                    .styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                          25.0)),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary ==
+                                        Colors.white
+                                        ? Theme.of(
+                                        context)
+                                        .primaryColor
+                                        : Theme.of(
+                                        context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  final routes =
+                                      VRouter
+                                          .of(context)
+                                          .queryParameters;
+                                  final routes1 = VRouter
+                                      .of(
+                                      context)
+                                      .pathParameters['roomid'];
+                                  print(classDetailUi!
+                                      .classAuthorId
+                                      .toString());
+                                  print(classDetailUi!.classAuthor
+                                      .toString());
+
+                                  if (routes["id"] != null) {
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  } else {
+                                    // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                    UrlLauncher(context,
+                                        'https://matrix.to/#/${classDetailUi!
+                                            .classAuthorId.toString()}')
+                                        .openMatrixToUrl();
+                                  }
+
+                                },
+                                child: Text(
+                                  "Message ${classDetailUi?.classAuthor}",
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     final routes =
+                          //         VRouter.of(context)
+                          //             .queryParameters;
+                          //     final routes1 = VRouter.of(
+                          //         context)
+                          //         .pathParameters['roomid'];
+                          //     print(classDetailUi!
+                          //         .classAuthorId
+                          //         .toString());
+                          //     print(classDetailUi!.classAuthor
+                          //         .toString());
+                          //
+                          //     if (routes["id"] != null) {
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes["id"]}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes["id"].toString(),
+                          //       //     // }
+                          //       //     );
+                          //     } else {
+                          //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                          //       UrlLauncher(context,
+                          //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                          //           .openMatrixToUrl();
+                          //
+                          //       // FluffyShare.share(
+                          //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                          //       //   context,
+                          //       // );
+                          //       // VRouter.of(context).toSegments([
+                          //       //   'rooms',
+                          //       //   classDetailUi!.pangeaClassRoomId.toString()
+                          //       //   // routes["id"].toString()
+                          //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                          //       // ]);
+                          //       // VRouter.of(context).to(
+                          //       //     'rooms/${routes1.toString()}',
+                          //       //     // queryParameters: {
+                          //       //     //   "id": routes1.toString(),
+                          //       //     // }
+                          //       //     );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     height: 40,
+                          //     padding:
+                          //     const EdgeInsets.symmetric(
+                          //         horizontal: 40),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "Message ${classDetailUi?.classAuthor}",
+                          //         style: TextStyle().copyWith(
+                          //             color: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodyText1!
+                          //                 .color,
+                          //             fontWeight:
+                          //             FontWeight.w400,
+                          //             fontSize: 12),
+                          //         // style: TextStyle(
+                          //         //     color: AppConfig.violetColor,
+                          //         //     fontWeight: FontWeight.w400,
+                          //         //     fontSize: 12.0),
+                          //       ),
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //         borderRadius:
+                          //         BorderRadius.circular(
+                          //             25.0),
+                          //         border: Border.all(
+                          //             color: Theme.of(context)
+                          //                 .colorScheme
+                          //                 .onPrimary,
+                          //             width: 2.0)),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
@@ -3402,7 +4058,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                 }
                                                 ClassServices
                                                     .deleteClass(
-                                                  context: context,
+                                                    context: context,
                                                     roomId:
                                                     room.id);
                                                 if (kDebugMode) {
@@ -4246,97 +4902,132 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     mainAxisAlignment:
                     MainAxisAlignment.spaceEvenly,
                     children: [
-                      MaterialButton(
-                        onPressed: () {},
-                        height: 40,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(
-                                25.0)),
-                        child: Text(
-                          "Request an Exchange",
-                          style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                          // style: TextStyle(
-                          //     color: Colors.white,
-                          //     fontWeight: FontWeight.w400,
-                          //     fontSize: 12.0)
-                        ),
-                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Flexible(
+                          flex: 0,
+                          fit: FlexFit.tight,
+                          child: OutlinedButton(
+                            style: OutlinedButton
+                                .styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(
+                                      25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(
+                                    context)
+                                    .primaryColor
+                                    : Theme.of(
+                                    context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Request an Exchange",
+                              style: TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),),
+                      // MaterialButton(
+                      //   onPressed: () {},
+                      //   height: 40,
+                      //   color: Theme.of(context)
+                      //       .colorScheme
+                      //       .onPrimary,
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius:
+                      //       BorderRadius.circular(
+                      //           25.0)),
+                      //   child: Text(
+                      //     "Request an Exchange",
+                      //     style: TextStyle().copyWith(
+                      //         color: Theme.of(context)
+                      //             .textTheme
+                      //             .bodyText1!
+                      //             .color,
+                      //         fontWeight: FontWeight.w400,
+                      //         fontSize: 12),
+                      //     // style: TextStyle(
+                      //     //     color: Colors.white,
+                      //     //     fontWeight: FontWeight.w400,
+                      //     //     fontSize: 12.0)
+                      //   ),
+                      // ),
                       const SizedBox(
                         width: 20,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          final routes =
-                              VRouter.of(context)
-                                  .queryParameters;
-                          final routes1 = VRouter.of(
-                              context)
-                              .pathParameters['roomid'];
-                          print(classDetailUi!
-                              .classAuthorId
-                              .toString());
-                          print(classDetailUi!.classAuthor
-                              .toString());
+                      SizedBox(
+                        width: 200,
+                        child: Flexible(
+                          flex: 0,
+                          fit: FlexFit.tight,
+                          child: OutlinedButton(
+                            style: OutlinedButton
+                                .styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(
+                                      25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(
+                                    context)
+                                    .primaryColor
+                                    : Theme.of(
+                                    context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              final routes =
+                                  VRouter
+                                      .of(context)
+                                      .queryParameters;
+                              final routes1 = VRouter
+                                  .of(
+                                  context)
+                                  .pathParameters['roomid'];
+                              print(classDetailUi!
+                                  .classAuthorId
+                                  .toString());
+                              print(classDetailUi!.classAuthor
+                                  .toString());
 
-                          if (routes["id"] != null) {
-                            UrlLauncher(context,
-                                'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                                .openMatrixToUrl();
-                            // FluffyShare.share(
-                            //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                            //   context,
-                            // );
-                            // VRouter.of(context).toSegments([
-                            //   'rooms',
-                            //   classDetailUi!.pangeaClassRoomId.toString()
-                            // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                            // ]);
-                            // VRouter.of(context).to(
-                            //     'rooms/${routes["id"]}',
-                            //     // queryParameters: {
-                            //     //   "id": routes["id"].toString(),
-                            //     // }
-                            //     );
-                          } else {
-                            // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                            UrlLauncher(context,
-                                'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                                .openMatrixToUrl();
+                              if (routes["id"] != null) {
+                                UrlLauncher(context,
+                                    'https://matrix.to/#/${classDetailUi!
+                                        .classAuthorId.toString()}')
+                                    .openMatrixToUrl();
+                              } else {
+                                // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                UrlLauncher(context,
+                                    'https://matrix.to/#/${classDetailUi!
+                                        .classAuthorId.toString()}')
+                                    .openMatrixToUrl();
+                              }
 
-                            // FluffyShare.share(
-                            //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                            //   context,
-                            // );
-                            // VRouter.of(context).toSegments([
-                            //   'rooms',
-                            //   classDetailUi!.pangeaClassRoomId.toString()
-                            //   // routes["id"].toString()
-                            //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                            // ]);
-                            // VRouter.of(context).to(
-                            //     'rooms/${routes1.toString()}',
-                            //     // queryParameters: {
-                            //     //   "id": routes1.toString(),
-                            //     // }
-                            //     );
-                          }
-                        },
-                        child: Container(
-                          height: 40,
-                          padding:
-                          const EdgeInsets.symmetric(
-                              horizontal: 40),
-                          child: Center(
+                            },
                             child: Text(
                               "Message ${classDetailUi?.classAuthor}",
                               style: TextStyle().copyWith(
@@ -4344,26 +5035,101 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .textTheme
                                       .bodyText1!
                                       .color,
-                                  fontWeight:
-                                  FontWeight.w400,
+                                  fontWeight: FontWeight.w400,
                                   fontSize: 12),
-                              // style: TextStyle(
-                              //     color: AppConfig.violetColor,
-                              //     fontWeight: FontWeight.w400,
-                              //     fontSize: 12.0),
                             ),
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(
-                                  25.0),
-                              border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary,
-                                  width: 2.0)),
-                        ),
-                      )
+                        ),),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     final routes =
+                      //         VRouter.of(context)
+                      //             .queryParameters;
+                      //     final routes1 = VRouter.of(
+                      //         context)
+                      //         .pathParameters['roomid'];
+                      //     print(classDetailUi!
+                      //         .classAuthorId
+                      //         .toString());
+                      //     print(classDetailUi!.classAuthor
+                      //         .toString());
+                      //
+                      //     if (routes["id"] != null) {
+                      //       UrlLauncher(context,
+                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                      //           .openMatrixToUrl();
+                      //       // FluffyShare.share(
+                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                      //       //   context,
+                      //       // );
+                      //       // VRouter.of(context).toSegments([
+                      //       //   'rooms',
+                      //       //   classDetailUi!.pangeaClassRoomId.toString()
+                      //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                      //       // ]);
+                      //       // VRouter.of(context).to(
+                      //       //     'rooms/${routes["id"]}',
+                      //       //     // queryParameters: {
+                      //       //     //   "id": routes["id"].toString(),
+                      //       //     // }
+                      //       //     );
+                      //     } else {
+                      //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                      //       UrlLauncher(context,
+                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                      //           .openMatrixToUrl();
+                      //
+                      //       // FluffyShare.share(
+                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                      //       //   context,
+                      //       // );
+                      //       // VRouter.of(context).toSegments([
+                      //       //   'rooms',
+                      //       //   classDetailUi!.pangeaClassRoomId.toString()
+                      //       //   // routes["id"].toString()
+                      //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                      //       // ]);
+                      //       // VRouter.of(context).to(
+                      //       //     'rooms/${routes1.toString()}',
+                      //       //     // queryParameters: {
+                      //       //     //   "id": routes1.toString(),
+                      //       //     // }
+                      //       //     );
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     height: 40,
+                      //     padding:
+                      //     const EdgeInsets.symmetric(
+                      //         horizontal: 40),
+                      //     child: Center(
+                      //       child: Text(
+                      //         "Message ${classDetailUi?.classAuthor}",
+                      //         style: TextStyle().copyWith(
+                      //             color: Theme.of(context)
+                      //                 .textTheme
+                      //                 .bodyText1!
+                      //                 .color,
+                      //             fontWeight:
+                      //             FontWeight.w400,
+                      //             fontSize: 12),
+                      //         // style: TextStyle(
+                      //         //     color: AppConfig.violetColor,
+                      //         //     fontWeight: FontWeight.w400,
+                      //         //     fontSize: 12.0),
+                      //       ),
+                      //     ),
+                      //     decoration: BoxDecoration(
+                      //         borderRadius:
+                      //         BorderRadius.circular(
+                      //             25.0),
+                      //         border: Border.all(
+                      //             color: Theme.of(context)
+                      //                 .colorScheme
+                      //                 .onPrimary,
+                      //             width: 2.0)),
+                      //   ),
+                      // )
                     ],
                   ),
                 ):Container(
@@ -4374,27 +5140,234 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     mainAxisAlignment:
                     MainAxisAlignment.spaceEvenly,
                     children: [
-                      MaterialButton(
-                        onPressed: () {},
-                        height: 40,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(
-                                25.0)),
-                        child: Text(
-                          "Request enroll",
-                          style: TextStyle().copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                        ),
+                      SizedBox(
+                        width: 200,
+                        child: Flexible(
+                          flex: 0,
+                          fit: FlexFit.tight,
+                          child: OutlinedButton(
+                            style: OutlinedButton
+                                .styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(
+                                      25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(
+                                    context)
+                                    .primaryColor
+                                    : Theme.of(
+                                    context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Request an Exchange",
+                              style: TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),),
+                      // MaterialButton(
+                      //   onPressed: () {},
+                      //   height: 40,
+                      //   color: Theme.of(context)
+                      //       .colorScheme
+                      //       .onPrimary,
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius:
+                      //       BorderRadius.circular(
+                      //           25.0)),
+                      //   child: Text(
+                      //     "Request an Exchange",
+                      //     style: TextStyle().copyWith(
+                      //         color: Theme.of(context)
+                      //             .textTheme
+                      //             .bodyText1!
+                      //             .color,
+                      //         fontWeight: FontWeight.w400,
+                      //         fontSize: 12),
+                      //     // style: TextStyle(
+                      //     //     color: Colors.white,
+                      //     //     fontWeight: FontWeight.w400,
+                      //     //     fontSize: 12.0)
+                      //   ),
+                      // ),
+                      const SizedBox(
+                        width: 20,
                       ),
+                      SizedBox(
+                        width: 200,
+                        child: Flexible(
+                          flex: 0,
+                          fit: FlexFit.tight,
+                          child: OutlinedButton(
+                            style: OutlinedButton
+                                .styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(
+                                      25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(
+                                    context)
+                                    .primaryColor
+                                    : Theme.of(
+                                    context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              final routes =
+                                  VRouter
+                                      .of(context)
+                                      .queryParameters;
+                              final routes1 = VRouter
+                                  .of(
+                                  context)
+                                  .pathParameters['roomid'];
+                              print(classDetailUi!
+                                  .classAuthorId
+                                  .toString());
+                              print(classDetailUi!.classAuthor
+                                  .toString());
+
+                              if (routes["id"] != null) {
+                                UrlLauncher(context,
+                                    'https://matrix.to/#/${classDetailUi!
+                                        .classAuthorId.toString()}')
+                                    .openMatrixToUrl();
+                              } else {
+                                // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                UrlLauncher(context,
+                                    'https://matrix.to/#/${classDetailUi!
+                                        .classAuthorId.toString()}')
+                                    .openMatrixToUrl();
+                              }
+
+                            },
+                            child: Text(
+                              "Message ${classDetailUi?.classAuthor}",
+                              style: TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     final routes =
+                      //         VRouter.of(context)
+                      //             .queryParameters;
+                      //     final routes1 = VRouter.of(
+                      //         context)
+                      //         .pathParameters['roomid'];
+                      //     print(classDetailUi!
+                      //         .classAuthorId
+                      //         .toString());
+                      //     print(classDetailUi!.classAuthor
+                      //         .toString());
+                      //
+                      //     if (routes["id"] != null) {
+                      //       UrlLauncher(context,
+                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                      //           .openMatrixToUrl();
+                      //       // FluffyShare.share(
+                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                      //       //   context,
+                      //       // );
+                      //       // VRouter.of(context).toSegments([
+                      //       //   'rooms',
+                      //       //   classDetailUi!.pangeaClassRoomId.toString()
+                      //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                      //       // ]);
+                      //       // VRouter.of(context).to(
+                      //       //     'rooms/${routes["id"]}',
+                      //       //     // queryParameters: {
+                      //       //     //   "id": routes["id"].toString(),
+                      //       //     // }
+                      //       //     );
+                      //     } else {
+                      //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                      //       UrlLauncher(context,
+                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                      //           .openMatrixToUrl();
+                      //
+                      //       // FluffyShare.share(
+                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
+                      //       //   context,
+                      //       // );
+                      //       // VRouter.of(context).toSegments([
+                      //       //   'rooms',
+                      //       //   classDetailUi!.pangeaClassRoomId.toString()
+                      //       //   // routes["id"].toString()
+                      //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
+                      //       // ]);
+                      //       // VRouter.of(context).to(
+                      //       //     'rooms/${routes1.toString()}',
+                      //       //     // queryParameters: {
+                      //       //     //   "id": routes1.toString(),
+                      //       //     // }
+                      //       //     );
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     height: 40,
+                      //     padding:
+                      //     const EdgeInsets.symmetric(
+                      //         horizontal: 40),
+                      //     child: Center(
+                      //       child: Text(
+                      //         "Message ${classDetailUi?.classAuthor}",
+                      //         style: TextStyle().copyWith(
+                      //             color: Theme.of(context)
+                      //                 .textTheme
+                      //                 .bodyText1!
+                      //                 .color,
+                      //             fontWeight:
+                      //             FontWeight.w400,
+                      //             fontSize: 12),
+                      //         // style: TextStyle(
+                      //         //     color: AppConfig.violetColor,
+                      //         //     fontWeight: FontWeight.w400,
+                      //         //     fontSize: 12.0),
+                      //       ),
+                      //     ),
+                      //     decoration: BoxDecoration(
+                      //         borderRadius:
+                      //         BorderRadius.circular(
+                      //             25.0),
+                      //         border: Border.all(
+                      //             color: Theme.of(context)
+                      //                 .colorScheme
+                      //                 .onPrimary,
+                      //             width: 2.0)),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -4954,7 +5927,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             }
                                             ClassServices
                                                 .deleteClass(
-                                              context: context,
+                                                context: context,
                                                 roomId:
                                                 room.id);
                                             if (kDebugMode) {
@@ -5531,7 +6504,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       }
                                       ClassServices
                                           .deleteClass(
-                                        context: context,
+                                          context: context,
                                           roomId:
                                           room.id);
                                       if (kDebugMode) {
