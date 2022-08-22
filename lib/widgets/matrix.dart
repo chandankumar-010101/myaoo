@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -353,9 +355,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 content: Text(L10n.of(context)!.oneClientLoggedOut),
               ),
             );
-
             if (state != LoginState.loggedIn) {
-              print("Logged Out");
               widget.router!.currentState!.to(
                 '/home',
                 queryParameters: widget.router!.currentState!.queryParameters,
@@ -363,34 +363,59 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             }
           }
           else if (state == LoginState.loggedIn) {
-            print(state);
             //matrix access token and client id
+            if(client.accessToken.toString().isEmpty || client.userID.toString().isEmpty){
+              await showFutureLoadingDialog(
+                context: context,
+                future: () => client.logout(),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to fetch userID and access token.")));
+              return;
+            }
             box.write("accessToken", client.accessToken.toString());
             box.write("clientID", client.userID.toString());
-            bool sign_up = box.read("sign_up") ?? false;
-            bool validateStatus = await validateUser();
-            box.read("accessToken");
-
-            if (sign_up || !validateStatus) {
-              print("print 1");
-             // context.vRouter.to("/home/connect/lang");
-              widget.router!.currentState!.to( '/home/connect/lang',
-                queryParameters: widget.router!.currentState!.queryParameters,
-              );
-            } else {
-              print("print2");
-              await UserDetails.userDetails();
-              await UserDetails.userAge();
-              widget.router!.currentState!.to(
-                '/rooms',
-                queryParameters: widget.router!.currentState!.queryParameters,
+            final bool signUp = box.read("sign_up") ?? false;
+            await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) async {
+            if(value.statusCode == 201 ||value.statusCode ==200){
+              if(!value.body["is_user_exist"] || signUp){
+                widget.router!.currentState!.to( '/home/connect/lang',
+                  queryParameters: widget.router!.currentState!.queryParameters,
+                );
+              }
+              else{
+                await UserDetails.userDetails(clientID: client.userID.toString());
+                await UserDetails.userAge();
+                widget.router!.currentState!.to(
+                  '/rooms',
+                  queryParameters: widget.router!.currentState!.queryParameters,
+                );
+              }
+            }
+            else{
+              if (kDebugMode) {
+                print("Unable to validate user");
+                print(value.body);
+                print(value.statusCode.toString());
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to validate User")));
+              await showFutureLoadingDialog(
+                context: context,
+                future: () => client.logout(),
               );
             }
+            }).catchError((e) async {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("User validation failed: $e")));
+              await showFutureLoadingDialog(
+                  context: context,
+                  future: () => client.logout(),
+              );
+            });
           }
           else {
-            print("looged out");
             widget.router!.currentState!.to(
-              // state == LoginState.loggedIn ? '/rooms' : '/home',
               '/home',
               queryParameters: widget.router!.currentState!.queryParameters,
             );
@@ -490,25 +515,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     createVoipPlugin();
   }
 
-  //TODO: validate user
 
-  Future<bool> validateUser() async {
-    String userID = box.read("clientID");
-    if (box.read("clientID") == "null") {
-      print("userID is null from getStorage");
-      return false;
-    }
-    var response = await ApiFunctions().get(ApiUrls.validate_user + userID);
-    bool validateStatus = false;
-    if (response != null) {
-      print(response.body);
-      return response.body["is_user_exist"] ?? false;
-    } else {
-      validateStatus = false;
-    }
-    log("Status is $validateStatus");
-    return validateStatus;
-  }
+
 
   void createVoipPlugin() async {
     if (await store.getItemBool(SettingKeys.experimentalVoip) == false) {
