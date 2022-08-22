@@ -99,24 +99,32 @@ class ClassServices {
             box.remove('publicGroup');
             box.remove('openEnrollment');
             box.remove('openToExchange');
-
-            print("Class Created Successfully");
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Class created successfully")));
             context.vRouter.to("/invite_students");
           } else {
-            log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Permissions Status Code is  ${value.statusCode} and ${value.body} ")));
+           // log("Permissions Status Code is  ${value.statusCode} and ${value.body} ");
           }
         }).catchError((onError) {
-          log("Error in Permissions: $onError");
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Error in Permissions: $onError")));
         });
       } else {
-        log("Status Code is  ${value.statusCode} and ${value.body} ");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Status Code is  ${value.statusCode} and ${value.body} ")));
+       // log("Status Code is  ${value.statusCode} and ${value.body} ");
       }
     }).catchError((onError) {
-      log("Error: $onError");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: $onError")));
+      //log("Error: $onError");
     });
   }
 
   static Future<bool?> deleteClass({
+    required BuildContext context,
     required String roomId,
   }) async {
     final token = box.read("access");
@@ -128,17 +136,23 @@ class ClassServices {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       ).then((value) {
-        Fluttertoast.showToast(msg: "Class deleted successfully");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Class deleted successfully")));
         return true;
       }).catchError((error){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error: $error")));
         log("Error: $error");
       });
     } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("JWT Token is null")));
       print("JWT Token is null");
     }
   }
 
   static Future<bool?> updateClassPermission({
+    required BuildContext context,
     required String classId,
     required String isPublic,
     required String openEnrollment,
@@ -146,9 +160,9 @@ class ClassServices {
   }) async {
     String token = box.read("access");
     if (token.isEmpty) {
-      print("JWT Token is null");
-      Fluttertoast.showToast(
-          msg: "Token expired please logout and login again");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+
       return null;
     }
     http
@@ -167,14 +181,25 @@ class ClassServices {
       ),
     )
         .then((value) {
-      Fluttertoast.showToast(msg: "Permissions updated successfully");
-      return true;
+          if(value.statusCode == 200 || value.statusCode ==201){
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Permissions updated successfully")));
+
+            return true;
+          }else{
+            print(value.statusCode);
+            print(value.body);
+          }
+
     }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
       print("Error accured: $e");
     });
   }
 
   static Future<bool?> updateStudentPermission({
+    required BuildContext context,
     required String classId,
     required String oneToOneChatsWithinClass,
     required String oneToOneChatsWithinExchanges,
@@ -191,8 +216,8 @@ class ClassServices {
       if (kDebugMode) {
         print("JWT Token is null");
       }
-      Fluttertoast.showToast(
-          msg: "Token expired please logout and login again");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
       return null;
     }
     http
@@ -217,9 +242,12 @@ class ClassServices {
       ),
     )
         .then((value) {
-      Fluttertoast.showToast(msg: "Permissions updated successfully");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Permissions updated successfully")));
       return true;
     }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
       print("Error accured: $e");
     });
   }
@@ -231,14 +259,15 @@ class ClassServices {
     required String desc,
     required int languageLevel,
     required String schoolName,
+    required BuildContext context,
   }) async {
     final String token = box.read("access");
     if (token.isEmpty) {
       if (kDebugMode) {
         print("JWT Token is null");
       }
-      Fluttertoast.showToast(
-          msg: "Token expired please logout and login again");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
       return null;
     }
     http
@@ -258,10 +287,15 @@ class ClassServices {
       }),
     )
         .then((value) {
-      Fluttertoast.showToast(msg: "Class Details updated successfully");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Class Details updated successfully")));
       return true;
     }).catchError((e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accrued: $e")));
+     if (kDebugMode) {
+       print(e);
+     }
     });
   }
 }

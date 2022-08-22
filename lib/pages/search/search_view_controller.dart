@@ -14,6 +14,8 @@ class SearchViewController extends GetxController {
   var classList = <Result>[].obs;
   var pageNo = 1.obs;
   final box = GetStorage();
+  RxBool previous = false.obs;
+  RxBool next = false.obs;
 
   ScrollController controller = ScrollController();
 
@@ -32,20 +34,30 @@ class SearchViewController extends GetxController {
       if (response.statusCode == 200) {
         loading.value = false;
         List temp = response.body["results"];
-
-        loadData.addAll(temp);
-        // classList.value = loadData.map((e) => Result.fromJson(e)).toList();
+        if (response.body["next"] != null) {
+          next.value = true;
+        } else {
+          next.value = false;
+        }
+        if (response.body["previous"] != null) {
+          previous.value = true;
+        } else {
+          previous.value = false;
+        }
+        log("Next Status is ${next.value} and Previous Status is ${previous.value}");
+        // loadData.addAll(temp);
+        classList.value = temp.map((e) => Result.fromJson(e)).toList();
         log("list is $loadData");
 
-        log("Page No. is ${pageNo.value}");
-        if (response.body["next"] != null) {
-          log("Next :${response.body["next"]}");
-          pageNo.value++;
-          getClasses();
-        } else if (response.body["next"] == null) {
-          log("Final List is $loadData");
-          classList.value = loadData.map((e) => Result.fromJson(e)).toList();
-        }
+        // log("Page No. is ${pageNo.value}");
+        // if (response.body["next"] != null) {
+        //   log("Next :${response.body["next"]}");
+        //   pageNo.value++;
+        //   getClasses();
+        // } else if (response.body["next"] == null) {
+        //   log("Final List is $loadData");
+        //   classList.value = loadData.map((e) => Result.fromJson(e)).toList();
+        // }
       } else {
         loading.value = false;
         Get.rawSnackbar(

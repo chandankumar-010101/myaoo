@@ -3538,6 +3538,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       ),
                                 box.read("clientID") ==
                                         classDetailUi!.classAuthorId
+
                                     ? Flexible(
                                   flex: 0,
                                   fit: FlexFit.tight,
@@ -3560,6 +3561,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     style: OutlinedButton.styleFrom(
                                                       shape: RoundedRectangleBorder(
                                                           borderRadius:
+
                                                           BorderRadius.circular(
                                                               25.0)),
                                                       side: BorderSide(
