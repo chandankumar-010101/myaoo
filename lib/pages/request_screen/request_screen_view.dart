@@ -3383,9 +3383,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                                 if (success.error == null) {
                                                                   final box = GetStorage();
                                                                   String token = box.read("access");
-                                                                  if (kDebugMode) {
-                                                                    print(token);
-                                                                  }
+
                                                                   ClassServices.deleteClass(roomId: room.id, context: context);
                                                                   if (kDebugMode) {
                                                                     print(room.id);
