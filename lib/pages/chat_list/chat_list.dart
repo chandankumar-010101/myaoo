@@ -102,6 +102,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     // //     .classList[i]
     // //     .pangea_class_room_id
     // //     .toString());
+   // print(spaceId);
     VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
     //VRouter.of(context).toSegments(['classes', spaceId]);
   }

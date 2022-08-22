@@ -20,4 +20,7 @@ class ApiUrls {
       Environment.baseAPI + "/class/permissions/add";
 
   static String getClassDetails = Environment.baseAPI + "/class/detail/";
+
+  static String updateClassPermissions = Environment.baseAPI+"/class/permissions/update/";
+  static String updateClassDetail = Environment.baseAPI+"/class/update/";
 }
