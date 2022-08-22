@@ -768,6 +768,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                   context: context,
                                   future: () =>
                                       ClassServices.updateClassDetails(
+                                        context: context,
                                     desc: discriptionController.text,
                                     city: cityController.text,
                                     roomId: id.toString(),

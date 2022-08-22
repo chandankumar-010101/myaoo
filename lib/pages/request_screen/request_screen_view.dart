@@ -3386,7 +3386,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                                   if (kDebugMode) {
                                                                     print(token);
                                                                   }
-                                                                  ClassServices.deleteClass(roomId: room.id);
+                                                                  ClassServices.deleteClass(roomId: room.id, context: context);
                                                                   if (kDebugMode) {
                                                                     print(room.id);
                                                                   }

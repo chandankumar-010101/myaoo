@@ -157,11 +157,11 @@ class _ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                   final success = await showFutureLoadingDialog(
                       context: context, future: () => widget.room.leave());
                   if (success.error == null) {
-                    final box = GetStorage();
-                    String token = box.read("access");
-                    print(token);
-                    ClassServices.deleteClass(roomId: widget.room.id);
-                    print(widget.room.id);
+                    // final box = GetStorage();
+                    // String token = box.read("access");
+                    // print(token);
+                    // ClassServices.deleteClass(roomId: widget.room.id);
+                    // print(widget.room.id);
 
                     VRouter.of(context).to('/rooms');
                   }
