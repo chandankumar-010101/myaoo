@@ -343,6 +343,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                   context: context,
                                   future: () =>
                                       ClassServices.updateClassPermission(
+                                        context: context,
                                     classId: id,
                                     isPublic: publicGroup.toString(),
                                     openEnrollment: openEnrollment.toString(),
