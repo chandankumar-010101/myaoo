@@ -2137,10 +2137,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .color,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
-                                // style: TextStyle(
-                                //     color: Colors.black,
-                                //     fontSize: 12.0,
-                                //     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 height: 10.0,
@@ -2163,17 +2159,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   ),
                                   Text(
                                     "",
-                                    style: const TextStyle().copyWith(
+                                    style:const TextStyle().copyWith(
                                         color: Theme.of(context)
                                             .textTheme
                                             .bodyText1!
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 12),
-                                    // style: TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontSize: 12.0,
-                                    //     fontWeight: FontWeight.w400),
+
                                   )
                                 ],
                               )
@@ -2196,7 +2189,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         .bodyText1!
                                         .color,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 12)
+                                    fontSize: 12),
+
                               ),
                               const SizedBox(
                                 height: 10.0,
@@ -2245,6 +2239,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.start,
                                   children: [
+
                                     Text(
                                       "Source Language",
                                       style: const TextStyle().copyWith(
@@ -2269,7 +2264,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .bodyText1!
                                           .color,
                                     ),
-                                    const  SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     Text(
@@ -2293,6 +2288,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                      children:[
+                                        SizedBox(
+                                            width:20,
+                                            height:20,
+                                            child: Image.network("https://staging.api.pangea.chat${classDetailUi!.flags![0].languageFlag.toString()}")),
+
+                                      ]
+                                  ),
                                   Text(
                                     "${classDetailUi?.dominantLanguage}",
                                     style: const TextStyle().copyWith(
@@ -2302,6 +2306,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
+
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -2309,7 +2314,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   Icon(
                                     Icons.arrow_right_alt_outlined,
                                     size: 20,
-                                    color:Theme.of(context)
+                                    color: Theme.of(context)
                                         .textTheme
                                         .bodyText1!
                                         .color,
@@ -2317,21 +2322,29 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   const  SizedBox(
                                     width: 10,
                                   ),
-                                  Text(
-                                    "${classDetailUi?.targetLanguage}",
 
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14),
-                                    // style: const TextStyle(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.w400,
-                                    //     fontSize: 14.0),
+                                  Row(
+                                      children:[
+                                        SizedBox(
+                                            width:20,
+                                            height:20,
+                                            child: Image.network("https://staging.api.pangea.chat${classDetailUi!.flags![1].languageFlag.toString()}")),
+
+                                        Text(
+                                          "${classDetailUi?.targetLanguage}",
+
+                                          style: const TextStyle().copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .color,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14),
+
+                                        ),
+                                      ]
                                   ),
+
                                 ],
                               )
                             ],
@@ -4245,10 +4258,20 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               height: 10.0,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment:
+                              MainAxisAlignment.start,
                               crossAxisAlignment:
                               CrossAxisAlignment.start,
                               children: [
+                                Row(
+                                    children:[
+                                      SizedBox(
+                                          width:20,
+                                          height:20,
+                                          child: Image.network("https://staging.api.pangea.chat${classDetailUi!.flags![0].languageFlag.toString()}")),
+
+                                    ]
+                                ),
                                 Text(
                                   "${classDetailUi?.dominantLanguage}",
                                   style: const TextStyle().copyWith(
@@ -4258,6 +4281,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14),
+
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -4270,21 +4294,75 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .bodyText1!
                                       .color,
                                 ),
-                                const SizedBox(
+                                const  SizedBox(
                                   width: 10,
                                 ),
-                                Text(
-                                  "${classDetailUi?.targetLanguage}",
-                                  style: const TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14),
+
+                                Row(
+                                    children:[
+                                      SizedBox(
+                                          width:20,
+                                          height:20,
+                                          child: Image.network("https://staging.api.pangea.chat${classDetailUi!.flags![1].languageFlag.toString()}")),
+
+                                      Text(
+                                        "${classDetailUi?.targetLanguage}",
+
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14),
+
+                                      ),
+                                    ]
                                 ),
+
                               ],
-                            )
+                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   crossAxisAlignment:
+                            //   CrossAxisAlignment.start,
+                            //   children: [
+                            //     Text(
+                            //       "${classDetailUi?.dominantLanguage}",
+                            //       style: const TextStyle().copyWith(
+                            //           color: Theme.of(context)
+                            //               .textTheme
+                            //               .bodyText1!
+                            //               .color,
+                            //           fontWeight: FontWeight.w400,
+                            //           fontSize: 14),
+                            //     ),
+                            //     const SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Icon(
+                            //       Icons.arrow_right_alt_outlined,
+                            //       size: 20,
+                            //       color: Theme.of(context)
+                            //           .textTheme
+                            //           .bodyText1!
+                            //           .color,
+                            //     ),
+                            //     const SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Text(
+                            //       "${classDetailUi?.targetLanguage}",
+                            //       style: const TextStyle().copyWith(
+                            //           color: Theme.of(context)
+                            //               .textTheme
+                            //               .bodyText1!
+                            //               .color,
+                            //           fontWeight: FontWeight.w400,
+                            //           fontSize: 14),
+                            //     ),
+                            //   ],
+                            // )
                           ],
                         ),
                       ],
@@ -4842,96 +4920,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             ),
                           ),
                         ),),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     final routes =
-                      //         VRouter.of(context)
-                      //             .queryParameters;
-                      //     final routes1 = VRouter.of(
-                      //         context)
-                      //         .pathParameters['roomid'];
-                      //     print(classDetailUi!
-                      //         .classAuthorId
-                      //         .toString());
-                      //     print(classDetailUi!.classAuthor
-                      //         .toString());
-                      //
-                      //     if (routes["id"] != null) {
-                      //       UrlLauncher(context,
-                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                      //           .openMatrixToUrl();
-                      //       // FluffyShare.share(
-                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                      //       //   context,
-                      //       // );
-                      //       // VRouter.of(context).toSegments([
-                      //       //   'rooms',
-                      //       //   classDetailUi!.pangeaClassRoomId.toString()
-                      //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                      //       // ]);
-                      //       // VRouter.of(context).to(
-                      //       //     'rooms/${routes["id"]}',
-                      //       //     // queryParameters: {
-                      //       //     //   "id": routes["id"].toString(),
-                      //       //     // }
-                      //       //     );
-                      //     } else {
-                      //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                      //       UrlLauncher(context,
-                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                      //           .openMatrixToUrl();
-                      //
-                      //       // FluffyShare.share(
-                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                      //       //   context,
-                      //       // );
-                      //       // VRouter.of(context).toSegments([
-                      //       //   'rooms',
-                      //       //   classDetailUi!.pangeaClassRoomId.toString()
-                      //       //   // routes["id"].toString()
-                      //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                      //       // ]);
-                      //       // VRouter.of(context).to(
-                      //       //     'rooms/${routes1.toString()}',
-                      //       //     // queryParameters: {
-                      //       //     //   "id": routes1.toString(),
-                      //       //     // }
-                      //       //     );
-                      //     }
-                      //   },
-                      //   child: Container(
-                      //     height: 40,
-                      //     padding:
-                      //     const EdgeInsets.symmetric(
-                      //         horizontal: 40),
-                      //     child: Center(
-                      //       child: Text(
-                      //         "Message ${classDetailUi?.classAuthor}",
-                      //         style: const TextStyle().copyWith(
-                      //             color: Theme.of(context)
-                      //                 .textTheme
-                      //                 .bodyText1!
-                      //                 .color,
-                      //             fontWeight:
-                      //             FontWeight.w400,
-                      //             fontSize: 12),
-                      //         // style: TextStyle(
-                      //         //     color: AppConfig.violetColor,
-                      //         //     fontWeight: FontWeight.w400,
-                      //         //     fontSize: 12.0),
-                      //       ),
-                      //     ),
-                      //     decoration: BoxDecoration(
-                      //         borderRadius:
-                      //         BorderRadius.circular(
-                      //             25.0),
-                      //         border: Border.all(
-                      //             color: Theme.of(context)
-                      //                 .colorScheme
-                      //                 .onPrimary,
-                      //             width: 2.0)),
-                      //   ),
-                      // )
                     ],
                   ),
                 ):Container(
@@ -4983,31 +4971,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             ),
                           ),
                         ),),
-                      // MaterialButton(
-                      //   onPressed: () {},
-                      //   height: 40,
-                      //   color: Theme.of(context)
-                      //       .colorScheme
-                      //       .onPrimary,
-                      //   shape: RoundedRectangleBorder(
-                      //       borderRadius:
-                      //       BorderRadius.circular(
-                      //           25.0)),
-                      //   child: Text(
-                      //     "Request an Exchange",
-                      //     style: const TextStyle().copyWith(
-                      //         color: Theme.of(context)
-                      //             .textTheme
-                      //             .bodyText1!
-                      //             .color,
-                      //         fontWeight: FontWeight.w400,
-                      //         fontSize: 12),
-                      //     // style: TextStyle(
-                      //     //     color: Colors.white,
-                      //     //     fontWeight: FontWeight.w400,
-                      //     //     fontSize: 12.0)
-                      //   ),
-                      // ),
                       const SizedBox(
                         width: 20,
                       ),
@@ -5080,96 +5043,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             ),
                           ),
                         ),),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     final routes =
-                      //         VRouter.of(context)
-                      //             .queryParameters;
-                      //     final routes1 = VRouter.of(
-                      //         context)
-                      //         .pathParameters['roomid'];
-                      //     print(classDetailUi!
-                      //         .classAuthorId
-                      //         .toString());
-                      //     print(classDetailUi!.classAuthor
-                      //         .toString());
-                      //
-                      //     if (routes["id"] != null) {
-                      //       UrlLauncher(context,
-                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                      //           .openMatrixToUrl();
-                      //       // FluffyShare.share(
-                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                      //       //   context,
-                      //       // );
-                      //       // VRouter.of(context).toSegments([
-                      //       //   'rooms',
-                      //       //   classDetailUi!.pangeaClassRoomId.toString()
-                      //       // //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                      //       // ]);
-                      //       // VRouter.of(context).to(
-                      //       //     'rooms/${routes["id"]}',
-                      //       //     // queryParameters: {
-                      //       //     //   "id": routes["id"].toString(),
-                      //       //     // }
-                      //       //     );
-                      //     } else {
-                      //       // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                      //       UrlLauncher(context,
-                      //           'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
-                      //           .openMatrixToUrl();
-                      //
-                      //       // FluffyShare.share(
-                      //       //   'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}',
-                      //       //   context,
-                      //       // );
-                      //       // VRouter.of(context).toSegments([
-                      //       //   'rooms',
-                      //       //   classDetailUi!.pangeaClassRoomId.toString()
-                      //       //   // routes["id"].toString()
-                      //       //   //  Matrix.of(context).client.getDirectChatFromUserId(contact.userid)!
-                      //       // ]);
-                      //       // VRouter.of(context).to(
-                      //       //     'rooms/${routes1.toString()}',
-                      //       //     // queryParameters: {
-                      //       //     //   "id": routes1.toString(),
-                      //       //     // }
-                      //       //     );
-                      //     }
-                      //   },
-                      //   child: Container(
-                      //     height: 40,
-                      //     padding:
-                      //     const EdgeInsets.symmetric(
-                      //         horizontal: 40),
-                      //     child: Center(
-                      //       child: Text(
-                      //         "Message ${classDetailUi?.classAuthor}",
-                      //         style: const TextStyle().copyWith(
-                      //             color: Theme.of(context)
-                      //                 .textTheme
-                      //                 .bodyText1!
-                      //                 .color,
-                      //             fontWeight:
-                      //             FontWeight.w400,
-                      //             fontSize: 12),
-                      //         // style: TextStyle(
-                      //         //     color: AppConfig.violetColor,
-                      //         //     fontWeight: FontWeight.w400,
-                      //         //     fontSize: 12.0),
-                      //       ),
-                      //     ),
-                      //     decoration: BoxDecoration(
-                      //         borderRadius:
-                      //         BorderRadius.circular(
-                      //             25.0),
-                      //         border: Border.all(
-                      //             color: Theme.of(context)
-                      //                 .colorScheme
-                      //                 .onPrimary,
-                      //             width: 2.0)),
-                      //   ),
-                      // )
                     ],
                   ),
                 ),
@@ -6346,3 +6219,5 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     );
   }
 }
+
+
