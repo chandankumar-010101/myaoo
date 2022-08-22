@@ -145,6 +145,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
           return;
       }
     }
+    box.remove("class_name");
+    box.remove("city_name");
+    box.remove("school_name");
+    box.remove("country_name");
+    box.remove("disc");
+
   }
 
   @override

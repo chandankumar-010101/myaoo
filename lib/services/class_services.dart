@@ -116,14 +116,23 @@ class ClassServices {
     });
   }
 
-  static Future<void> deleteClass({
+  static Future<bool?> deleteClass({
     required String roomId,
   }) async {
     final token = box.read("access");
     if (token != null) {
-      try {} catch (e) {
-        print("Error: $e");
-      }
+      await http.delete(
+        Uri.parse(ApiUrls.deleteClass+roomId),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      ).then((value) {
+        Fluttertoast.showToast(msg: "Class deleted successfully");
+        return true;
+      }).catchError((error){
+        log("Error: $error");
+      });
     } else {
       print("JWT Token is null");
     }
@@ -217,11 +226,8 @@ class ClassServices {
 
   static Future<bool?> updateClassDetails({
     required String roomId,
-   // required String className,
     required String city,
     required String country,
-    //required String dominantLanguage,
-    //required String targetLanguage,
     required String desc,
     required int languageLevel,
     required String schoolName,
@@ -235,22 +241,24 @@ class ClassServices {
           msg: "Token expired please logout and login again");
       return null;
     }
-    http.put(Uri.parse(ApiUrls.updateClassDetail + roomId),
-            headers: {
-              "Authorization": "Bearer $token",
-              'Content-Type': 'application/json; charset=UTF-8'
-            },
-        body: jsonEncode(
-          <String, String>{
-            'city': city,
-            'country': country,
-            'language_level': languageLevel.toString(),
-            'description': desc,
-            'school_name': schoolName,
-            'pangea_class_room_id': roomId,
-          }),)
+    http
+        .put(
+      Uri.parse(ApiUrls.updateClassDetail + roomId),
+      headers: {
+        "Authorization": "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        'city': city,
+        'country': country,
+        'language_level': languageLevel.toString(),
+        'description': desc,
+        'school_name': schoolName,
+        'pangea_class_room_id': roomId,
+      }),
+    )
         .then((value) {
-       Fluttertoast.showToast(msg: "Class Details updated successfully");
+      Fluttertoast.showToast(msg: "Class Details updated successfully");
       return true;
     }).catchError((e) {
       print(e);
