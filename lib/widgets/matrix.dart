@@ -361,9 +361,9 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
             }
-          } else if (state == LoginState.loggedIn) {
+          }
+          else if (state == LoginState.loggedIn) {
             print(state);
-
             //matrix access token and client id
             box.write("accessToken", client.accessToken.toString());
             box.write("clientID", client.userID.toString());
@@ -373,8 +373,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
             if (sign_up || !validateStatus) {
               print("print 1");
-              widget.router!.currentState!.to(
-                '/lang',
+             // context.vRouter.to("/home/connect/lang");
+              widget.router!.currentState!.to( '/home/connect/lang',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
             } else {
@@ -386,7 +386,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
             }
-          } else {
+          }
+          else {
             print("looged out");
             widget.router!.currentState!.to(
               // state == LoginState.loggedIn ? '/rooms' : '/home',
