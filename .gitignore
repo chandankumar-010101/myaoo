@@ -10,6 +10,7 @@
 .buildlog/
 .history
 .svn/
+lib/generated_plugin_registrant.dart
 prime
 
 # libolm package
@@ -37,8 +38,11 @@ prime
 .pub/
 /build/
 .env.development
-.env
+.flutter-plugins-dependencies
+.packages
+package_config.json
 # Web related
+lib/generated_plugin_registrant.dart
 docs/build/
 docs/.jekyll-cache/
 docs/_site/

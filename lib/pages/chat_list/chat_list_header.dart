@@ -1,20 +1,156 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
-import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_list/client_chooser_button.dart';
+import 'package:vrouter/vrouter.dart';
+
 import '../../widgets/matrix.dart';
 
 class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
   final ChatListController controller;
 
-  const ChatListHeader({Key? key, required this.controller}) : super(key: key);
+  ChatListHeader({Key? key, required this.controller}) : super(key: key);
+
+
+  checkUser(BuildContext context){
+    final box = GetStorage();
+    if(box.read("usertype") == 2){
+      return  [
+        PopupMenuItem(
+          value: PopupMenuAction.setStatus,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.edit_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.setStatus),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.newGroup,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.group_add_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.createNewGroup),
+            ],
+          ),
+        ),
+
+        PopupMenuItem(
+          enabled: GetStorage().read("usertype")==2?true:false,
+          value: PopupMenuAction.newSpace,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.group_work_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.createNewSpace),
+            ],
+          ),
+        ),
+
+        PopupMenuItem(
+          value: PopupMenuAction.invite,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.adaptive.share_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.inviteContact),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.archive,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.archive_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.archive),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.settings,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.settings_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.settings),
+            ],
+          ),
+        ),
+      ];
+    }else{
+      return  [
+        PopupMenuItem(
+          value: PopupMenuAction.setStatus,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.edit_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.setStatus),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.newGroup,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.group_add_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.createNewGroup),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.invite,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.adaptive.share_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.inviteContact),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.archive,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.archive_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.archive),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.settings,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.settings_outlined),
+              const SizedBox(width: 12),
+              Text(L10n.of(context)!.settings),
+            ],
+          ),
+        ),
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,74 +234,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,
-                    itemBuilder: (_) => [
-                      PopupMenuItem(
-                        value: PopupMenuAction.setStatus,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.edit_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.setStatus),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: PopupMenuAction.newGroup,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.group_add_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.createNewGroup),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: PopupMenuAction.newSpace,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.group_work_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.createNewSpace),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: PopupMenuAction.invite,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.adaptive.share_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.inviteContact),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: PopupMenuAction.archive,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.archive_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.archive),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: PopupMenuAction.settings,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.settings_outlined),
-                            const SizedBox(width: 12),
-                            Text(L10n.of(context)!.settings),
-                          ],
-                        ),
-                      ),
-                    ],
+                    itemBuilder: (_) => checkUser(context),
                   ),
                 ],
       title: PageTransitionSwitcher(

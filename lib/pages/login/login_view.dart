@@ -77,12 +77,16 @@ class LoginView extends StatelessWidget {
                   // ),
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20, top: 40, bottom: 40),
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20, top: 40, bottom: 40),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ConstrainedBox(constraints: BoxConstraints(maxHeight: 100),child: Image.asset("assets/newAssets/pangea-bare.png")),
+                          ConstrainedBox(
+                              constraints: BoxConstraints(maxHeight: 100),
+                              child: Image.asset(
+                                  "assets/newAssets/pangea-bare.png")),
                           const SizedBox(
                             width: 10.0,
                           ),
@@ -98,64 +102,96 @@ class LoginView extends StatelessWidget {
                             constraints: const BoxConstraints(maxWidth: 550),
                             child: ClipRect(
                               child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                                filter:
+                                    ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.grey.shade100.withOpacity(0.5),
+                                      color:
+                                          Colors.grey.shade100.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15.0),
-                                      border: Border.all(width: 1, color: Colors.white)
-                                  ),
+                                      border: Border.all(
+                                          width: 1, color: Colors.white)),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       const SizedBox(height: 50.0),
                                       ConstrainedBox(
-                                        constraints: const BoxConstraints(maxWidth: 400),
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 400),
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
-                                          child: SizedBox(
+                                          child: Container(
                                             height: 50,
-                                            child: TextField(
+                                            child: TextFormField(
                                               readOnly: controller.loading,
                                               autocorrect: false,
                                               autofocus: true,
-                                              onChanged: controller.checkWellKnownWithCoolDown,
-                                              controller: controller.usernameController,
-                                              textInputAction: TextInputAction.next,
-                                              keyboardType: TextInputType.emailAddress,
-                                              style: FluffyThemes.loginTextFieldStyle,
+                                              onChanged: controller
+                                                  .checkWellKnownWithCoolDown,
+                                              controller:
+                                                  controller.usernameController,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              style: FluffyThemes
+                                                  .loginTextFieldStyle,
                                               autofillHints: controller.loading
                                                   ? null
                                                   : [AutofillHints.username],
                                               decoration: InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(25.0),
-                                                      borderSide:
-                                                          const BorderSide(color: Colors.white)),
-                                                  enabledBorder: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(25.0),
-                                                      borderSide:
-                                                          const BorderSide(color: Colors.white)),
-                                                  focusedBorder: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(25.0),
-                                                      borderSide:
-                                                          const BorderSide(color: Colors.white)),
-                                                  fillColor: const Color(0xFFDADDE2),
-                                                  filled: true,
-                                                  prefixIcon: SvgPicture.asset(
-                                                      "assets/newAssets/userIcon.svg",
-                                                      fit: BoxFit.scaleDown,
-                                                  ),
-                                                  errorText: controller.usernameError,
-                                                  hintText: L10n.of(context)!.emailOrUsername,
-                                                  hintStyle: const TextStyle(color: Color(0x35204880)),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color:
+                                                                Colors.white)),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Colors
+                                                                    .white)),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Colors
+                                                                    .white)),
+                                                fillColor:
+                                                    const Color(0xFFDADDE2),
+                                                filled: true,
+                                                prefixIcon: SvgPicture.asset(
+                                                  "assets/newAssets/userIcon.svg",
+                                                  fit: BoxFit.scaleDown,
+                                                ),
+                                                errorText:
+                                                    controller.usernameError,
+                                                hintText: L10n.of(context)!
+                                                    .emailOrUsername,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 25),
+                                                hintStyle: const TextStyle(
+                                                  color: Color(0x35204880),
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                       ConstrainedBox(
-                                        constraints: const BoxConstraints(maxWidth: 400),
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 400),
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: SizedBox(
@@ -166,50 +202,81 @@ class LoginView extends StatelessWidget {
                                               autofillHints: controller.loading
                                                   ? null
                                                   : [AutofillHints.password],
-                                              controller: controller.passwordController,
-                                              textInputAction: TextInputAction.next,
-                                              obscureText: !controller.showPassword,
+                                              controller:
+                                                  controller.passwordController,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              obscureText:
+                                                  !controller.showPassword,
                                               onSubmitted: controller.login,
-                                              style: FluffyThemes.loginTextFieldStyle,
+                                              style: FluffyThemes
+                                                  .loginTextFieldStyle,
                                               decoration: InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(25.0),
-                                                      borderSide:
-                                                          const BorderSide(color: Colors.white)),
-                                                  enabledBorder: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(25.0),
-                                                      borderSide:
-                                                          const BorderSide(color: Colors.white)),
-                                                  focusedBorder: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(25.0),
-                                                      borderSide:
-                                                          const BorderSide(color: Colors.white)),
-                                                  fillColor: const Color(0xFFDADDE2),
-                                                  filled: true,
-                                                  prefixIcon: SvgPicture.asset(
-                                                      "assets/newAssets/lockIcon.svg",
-                                                    fit: BoxFit.scaleDown,
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color:
+                                                                Colors.white)),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Colors
+                                                                    .white)),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Colors
+                                                                    .white)),
+                                                fillColor:
+                                                    const Color(0xFFDADDE2),
+                                                filled: true,
+                                                prefixIcon: SvgPicture.asset(
+                                                  "assets/newAssets/lockIcon.svg",
+                                                  fit: BoxFit.scaleDown,
+                                                ),
+                                                errorText:
+                                                    controller.passwordError,
+                                                suffixIcon: IconButton(
+                                                  tooltip: L10n.of(context)!
+                                                      .showPassword,
+                                                  icon: Icon(
+                                                    controller.showPassword
+                                                        ? Icons
+                                                            .visibility_off_outlined
+                                                        : Icons
+                                                            .visibility_outlined,
+                                                    color: Colors.white,
                                                   ),
-                                                  errorText: controller.passwordError,
-                                                  suffixIcon: IconButton(
-                                                    tooltip: L10n.of(context)!.showPassword,
-                                                    icon: Icon(
-                                                      controller.showPassword
-                                                          ? Icons.visibility_off_outlined
-                                                          : Icons.visibility_outlined,
-                                                      color: Colors.white,
-                                                    ),
-                                                    onPressed: controller.toggleShowPassword,
-                                                  ),
-                                                  hintText: L10n.of(context)!.password,
-                                                  hintStyle: const TextStyle(color: Color(0x35204880)),
+                                                  onPressed: controller
+                                                      .toggleShowPassword,
+                                                ),
+                                                hintText:
+                                                    L10n.of(context)!.password,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 25,
+                                                        horizontal: 10),
+                                                hintStyle: const TextStyle(
+                                                    color: Color(0x35204880)),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                       ConstrainedBox(
-                                        constraints: const BoxConstraints(maxWidth: 400),
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 400),
                                         child: Hero(
                                           tag: 'signinButton',
                                           child: Padding(
@@ -217,26 +284,33 @@ class LoginView extends StatelessWidget {
                                             child: ElevatedButton(
                                               onPressed: controller.loading
                                                   ? null
-                                                  : () => controller.login(context),
+                                                  : () =>
+                                                      controller.login(context),
                                               style: ElevatedButton.styleFrom(
-                                                primary: const Color(0xFF352048),
+                                                primary:
+                                                    const Color(0xFF352048),
                                                 onPrimary: Colors.white,
                                                 shadowColor: Colors.white,
                                               ),
                                               child: controller.loading
                                                   ? const LinearProgressIndicator()
-                                                  : Text(L10n.of(context)!.login),
+                                                  : Text(
+                                                      L10n.of(context)!.login),
                                             ),
                                           ),
                                         ),
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           const Text(
                                             "Don't have an account ?",
-                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
                                           ),
                                           const SizedBox(
                                             width: 10.0,
@@ -245,42 +319,50 @@ class LoginView extends StatelessWidget {
                                             onTap: () => Navigator.pop(context),
                                             child: const Text(
                                               "Sign Up",
-                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Row(
                                         children: [
-                                          const Expanded(child: Divider(color: Colors.white)),
+                                          const Expanded(
+                                              child:
+                                                  Divider(color: Colors.white)),
                                           Padding(
                                             padding: const EdgeInsets.all(16.0),
                                             child: Text(
                                               L10n.of(context)!.or,
-                                              style: const TextStyle(color: Colors.black),
+                                              style: const TextStyle(
+                                                  color: Colors.black),
                                             ),
                                           ),
-                                          const Expanded(child: Divider(color: Colors.white)),
+                                          const Expanded(
+                                              child:
+                                                  Divider(color: Colors.white)),
                                         ],
                                       ),
-
                                       ConstrainedBox(
-                                        constraints: const BoxConstraints(maxWidth: 400),
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 400),
                                         child: Padding(
                                           padding: const EdgeInsets.all(16),
                                           child: ElevatedButton(
-                                            onPressed:
-                                            controller.loading ? () {} : controller.passwordForgotten,
+                                            onPressed: controller.loading
+                                                ? () {}
+                                                : controller.passwordForgotten,
                                             style: ElevatedButton.styleFrom(
                                               primary: const Color(0xFF352048),
                                               onPrimary: Colors.white,
                                               shadowColor: Colors.white,
                                             ),
-                                            child: Text(L10n.of(context)!.passwordForgotten),
+                                            child: Text(L10n.of(context)!
+                                                .passwordForgotten),
                                           ),
                                         ),
                                       ),
-
                                       const SizedBox(
                                         height: 30.0,
                                       )
