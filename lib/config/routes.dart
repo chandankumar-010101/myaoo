@@ -12,6 +12,7 @@ import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
 import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart';
 import 'package:pangeachat/pages/login/login.dart';
 import 'package:pangeachat/pages/new_class/class_permissions.dart';
+import 'package:pangeachat/pages/new_class/exchange_class.dart';
 import 'package:pangeachat/pages/new_class/invite_students.dart';
 import 'package:pangeachat/pages/new_class/language_selection.dart';
 import 'package:pangeachat/pages/new_class/student_permissions.dart';
@@ -238,6 +239,11 @@ class AppRoutes {
                       VWidget(
                         path: 'update_student_permissions',
                         widget: const StudentPermissions(),
+                        buildTransition: _dynamicTransition,
+                      ),
+                      VWidget(
+                        path: 'exchange_class',
+                        widget: const ExchangeClass(),
                         buildTransition: _dynamicTransition,
                       ),
                     ]

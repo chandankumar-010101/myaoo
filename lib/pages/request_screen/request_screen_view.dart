@@ -429,6 +429,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     child: Image.network(
                                                         "https://staging.api.pangea.chat${classDetailUi!.flags![0].languageFlag.toString()}")),
                                               ]),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
                                               Text(
                                                 "${classDetailUi?.dominantLanguage}",
                                                 style: const TextStyle()
@@ -461,6 +464,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     height: 20,
                                                     child: Image.network(
                                                         "https://staging.api.pangea.chat${classDetailUi!.flags![1].languageFlag.toString()}")),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
                                                 Text(
                                                   "${classDetailUi?.targetLanguage}",
                                                   style: const TextStyle()
@@ -968,8 +974,32 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                       ),
                                                     ),
                                                     onPressed: () {
-                                                      print(
-                                                          "${classDetailUi!.flags!.toString()}");
+                                                      final String id = context.vRouter
+                                                          .queryParameters['id'] ??
+                                                          "";
+                                                      final box = GetStorage();
+                                                      if (id.isEmpty) {
+                                                        // print(
+                                                        //     "Unable to find class id");
+                                                      } else {
+                                                        box.write(
+                                                            "public",
+                                                            classDetailUi!
+                                                                .permissions!.isPublic);
+                                                        box.write(
+                                                            "openEnrollment",
+                                                            classDetailUi!.permissions!
+                                                                .isOpenEnrollment);
+                                                        box.write(
+                                                            "openExchange",
+                                                            classDetailUi!.permissions!
+                                                                .isOpenExchange);
+                                                        context.vRouter.to(
+                                                            "/classDetails/exchange_class",
+                                                            queryParameters: {
+                                                              "class_id": id,
+                                                            });
+                                                      }
                                                     },
                                                     child: Text(
                                                       "Request an Exchange",
@@ -2172,6 +2202,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     child: Image.network(
                                                         "https://staging.api.pangea.chat${classDetailUi!.flags![0].languageFlag.toString()}")),
                                               ]),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
                                               Text(
                                                 "${classDetailUi?.dominantLanguage}",
                                                 style: const TextStyle()
@@ -2204,6 +2237,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     height: 20,
                                                     child: Image.network(
                                                         "https://staging.api.pangea.chat${classDetailUi!.flags![1].languageFlag.toString()}")),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
                                                 Text(
                                                   "${classDetailUi?.targetLanguage}",
                                                   style: const TextStyle()
@@ -3811,6 +3847,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           child: Image.network(
                                               "https://staging.api.pangea.chat${classDetailUi!.flags![0].languageFlag.toString()}")),
                                     ]),
+                                   const SizedBox(
+                                      width: 5,
+                                    ),
                                     Text(
                                       "${classDetailUi?.dominantLanguage}",
                                       style: const TextStyle().copyWith(
@@ -3841,6 +3880,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           height: 20,
                                           child: Image.network(
                                               "https://staging.api.pangea.chat${classDetailUi!.flags![1].languageFlag.toString()}")),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
                                       Text(
                                         "${classDetailUi?.targetLanguage}",
                                         style: const TextStyle().copyWith(
@@ -5023,13 +5065,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                       .onPrimary,
                                             ),
                                           ),
-                                          // onPressed: ()async {
-                                          //
-                                          // },
-                                          // child: Padding(
-                                          //   padding: const EdgeInsets.symmetric(horizontal: 10,vertical:15),
-                                          //   child: Text('logout'.toUpperCase(),style: kBody15blue600,),
-                                          // ),
                                           onPressed: () {
                                             //print("haay haay");
                                             final String id = context.vRouter
@@ -5059,14 +5094,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   });
                                             }
                                           },
-                                          //height: 40,
-                                          //color: Theme.of(context).colorScheme.onPrimary,
-                                          //shape:
-                                          // RoundedRectangleBorder(
-                                          //     borderRadius:
-                                          //     BorderRadius
-                                          //         .circular(
-                                          //         25.0)),
                                           child: Text(
                                             "Class permissions",
                                             style: const TextStyle().copyWith(
@@ -5076,10 +5103,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     .color,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 12),
-                                            // style: TextStyle(
-                                            //     color: Colors.white,
-                                            //     fontWeight: FontWeight.w400,
-                                            //     fontSize: 12.0)
                                           ),
                                         ),
                                       ),
