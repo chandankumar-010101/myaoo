@@ -4,13 +4,13 @@
 
 import 'dart:convert';
 
-ClassDetailUi classDetailUiFromJson(String str) =>
-    ClassDetailUi.fromJson(json.decode(str));
+ClassDetailModel classDetailUiFromJson(String str) =>
+    ClassDetailModel.fromJson(json.decode(str));
 
-String classDetailUiToJson(ClassDetailUi data) => json.encode(data.toJson());
+String classDetailUiToJson(ClassDetailModel data) => json.encode(data.toJson());
 
-class ClassDetailUi {
-  ClassDetailUi({
+class ClassDetailModel {
+  ClassDetailModel({
     this.id,
     this.className,
     this.city,
@@ -52,7 +52,7 @@ class ClassDetailUi {
   int? totalStudent;
   List<Flag>? flags;
 
-  factory ClassDetailUi.fromJson(Map<String, dynamic> json) => ClassDetailUi(
+  factory ClassDetailModel.fromJson(Map<String, dynamic> json) => ClassDetailModel(
         id: json["id"] == null ? null : json["id"],
         className: json["class_name"] == null ? null : json["class_name"],
         city: json["city"] == null ? null : json["city"],
