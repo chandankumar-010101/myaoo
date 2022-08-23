@@ -257,8 +257,11 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                     .textTheme
                                     .bodyText1!
                                     .color,
-                                fontSize: 14),
+                                fontSize: 14,
+                              fontFamily:
+                            ),
                             overflow: TextOverflow.clip,
+
                           ),
                           value: oneToOneChatsWithinClass,
                           onChanged: setOneToOneChatsWithinClass,

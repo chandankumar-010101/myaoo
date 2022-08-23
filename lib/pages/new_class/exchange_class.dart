@@ -56,7 +56,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
             ? AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Create a Class",
+            "Exchange Class",
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
                 fontSize: 14),
@@ -92,7 +92,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                   height: 40,
                   child: Center(
                     child: Text(
-                      "Class Permissions",
+                      "Confirm the exchange?",
                       style: TextStyle().copyWith(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: 14),
@@ -110,18 +110,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SwitchListTile.adaptive(
-                        title: Text(
-                          "Public",
-                          style: TextStyle().copyWith(
-                              color:
-                              Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
-                          overflow: TextOverflow.clip,
-                        ),
-                        value: publicGroup,
-                        onChanged: setPublicGroup,
-                      ),
+
                       Container(
                         constraints:
                         BoxConstraints(minWidth: 100, maxWidth: 700),
@@ -132,7 +121,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               child: Padding(
                                 padding: EdgeInsets.only(right: 5),
                                 child: Text(
-                                  "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
+                                 "A space will be made where you can both create rooms for your students to chat. Students from both classes will see these rooms in the exchange tab, and be able to join and chat within them.",
                                   style: TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -147,18 +136,6 @@ class _ExchangeClassState extends State<ExchangeClass> {
                           ],
                         ),
                       ),
-                      SwitchListTile.adaptive(
-                        title: Text(
-                          "Open Enrollment?",
-                          style: TextStyle().copyWith(
-                              color:
-                              Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
-                          overflow: TextOverflow.clip,
-                        ),
-                        value: openEnrollment,
-                        onChanged: setOpenEnrollment,
-                      ),
                       Container(
                         constraints:
                         BoxConstraints(minWidth: 100, maxWidth: 700),
@@ -169,7 +146,8 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               child: Padding(
                                 padding: EdgeInsets.only(right: 5),
                                 child: Text(
-                                  "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
+                                  "While both teachers allow 1-to-1 chats in exchanges, students will have this permission in this exchange.",
+
                                   style: TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -184,17 +162,32 @@ class _ExchangeClassState extends State<ExchangeClass> {
                           ],
                         ),
                       ),
-                      SwitchListTile.adaptive(
-                        title: Text(
-                          "Open to exchanges?",
-                          style: TextStyle().copyWith(
-                              color:
-                              Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
-                          overflow: TextOverflow.clip,
+                      Container(
+                        constraints:
+                        BoxConstraints(minWidth: 100, maxWidth: 700),
+                        padding: EdgeInsets.all(size.height * 0.01),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child: Text(
+                                  "Either teachers can cancel the exchange at any time,",
+
+                               
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 14),
+                                  overflow: TextOverflow.clip,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        value: openToExchange,
-                        onChanged: setOpentToExchange,
                       ),
                       Container(
                         constraints:
@@ -206,8 +199,9 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               child: Padding(
                                 padding: EdgeInsets.only(right: 5),
                                 child: Text(
-                                  "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
-                                  style: TextStyle().copyWith(
+                                  "While both teachers allow students to create rooms in the exchange, students will have this permission.",
+
+                                style: TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
