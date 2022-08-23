@@ -95,7 +95,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       "Confirm the exchange?",
                       style: TextStyle().copyWith(
                           color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 14),
+                          fontSize: 14,fontWeight: FontWeight.w700),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.center,
                     ),
@@ -174,7 +174,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                 child: Text(
                                   "Either teachers can cancel the exchange at any time,",
 
-                               
+
                                   style: TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -321,9 +321,14 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               "Cancel",
                               style: TextStyle().copyWith(
                                   color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
+                                      .colorScheme
+                                      .onPrimary ==
+                                      Colors.white
+                                      ? Theme.of(context)
+                                      .primaryColorLight
+                                      : Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary,
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
@@ -378,9 +383,14 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               "Save",
                               style: TextStyle().copyWith(
                                   color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
+                                      .colorScheme
+                                      .onPrimary ==
+                                      Colors.white
+                                      ? Theme.of(context)
+                                      .primaryColorLight
+                                      : Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary,
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
