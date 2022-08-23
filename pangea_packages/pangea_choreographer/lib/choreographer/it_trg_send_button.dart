@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pangea_choreographer/choreographer/Repo/chreo_repo.dart';
+import 'package:pangea_choreographer/choreographer/constants/route_type.dart';
+import 'package:pangea_choreographer/choreographer/controller/state_controller.dart';
 
 import 'config/colors.dart';
 import 'controller/choreo_controller.dart';
@@ -102,17 +105,19 @@ class ItTrgSendButton extends StatelessWidget {
     const double flagSize = 30;
     return InkWell(
       onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => ItDropDown(
-              title: 'Target language',
-              onPress: (lang) {
-                itController.lang!.changeTrgLand(lang);
-              },
-              selectedLang: itController.lang!.trgLang!,
-              languages: itController.lang!.langList),
-          useRootNavigator: false,
-        );
+        itController.state?.currentRoute == ChoreoRoute.STEP1 && false
+            ? showDialog(
+                context: context,
+                builder: (context) => ItDropDown(
+                    title: 'Target language',
+                    onPress: (lang) {
+                      itController.lang!.changeTrgLand(lang);
+                    },
+                    selectedLang: itController.lang!.trgLang!,
+                    languages: itController.lang!.langList),
+                useRootNavigator: false,
+              )
+            : null;
       },
       child: Center(
         child: ClipRRect(

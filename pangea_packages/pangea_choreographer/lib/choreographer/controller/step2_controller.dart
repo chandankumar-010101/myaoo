@@ -84,9 +84,8 @@ class Step2Controller extends LoaderState {
       _addPayloadId(res);
 
       _isTranslationDone = res.isFinal;
-      if (!res.isFinal) {
-        receivedTextList.add(res);
-      }
+
+      receivedTextList.add(res);
 
       _setState();
     }).catchError((err) {
@@ -111,9 +110,10 @@ class Step2Controller extends LoaderState {
       controller.errorService!.resetError();
 
       if (selectedTranslations!.length > 0 && receivedTextList.isNotEmpty) {
-        if (!_isTranslationDone) {
-          receivedTextList!.removeLast();
-        }
+        receivedTextList!.removeLast();
+        // if (!_isTranslationDone) {
+        //   receivedTextList!.removeLast();
+        // }
         _isTranslationDone = false;
 
         removedTranslations.add(RemovedTranslation()

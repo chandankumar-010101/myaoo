@@ -37,6 +37,7 @@ class ChoreoRepo {
     final decodedBody = jsonDecode(res.body);
     ReceiveTextModel receiveText = new ReceiveTextModel();
     if (decodedBody['continuances'].runtimeType == String) {
+      receiveText.continuances = [];
       receiveText.isFinal = true;
     }
 
