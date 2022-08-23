@@ -132,7 +132,6 @@ flutter:
     - assets/icons/
     - assets/png/grow.png
     - assets/png/partner.png
-    - js/
 
   fonts:
     - family: Roboto

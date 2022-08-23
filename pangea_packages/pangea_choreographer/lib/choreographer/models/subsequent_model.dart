@@ -1,5 +1,5 @@
 class SubsequentTextModel {
-  int? translation_id;
+  String? translation_id;
   int? next_word_index;
   String? user_id;
   String? room_id;

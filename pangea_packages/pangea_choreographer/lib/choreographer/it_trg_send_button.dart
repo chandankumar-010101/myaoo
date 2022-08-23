@@ -8,6 +8,10 @@ import 'widgets/it_dropdown/it_dropdown.dart';
 class ItTrgSendButton extends StatelessWidget {
   final ChoreoController controller;
   ItTrgSendButton({Key? key, required this.controller}) : super(key: key);
+  bool get isSendDisabled {
+    return controller.step2!.selectedTranslations!.isEmpty ||
+        controller.step2!.isLoading;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +59,14 @@ class ItTrgSendButton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   )),
                 ),
-                onPressed: controller.step2!.selectedTranslations!.isEmpty
+                onPressed: isSendDisabled
                     ? null
                     : () {
                         controller.send();
                       },
                 child: Text('Send',
                     style: TextStyle(
-                      color: controller.step2!.selectedTranslations!.isEmpty
+                      color: isSendDisabled
                           ? ChoreoColor.disabled(context)
                           : ChoreoColor.textColor(context),
                     )),

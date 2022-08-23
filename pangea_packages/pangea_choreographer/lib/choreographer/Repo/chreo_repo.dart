@@ -20,8 +20,7 @@ class ChoreoRepo {
     ReceiveTextModel receiveText = new ReceiveTextModel()
       ..fromJson(jsonDecode(res.body));
     for (int i = 0; i < receiveText.continuances!.length; i++) {
-      receiveText.continuances![i].index =
-          receiveText.continuances![i].level! - 1;
+      receiveText.continuances![i].index = i;
     }
     return receiveText;
   }
@@ -45,8 +44,7 @@ class ChoreoRepo {
 
     if (!receiveText.isFinal) {
       for (int i = 0; i < receiveText.continuances!.length; i++) {
-        receiveText.continuances![i].index =
-            receiveText.continuances![i].level! - 1;
+        receiveText.continuances![i].index = i;
       }
     }
 
