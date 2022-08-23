@@ -14,7 +14,7 @@ class Step2Controller extends LoaderState {
   List<Continuances>? selectedTranslations = [];
 
   // ignore: non_constant_identifier_names
-  List<int> _translationIds = [];
+  List<String> _translationIds = [];
   bool _isTranslationDone = false;
   List<RemovedTranslation> removedTranslations = [];
   Step2Controller(this.controller);
@@ -23,7 +23,7 @@ class Step2Controller extends LoaderState {
     _firstTranslation();
   }
 
-  int get translationId {
+  String get translationId {
     return _translationIds.last;
   }
 

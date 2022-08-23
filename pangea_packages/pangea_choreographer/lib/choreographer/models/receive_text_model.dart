@@ -2,7 +2,7 @@ class ReceiveTextModel {
   String? translation;
   List<Continuances>? continuances;
   bool isFinal = false;
-  int? translationId;
+  String? translationId;
   int? payload_id;
   ReceiveTextModel({this.translation, this.continuances, this.translationId});
 

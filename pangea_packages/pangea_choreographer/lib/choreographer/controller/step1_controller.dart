@@ -36,6 +36,7 @@ class Step1Controller extends LoaderState {
         controller.state!.changeRoute(ChoreoRoute.STEP1);
       }
     } catch (err) {
+      print(err.toString());
       print('Error in initial');
       stopLoading();
       controller.state!.changeRoute(ChoreoRoute.STEP1_ERROR);
