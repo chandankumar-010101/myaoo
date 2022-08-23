@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:pangea_choreographer/choreographer/constants/route_type.dart';
 import 'package:pangea_choreographer/choreographer/controller/error_service.dart';
 
 import 'lang_controller.dart';
@@ -53,8 +54,21 @@ class ChoreoController {
     this._sendCallback = setCallBack;
   }
 
+  String? get translatedText {
+    if (state!.currentRoute == ChoreoRoute.INITAL_LOADING ||
+        state!.currentRoute == ChoreoRoute.SEND ||
+        state!.currentRoute == ChoreoRoute.STEP1) {
+      return textController!.text;
+    }
+    if (step2!.receivedTextList.isEmpty) {
+      return '';
+    }
+
+    return step2!.receivedTextList.last.translation;
+  }
+
   void send() {
-    this.textController!.value = TextEditingValue(text: step2!.translatedText!);
+    this.textController!.value = TextEditingValue(text: translatedText!);
     _sendCallback!();
     clearState();
   }

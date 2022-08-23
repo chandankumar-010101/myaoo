@@ -75,7 +75,7 @@ class Step1Controller extends LoaderState {
       return _choreoResponse!.grammarData!.tokens;
     }
     List<Tokens> newList = [];
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
       newList.add(_choreoResponse!.grammarData!.tokens![i]);
     }
     return newList;

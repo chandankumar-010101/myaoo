@@ -49,8 +49,8 @@ class Step2View extends StatelessWidget {
                             ...renderShimmerIfListEmpty(context,
                                     controller: controller!)
                                 .map((e) => e),
-                            ...controller.step2!.availTranslations!.last.map(
-                                (e) => controller.step2!.isLoading
+                            ...controller.step2!.availTranslations!.map((e) =>
+                                controller.step2!.isLoading
                                     ? ItShimmer(
                                         text: e.text,
                                       )
@@ -84,7 +84,7 @@ class Step2View extends StatelessWidget {
       return [const SizedBox.shrink()];
     }
 
-    if (controller.step2!.availTranslations!.last.isEmpty) {
+    if (controller.step2!.receivedTextList!.isEmpty) {
       List<String> dummyStrings = [];
       for (int i = 0; i < noOfBars; i++) {
         dummyStrings.add('Dummy');
@@ -109,7 +109,7 @@ class Step2View extends StatelessWidget {
             color: controller.step2!.selectedTranslations!.isEmpty ||
                     controller.step2!.isLoading
                 ? ChoreoColor.disabled(context)
-                : Theme.of(context).primaryColor,
+                : ChoreoColor.removeButtonColor(context),
           )),
     );
   }

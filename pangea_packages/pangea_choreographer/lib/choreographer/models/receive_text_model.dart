@@ -5,6 +5,17 @@ class ReceiveTextModel {
   String? translationId;
   int? payload_id;
   ReceiveTextModel({this.translation, this.continuances, this.translationId});
+  List<Continuances>? get uniqueContinuances {
+    List<Continuances> uniqueOptions = [];
+    Map<String, Continuances> hashMap = {};
+    continuances?.forEach((element) {
+      if (hashMap[element.text!] == null) {
+        uniqueOptions.add(element);
+        hashMap[element.text!] = element;
+      }
+    });
+    return uniqueOptions;
+  }
 
   fromJson(Map<String, dynamic> json) {
     translation = json['translation'];

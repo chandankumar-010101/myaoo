@@ -9,12 +9,12 @@ import 'Loader_state.dart';
 
 class Step2Controller extends LoaderState {
   ChoreoController controller;
-  ReceiveTextModel? translations;
-  List<List<Continuances>>? availTranslations = [[]];
+  List<ReceiveTextModel> receivedTextList = [];
+  //List<List<Continuances>>? availTranslations = [[]];
   List<Continuances>? selectedTranslations = [];
 
   // ignore: non_constant_identifier_names
-  List<String> _translationIds = [];
+  //List<String> _translationIds = [];
   bool _isTranslationDone = false;
   List<RemovedTranslation> removedTranslations = [];
   Step2Controller(this.controller);
@@ -24,7 +24,18 @@ class Step2Controller extends LoaderState {
   }
 
   String get translationId {
-    return _translationIds.last;
+    return receivedTextList.last.translationId!;
+  }
+
+  List<Continuances> get availTranslations {
+    if (receivedTextList.isEmpty) {
+      return [];
+    }
+    if (receivedTextList.last.continuances!.isEmpty) {
+      return [];
+    }
+
+    return receivedTextList.last.uniqueContinuances!;
   }
 
   void _firstTranslation() {
@@ -40,14 +51,15 @@ class Step2Controller extends LoaderState {
     ChoreoRepo.firstCall(initialTextModel).then((res) {
       _addPayloadId(res);
       stopLoading();
-      _translationIds.add(res.translationId!);
+
       try {
-        availTranslations!.add(res.continuances!);
+        receivedTextList.add(res);
+        //availTranslations!.add(res.uniqueContinuances!);
       } catch (err) {
         controller.errorService!.showError('Please try again later');
 
         print(err);
-        availTranslations = [[]];
+        //availTranslations = [[]];
       }
       _setState();
     }).catchError((err) {
@@ -70,12 +82,10 @@ class Step2Controller extends LoaderState {
     ChoreoRepo.subsequentCall(subSeqText).then((res) {
       stopLoading();
       _addPayloadId(res);
-      if (res.translationId != null) {
-        _translationIds.add(res.translationId!);
-      }
+
       _isTranslationDone = res.isFinal;
       if (!res.isFinal) {
-        availTranslations!.add(res.continuances!);
+        receivedTextList.add(res);
       }
 
       _setState();
@@ -99,11 +109,10 @@ class Step2Controller extends LoaderState {
   void removeLastSelected() {
     if (!isLoading) {
       controller.errorService!.resetError();
-      _translationIds.removeLast();
-      if (selectedTranslations!.length > 0 &&
-          availTranslations!.last.isNotEmpty) {
+
+      if (selectedTranslations!.length > 0 && receivedTextList.isNotEmpty) {
         if (!_isTranslationDone) {
-          availTranslations!.removeLast();
+          receivedTextList!.removeLast();
         }
         _isTranslationDone = false;
 
@@ -115,16 +124,6 @@ class Step2Controller extends LoaderState {
     }
   }
 
-  String? get translatedText {
-    String? text = '';
-    selectedTranslations!.forEach((element) {
-      text = text! + element.text! + ' ';
-    });
-    text!.trim();
-
-    return text;
-  }
-
   void _addPayloadId(ReceiveTextModel res) {
     if (res.payload_id != null) {
       controller.state!.payLoadIds.add(res.payload_id!);
@@ -133,8 +132,7 @@ class Step2Controller extends LoaderState {
 
   void clearState() {
     _isTranslationDone = false;
-    availTranslations = [[]];
+    receivedTextList = [];
     selectedTranslations = [];
-    _translationIds = [];
   }
 }
