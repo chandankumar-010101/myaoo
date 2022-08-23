@@ -90,17 +90,17 @@ class ItSrcSendButton extends StatelessWidget {
     const double flagSize = 30;
     return InkWell(
       onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => ItDropDown(
-              title: 'Source language',
-              onPress: (lang) {
-                controller.lang!.changeSrcLang(lang);
-              },
-              selectedLang: controller.lang!.srcLang!,
-              languages: controller.lang!.langList),
-          useRootNavigator: false,
-        );
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => ItDropDown(
+        //       title: 'Source language',
+        //       onPress: (lang) {
+        //         controller.lang!.changeSrcLang(lang);
+        //       },
+        //       selectedLang: controller.lang!.srcLang!,
+        //       languages: controller.lang!.langList),
+        //   useRootNavigator: false,
+        // );
       },
       child: Center(
         child: Container(
