@@ -59,7 +59,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                   "Create a Class",
                   style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1!.color,
-                      fontSize: 14),
+                      fontSize: 14,fontWeight: FontWeight.w700),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                 ),
@@ -93,9 +93,9 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                   child: Center(
                     child: Text(
                       "Class Permissions",
-                      style: TextStyle().copyWith(
+                      style: const TextStyle().copyWith(
                           color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 14),
+                          fontSize: 14,fontWeight: FontWeight.w700),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.center,
                     ),
@@ -103,7 +103,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                 ),
                 //switch buttons
                 Container(
-                  constraints: BoxConstraints(
+                  constraints:const BoxConstraints(
                     minWidth: 100,
                     maxWidth: 500,
                   ),
@@ -113,10 +113,12 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                       SwitchListTile.adaptive(
                         title: Text(
                           "Public",
-                          style: TextStyle().copyWith(
+                          style: const TextStyle().copyWith(
                               color:
                                   Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
+                              fontSize: 14,
+                          fontWeight: FontWeight.w700
+                          ),
                           overflow: TextOverflow.clip,
                         ),
                         value: publicGroup,
@@ -126,34 +128,39 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                         constraints:
                             BoxConstraints(minWidth: 100, maxWidth: 700),
                         padding: EdgeInsets.all(size.height * 0.01),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Text(
-                                  "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 14),
-                                  overflow: TextOverflow.clip,
-                                  textAlign: TextAlign.center,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 5),
+                                  child: Text(
+                                    "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 14),
+                                    overflow: TextOverflow.clip,
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       SwitchListTile.adaptive(
                         title: Text(
                           "Open Enrollment?",
-                          style: TextStyle().copyWith(
+                          style: const TextStyle().copyWith(
                               color:
                                   Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
+                              fontSize: 14,
+                             fontWeight: FontWeight.w700
+                          ),
                           overflow: TextOverflow.clip,
                         ),
                         value: openEnrollment,
@@ -163,34 +170,39 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                         constraints:
                             BoxConstraints(minWidth: 100, maxWidth: 700),
                         padding: EdgeInsets.all(size.height * 0.01),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Text(
-                                  "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 14),
-                                  overflow: TextOverflow.clip,
-                                  textAlign: TextAlign.center,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 5),
+                                  child: Text(
+                                    "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 14),
+                                    overflow: TextOverflow.clip,
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       SwitchListTile.adaptive(
                         title: Text(
                           "Open to exchanges?",
-                          style: TextStyle().copyWith(
+                          style: const TextStyle().copyWith(
                               color:
                                   Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700
+                          ),
                           overflow: TextOverflow.clip,
                         ),
                         value: openToExchange,
@@ -200,25 +212,28 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                         constraints:
                             const BoxConstraints(minWidth: 100, maxWidth: 700),
                         padding: EdgeInsets.all(size.height * 0.01),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Text(
-                                  "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 14),
-                                  overflow: TextOverflow.clip,
-                                  textAlign: TextAlign.center,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 5),
+                                  child: Text(
+                                    "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 14),
+                                    overflow: TextOverflow.clip,
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -240,7 +255,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                               child: Center(
                                 child: Text(
                                   "2/4",
-                                  style: TextStyle().copyWith(
+                                  style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
@@ -325,11 +340,16 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                 child: Center(
                                   child: Text(
                                     "Cancel",
-                                    style: TextStyle().copyWith(
+                                    style: const TextStyle().copyWith(
                                         color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
+                                            .colorScheme
+                                            .onPrimary ==
+                                            Colors.white
+                                            ? Theme.of(context)
+                                            .primaryColorLight
+                                            : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                         fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.center,
@@ -382,11 +402,17 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                 child: Center(
                                   child: Text(
                                     "Save",
-                                    style: TextStyle().copyWith(
+                                    style: const TextStyle().copyWith(
                                         color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
+                                            .colorScheme
+                                            .onPrimary ==
+                                            Colors.white
+                                            ? Theme.of(context)
+                                            .primaryColorLight
+                                            : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                        ,
                                         fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.center,
