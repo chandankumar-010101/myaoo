@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
-import 'package:snapping_sheet/snapping_sheet.dart';
-import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_list/spaces_bottom_bar.dart';
 import 'package:pangeachat/widgets/connection_status_header.dart';
+import 'package:snapping_sheet/snapping_sheet.dart';
+import 'package:vrouter/vrouter.dart';
+
 import '../../widgets/matrix.dart';
 import 'chat_list_body.dart';
 import 'chat_list_header.dart';

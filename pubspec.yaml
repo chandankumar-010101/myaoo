@@ -4,7 +4,7 @@ publish_to: none
 version: 1.5.0+2323
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.6 <3.0.0"
 
 dependencies:
   adaptive_dialog: ^1.5.1
@@ -89,13 +89,14 @@ dependencies:
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
 
-  fluttertoast: ^8.0.9
-
   tuple: any
   get_storage: ^2.0.3
   get: ^4.6.5
   dropdown_button2: ^1.6.3
   flutter_dotenv: ^5.0.2
+  fluttertoast: ^8.0.9
+  jwt_decoder: ^2.0.1
+
 
   # Pangeachat custom packages
   pangea_choreographer:
@@ -119,16 +120,19 @@ flutter_native_splash:
 
 flutter:
   generate: true
-  uses-material-design: true 
+  uses-material-design: true
   assets:
-
     - .env.development
     - .env.example
     - assets/
+    - assets/png/
     - assets/sounds/
     - assets/newAssets/
     - assets/countryFlags/
     - assets/icons/
+    - assets/png/grow.png
+    - assets/png/partner.png
+    - js/
 
   fonts:
     - family: Roboto

@@ -6,6 +6,8 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_view.dart';
@@ -24,6 +26,7 @@ import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 import '../bootstrap/bootstrap_dialog.dart';
+import '../search/search_view_controller.dart';
 
 enum SelectMode { normal, share, select }
 
@@ -93,7 +96,16 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   void editSpace(BuildContext context, String spaceId) async {
     await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
-    VRouter.of(context).toSegments(['classes', spaceId]);
+    // print(spaceId);
+    // // final searchController = Get.put(SearchViewController());
+    // // print(searchController
+    // //     .classList[i]
+    // //     .pangea_class_room_id
+    // //     .toString());
+   // print(spaceId);
+
+    VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
+   // VRouter.of(context).toSegments(['classes', spaceId]);
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
@@ -359,7 +371,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         VRouter.of(context).to('/newgroup');
         break;
       case PopupMenuAction.newSpace:
-        VRouter.of(context).to('/newspace');
+        //Matrix.of(context).client.
+
+        VRouter.of(context).to('/newclass');
         break;
       case PopupMenuAction.archive:
         VRouter.of(context).to('/archive');
