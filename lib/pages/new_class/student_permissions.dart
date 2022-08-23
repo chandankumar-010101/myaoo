@@ -258,7 +258,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                     .bodyText1!
                                     .color,
                                 fontSize: 14,
-                              fontFamily:
+
                             ),
                             overflow: TextOverflow.clip,
 
