@@ -9,7 +9,7 @@ class UserInfo {
     access = json['access'];
     refresh = json['refresh'];
     profile =
-    json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
+    json['profile'] != null ? Profile.fromJson(json['profile']) : null;
   }
 
   Map<String, dynamic> toJson() {
