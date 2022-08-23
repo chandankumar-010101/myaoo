@@ -400,10 +400,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               }
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Unable to validate User")));
-              await showFutureLoadingDialog(
-                context: context,
-                future: () => client.logout(),
-              );
+              UserDetails.logoutUser(client: client, context: context);
             }
             }).catchError((e) async {
               ScaffoldMessenger.of(context).showSnackBar(

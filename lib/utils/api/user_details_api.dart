@@ -4,10 +4,12 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/user_info.dart';
 import 'package:pangeachat/utils/api_urls.dart';
 
@@ -126,5 +128,16 @@ class UserDetails {
           snackStyle: SnackStyle.GROUNDED,
           backgroundColor: Colors.red);
     }
+  }
+  static logoutUser({ required BuildContext context, required Client client}) async {
+    await showFutureLoadingDialog(
+        context: context,
+        future: () => client.logout(),
+    ).then((value) {
+      box.erase();
+    }).catchError((e){
+      print("lougout error");
+      print(e);
+    });
   }
 }
