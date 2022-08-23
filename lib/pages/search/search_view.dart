@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_item.dart';
 import 'package:pangeachat/pages/search/search_view_controller.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/utils/string_extension.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/contacts_list.dart';
@@ -33,14 +33,12 @@ class _SearchViewState extends State<SearchView> {
   var box = GetStorage();
   String id = "";
 
-  userAgeDetails() async {
-    await UserDetails.userAge();
-  }
+
 
   @override
   void initState() {
     super.initState();
-    userAgeDetails();
+    PangeaServices.userAge();
   }
 
   Rx<bool> firstTime = true.obs;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/services/class_services.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
 class ExchangeClass extends StatefulWidget {
@@ -341,7 +341,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                           final result = await showFutureLoadingDialog(
                             context: context,
                             future: () =>
-                                ClassServices.updateClassPermission(
+                                PangeaServices.updateClassPermission(
                                   context: context,
                                   classId: id,
                                   isPublic: publicGroup.toString(),

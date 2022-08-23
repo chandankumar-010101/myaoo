@@ -571,11 +571,10 @@
 // }
 
 import 'dart:math';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
+import '../../services/services.dart';
 
 class SearchDiscoverView extends StatefulWidget {
   const SearchDiscoverView({Key? key}) : super(key: key);
@@ -588,7 +587,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
   var box = GetStorage();
 
   userAgeDetails() async {
-    await UserDetails.userAge();
+    await PangeaServices.userAge();
   }
 
   Object? dayId;
@@ -615,7 +614,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
       calculateAge();
       print("value of conditions is ${UserAge>18}");
       if(UserAge>18){
-      await UserDetails().updateUserAge(dayId, monthId, yearId);
+      await PangeaServices.updateUserAge(dayId, monthId, yearId);
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -642,14 +641,16 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     if (month2 > month1) {
       UserAge--;
     } else if (month1 == month2) {
-      int day1 = currentDate.day;
-      int day2 = currentDay;
+      final int day1 = currentDate.day;
+      final int day2 = currentDay;
       if (day2 > day1) {
         UserAge--;
       }
     }
-    print("object");
-    print(UserAge);
+    if (kDebugMode) {
+      print("object");
+      print(UserAge);
+    }
     return UserAge;
   }
 
@@ -669,10 +670,9 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
   Widget build(BuildContext context) {
 
     age = int.parse(box.read("age").toString());
-    Random random = Random();
-    List list = List<int>.generate(31, (i) => i + 1);
-    List month = List<int>.generate(12, (i) => i + 1);
-    List year = List<int>.generate(100, (i) => i + 1950);
+    final List list = List<int>.generate(31, (i) => i + 1);
+    final List month = List<int>.generate(12, (i) => i + 1);
+    final List year = List<int>.generate(100, (i) => i + 1950);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

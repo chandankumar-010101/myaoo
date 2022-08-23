@@ -12,7 +12,7 @@ import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/class_detail_model.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import '../../services/class_services.dart';
+import '../../services/services.dart';
 import '../../utils/api_urls.dart';
 import '../../widgets/matrix.dart';
 import 'package:http/http.dart' as http;
@@ -1803,7 +1803,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                 if (kDebugMode) {
                                                   print(token);
                                                 }
-                                                ClassServices
+                                                PangeaServices
                                                     .deleteClass(
                                                     roomId: room
                                                         .id,
@@ -3504,8 +3504,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             if (kDebugMode) {
                                               print(token);
                                             }
-                                            ClassServices
-                                                .deleteClass(
+                                            PangeaServices.deleteClass(
                                                 context:
                                                 context,
                                                 roomId: room
@@ -4915,7 +4914,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       if (kDebugMode) {
                                         print(token);
                                       }
-                                      ClassServices.deleteClass(
+                                      PangeaServices.deleteClass(
                                           context: context,
                                           roomId: room.id);
                                       if (kDebugMode) {
@@ -5382,7 +5381,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     if (kDebugMode) {
                                       print(token);
                                     }
-                                    ClassServices.deleteClass(
+                                    PangeaServices.deleteClass(
                                         context: context,
                                         roomId: room.id);
                                     if (kDebugMode) {
