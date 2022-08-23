@@ -48,13 +48,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text("Class Permissions "),
-        actions: [
-          InkWell(
-              onTap: () {
-                //print(context.vRouter.queryParameters['id']);
-              },
-              child: const Text("Hello"))
-        ],
       ),
       body: FutureBuilder(
         future: callMethod(context),

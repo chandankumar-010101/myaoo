@@ -103,6 +103,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     // //     .pangea_class_room_id
     // //     .toString());
    // print(spaceId);
+
     VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
    // VRouter.of(context).toSegments(['classes', spaceId]);
   }
@@ -371,6 +372,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         break;
       case PopupMenuAction.newSpace:
         //Matrix.of(context).client.
+
         VRouter.of(context).to('/newclass');
         break;
       case PopupMenuAction.archive:
