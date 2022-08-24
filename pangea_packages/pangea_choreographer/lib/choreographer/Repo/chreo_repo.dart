@@ -10,16 +10,19 @@ import '../network/urls.dart';
 import 'package:http/http.dart';
 import 'dart:math';
 
+import 'dart:convert' show utf8;
+
 class ChoreoRepo {
   static Future<ReceiveTextModel> firstCall(InitialTextModel initalText) async {
     final Requests req = Requests(Urls.baseUrl);
 
     final Response res =
         await req.post(url: Urls.firstStep, body: initalText.toJson());
-    print(jsonDecode(res.body));
+
     ReceiveTextModel receiveText = new ReceiveTextModel()
-      ..fromJson(jsonDecode(res.body));
+      ..fromJson(jsonDecode(utf8.decode(res.bodyBytes).toString()));
     for (int i = 0; i < receiveText.continuances!.length; i++) {
+      print('${receiveText.continuances![i].text}');
       receiveText.continuances![i].index = i;
     }
     return receiveText;
@@ -34,7 +37,7 @@ class ChoreoRepo {
     print(res.body);
 
     // TODO
-    final decodedBody = jsonDecode(res.body);
+    final decodedBody = jsonDecode(utf8.decode(res.bodyBytes).toString());
     ReceiveTextModel receiveText = new ReceiveTextModel();
     if (decodedBody['continuances'].runtimeType == String) {
       receiveText.continuances = [];
@@ -58,9 +61,10 @@ class ChoreoRepo {
 
     final Response res =
         await req.post(url: Urls.choreo, body: initCall.toJson());
+
     print(jsonDecode(res.body));
-    ChoreoResponseModel receiveText =
-        ChoreoResponseModel.fromJson(jsonDecode(res.body));
+    ChoreoResponseModel receiveText = ChoreoResponseModel.fromJson(
+        jsonDecode(utf8.decode(res.bodyBytes).toString()));
 
     return receiveText;
   }
