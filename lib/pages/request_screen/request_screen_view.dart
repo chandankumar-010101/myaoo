@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/config/app_config.dart';
+import 'package:pangeachat/utils/api/user_details_api.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
@@ -45,7 +46,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         },
       ).then((value) {
         if (value.statusCode == 200 || value.statusCode == 201) {
-          classDetailUi = classDetailUiFromJson(value.body);
+          classDetailUi = classDetailModelFromJson(value.body);
         } else {
           print(value.statusCode);
           print("Exception while fetching data");
@@ -958,9 +959,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         ),
                       ),
                       box.read("usertype") == 2
-                          ? box.read("clientID") ==
-                          classDetailUi!.classAuthorId
-                          ? Container()
+                          ? box.read("clientID") == classDetailUi!.classAuthorId ? Container()
                           : Container(
                         margin: const EdgeInsets.fromLTRB(
                             50, 30, 50, 0),
@@ -1113,7 +1112,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         ),
                       )
-                          : Container(
+                          :box.read("clientID") == classDetailUi!.classAuthorId ? Container(): Container(
                         margin: const EdgeInsets.fromLTRB(
                             50, 30, 50, 0),
                         child: Row(
@@ -1148,9 +1147,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .onPrimary,
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    print("value is printted");
+
+                                    UserDetails.enrollClassValidate(
+                                        context: context, room_id: '${classDetailUi!.pangeaClassRoomId}');
+                                  },
                                   child: Text(
-                                    "Request an Exchange",
+                                    "Request an Enroll",
                                     style: const TextStyle()
                                         .copyWith(
                                         color: Theme.of(
@@ -1238,6 +1242,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         ),
                       ),
+
+
                       box.read("clientID") ==
                           classDetailUi!.classAuthorId
                           ? Flexible(

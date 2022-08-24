@@ -10,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/model/class_detail_model.dart';
 import 'package:pangeachat/model/user_info.dart';
 import 'package:pangeachat/utils/api_urls.dart';
 
@@ -140,4 +141,341 @@ class UserDetails {
       print(e);
     });
   }
+
+
+
+  // /// exchange class validate api
+  // exchangeClassValidate(class_id) async {
+  //   var Url = "${ApiUrls.exchangeClassValidate}";
+  //   log("Url is $Url");
+  //   Map<String,dynamic> data ={
+  //
+  //     "pangea_class_room_id": class_id,
+  //     "student_id":"${box.read("ClientID")}"
+  //
+  //   };
+  //   log(data.toString());
+  //   http.Response response = await http.post(
+  //     Uri.parse(Url),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer ${box.read("access")}",
+  //     },
+  //     body: jsonEncode(data),
+  //   );
+  //   print(response.body);
+  //   log(response.body);
+  //   log(response.body);
+  //   log(response.body);
+  //   if (response.statusCode == 200) {
+  //
+  //     ClassDetailModel p = classDetailModelFromJson(response.body);
+  //
+  //     return p;
+  //   } else if (response.statusCode == 400) {
+  //     log("400" + response.body);
+  //   } else {
+  //     Get.rawSnackbar(
+  //         message: "Something went wrong",
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         margin: EdgeInsets.zero,
+  //         snackStyle: SnackStyle.GROUNDED,
+  //         backgroundColor: Colors.red);
+  //   }
+  // }
+  //
+  // /// exchange class api
+  // exchangeClass(user_id) async {
+  //   var Url = "${ApiUrls.getClassDetails}$user_id";
+  //   log("Url is $Url");
+  //   http.Response response = await http.get(
+  //     Uri.parse(Url),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer ${box.read("access")}",
+  //     },
+  //   );
+  //   print(response.body);
+  //   log(response.body);
+  //   log(response.body);
+  //   log(response.body);
+  //   if (response.statusCode == 200) {
+  //
+  //     ClassDetailModel p = classDetailModelFromJson(response.body);
+  //
+  //     return p;
+  //   } else if (response.statusCode == 400) {
+  //     log("400" + response.body);
+  //   } else {
+  //     Get.rawSnackbar(
+  //         message: "Something went wrong",
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         margin: EdgeInsets.zero,
+  //         snackStyle: SnackStyle.GROUNDED,
+  //         backgroundColor: Colors.red);
+  //   }
+  // }
+  //
+  // /// enroll class validate api
+  // // // enrollClassValidate1(room_id) async {
+  // // //   ;
+  // // //
+  // // //   print(response.body);
+  // // //   print(response.statusCode);
+  // // //   if (response.statusCode == 200) {
+  // // //
+  // // //    var body=jsonDecode(response.body);
+  // // //
+  // // //
+  // // //
+  // // //    if(body["is_enrollment_sent"]==false){
+  // // //      print("print");
+  // // //      enrollClass(room_id);
+  // // //    }
+  // // //    else{
+  // // //
+  // // //    }
+  // // //
+  // // //   } else if (response.statusCode == 400) {
+  // // //     log("400" + response.body);
+  // // //   } else {
+  // // //     Get.rawSnackbar(
+  // // //         message: "Something went wrong",
+  // // //         snackPosition: SnackPosition.BOTTOM,
+  // // //         margin: EdgeInsets.zero,
+  // // //         snackStyle: SnackStyle.GROUNDED,
+  // // //         backgroundColor: Colors.red);
+  // // //   }
+  // // // }
+  // //
+  // // /// enroll class api
+  // // enrollClass1(room_id) async {
+  // //  ;
+  // //   print(response.body);
+  // //   log(response.body);
+  // //   log(response.body);
+  // //   log(response.body);
+  // //   if (response.statusCode == 200) {
+  // //
+  // //
+  // //
+  // //
+  // //   } else if (response.statusCode == 400) {
+  // //     log("400" + response.body);
+  // //   } else {
+  // //     Get.rawSnackbar(
+  // //         message: "Something went wrong",
+  // //         snackPosition: SnackPosition.BOTTOM,
+  // //         margin: EdgeInsets.zero,
+  // //         snackStyle: SnackStyle.GROUNDED,
+  // //         backgroundColor: Colors.red);
+  // //   }
+  // // }
+
+
+
+  static Future<bool?> enrollClassValidate({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClassValidate}";
+    log("Url is $Url");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "student_id":"${box.read("clientID")}"
+
+    };
+
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+
+        var body=jsonDecode(value.body);
+
+
+
+        if(body["is_enrollment_sent"]==false){
+          print("print");
+          enrollClass( context: context, room_id: '${room_id}');
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Enrollment Request Already send successfully")));
+        }
+
+       return true;
+    }}).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
+
+  static Future<bool?> enrollClass({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClass}";
+    log("Url is $Url");
+    print("value of enrolling section");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "student_id":"${box.read("clientID")}"
+
+    };
+    log(data.toString());
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Send successfully")));
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Enrollment Request Already send successfully")));
+        }
+
+        return true;
+      }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
+  static Future<bool?> exchangeClassValidate({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClassValidate}";
+    log("Url is $Url");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "teacher_id":"${box.read("clientID")}"
+
+    };
+
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+
+        var body=jsonDecode(value.body);
+
+
+
+        if(body["is_enrollment_sent"]==false){
+          print("print");
+          enrollClass( context: context, room_id: '${room_id}');
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Enrollment Request Already send successfully")));
+        }
+
+        return true;
+      }}).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
+
+  static Future<bool?> exchangeClass({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClass}";
+    log("Url is $Url");
+    print("value of enrolling section");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "teacher_id":"${box.read("clientID")}"
+
+    };
+    log(data.toString());
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Send successfully")));
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Already send successfully")));
+      }
+
+      return true;
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
 }
