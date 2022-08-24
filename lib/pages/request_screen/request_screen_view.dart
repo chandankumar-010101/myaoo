@@ -3026,9 +3026,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                               .onPrimary,
                                                     ),
                                                   ),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    context.vRouter.to(
+                                                      "/request_ui",
+                                                    );
+                                                  },
                                                   child: Text(
-                                                    "Request an Exchange",
+                                                    "Request to enroll ",
                                                     style: const TextStyle()
                                                         .copyWith(
                                                             color: Theme.of(
