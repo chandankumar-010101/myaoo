@@ -103,7 +103,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                 ),
                 //switch buttons
                 Container(
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 100,
                     maxWidth: 500,
                   ),
