@@ -334,6 +334,11 @@ class AppRoutes {
                             widget: const SignupPage(),
                             buildTransition: _fadeTransition,
                           ),
+                          VWidget(
+                            path: 'class_analytics',
+                            widget: const SignupPage(),
+                            buildTransition: _fadeTransition,
+                          ),
                         ]),
                   ],
                 ),

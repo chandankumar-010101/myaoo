@@ -1324,6 +1324,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                           ),
                                                         ),
                                                         onPressed: () {
+                                                          VRouter.of(context).to(
+                                                              'class_analytics');
                                                           print(
                                                               "${classDetailUi!.flags![0].languageFlag.toString()}");
                                                           print(
@@ -3154,7 +3156,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                                   .onPrimary,
                                                         ),
                                                       ),
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        VRouter.of(context).to(
+                                                            'class_analytics');
+                                                      },
                                                       child: Text(
                                                         "Class analytics",
                                                         style: const TextStyle()
@@ -4680,7 +4685,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                           .onPrimary,
                                                 ),
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                VRouter.of(context)
+                                                    .to('class_analytics');
+                                              },
                                               child: Text(
                                                 "Class analytics",
                                                 style: const TextStyle()
@@ -5192,7 +5200,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                         .onPrimary,
                                               ),
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              VRouter.of(context)
+                                                  .to('class_analytics');
+                                            },
                                             child: Text(
                                               "Class analytics",
                                               style: const TextStyle().copyWith(
