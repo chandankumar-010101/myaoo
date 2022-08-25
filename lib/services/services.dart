@@ -10,6 +10,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
+import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/user_info.dart';
@@ -374,6 +375,7 @@ class PangeaServices{
     });
   }
 
+
   static Future<bool?> updateStudentPermission({
     required BuildContext context,
     required String classId,
@@ -482,5 +484,36 @@ class PangeaServices{
         print(e);
       }
     });
+  }
+
+
+
+ static Future<ClassDetailModel> fetchUserInfo(BuildContext context) async {
+
+    try{
+      final String accessToken = box.read("access") ?? "";
+      final String roomID =  VRouter.of(context).queryParameters["id"] ?? "";
+      if (accessToken.isNotEmpty && roomID.isNotEmpty) {
+        final value =  await http.get(
+          Uri.parse(ApiUrls.getClassDetails + roomID),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $accessToken",
+          },
+        );
+        if (value.statusCode == 200 || value.statusCode == 201) {
+          return  classDetailUiFromJson(value.body);
+        } else {
+          ApiException.exception(statusCode: value.statusCode, body: value.body, context: context);
+          throw Exception("${value.statusCode}");
+        }
+      }else{
+        throw Exception("Access token or Room ID is empty");
+      }
+    }catch(e){
+      print("eero");
+      print(e);
+      throw Exception(e.toString());
+    }
   }
 }
