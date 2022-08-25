@@ -517,4 +517,211 @@ class PangeaServices{
     }
   }
 
+
+
+
+  static Future<bool?> enrollClassValidate({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClassValidate}";
+    log("Url is $Url");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "student_id":"${box.read("clientID")}"
+
+    };
+    log(room_id);
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+
+        var body=jsonDecode(value.body);
+
+
+
+        if(body["is_enrollment_sent"]==false){
+          print("print");
+          enrollClass( context: context, room_id: '${room_id}');
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Enrollment Request Already send successfully")));
+        }
+
+        return true;
+      }}).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
+
+  static Future<bool?> enrollClass({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClass}";
+    log("Url is $Url");
+    print("value of enrolling section");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "student_id":"${box.read("clientID")}"
+
+    };
+    log(data.toString());
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Send successfully")));
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Already send successfully")));
+      }
+
+      return true;
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
+  static Future<bool?> exchangeClassValidate({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClassValidate}";
+    log("Url is $Url");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "teacher_id":"${box.read("clientID")}"
+
+    };
+
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+
+        var body=jsonDecode(value.body);
+
+
+
+        if(body["is_enrollment_sent"]==false){
+          print("print");
+          enrollClass( context: context, room_id: '${room_id}');
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Enrollment Request Already send successfully")));
+        }
+
+        return true;
+      }}).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
+
+  static Future<bool?> exchangeClass({
+    required BuildContext context,
+    required String room_id,
+  }) async {
+    String token = box.read("access");
+    if (token.isEmpty) {
+      if (kDebugMode) {
+        print("JWT Token is null");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Token expired please logout and login again")));
+      return null;
+    }
+    var Url = "${ApiUrls.enrollClass}";
+    log("Url is $Url");
+    print("value of enrolling section");
+    Map<String,dynamic> data ={
+
+      "pangea_class_room_id": room_id,
+      "teacher_id":"${box.read("clientID")}"
+
+    };
+    log(data.toString());
+    http.post(
+      Uri.parse(Url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${box.read("access")}",
+      },
+      body: jsonEncode(data),
+    ).then((value) {
+      if (value.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Send successfully")));
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Enrollment Request Already send successfully")));
+      }
+
+      return true;
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error accured: $e")));
+      print("Error accured: $e");
+    });
+  }
+
 }
