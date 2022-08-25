@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/services/class_services.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
+
 
 class ClassPermissions extends StatefulWidget {
   const ClassPermissions({Key? key}) : super(key: key);
@@ -45,6 +46,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
     box.remove("openEnrollment");
     box.remove("openExchange");
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -268,12 +270,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                             ),
                             InkWell(
                               onTap: () {
-                                if (ModalRoute.of(context)!.settings.name ==
-                                    "class_permissions") {
-                                  createClassPermissions();
-                                } else {
-                                  //update
-                                }
+                                createClassPermissions();
                               },
                               child: Container(
                                 width: 50.0,
@@ -362,7 +359,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                final result = await showFutureLoadingDialog(
                                   context: context,
                                   future: () =>
-                                      ClassServices.updateClassPermission(
+                                      PangeaServices.updateClassPermission(
                                         context: context,
                                     classId: id,
                                     isPublic: publicGroup.toString(),
@@ -371,10 +368,8 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                   ),
                                 );
                                if(result !=null){
-                                 print("updated");
                                  VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
-                                // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
-                               }
+                                }
                               },
                               child: Container(
                                 width: 200,
