@@ -197,8 +197,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     return candidate;
   }
 
-
-
   Client? getClientByName(String name) =>
       widget.clients.firstWhereOrNull((c) => c.clientName == name);
 
@@ -229,7 +227,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             statusMsg: statusMsg,
           );
         }
-       // box.write("clientID", client.userID ?? "null");
+        // box.write("clientID", client.userID ?? "null");
       }
     } catch (e, s) {
       client.onLoginStateChanged.sink.addError(e, s);
@@ -345,21 +343,65 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     });
     onLoginStateChanged[name] ??=
         c.onLoginStateChanged.stream.listen((state) async {
-          final loggedInWithMultipleClients = widget.clients.length > 1;
-          if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
-            _cancelSubs(c.clientName);
-            widget.clients.remove(c);
-            ClientManager.removeClientNameFromStore(c.clientName);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(L10n.of(context)!.oneClientLoggedOut),
-              ),
-            );
-            if (state != LoginState.loggedIn) {
+      final loggedInWithMultipleClients = widget.clients.length > 1;
+      if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
+        _cancelSubs(c.clientName);
+        widget.clients.remove(c);
+        ClientManager.removeClientNameFromStore(c.clientName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(L10n.of(context)!.oneClientLoggedOut),
+          ),
+        );
+        if (state != LoginState.loggedIn) {
+          widget.router!.currentState!.to(
+            '/home',
+            queryParameters: widget.router!.currentState!.queryParameters,
+          );
+        }
+      } else if (state == LoginState.loggedIn) {
+        //matrix access token and client id
+        if (client.accessToken.toString().isEmpty ||
+            client.userID.toString().isEmpty) {
+          await showFutureLoadingDialog(
+            context: context,
+            future: () => client.logout(),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Unable to fetch userID and access token.")));
+          return;
+        }
+        box.write("accessToken", client.accessToken.toString());
+        box.write("clientID", client.userID.toString());
+        final bool signUp = box.read("sign_up") ?? false;
+        await ApiFunctions()
+            .get(ApiUrls.validate_user + client.userID.toString())
+            .then((value) async {
+          if (value.statusCode == 201 || value.statusCode == 200) {
+            if (!value.body["is_user_exist"] || signUp) {
               widget.router!.currentState!.to(
-                '/home',
+                '/home/connect/lang',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
+
+            } else {
+              await UserDetails.userDetails(clientID: client.userID.toString());
+              await UserDetails.userAge();
+              widget.router!.currentState!.to(
+                '/rooms',
+                queryParameters: widget.router!.currentState!.queryParameters,
+              );
+            }
+          } else {
+            if (kDebugMode) {
+              print("Unable to validate user");
+              print(value.body);
+              print(value.statusCode.toString());
+            }
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Unable to validate User")));
+            UserDetails.logoutUser(client: client, context: context);
+
             }
           }
           else if (state == LoginState.loggedIn) {
@@ -414,8 +456,23 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               '/home',
               queryParameters: widget.router!.currentState!.queryParameters,
             );
+
           }
+        }).catchError((e) async {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("User validation failed: $e")));
+          await showFutureLoadingDialog(
+            context: context,
+            future: () => client.logout(),
+          );
         });
+      } else {
+        widget.router!.currentState!.to(
+          '/home',
+          queryParameters: widget.router!.currentState!.queryParameters,
+        );
+      }
+    });
 
     // Cache and resend status message
     onOwnPresence[name] ??= c.onPresenceChanged.stream.listen((presence) {
@@ -509,9 +566,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
     createVoipPlugin();
   }
-
-
-
 
   void createVoipPlugin() async {
     if (await store.getItemBool(SettingKeys.experimentalVoip) == false) {
