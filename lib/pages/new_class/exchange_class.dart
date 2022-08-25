@@ -291,7 +291,8 @@ class _ExchangeClassState extends State<ExchangeClass> {
                     children: [
                       InkWell(
                         onTap: () {
-                          VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+                         // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+
                         },
                         child: Container(
                           width: 200,
@@ -340,7 +341,10 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       InkWell(
                         onTap: () async {
 
-                          final result = await showFutureLoadingDialog(
+
+                        // UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
+
+                        final result = await showFutureLoadingDialog(
                             context: context,
                             future: () =>
                                 PangeaServices.updateClassPermission(
@@ -356,6 +360,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                             VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
                             // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                           }
+
 
                         },
                         child: Container(
