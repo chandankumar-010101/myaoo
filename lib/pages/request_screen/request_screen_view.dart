@@ -38,6 +38,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
             return Center(child: Text(snapshot.error.toString()));
           } else if (snapshot.hasData) {
             final ClassDetailModel data = snapshot.data! as ClassDetailModel;
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,16 +418,17 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             fontSize: 14),
                       )),
                   fetchPermissions(data.permissions),
-                 10>2? Container(
+                  box.read("usertype") == 2? box.read("clientID") == data.classAuthorId?Container():Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
                     child: Flex(
                       direction:
-                          size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                      size.width >= 1000 ? Axis.horizontal : Axis.vertical,
                       mainAxisAlignment: size.width >= 1000
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
+
                         SizedBox(
                           width: 200,
                           child: OutlinedButton(
@@ -436,9 +438,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary ==
-                                        Colors.white
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -485,38 +487,18 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary ==
-                                        Colors.white
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                             onPressed: () {
                               UrlLauncher(context,
-                                      'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
                                   .openMatrixToUrl();
-                              // final routes =
-                              //     VRouter.of(context)
-                              //         .queryParameters;
-                              // VRouter.of(context)
-                              //     .pathParameters[
-                              // 'roomid'];
-                              // // print(classDetailUi!
-                              // //     .classAuthorId
-                              // //     .toString());
-                              // // print(classDetailUi!.classAuthor
-                              // //     .toString());
-                              //
-                              // if (routes["id"] !=
-                              //     null) {
-                              //   UrlLauncher(context,
-                              //       'https://matrix.to/#/${data.classAuthorId.toString()}')
-                              //       .openMatrixToUrl();
-                              // } else {
-                              //   // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                              //
-                              // }
+
                             },
                             child: Text(
                               "Message ${data.classAuthor}",
@@ -532,13 +514,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         ),
                       ],
                     ),
-                  ):
-                 Container(
+                  ):box.read("clientID") == data.classAuthorId?Container(): Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
                     child: Flex(
                       direction:
-                      size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                          size.width >= 1000 ? Axis.horizontal : Axis.vertical,
                       mainAxisAlignment: size.width >= 1000
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
@@ -552,32 +533,18 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
+                                            .colorScheme
+                                            .onPrimary ==
+                                        Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                             onPressed: () {
-                              final String id =
-                                  context.vRouter.queryParameters['id'] ?? "";
-                              final box = GetStorage();
-                              if (id.isNotEmpty) {
-                                box.write("public", data.permissions!.isPublic);
-                                box.write("openEnrollment",
-                                    data.permissions!.isOpenEnrollment);
-                                box.write("openExchange",
-                                    data.permissions!.isOpenExchange);
-                                context.vRouter.to(
-                                    "/classDetails/exchange_class",
-                                    queryParameters: {
-                                      "class_id": id,
-                                    });
-                              }
+                              context.vRouter.to("/request_ui",queryParameters: {"room_id": "${data.pangeaClassRoomId}"});
                             },
                             child: Text(
-                              "Request To Enroll",
+                              "Request an Enroll",
                               style: const TextStyle().copyWith(
                                   color: Theme.of(context)
                                       .textTheme
@@ -601,14 +568,17 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
+                                            .colorScheme
+                                            .onPrimary ==
+                                        Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                             onPressed: () {
+                              UrlLauncher(context,
+                                      'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  .openMatrixToUrl();
 
                             },
                             child: Text(
@@ -626,12 +596,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       ],
                     ),
                   ),
-                  Container(
+
+                  box.read("usertype")==2 && box.read("clientID") == data.classAuthorId?Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
                     child: Flex(
                       direction:
-                          size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                      size.width >= 1000 ? Axis.horizontal : Axis.vertical,
                       mainAxisAlignment: size.width >= 1000
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
@@ -645,9 +616,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary ==
-                                        Colors.white
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -694,16 +665,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary ==
-                                        Colors.white
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                             onPressed: () {
                               UrlLauncher(context,
-                                      'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
                                   .openMatrixToUrl();
                               // final routes =
                               //     VRouter.of(context)
@@ -711,10 +682,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               // VRouter.of(context)
                               //     .pathParameters[
                               // 'roomid'];
-                              // // print(classDetailUi!
+                              // // print(data
                               // //     .classAuthorId
                               // //     .toString());
-                              // // print(classDetailUi!.classAuthor
+                              // // print(data.classAuthor
                               // //     .toString());
                               //
                               // if (routes["id"] !=
@@ -752,9 +723,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               side: BorderSide(
                                 width: 2,
                                 color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary ==
-                                        Colors.white
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -774,8 +745,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         ),
                       ],
                     ),
-                  ),
-                  Container(
+                  ):
+                  Container(),
+
+                  box.read("usertype")==2 && box.read("clientID") == data.classAuthorId?Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
                     child: Flex(
@@ -953,8 +926,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         ),
                       ],
                     ),
-                  ),
-                  Container(
+                  ):Container(),
+                  box.read("usertype")==2 && box.read("clientID") == data.classAuthorId?Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
                     child: Flex(
@@ -1027,7 +1000,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                         ),
                       ],
                     ),
-                  ),
+                  ):Container(),
+
                   const SizedBox(
                     height: 50,
                   ),

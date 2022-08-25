@@ -35,7 +35,7 @@ class ApiException{
         return;
       default:
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("$statusCode: $body")));
+            SnackBar(content: Text("$statusCode:")));
         return;
         }
 
