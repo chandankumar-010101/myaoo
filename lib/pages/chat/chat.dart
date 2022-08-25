@@ -14,6 +14,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
+import 'package:provider/provider.dart';
 
 import 'package:record/record.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -182,6 +183,7 @@ class ChatController extends State<Chat> {
       choreoController.setRoomId(roomId);
       choreoController.setTextEditingController(sendController);
       choreoController.setSendCallback(send);
+      choreoController.setMatrixClient(room!.client);
       choreoController.stateListener.stream.listen((event) {
         setState(() {});
       });
@@ -279,7 +281,7 @@ class ChatController extends State<Chat> {
         Matrix.of(context).setActiveClient(c);
       });
 
-  Future<void> send() async {
+  Future<void> send({String? txid}) async {
     if (sendController.text.trim().isEmpty) return;
     var parseCommands = true;
 
@@ -303,7 +305,9 @@ class ChatController extends State<Chat> {
     room!.sendTextEvent(sendController.text,
         inReplyTo: replyEvent,
         editEventId: editEvent?.eventId,
+        txid: txid,
         parseCommands: parseCommands);
+
     sendController.value = TextEditingValue(
       text: pendingText,
       selection: const TextSelection.collapsed(offset: 0),

@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:matrix/matrix.dart';
 import 'package:pangea_choreographer/choreographer/constants/route_type.dart';
 import 'package:pangea_choreographer/choreographer/controller/error_service.dart';
+import 'package:pangea_choreographer/choreographer/controller/ml_controller.dart';
 
 import 'lang_controller.dart';
+import 'my_matrix_client.dart';
 import 'state_controller.dart';
 import 'step1_controller.dart';
 import 'step2_controller.dart';
@@ -16,10 +19,12 @@ class ChoreoController {
   Step2Controller? step2;
 
   ErrorService? errorService;
+  MlController? mlController;
+  MyMatrixClient? myMatrixClient;
   final StreamController stateListener = StreamController();
   TextEditingController? textController;
 
-  Function? _sendCallback;
+  Function({String txid})? _sendCallback;
 
   addRefInObjects() {
     state = ChoreoState(this);
@@ -27,12 +32,18 @@ class ChoreoController {
     step2 = Step2Controller(this);
     errorService = ErrorService(this);
     step1 = Step1Controller(this);
+    mlController = MlController(this);
+    myMatrixClient = MyMatrixClient(this);
   }
 
   String get originalText => textController!.value.text;
   setTextEditingController(TextEditingController textEditingController) {
     textController = textEditingController;
     _addClearOnEditListener();
+  }
+
+  setMatrixClient(Client matrixClient) {
+    myMatrixClient!.setClientInstance(matrixClient);
   }
 
   bool get isOpen => state!.isOpen;
@@ -50,7 +61,7 @@ class ChoreoController {
     stateListener.add(0);
   }
 
-  setSendCallback(Function setCallBack) {
+  setSendCallback(Function({String txid}) setCallBack) {
     this._sendCallback = setCallBack;
   }
 
@@ -68,8 +79,11 @@ class ChoreoController {
   }
 
   void send() {
+    String txId = myMatrixClient!.generateUniqueTransactionId();
+    mlController!.sendPayloads(translatedText!, txId);
     this.textController!.value = TextEditingValue(text: translatedText!);
-    _sendCallback!();
+
+    _sendCallback!(txid: txId);
     clearState();
   }
 
