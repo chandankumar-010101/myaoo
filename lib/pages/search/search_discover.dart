@@ -573,7 +573,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/utils/api/user_details_api.dart';
 
@@ -594,10 +594,9 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
   Object? dayId;
   Object? monthId;
   Object? yearId;
-  int UserAge=0;
+  int UserAge = 0;
 
   verify() async {
-
     if (dayId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Select Day"),
@@ -611,30 +610,26 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
         content: Text("Select Year"),
       ));
     } else {
-
       calculateAge();
-      print("value of conditions is ${UserAge>18}");
-      if(UserAge>18){
-      await UserDetails().updateUserAge(dayId, monthId, yearId);
-      }
-      else{
+      print("value of conditions is ${UserAge > 18}");
+      if (UserAge > 18) {
+        await UserDetails().updateUserAge(dayId, monthId, yearId);
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Selected Age is below 18"),
         ));
       }
-      if(!mounted) {
-        setState(() {
-
-        });
+      if (!mounted) {
+        setState(() {});
       }
     }
   }
 
   calculateAge() {
     DateTime currentDate = DateTime.now();
-    var currentDay=int.parse(dayId.toString());
-    var currentmonths=int.parse(monthId.toString());
-    var currentyears=int.parse(yearId.toString());
+    var currentDay = int.parse(dayId.toString());
+    var currentmonths = int.parse(monthId.toString());
+    var currentyears = int.parse(yearId.toString());
 
     UserAge = currentDate.year - currentyears;
     int month1 = currentDate.month;
@@ -653,22 +648,19 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     return UserAge;
   }
 
-
-  int age = 0;
+  RxInt age = 0.obs;
   @override
   void initState() {
     // TODO: implement initState
     userAgeDetails();
 
-
-    age = int.parse(box.read("age").toString());
+    age.value = int.parse(box.read("age").toString());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    age = int.parse(box.read("age").toString());
+    age.value = int.parse(box.read("age").toString());
     Random random = Random();
     List list = List<int>.generate(31, (i) => i + 1);
     List month = List<int>.generate(12, (i) => i + 1);
@@ -680,14 +672,14 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              age <= 18
+              Obx(() => age.value <= 18
                   ? SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                             // color: Theme.of(context).colorScheme.onPrimary
+                            borderRadius: BorderRadius.circular(10),
+                            // color: Theme.of(context).colorScheme.onPrimary
                           ),
                           child: Column(
                             children: [
@@ -696,9 +688,11 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text("Please verify that you are 18 years of age or older to enter",
+                                child: Text(
+                                  "Please  verify that you are 18 years of age or older to enter",
                                   style: TextStyle().copyWith(
-                                      color: Theme.of(context).textTheme
+                                      color: Theme.of(context)
+                                          .textTheme
                                           .bodyText1!
                                           .color,
                                       fontSize: 16),
@@ -751,7 +745,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           return DropdownMenuItem(
                                             value: item,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(item.toString()),
                                             ),
                                           );
@@ -805,7 +800,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           return DropdownMenuItem(
                                             value: item,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(item.toString()),
                                             ),
                                           );
@@ -861,7 +857,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           return DropdownMenuItem(
                                             value: item,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(item.toString()),
                                             ),
                                           );
@@ -890,7 +887,9 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                 child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                        color: Theme.of(context).colorScheme.onPrimary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
                                       border: Border.all(),
                                     ),
                                     child: Padding(
@@ -907,7 +906,6 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                       ),
                                     )),
                               ),
-
                               const SizedBox(
                                 height: 134,
                               ),
@@ -917,17 +915,16 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                       ),
                     )
                   : Align(
-                   alignment: Alignment.center,
-                   child: Padding(
-                      padding: const EdgeInsets.only(top:100),
-                      child: SizedBox(
-                        width:150,
-                        height: 150,
-                        child: Image.asset("assets/logo.png"),
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 100),
+                        child: SizedBox(
+                          width: 150,
+                          height: 150,
+                          child: Image.asset("assets/logo.png"),
+                        ),
                       ),
-                    ),
-                  ),
-
+                    )),
             ],
           ),
         ),
