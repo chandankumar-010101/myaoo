@@ -8,9 +8,8 @@ import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:vrouter/vrouter.dart';
 import 'package:pangeachat/config/routes.dart';
@@ -28,15 +27,10 @@ import 'widgets/lock_screen.dart';
 import 'widgets/matrix.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
 
-
   await GetStorage.init();
-  // Our background push shared isolate accesses flutter-internal things very early in the startup proccess
-  // To make sure that the parts of flutter needed are started up already, we need to ensure that the
-  // widget bindings are initialized already.
   WidgetsFlutterBinding.ensureInitialized();
 
   FlutterError.onError =
@@ -72,7 +66,7 @@ void main() async {
     SentryController.captureException,
   );
 
- await UserDetails.accessToken();
+  await PangeaServices.accessToken();
 }
 
 class FluffyChatApp extends StatefulWidget {
@@ -100,26 +94,16 @@ class _FluffyChatAppState extends State<FluffyChatApp> {
   GlobalKey<VRouterState>? _router;
   bool? columnMode;
   String? _initialUrl;
-  var box=GetStorage();
 
   @override
   void initState() {
     super.initState();
-    _initialUrl = widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
+    _initialUrl =
+        widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
   }
 
   @override
   Widget build(BuildContext context) {
-    // final String token ="${box.read("access")}";
-    // Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    //
-    // print(decodedToken);
-    //
-    // bool isTokenExpired = JwtDecoder.isExpired(token);
-    //
-    // print(isTokenExpired);
-    //
-    // print("access  ${box.read("access")}");
     return DynamicColorBuilder(
         builder: (lightColorScheme, darkColorScheme) => AdaptiveTheme(
               light: FluffyThemes.light(lightColorScheme),
