@@ -45,7 +45,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         },
       ).then((value) {
         if (value.statusCode == 200 || value.statusCode == 201) {
-          classDetailUi = classDetailUiFromJson(value.body);
+          classDetailUi = classDetailModelFromJson(value.body);
         } else {
           print(value.statusCode);
           print("Exception while fetching data");
@@ -994,6 +994,293 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                                   ),
                                   box.read("usertype") == 2
+                                      ? box.read("clientID") == classDetailUi!.classAuthorId ? Container()
+                                      : Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        50, 30, 50, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          child: OutlinedButton(
+                                            style: OutlinedButton
+                                                .styleFrom(
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(
+                                                      25.0)),
+                                              side: BorderSide(
+                                                width: 2,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                    Colors.white
+                                                    ? Theme.of(context)
+                                                    .primaryColor
+                                                    : Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              final String id = context
+                                                  .vRouter
+                                                  .queryParameters[
+                                              'id'] ??
+                                                  "";
+                                              final box = GetStorage();
+                                              if (id.isEmpty) {
+                                                // print(
+                                                //     "Unable to find class id");
+                                              } else {
+                                                box.write(
+                                                    "public",
+                                                    classDetailUi!
+                                                        .permissions!
+                                                        .isPublic);
+                                                box.write(
+                                                    "openEnrollment",
+                                                    classDetailUi!
+                                                        .permissions!
+                                                        .isOpenEnrollment);
+                                                box.write(
+                                                    "openExchange",
+                                                    classDetailUi!
+                                                        .permissions!
+                                                        .isOpenExchange);
+                                                context.vRouter.to(
+                                                    "/classDetails/exchange_class",
+                                                    queryParameters: {
+                                                      "class_id": id,
+                                                    });
+                                              }
+                                            },
+                                            child: Text(
+                                              "Request an Exchange",
+                                              style: const TextStyle()
+                                                  .copyWith(
+                                                  color: Theme.of(
+                                                      context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .w400,
+                                                  fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        SizedBox(
+                                          width: 200,
+                                          child: OutlinedButton(
+                                            style: OutlinedButton
+                                                .styleFrom(
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(
+                                                      25.0)),
+                                              side: BorderSide(
+                                                width: 2,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                    Colors.white
+                                                    ? Theme.of(context)
+                                                    .primaryColor
+                                                    : Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              final routes =
+                                                  VRouter.of(context)
+                                                      .queryParameters;
+                                              VRouter.of(context)
+                                                  .pathParameters[
+                                              'roomid'];
+                                              // print(classDetailUi!
+                                              //     .classAuthorId
+                                              //     .toString());
+                                              // print(classDetailUi!.classAuthor
+                                              //     .toString());
+
+                                              if (routes["id"] !=
+                                                  null) {
+                                                UrlLauncher(context,
+                                                    'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                                                    .openMatrixToUrl();
+                                              } else {
+                                                // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                                UrlLauncher(context,
+                                                    'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                                                    .openMatrixToUrl();
+                                              }
+                                            },
+                                            child: Text(
+                                              "Message ${classDetailUi?.classAuthor}",
+                                              style: const TextStyle()
+                                                  .copyWith(
+                                                  color: Theme.of(
+                                                      context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .w400,
+                                                  fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                      :box.read("clientID") == classDetailUi!.classAuthorId ? Container(): Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        50, 30, 50, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          child: Flexible(
+                                            flex: 0,
+                                            fit: FlexFit.tight,
+                                            child: OutlinedButton(
+                                              style:
+                                              OutlinedButton.styleFrom(
+                                                shape:
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(
+                                                        25.0)),
+                                                side: BorderSide(
+                                                  width: 2,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary ==
+                                                      Colors.white
+                                                      ? Theme.of(context)
+                                                      .primaryColor
+                                                      : Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                print("value is enroll ");
+
+                                                context.vRouter.to(
+                                                  "/request_ui",queryParameters: {"room_id": "${classDetailUi!.pangeaClassRoomId}"}
+                                                );
+                                              },
+                                              child: Text(
+                                                "Request an Enroll",
+                                                style: const TextStyle()
+                                                    .copyWith(
+                                                    color: Theme.of(
+                                                        context)
+                                                        .textTheme
+                                                        .bodyText1!
+                                                        .color,
+                                                    fontWeight:
+                                                    FontWeight.w400,
+                                                    fontSize: 12),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        SizedBox(
+                                          width: 200,
+                                          child: Flexible(
+                                            flex: 0,
+                                            fit: FlexFit.tight,
+                                            child: OutlinedButton(
+                                              style:
+                                              OutlinedButton.styleFrom(
+                                                shape:
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(
+                                                        25.0)),
+                                                side: BorderSide(
+                                                  width: 2,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary ==
+                                                      Colors.white
+                                                      ? Theme.of(context)
+                                                      .primaryColor
+                                                      : Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                final routes =
+                                                    VRouter.of(context)
+                                                        .queryParameters;
+                                                VRouter.of(context)
+                                                    .pathParameters[
+                                                'roomid'];
+                                                // print(classDetailUi!
+                                                //     .classAuthorId
+                                                //     .toString());
+                                                // print(classDetailUi!.classAuthor
+                                                //     .toString());
+
+                                                if (routes["id"] != null) {
+                                                  UrlLauncher(context,
+                                                      'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                                                      .openMatrixToUrl();
+                                                } else {
+                                                  // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                                                  UrlLauncher(context,
+                                                      'https://matrix.to/#/${classDetailUi!.classAuthorId.toString()}')
+                                                      .openMatrixToUrl();
+                                                }
+                                              },
+                                              child: Text(
+                                                "Message ${classDetailUi?.classAuthor}",
+                                                style: const TextStyle()
+                                                    .copyWith(
+                                                    color: Theme.of(
+                                                        context)
+                                                        .textTheme
+                                                        .bodyText1!
+                                                        .color,
+                                                    fontWeight:
+                                                    FontWeight.w400,
+                                                    fontSize: 12),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+
+                                  box.read("usertype") == 2
                                       ? box.read("clientID") ==
                                               classDetailUi!.classAuthorId
                                           ? Container()
@@ -1281,6 +1568,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             ],
                                           ),
                                         ),
+
+
+
                                   box.read("clientID") ==
                                           classDetailUi!.classAuthorId
                                       ? Flexible(

@@ -72,8 +72,7 @@ class ChatListView extends StatelessWidget {
                       : const SnappingPosition.factor(positionFactor: 0.0),
                   snappingPositions: showSpaces
                       ? const [
-                          SnappingPosition.pixels(
-                              positionPixels: kSpacesBottomBarHeight),
+                          SnappingPosition.pixels(positionPixels: kSpacesBottomBarHeight),
                           SnappingPosition.factor(positionFactor: 0.5),
                           SnappingPosition.factor(positionFactor: 0.9),
                         ]
@@ -90,7 +89,7 @@ class ChatListView extends StatelessWidget {
               },
             ),
             floatingActionButton: selectMode == SelectMode.normal
-                ? Padding(
+                ?Padding(
                     padding: showSpaces
                         ? const EdgeInsets.only(bottom: 64.0)
                         : const EdgeInsets.all(0),
@@ -111,17 +110,16 @@ class ChatListView extends StatelessWidget {
                       helpLabel: L10n.of(context)!.newChat,
                     ),
                   )
-                : null,
+                : Container(),
             bottomNavigationBar: const SafeArea(
               child: ConnectionStatusHeader(),
-            ),
+           ),
           ),
         );
       },
     );
   }
 }
-//
 // enum ChatListPopupMenuItemActions {
 //   createGroup,
 //   createSpace,
