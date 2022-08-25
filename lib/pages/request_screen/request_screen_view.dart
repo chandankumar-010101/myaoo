@@ -474,7 +474,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                      const  SizedBox(
                           width: 10,
                           height: 10,
                         ),
@@ -1058,7 +1058,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: <Widget>[
                             Text("• "),
                             Expanded(
-                              child: Text("One To One Chat Class"),
+                              child: Text("One To One Chat"),
                             ),
                           ],
                         )

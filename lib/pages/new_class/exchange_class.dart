@@ -344,7 +344,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
 
                         // UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
 
-                          final result = await showFutureLoadingDialog(
+                        final result = await showFutureLoadingDialog(
                             context: context,
                             future: () =>
                                 PangeaServices.updateClassPermission(
