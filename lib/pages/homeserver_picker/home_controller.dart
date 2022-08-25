@@ -363,6 +363,12 @@ class HomeController extends GetxController {
     getFlags();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<HomeController>();
+  }
+
   getUserDetails() async {
     try {
       String name = dataStorage.read("clientID");

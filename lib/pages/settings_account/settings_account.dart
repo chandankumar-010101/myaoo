@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/settings_account/settings_account_view.dart';
@@ -54,8 +55,6 @@ class SettingsAccountController extends State<SettingsAccount> {
   }
 
   void logoutAction() async {
-    final box = GetStorage();
-    box.erase();
     if (await showOkCancelAlertDialog(
           useRootNavigator: false,
           context: context,
@@ -67,10 +66,7 @@ class SettingsAccountController extends State<SettingsAccount> {
       return;
     }
     final matrix = Matrix.of(context);
-    await showFutureLoadingDialog(
-      context: context,
-      future: () => matrix.client.logout(),
-    );
+    PangeaServices.logoutUser(context: context, client: matrix.client);
   }
 
   void deleteAccountAction() async {

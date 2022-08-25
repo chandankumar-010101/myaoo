@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/services/class_services.dart';
+
+import 'package:pangeachat/services/services.dart';
+
 import 'package:vrouter/vrouter.dart';
 
 class ExchangeClass extends StatefulWidget {
@@ -103,7 +105,9 @@ class _ExchangeClassState extends State<ExchangeClass> {
                 ),
                 //switch buttons
                 Container(
-                  constraints: BoxConstraints(
+
+                  constraints: const BoxConstraints(
+
                     minWidth: 100,
                     maxWidth: 500,
                   ),
@@ -291,7 +295,10 @@ class _ExchangeClassState extends State<ExchangeClass> {
                     children: [
                       InkWell(
                         onTap: () {
-                          VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+
+                         // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+
+
                         },
                         child: Container(
                           width: 200,
@@ -327,8 +334,10 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       ? Theme.of(context)
                                       .primaryColorLight
                                       : Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary,
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
@@ -338,10 +347,15 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       ),
                       InkWell(
                         onTap: () async {
-                          final result = await showFutureLoadingDialog(
+
+
+                        // UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
+
+                        final result = await showFutureLoadingDialog(
                             context: context,
                             future: () =>
-                                ClassServices.updateClassPermission(
+                                PangeaServices.updateClassPermission(
+
                                   context: context,
                                   classId: id,
                                   isPublic: publicGroup.toString(),
@@ -354,6 +368,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                             VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
                             // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                           }
+
                         },
                         child: Container(
                           width: 200,
@@ -389,8 +404,11 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       ? Theme.of(context)
                                       .primaryColorLight
                                       : Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary,
+
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,

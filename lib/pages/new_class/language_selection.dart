@@ -6,8 +6,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../model/flag_model.dart';
-import '../../services/class_services.dart';
-import '../../utils/services.dart';
+import '../../services/services.dart';
+
 
 class ClassLanguage extends StatefulWidget {
   const ClassLanguage({Key? key}) : super(key: key);
@@ -31,8 +31,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
   LanguageFlag? sourceLanguage;
 
   getFlags() async {
-    languageFlagList = await Services.getFlags();
-    languageFlag2List = await Services.getFlags2();
+
+    languageFlagList = await PangeaServices.getFlags();
+    languageFlag2List = await PangeaServices.getFlags2();
+
     setState(() {
 
     });
@@ -767,7 +769,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                 final result = await showFutureLoadingDialog(
                                   context: context,
                                   future: () =>
-                                      ClassServices.updateClassDetails(
+
+                                      PangeaServices.updateClassDetails(
+
                                         context: context,
                                     desc: discriptionController.text,
                                     city: cityController.text,
