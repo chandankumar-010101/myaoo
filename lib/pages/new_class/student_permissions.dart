@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/class_services.dart';
 import '../../widgets/matrix.dart';
 import 'package:matrix/matrix.dart' as sdk;
 
@@ -88,27 +88,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
       );
       if (roomID.result != null) {
         print(roomID.result);
-        //  print(roomID.result);
-        // class_code = roomID.result!;
-        //
-        // var room = Matrix.of(context).client.getRoomById(class_code);
-        //
-        // print(roomID.result);
-        // if(room !=null){
-        //   // print("working");
-        //   // print(room.canonicalAlias);
-        //   // if(room.canonicalAlias.isEmpty){
-        //   //   print("rerr");
-        //   // }else{
-        //   //   print("work");
-        //   //   class_url = room.canonicalAlias;
-        //   // }
-        //
-        // }else{
-        //   print("test");
-        // }
 
-        await ClassServices.createClass(
+        await PangeaServices.createClass(
+
           context: context,
           isPublic: publicGroup,
           isSharePhoto: sharePhotos,
@@ -745,7 +727,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   final result = await showFutureLoadingDialog(
                                     context: context,
                                     future: () =>
-                                        ClassServices.updateStudentPermission(
+
+                                        PangeaServices.updateStudentPermission(
+
                                       classId: id.toString(),
                                       sharePhotos: sharePhotos.toString(),
                                       oneToOneChatsWithinClass: oneToOneChatsWithinClass.toString(),

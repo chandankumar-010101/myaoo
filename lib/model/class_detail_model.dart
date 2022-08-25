@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-ClassDetailModel classDetailUiFromJson(String str) =>
+ClassDetailModel classDetailModelFromJson(String str) =>
+
     ClassDetailModel.fromJson(json.decode(str));
 
 String classDetailUiToJson(ClassDetailModel data) => json.encode(data.toJson());

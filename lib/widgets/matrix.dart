@@ -19,8 +19,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
-import 'package:pangeachat/model/user_info.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
+import 'package:pangeachat/services/api_exception.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
@@ -383,6 +383,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 '/home/connect/lang',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
+
             } else {
               await UserDetails.userDetails(clientID: client.userID.toString());
               await UserDetails.userAge();
@@ -400,6 +401,62 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Unable to validate User")));
             UserDetails.logoutUser(client: client, context: context);
+
+            }
+          }
+          else if (state == LoginState.loggedIn) {
+            //matrix access token and client id
+            if(client.accessToken.toString().isEmpty || client.userID.toString().isEmpty){
+
+              PangeaServices.logoutUser(context: context, client: client);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to fetch userID and access token.")));
+              return;
+            }
+            box.write("accessToken", client.accessToken.toString());
+            box.write("clientID", client.userID.toString());
+            final bool signUp = box.read("sign_up") ?? false;
+            await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) {
+
+            if(value.statusCode == 201 ||value.statusCode ==200){
+              if(!value.body["is_user_exist"] || signUp){
+                widget.router!.currentState!.to( '/home/connect/lang',
+                  queryParameters: widget.router!.currentState!.queryParameters,
+                );
+              }
+              else{
+
+                PangeaServices.userDetails(clientID: client.userID.toString());
+                PangeaServices.userAge();
+
+                widget.router!.currentState!.to(
+                  '/rooms',
+                  queryParameters: widget.router!.currentState!.queryParameters,
+                );
+              }
+            }
+            else{
+
+              ApiException.exception(statusCode: value.statusCode!, body: value.body, context: context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to validate User")));
+              PangeaServices.logoutUser(context: context, client: client);
+
+            }
+            }).catchError((e) async {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("User validation failed: $e")));
+
+              PangeaServices.logoutUser(context: context, client: client);
+            });
+          }
+          else {
+            widget.router!.currentState!.to(
+              '/home',
+              queryParameters: widget.router!.currentState!.queryParameters,
+            );
+
           }
         }).catchError((e) async {
           ScaffoldMessenger.of(context).showSnackBar(
