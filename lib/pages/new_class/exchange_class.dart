@@ -103,7 +103,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                 ),
                 //switch buttons
                 Container(
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 100,
                     maxWidth: 500,
                   ),
@@ -327,8 +327,9 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       ? Theme.of(context)
                                       .primaryColorLight
                                       : Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary,
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
@@ -338,6 +339,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       ),
                       InkWell(
                         onTap: () async {
+
                           final result = await showFutureLoadingDialog(
                             context: context,
                             future: () =>
@@ -354,6 +356,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                             VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
                             // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                           }
+
                         },
                         child: Container(
                           width: 200,
@@ -389,8 +392,9 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       ? Theme.of(context)
                                       .primaryColorLight
                                       : Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary,
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,

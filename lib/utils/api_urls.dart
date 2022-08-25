@@ -24,4 +24,9 @@ class ApiUrls {
   static String updateClassPermissions = Environment.baseAPI+"/api/v1/class/permissions/update/";
   static String updateClassDetail = Environment.baseAPI+"/api/v1/class/update/";
   static String deleteClass = Environment.baseAPI+"/api/v1/class/detail/";
+  static String exchangeClassValidate = Environment.baseAPI+"/api/v1/class/validate_exchange";
+  static String exchangeClass = Environment.baseAPI+"/api/v1/class/class_exchange";
+  static String enrollClassValidate = Environment.baseAPI+"/api/v1/class/validate_enroll";
+  static String enrollClass = Environment.baseAPI+"/api/v1/class/class_enroll";
+
 }

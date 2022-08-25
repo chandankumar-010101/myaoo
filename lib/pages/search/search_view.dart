@@ -56,9 +56,9 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
-    // userAgeDetails();
+    PangeaServices.userAge();
     searchController.getClasses();
-    int age = int.parse(box.read("age").toString());
+    RxInt age = int.parse(box.read("age").toString()).obs;
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
         : widget.controller.server;
@@ -145,7 +145,7 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
-            age <= 18
+            Obx(() => age.value <= 18
                 ? SingleChildScrollView(
                     child: Column(
                       children: [
@@ -966,7 +966,7 @@ class _SearchViewState extends State<SearchView> {
                             );
                           }),
                     ],
-                  ),
+                  )),
             ListView.builder(
               keyboardDismissBehavior: PlatformInfos.isIOS
                   ? ScrollViewKeyboardDismissBehavior.onDrag

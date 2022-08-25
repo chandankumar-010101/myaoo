@@ -502,7 +502,7 @@ class PangeaServices{
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-          return  classDetailUiFromJson(value.body);
+          return  classDetailModelFromJson(value.body);
         } else {
           ApiException.exception(statusCode: value.statusCode, body: value.body, context: context);
           throw Exception("${value.statusCode}");
@@ -516,4 +516,5 @@ class PangeaServices{
       throw Exception(e.toString());
     }
   }
+
 }
