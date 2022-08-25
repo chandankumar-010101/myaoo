@@ -291,7 +291,8 @@ class _ExchangeClassState extends State<ExchangeClass> {
                     children: [
                       InkWell(
                         onTap: () {
-                          VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+                         // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+
                         },
                         child: Container(
                           width: 200,
@@ -339,7 +340,8 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       ),
                       InkWell(
                         onTap: () async {
-                         // UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
+
+                        // UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
                         },
                         child: Container(
                           width: 200,

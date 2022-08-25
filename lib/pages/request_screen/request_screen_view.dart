@@ -993,6 +993,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       ],
                                     ),
                                   ),
+
                                   box.read("usertype") == 2
                                       ? box.read("clientID") == classDetailUi!.classAuthorId ? Container()
                                       : Container(
@@ -1278,6 +1279,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       ],
                                     ),
                                   ),
+
 
 
                                   box.read("usertype") == 2
