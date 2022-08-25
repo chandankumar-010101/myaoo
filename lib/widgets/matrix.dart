@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -19,8 +17,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
-import 'package:pangeachat/model/user_info.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
+import 'package:pangeachat/services/api_exception.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/sentry_controller.dart';
@@ -365,10 +363,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           else if (state == LoginState.loggedIn) {
             //matrix access token and client id
             if(client.accessToken.toString().isEmpty || client.userID.toString().isEmpty){
-              await showFutureLoadingDialog(
-                context: context,
-                future: () => client.logout(),
-              );
+              PangeaServices.logoutUser(context: context, client: client);
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Unable to fetch userID and access token.")));
               return;
@@ -376,7 +371,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             box.write("accessToken", client.accessToken.toString());
             box.write("clientID", client.userID.toString());
             final bool signUp = box.read("sign_up") ?? false;
-            await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) async {
+            await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) {
             if(value.statusCode == 201 ||value.statusCode ==200){
               if(!value.body["is_user_exist"] || signUp){
                 widget.router!.currentState!.to( '/home/connect/lang',
@@ -384,8 +379,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 );
               }
               else{
-                await UserDetails.userDetails(clientID: client.userID.toString());
-                await UserDetails.userAge();
+                PangeaServices.userDetails(clientID: client.userID.toString());
+                PangeaServices.userAge();
                 widget.router!.currentState!.to(
                   '/rooms',
                   queryParameters: widget.router!.currentState!.queryParameters,
@@ -393,22 +388,15 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               }
             }
             else{
-              if (kDebugMode) {
-                print("Unable to validate user");
-                print(value.body);
-                print(value.statusCode.toString());
-              }
+              ApiException.exception(statusCode: value.statusCode!, body: value.body, context: context);
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Unable to validate User")));
-              UserDetails.logoutUser(client: client, context: context);
+              PangeaServices.logoutUser(context: context, client: client);
             }
             }).catchError((e) async {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("User validation failed: $e")));
-              await showFutureLoadingDialog(
-                  context: context,
-                  future: () => client.logout(),
-              );
+              PangeaServices.logoutUser(context: context, client: client);
             });
           }
           else {

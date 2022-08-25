@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pangeachat/utils/api/user_details_api.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
 class RequestEnrollUI extends StatefulWidget {
@@ -134,7 +134,7 @@ class _RequestEnrollUIState extends State<RequestEnrollUI> {
                         print(room_ID);
                         print(roomID);
                         print(room_ID);
-                        UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
+                        PangeaServices.enrollClassValidate(context: context, room_id: '${room_ID}');
 
                       },
                       child: Text(
