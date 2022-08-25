@@ -10,6 +10,7 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/class_services.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/chat/cupertino_widgets_bottom_sheet.dart';

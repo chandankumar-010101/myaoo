@@ -32,9 +32,6 @@ class _SearchViewState extends State<SearchView> {
 
   var box = GetStorage();
   String id = "";
-
-
-
   @override
   void initState() {
     super.initState();
@@ -56,9 +53,11 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
+
     PangeaServices.userAge();
     searchController.getClasses();
     RxInt age = int.parse(box.read("age").toString()).obs;
+
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
         : widget.controller.server;
@@ -966,7 +965,9 @@ class _SearchViewState extends State<SearchView> {
                             );
                           }),
                     ],
+
                   )),
+
             ListView.builder(
               keyboardDismissBehavior: PlatformInfos.isIOS
                   ? ScrollViewKeyboardDismissBehavior.onDrag

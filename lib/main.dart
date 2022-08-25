@@ -8,8 +8,10 @@ import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/services/services.dart';
+
 import 'package:universal_html/html.dart' as html;
 import 'package:vrouter/vrouter.dart';
 import 'package:pangeachat/config/routes.dart';
@@ -67,6 +69,7 @@ void main() async {
   );
 
   await PangeaServices.accessToken();
+
 }
 
 class FluffyChatApp extends StatefulWidget {

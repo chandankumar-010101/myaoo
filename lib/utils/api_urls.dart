@@ -17,6 +17,7 @@ class ApiUrls {
       Environment.baseAPI + "/api/v1/account/get_update_dob";
   static String create_class = Environment.baseAPI + "/api/v1/class/create";
   static String addClassPermissions =
+
       Environment.baseAPI + "/api/v1/class/permissions/add";
 
   static String getClassDetails = Environment.baseAPI + "/api/v1/class/detail/";
@@ -28,5 +29,6 @@ class ApiUrls {
   static String exchangeClass = Environment.baseAPI+"/api/v1/class/class_exchange";
   static String enrollClassValidate = Environment.baseAPI+"/api/v1/class/validate_enroll";
   static String enrollClass = Environment.baseAPI+"/api/v1/class/class_enroll";
+
 
 }

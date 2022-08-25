@@ -95,12 +95,12 @@ dependencies:
   dropdown_button2: ^1.6.3
   flutter_dotenv: ^5.0.2
   fluttertoast: ^8.0.9
+  jwt_decoder: ^2.0.1
 
 
   # Pangeachat custom packages
-  pangeachat_it:
-    path: pangea_packages/pangeachat_it
-  jwt_decoder: ^2.0.1
+  pangea_choreographer:
+    path: pangea_packages/pangea_choreographer
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1
@@ -132,7 +132,9 @@ flutter:
     - assets/icons/
     - assets/png/grow.png
     - assets/png/partner.png
+
     - js/
+
 
   fonts:
     - family: Roboto

@@ -109,6 +109,7 @@ class PangeaServices{
     }).catchError((e){
       if (kDebugMode) {
         print(e);
+        print("eeror accured");
       }
       Fluttertoast.showToast(msg: "Unable to fetch user information");
       //TODO: logout

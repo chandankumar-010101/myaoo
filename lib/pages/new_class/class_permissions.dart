@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
-
 
 class ClassPermissions extends StatefulWidget {
   const ClassPermissions({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String id = context.vRouter.queryParameters['class_id'] ?? "";
-    print(id);
+
     return Scaffold(
         appBar: id.isEmpty
             ? AppBar(
@@ -270,7 +270,9 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                             ),
                             InkWell(
                               onTap: () {
+
                                 createClassPermissions();
+
                               },
                               child: Container(
                                 width: 50.0,
@@ -359,7 +361,9 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                final result = await showFutureLoadingDialog(
                                   context: context,
                                   future: () =>
+
                                       PangeaServices.updateClassPermission(
+
                                         context: context,
                                     classId: id,
                                     isPublic: publicGroup.toString(),
@@ -368,8 +372,10 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                   ),
                                 );
                                if(result !=null){
+
                                  VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
                                 }
+
                               },
                               child: Container(
                                 width: 200,

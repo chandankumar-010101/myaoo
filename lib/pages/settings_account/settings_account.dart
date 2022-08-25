@@ -119,7 +119,7 @@ class SettingsAccountController extends State<SettingsAccount> {
     );
   }
 
-  void addAccountAction() => VRouter.of(context).to('add/age');
+  void addAccountAction() => VRouter.of(context).to('add');
 
   @override
   Widget build(BuildContext context) {

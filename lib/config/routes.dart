@@ -42,9 +42,11 @@ import 'package:pangeachat/widgets/layouts/two_column_layout.dart';
 import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
+
 import '../pages/language_selection_screen/language_selection.dart';
 import '../pages/new_class/new_class.dart';
 import '../pages/request_screen/request_ui.dart';
+
 
 class AppRoutes {
   final bool columnMode;
@@ -118,25 +120,27 @@ class AppRoutes {
               widget: const NewGroup(),
             ),
             VWidget(
-                path: '/newclass',
-                widget: const NewClass(),
-                stackedRoutes: [
-                  VWidget(
-                    path: 'class_permissions',
-                    widget: const LogViewer(),
-                    buildTransition: _dynamicTransition,
-                  ),
-                  VWidget(
-                    path: 'language',
-                    widget: const ClassLanguage(),
-                    buildTransition: _dynamicTransition,
-                  ),
-                  VWidget(
-                    path: '/students_permissions',
-                    widget: const LogViewer(),
-                    buildTransition: _dynamicTransition,
-                  ),
-                ]),
+
+              path: '/newclass',
+              widget: const NewClass(),
+              stackedRoutes: [
+                VWidget(
+                  path: 'class_permissions',
+                  widget: const LogViewer(),
+                  buildTransition: _dynamicTransition,
+                ),
+                VWidget(
+                  path: 'language',
+                  widget: const ClassLanguage(),
+                  buildTransition: _dynamicTransition,
+                ),
+                VWidget(
+                  path: '/students_permissions',
+                  widget: const LogViewer(),
+                  buildTransition: _dynamicTransition,
+                ),
+              ]
+            ),
           ],
         ),
       ];
@@ -223,6 +227,7 @@ class AppRoutes {
                     path: '/classDetails',
                     widget: RequestScreenView(),
                     buildTransition: _dynamicTransition,
+
                     stackedRoutes: [
                       VWidget(
                         path: 'update_language',
@@ -234,6 +239,7 @@ class AppRoutes {
                         widget: const ClassPermissions(),
                         buildTransition: _dynamicTransition,
                       ),
+
                       VWidget(
                         path: 'update_student_permissions',
                         widget: const StudentPermissions(),
@@ -244,12 +250,14 @@ class AppRoutes {
                         widget: const ExchangeClass(),
                         buildTransition: _dynamicTransition,
                       ),
+
                     ]),
                 //Todo: newClass
                 VWidget(
                     path: '/newclass',
                     widget: const NewClass(),
                     buildTransition: _fadeTransition,
+
                     stackedRoutes: [
                       VWidget(
                         path: 'language',
@@ -266,17 +274,21 @@ class AppRoutes {
                         widget: const StudentPermissions(),
                         buildTransition: _dynamicTransition,
                       ),
+
                     ]),
+
                 //Todo: invite_students
                 VWidget(
                   path: '/invite_students',
                   widget: const InviteStudent(),
                   buildTransition: _dynamicTransition,
                 ),
+
               ],
             ),
           ],
         ),
+
         VWidget(
           path: '/rooms',
           widget: const TwoColumnLayout(
@@ -319,6 +331,7 @@ class AppRoutes {
                       widget: SearchDiscoverView(),
                       buildTransition: _fadeTransition,
                     ),
+
                     VWidget(
                         path: 'connect',
                         widget: const ConnectPage(),
@@ -374,6 +387,7 @@ class AppRoutes {
                     path: '/request_ui',
                     widget: RequestEnrollUI(),
                     buildTransition: _dynamicTransition),
+
               ],
             ),
             VWidget(
@@ -386,6 +400,7 @@ class AppRoutes {
             ),
           ],
         ),
+
       ];
 
   List<VRouteElement> get _homeRoutes => [

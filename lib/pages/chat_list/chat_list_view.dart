@@ -90,6 +90,7 @@ class ChatListView extends StatelessWidget {
             ),
             floatingActionButton: selectMode == SelectMode.normal
                 ?Padding(
+
                     padding: showSpaces
                         ? const EdgeInsets.only(bottom: 64.0)
                         : const EdgeInsets.all(0),

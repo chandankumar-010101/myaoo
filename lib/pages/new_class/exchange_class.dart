@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'package:pangeachat/services/services.dart';
+
 import 'package:vrouter/vrouter.dart';
 
 class ExchangeClass extends StatefulWidget {
@@ -103,7 +105,9 @@ class _ExchangeClassState extends State<ExchangeClass> {
                 ),
                 //switch buttons
                 Container(
+
                   constraints: const BoxConstraints(
+
                     minWidth: 100,
                     maxWidth: 500,
                   ),
@@ -291,7 +295,9 @@ class _ExchangeClassState extends State<ExchangeClass> {
                     children: [
                       InkWell(
                         onTap: () {
+
                          // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+
 
                         },
                         child: Container(
@@ -331,6 +337,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       .textTheme
                                       .bodyText1!
                                       .color,
+
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
@@ -348,6 +355,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                             context: context,
                             future: () =>
                                 PangeaServices.updateClassPermission(
+
                                   context: context,
                                   classId: id,
                                   isPublic: publicGroup.toString(),
@@ -360,7 +368,6 @@ class _ExchangeClassState extends State<ExchangeClass> {
                             VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
                             // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                           }
-
 
                         },
                         child: Container(
@@ -397,9 +404,11 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       ? Theme.of(context)
                                       .primaryColorLight
                                       : Theme.of(context)
+
                                       .textTheme
                                       .bodyText1!
                                       .color,
+
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,

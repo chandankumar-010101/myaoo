@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -363,7 +365,9 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           else if (state == LoginState.loggedIn) {
             //matrix access token and client id
             if(client.accessToken.toString().isEmpty || client.userID.toString().isEmpty){
+
               PangeaServices.logoutUser(context: context, client: client);
+
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Unable to fetch userID and access token.")));
               return;
@@ -372,6 +376,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             box.write("clientID", client.userID.toString());
             final bool signUp = box.read("sign_up") ?? false;
             await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) {
+
             if(value.statusCode == 201 ||value.statusCode ==200){
               if(!value.body["is_user_exist"] || signUp){
                 widget.router!.currentState!.to( '/home/connect/lang',
@@ -379,8 +384,10 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 );
               }
               else{
+
                 PangeaServices.userDetails(clientID: client.userID.toString());
                 PangeaServices.userAge();
+
                 widget.router!.currentState!.to(
                   '/rooms',
                   queryParameters: widget.router!.currentState!.queryParameters,
@@ -388,14 +395,17 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               }
             }
             else{
+
               ApiException.exception(statusCode: value.statusCode!, body: value.body, context: context);
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Unable to validate User")));
               PangeaServices.logoutUser(context: context, client: client);
+
             }
             }).catchError((e) async {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("User validation failed: $e")));
+
               PangeaServices.logoutUser(context: context, client: client);
             });
           }
