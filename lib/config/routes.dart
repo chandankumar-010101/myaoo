@@ -243,7 +243,6 @@ class AppRoutes {
                       widget: const ExchangeClass(),
                       buildTransition: _dynamicTransition,
                     ),
-
                   ],
                 ),
 
@@ -380,6 +379,10 @@ class AppRoutes {
             ),
           ],
         ),
+        VWidget(
+          path: '/request_to_enroll',
+          widget: NewClass(),
+        )
       ];
 
   List<VRouteElement> get _homeRoutes => [
