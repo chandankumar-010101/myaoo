@@ -56,7 +56,8 @@ class _SearchViewState extends State<SearchView> {
 
     PangeaServices.userAge();
     searchController.getClasses();
-    RxInt age = int.parse(box.read("age").toString()).obs;
+    var age1 = box.read("age")??0;
+    RxInt age = int.parse(age1.toString()).obs;
 
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain

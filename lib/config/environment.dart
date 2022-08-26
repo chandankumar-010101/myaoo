@@ -1,12 +1,14 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 class Environment{
 
   static String get fileName{
-    // if(kReleaseMode){
-    //   return ".env.stagging";
-    // }
-      return ".env.development";
+    if(kReleaseMode){
+      print("stagging");
+      return ".env.staging";
+    }
+    return ".env.staging";
   }
   static String get baseAPI{
     return dotenv.env["BASE_API"]?? 'BASE API not found';
