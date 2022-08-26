@@ -1,9 +1,12 @@
 import 'dart:io' show Platform;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
 
 class MyPlatformName {
   static String get platformName {
+    if (kIsWeb) {
+      return 'web';
+    }
     if (Platform.isAndroid) {
       return 'android';
     }
