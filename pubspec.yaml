@@ -123,6 +123,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env.development
+    - .env.staging
     - .env.example
     - assets/
     - assets/png/
