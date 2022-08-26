@@ -11,13 +11,7 @@ class NewClass extends StatefulWidget {
 
 class NewClassController extends State<NewClass> {
 
-  int createClass = 0;
 
-
-
-
-
-  String? get roomId => VRouter.of(context).pathParameters['roomid'];
 
 
 

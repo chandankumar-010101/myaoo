@@ -563,9 +563,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         ),
                                       ),
                                       onPressed: () {
-                                        context.vRouter.to("/request_ui",
+                                        context.vRouter.to("request_ui",
                                             queryParameters: {
-                                              "room_id":
+                                              "id":
                                                   "${data.pangeaClassRoomId}"
                                             });
                                       },

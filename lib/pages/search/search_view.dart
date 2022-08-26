@@ -577,27 +577,10 @@ class _SearchViewState extends State<SearchView> {
                                               BorderRadius.circular(16),
                                           child: InkWell(
                                             onTap: () async {
-                                              // createClassDetailsAction();
                                               id = searchController.classList[i]
                                                   .pangea_class_room_id
                                                   .toString();
-
-                                              //createClassDetailsAction();
-
-                                              print("value of ${firstTime}");
-
-                                              firstTime == true
-                                                  ? VRouter.of(context).to(
-                                                      'allclassDetails',
-                                                      queryParameters: {
-                                                          "id": id
-                                                        })
-                                                  : VRouter.of(context).to('',
-                                                      queryParameters: {
-                                                          "id": id
-                                                        });
-                                              firstTime.value = false;
-                                              print("value of 2 ${firstTime}");
+                                              VRouter.of(context).to("/classDetails",queryParameters:{"id":id} );
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(16),

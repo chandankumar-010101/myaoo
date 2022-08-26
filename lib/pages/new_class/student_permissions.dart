@@ -116,6 +116,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
         );
       }
       if (roomID == null) {
+
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
         print(roomID);
       }
@@ -626,18 +627,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  //    context.vRouter.to("/invite_students");
-                                  if (ModalRoute.of(context)!.settings.name ==
-                                      "student_permissions") {
-                                    submitAction();
-                                  } else {
-                                    //update
-                                  }
-
-                                  // widget.controller.submitAction();
-                                  // setState(() {
-                                  //   widget.controller.createClass = 4;
-                                  // });
+                                  submitAction();
                                 },
                                 child: Container(
                                   width: 50.0,
