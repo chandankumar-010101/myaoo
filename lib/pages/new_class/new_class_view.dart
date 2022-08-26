@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:pangeachat/config/app_config.dart';
-import 'package:pangeachat/model/flag_model.dart';
 import 'package:vrouter/vrouter.dart';
-import '../../config/app_config.dart';
-import '../../utils/fluffy_share.dart';
-import '../../widgets/matrix.dart';
 import 'new_class.dart';
-import 'package:flutter/services.dart';
 
 class NewClassView extends StatefulWidget {
   final NewClassController controller;
@@ -39,19 +31,8 @@ class _NewClassViewState extends State<NewClassView> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
-          leading: widget.controller.createClass == 0
-              ? Container()
-              : IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
-                  onPressed: () {
-                    setState(() {
-                      widget.controller.createClass =
-                          widget.controller.createClass - 1;
-                    });
-                  },
-                ),
         ),
-        body: Container(
+        body: SizedBox(
           width: size.width,
           height: size.height,
           child: SingleChildScrollView(
@@ -64,7 +45,7 @@ class _NewClassViewState extends State<NewClassView> {
                 Text(
                   "Pangea Chat is designed to help teachers,\nboth online and in-person, facilitate\nCommunicative Language Teaching.\nWith Pangea Chat, you can:",
                   textAlign: TextAlign.center,
-                  style: TextStyle().copyWith(
+                  style: const TextStyle().copyWith(
                       color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),
                   overflow: TextOverflow.clip,
@@ -95,7 +76,7 @@ class _NewClassViewState extends State<NewClassView> {
                         Text(
                           "Partner with\nteachers from arround\nthe world\nfor language exchanges.",
                           textAlign: TextAlign.center,
-                          style: TextStyle().copyWith(
+                          style: const TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14),
                           overflow: TextOverflow.clip,
@@ -116,7 +97,7 @@ class _NewClassViewState extends State<NewClassView> {
                                 : Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(

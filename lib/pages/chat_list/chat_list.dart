@@ -105,7 +105,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
    // print(spaceId);
 
     VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
-   // VRouter.of(context).toSegments(['classes', spaceId]);
+    //VRouter.of(context).toSegments(['classes', spaceId]);
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
