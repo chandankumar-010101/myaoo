@@ -5,6 +5,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/config/environment.dart';
 import 'package:punycode/punycode.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vrouter/vrouter.dart';
@@ -18,7 +19,8 @@ import 'platform_infos.dart';
 class UrlLauncher {
   final String? url;
   final BuildContext context;
-  const UrlLauncher(this.context, this.url);
+  bool requestToEnroll;
+  UrlLauncher(this.context, this.url,{this.requestToEnroll = false});
 
   void launchUrl() {
     if (url!.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
@@ -130,6 +132,7 @@ class UrlLauncher {
       }
       servers.addAll(identityParts.via);
       if (room != null) {
+        print("Working here");
         // we have the room, so....just open it
         if (event != null) {
           VRouter.of(context).toSegments(['rooms', room.id],
@@ -138,7 +141,9 @@ class UrlLauncher {
           VRouter.of(context).toSegments(['rooms', room.id]);
         }
         return;
-      } else {
+      }
+      else {
+        print("Working here1");
         await showModalBottomSheet(
           context: context,
           builder: (c) => PublicRoomBottomSheet(
@@ -148,6 +153,7 @@ class UrlLauncher {
         );
       }
       if (roomIdOrAlias.sigil == '!') {
+        print("Welcome 2");
         if (await showOkCancelAlertDialog(
               useRootNavigator: false,
               context: context,
@@ -175,14 +181,38 @@ class UrlLauncher {
           }
         }
       }
-    } else if (identityParts.primaryIdentifier.sigil == '@') {
-      await showModalBottomSheet(
-        context: context,
-        builder: (c) => ProfileBottomSheet(
-          userId: identityParts.primaryIdentifier,
-          outerContext: context,
-        ),
-      );
+    }
+    else if (identityParts.primaryIdentifier.sigil == '@') {
+     // final roomIdOrAlias = identityParts.primaryIdentifier;
+
+      //await Matrix.of(context).client.getRoomById(roomID)!.sendTextEvent('Hello world');
+      if(!requestToEnroll){
+        await showModalBottomSheet(
+          context: context,
+          builder: (c) => ProfileBottomSheet(
+            userId: identityParts.primaryIdentifier,
+            outerContext: context,
+          ),
+        );
+      }else{
+        final client = Matrix.of(context).client;
+        final result = await showFutureLoadingDialog<String>(
+          context: context,
+          future: () => client.startDirectChat(identityParts.primaryIdentifier),
+        );
+        if (result.error == null) {
+          await client.getRoomById(result.result!)!.sendTextEvent(Environment.baseAPI+"/request_to_enroll").then((value){
+            VRouter.of(context).toSegments(['rooms', result.result!]);
+            Navigator.of(context, rootNavigator: false).pop();
+          }).catchError((e){
+            print("Error Accured");
+            print(e);
+          });
+          return;
+        }
+      }
+
+
     }
   }
 }

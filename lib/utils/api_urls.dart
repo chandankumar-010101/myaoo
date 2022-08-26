@@ -27,7 +27,7 @@ class ApiUrls {
   static String deleteClass = Environment.baseAPI+"/class/detail/";
   static String exchangeClassValidate = Environment.baseAPI+"/class/validate_exchange";
   static String exchangeClass = Environment.baseAPI+"/class/class_exchange";
-  static String enrollClassValidate = Environment.baseAPI+"/class/validate_enroll";
+ // static String enrollClassValidate = Environment.baseAPI+"/class/validate_enroll";
   static String enrollClass = Environment.baseAPI+"/class/class_enroll";
 
 
