@@ -201,14 +201,24 @@ class UrlLauncher {
           future: () => client.startDirectChat(identityParts.primaryIdentifier),
         );
         if (result.error == null) {
-          await client.getRoomById(result.result!)!.sendTextEvent(Environment.baseAPI+"/request_to_enroll").then((value){
-            VRouter.of(context).toSegments(['rooms', result.result!]);
-            Navigator.of(context, rootNavigator: false).pop();
-          }).catchError((e){
-            print("Error Accured");
-            print(e);
-          });
-          return;
+         String userId =  Matrix.of(context).client.userID??"";
+         if(userId.isNotEmpty){
+           //TODO Env update
+           await client.getRoomById(result.result!)!.sendTextEvent(Environment.frontendURL+"/#"+"/request_to_enroll/userID/$userId").then((value){
+             VRouter.of(context).toSegments(['rooms', result.result!]);
+             Navigator.of(context, rootNavigator: false).pop();
+           }).catchError((e){
+             print("Error Accured");
+             print(e);
+           });
+           return;
+         }else{
+
+           print("userid empty");
+           return;
+         }
+
+
         }
       }
 
