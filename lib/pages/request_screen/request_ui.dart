@@ -34,20 +34,7 @@ class _RequestEnrollUIState extends State<RequestEnrollUI> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Container(
-                //   height: 50,
-                //   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                //   decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(15.0),
-                //       border: Border.all(color: Colors.black, width: 1.0)),
-                //   child: Center(
-                //     child: Text(
-                //       "Cancel",
-                //       style: TextStyle()
-                //           .copyWith(fontWeight: FontWeight.w400, fontSize: 15),
-                //     ),
-                //   ),
-                // ),
+
                 SizedBox(
                   width: 200,
                   child: Flexible(
@@ -76,7 +63,8 @@ class _RequestEnrollUIState extends State<RequestEnrollUI> {
                         ),
                       ),
                       onPressed: () {
-                        print("value is printted");
+
+                        //VRouter.of(context).to("/classDetails",queryParameters:{"id":id} );
                        // UserDetails.enrollClassValidate(context: context, room_id: '${classDetailUi!.pangeaClassRoomId}');
                        // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
                       },

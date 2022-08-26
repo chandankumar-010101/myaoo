@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
@@ -16,7 +17,8 @@ class _InviteStudentState extends State<InviteStudent> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    String roomId = VRouter.of(context).queryParameters['id']??"";
+    final room = Matrix.of(context).client.getRoomById(roomId);
    // print(widget.controller.class_code);
    // final room =
    // Matrix.of(context).client.getRoomById(widget.controller.class_code!);
@@ -36,12 +38,7 @@ class _InviteStudentState extends State<InviteStudent> {
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
-          // leading:  IconButton(
-          //   icon: const Icon(Icons.arrow_back, color: Colors.black),
-          //   onPressed: () {
-          //     //context.vRouter.to("/newclass/l");
-          //   },
-          // ),
+
         ),
         body: Container(
           width: size.width,
@@ -68,8 +65,11 @@ class _InviteStudentState extends State<InviteStudent> {
                   ),
                   InkWell(
                     onTap: () {
-                      // FluffyShare.share(
-                      //     AppConfig.inviteLinkPrefix + room!.canonicalAlias, context);
+                      print(roomId);
+
+                      FluffyShare.share(
+                          AppConfig.inviteLinkPrefix + room!.canonicalAlias,
+                          context);
                     },
                     child: Container(
                       width: 200,

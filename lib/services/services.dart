@@ -103,7 +103,7 @@ class PangeaServices{
           print("Unable to fetch user information");
           print(value.body+value.statusCode.toString());
         }
-        Fluttertoast.showToast(msg: "API Error:${value.body}");
+        Fluttertoast.showToast(msg: "API Error:${value.statusCode}");
         //TODO: logout
       }
     }).catchError((e){
@@ -135,7 +135,7 @@ class PangeaServices{
             print("Unable to fetch user Age");
             print(value.body+value.statusCode.toString());
           }
-          Fluttertoast.showToast(msg: "API Error:${value.body}");
+          Fluttertoast.showToast(msg: "API Error:${value.statusCode}");
           //TODO: logout
         }
       }).catchError((e){
@@ -279,7 +279,7 @@ class PangeaServices{
             box.remove('openToExchange');
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Class created successfully")));
-            context.vRouter.to("/invite_students");
+            context.vRouter.to("/invite_students", queryParameters: { "id":roomId });
           } else {
             ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
           }
