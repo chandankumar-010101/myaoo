@@ -44,7 +44,6 @@ import 'package:vrouter/vrouter.dart';
 
 import '../pages/language_selection_screen/language_selection.dart';
 import '../pages/new_class/new_class.dart';
-import '../pages/request_screen/request_ui.dart';
 
 class AppRoutes {
   final bool columnMode;
@@ -244,10 +243,7 @@ class AppRoutes {
                       widget: const ExchangeClass(),
                       buildTransition: _dynamicTransition,
                     ),
-                    VWidget(
-                        path: 'request_ui',
-                        widget: RequestEnrollUI(),
-                        buildTransition: _dynamicTransition),
+
                   ],
                 ),
 
