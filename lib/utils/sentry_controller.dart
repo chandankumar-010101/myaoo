@@ -27,6 +27,7 @@ abstract class SentryController {
 
   static void captureException(error, stackTrace) async {
     Logs().e('Capture exception', error, stackTrace);
+
     if (!kDebugMode && await getSentryStatus()) {
       await sentry.captureException(
         error,

@@ -103,14 +103,12 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     // //     .pangea_class_room_id
     // //     .toString());
    // print(spaceId);
-
     VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
     //VRouter.of(context).toSegments(['classes', spaceId]);
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
-  List<Room> get spaces =>
-      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+  List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
   // Note that this could change due to configuration, etc.
   // Also be aware that _activeSpacesEntry = null is the expected reset method.
