@@ -18,10 +18,31 @@ import '../utils/api_helper.dart';
 import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
+import '../widgets/matrix.dart';
 import 'api_exception.dart';
+
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 class PangeaServices{
   static GetStorage box = GetStorage();
+
+  static inviteAction(BuildContext context, String id,String roomId) async {
+    final room = Matrix.of(context).client.getRoomById(roomId);
+    if(room !=null){
+      final success = await showFutureLoadingDialog(
+        context: context,
+        future: () => room.invite(id),
+      );
+      if (success.error == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(L10n.of(context)!.contactHasBeenInvitedToTheGroup)));
+      }
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Unable to Fetch Room")));
+    }
+
+  }
 
   static Future<List<LanguageFlag>> getFlags() async {
     List<LanguageFlag> countryFlag = [];
@@ -89,7 +110,7 @@ class PangeaServices{
       Uri.parse(ApiUrls.user_details + clientID),
     ).then((value) {
       if(value.statusCode.isEqual(200)){
-        userAge();
+
         final UserInfo data = userInfoFromJson(value.body);
         box.write("access", data.access);
         box.write("refresh", data.refresh);
@@ -190,6 +211,9 @@ class PangeaServices{
       future: () => client.logout(),
     ).then((value) {
       box.erase();
+      Fluttertoast.showToast(msg: "Logout Successfully");
+
+
     }).catchError((e){
       print("lougout error");
       print(e);
@@ -724,5 +748,8 @@ class PangeaServices{
       print("Error accured: $e");
     });
   }
+
+
+
 
 }

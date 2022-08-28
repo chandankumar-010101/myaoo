@@ -577,9 +577,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         if (confirmed == OkCancelResult.ok) {
                                           print("confirm");
                                           print(data.classAuthor);
-                                          UrlLauncher(context,requestToEnroll: true,
-                                              'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                              .openMatrixToUrl();
+                                          String roomId =  VRouter.of(context).queryParameters['id']??"";
+                                          if(roomId.isNotEmpty){
+                                            UrlLauncher(context,requestToEnroll: true,
+                                                roomId:  roomId,
+                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                                .openMatrixToUrl();
+                                          }
+
                                         }
                                       },
                                       child: Text(
