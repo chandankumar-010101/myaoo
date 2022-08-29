@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/pages/homeserver_picker/home_controller.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -22,7 +24,7 @@ class SettingsAccountController extends State<SettingsAccount> {
   Future<dynamic>? profileFuture;
   Profile? profile;
   bool profileUpdated = false;
-
+  HomeController controller = Get.put(HomeController());
   void updateProfile() => setState(() {
         profileUpdated = true;
         profile = profileFuture = null;
@@ -121,6 +123,11 @@ class SettingsAccountController extends State<SettingsAccount> {
 
   void addAccountAction() => VRouter.of(context).to('add');
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;

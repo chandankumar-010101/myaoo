@@ -21,4 +21,8 @@ class Environment {
   static String get synapsURL {
     return dotenv.env['SYNAPSE_URL'] ?? 'Synapse Url not found';
   }
+
+  static String get homeServer {
+    return dotenv.env["HOME_SERVER"] ?? 'Home Server not found';
+  }
 }

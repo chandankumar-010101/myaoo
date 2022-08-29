@@ -581,6 +581,7 @@ class _SearchViewState extends State<SearchView> {
                                               id = searchController.classList[i]
                                                   .pangea_class_room_id
                                                   .toString();
+                                              
                                               VRouter.of(context).to("/classDetails",queryParameters:{"id":id} );
                                             },
                                             borderRadius:

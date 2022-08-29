@@ -76,7 +76,6 @@ class Matrix extends StatefulWidget {
 
 class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   final box = GetStorage();
-  final controller = Get.put(HomeController());
 
   int _activeClient = -1;
   String? activeBundle;
@@ -186,7 +185,10 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
         ClientManager.addClientNameToStore(_loginClientCandidate!.clientName);
 
+        print("Login data");
         _registerSubs(_loginClientCandidate!.clientName);
+
+        print("Login data");
         _loginClientCandidate = null;
         print(_loginClientCandidate!.userID);
         print("Login data");
@@ -274,7 +276,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    print("matrix initialized");
     initMatrix();
     if (PlatformInfos.isWeb) {
       initConfig().then((_) => initSettings());
@@ -286,7 +287,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   Future<void> initConfig() async {
     try {
       final configJsonString =
-          utf8.decode((await http.get(Uri.parse('config.json'))).bodyBytes);
+          utf8.decode((await http.get(Uri.parse('config.sample.json'))).bodyBytes);
       final configJson = json.decode(configJsonString);
       AppConfig.loadFromJson(configJson);
     } on FormatException catch (_) {
@@ -309,16 +310,10 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           'Attempted to register subscriptions for non-existing client $name');
       return;
     }
-    // print(c.userID);
-    // print(c.clientName);
 
-    c.onSyncStatus.stream
-        .where((s) => s.status == SyncStatus.error)
-        .listen(_reportSyncError);
-    onRoomKeyRequestSub[name] ??=
-        c.onRoomKeyRequest.stream.listen((RoomKeyRequest request) async {
-      if (widget.clients.any(((cl) =>
-          cl.userID == request.requestingDevice.userId &&
+    c.onSyncStatus.stream.where((s) => s.status == SyncStatus.error).listen(_reportSyncError);
+    onRoomKeyRequestSub[name] ??= c.onRoomKeyRequest.stream.listen((RoomKeyRequest request) async {
+      if (widget.clients.any(((cl) => cl.userID == request.requestingDevice.userId &&
           cl.identityKey == request.requestingDevice.curve25519Key))) {
         Logs().i(
             '[Key Request] Request is from one of our own clients, forwarding the key...');
@@ -374,30 +369,82 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         final bool signUp = box.read("sign_up") ?? false;
         await ApiFunctions()
             .get(ApiUrls.validate_user + client.userID.toString())
-            .then((value) {
+            .then((value) async {
           if (value.statusCode == 201 || value.statusCode == 200) {
             if (!value.body["is_user_exist"] || signUp) {
               widget.router!.currentState!.to(
                 '/home/connect/lang',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
-            } else {
-              PangeaServices.userDetails(clientID: client.userID.toString());
-              PangeaServices.userAge();
+
+            }
+          }
+          else if (state == LoginState.loggedIn) {
+            print("State 1");
+            //matrix access token and client id
+            if(client.accessToken.toString().isEmpty || client.userID.toString().isEmpty){
+              print("State 2");
+              PangeaServices.logoutUser(context: context, client: client);
+              print("State 3");
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to fetch userID and access token.")));
+              return;
+            }
+            box.write("accessToken", client.accessToken.toString());
+            box.write("clientID", client.userID.toString());
+            final bool signUp = box.read("sign_up") ?? false;
+            await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) {
+
+            if(value.statusCode == 201 ||value.statusCode ==200){
+              if(!value.body["is_user_exist"] || signUp){
+                widget.router!.currentState!.to( '/home/connect/lang',
+                  queryParameters: widget.router!.currentState!.queryParameters,
+                );
+              }
+              else{
+                if (kDebugMode) {
+                  print("fetching userDetails");
+                }
+
+                PangeaServices.userDetails(clientID: client.userID.toString());
+                PangeaServices.userAge();
+
+                widget.router!.currentState!.to(
+                  '/rooms',
+                  queryParameters: widget.router!.currentState!.queryParameters,
+                );
+              }
+            }
+            else{
+              print("Err");
+              print(value.statusCode);
+              ApiException.exception(statusCode: value.statusCode!, body: value.body, context: context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to validate User")));
+              PangeaServices.logoutUser(context: context, client: client);
 
               widget.router!.currentState!.to(
                 '/rooms',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
             }
-          } else {
-            ApiException.exception(
-                statusCode: value.statusCode!,
-                body: value.body,
-                context: context);
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Unable to validate User")));
-            PangeaServices.logoutUser(context: context, client: client);
+
+            }).catchError((e) async {
+              if (kDebugMode) {
+                print("Error: ");
+                print(e);
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("User validation failed: $e")));
+
+              PangeaServices.logoutUser(context: context, client: client);
+            });
+          }
+          else {
+            widget.router!.currentState!.to(
+              '/home',
+              queryParameters: widget.router!.currentState!.queryParameters,
+            );
           }
         }).catchError((e) async {
           ScaffoldMessenger.of(context).showSnackBar(
