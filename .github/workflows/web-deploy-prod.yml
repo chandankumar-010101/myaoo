@@ -15,7 +15,7 @@ jobs:
       image: cirrusci/flutter:3.0.5
     steps:
       - uses: actions/checkout@v3
-      - run: cp .env.prod .env.development
+      - run: echo "${{secrets.WEB_ENV_PROD }}" > .env
       - run: |
           sudo apt update && sudo apt install curl -y
           chmod -R 0777 scripts
