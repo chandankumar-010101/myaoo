@@ -1,7 +1,7 @@
 name: Web Deploy Staging
 on:
   push:
-    branches: [ main, update-ci ]
+    branches: [ main ]
 env:
   WEBAPP_S3_BUCKET: pangea-staging-webapp
   CF_DISTRIBUTION_ID: E3KCU729VPE6GG
