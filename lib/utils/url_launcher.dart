@@ -20,7 +20,8 @@ class UrlLauncher {
   final String? url;
   final BuildContext context;
   bool requestToEnroll;
-  UrlLauncher(this.context, this.url,{this.requestToEnroll = false});
+  final String? roomId;
+  UrlLauncher(this.context, this.url,{this.roomId="", this.requestToEnroll = false});
 
   void launchUrl() {
     if (url!.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
@@ -204,7 +205,7 @@ class UrlLauncher {
          String userId =  Matrix.of(context).client.userID??"";
          if(userId.isNotEmpty){
            //TODO Env update
-           await client.getRoomById(result.result!)!.sendTextEvent(Environment.frontendURL+"/#"+"/request_to_enroll/userID/$userId").then((value){
+           await client.getRoomById(result.result!)!.sendTextEvent(Environment.basePath+"/#"+"/request_to_enroll?id=$userId&room_id=$roomId").then((value){
              VRouter.of(context).toSegments(['rooms', result.result!]);
              Navigator.of(context, rootNavigator: false).pop();
            }).catchError((e){

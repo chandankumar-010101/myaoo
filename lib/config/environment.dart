@@ -16,8 +16,9 @@ class Environment{
   static String get basePath{
     return dotenv.env["BASE_URL"]?? 'BASE URL not found';
   }
-  static String get frontendURL{
-    return dotenv.env["FRONTEND_URL"]??"Frontend URL NOT FOUND";
+
+  static String get homeServer{
+    return dotenv.env["HOME_SERVER"]?? 'Home Server not found';
   }
 
 

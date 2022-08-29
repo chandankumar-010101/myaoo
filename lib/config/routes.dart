@@ -19,6 +19,7 @@ import 'package:pangeachat/pages/new_class/student_permissions.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
 import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
+import 'package:pangeachat/pages/request_to_enroll/request_to_enroll.dart';
 import 'package:pangeachat/pages/search/invite_screen.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/search/search_discover.dart';
@@ -42,6 +43,7 @@ import 'package:pangeachat/widgets/layouts/two_column_layout.dart';
 import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../home_page.dart';
 import '../pages/language_selection_screen/language_selection.dart';
 import '../pages/new_class/new_class.dart';
 
@@ -272,6 +274,10 @@ class AppRoutes {
                   widget: const InviteStudent(),
                   buildTransition: _dynamicTransition,
                 ),
+                VWidget(
+                  path: '/request_to_enroll',
+                  widget: RequestToEnroll(),
+                )
               ],
             ),
           ],
@@ -379,19 +385,15 @@ class AppRoutes {
             ),
           ],
         ),
-        VWidget(
-          path: '/request_to_enroll',
-          widget: NewClass(),
-        )
+
       ];
 
   List<VRouteElement> get _homeRoutes => [
         VWidget(path: '/', widget: const LoadingView()),
         VWidget(
-          path: '/home',
-          // widget: const HomePage(),
-          widget: const HomeserverPicker(),
-          // buildTransition: _fadeTransition,
+          path: '/home', widget: const HomeserverPicker(),
+          //widget: const RequestToEnroll(),
+          buildTransition: _fadeTransition,
           stackedRoutes: [
             VWidget(
               path: '/login',

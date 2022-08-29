@@ -50,7 +50,10 @@ class InvitationSelectionController extends State<InvitationSelection> {
   }
 
   void inviteAction(BuildContext context, String id) async {
+    print("id $id");
     final room = Matrix.of(context).client.getRoomById(roomId!);
+    print("below is id");
+    print(room);
     final success = await showFutureLoadingDialog(
       context: context,
       future: () => room!.invite(id),
