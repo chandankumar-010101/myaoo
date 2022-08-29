@@ -10,7 +10,7 @@ class ChoreoState {
   bool _isEditing = true;
 
   String? _roomId;
-  String get userId => 0.toString();
+  String get userId => controller.myMatrixClient!.userId;
   List<int> payLoadIds = [];
   String currentRoute = ChoreoRoute.INITAL_LOADING;
   void reset() {

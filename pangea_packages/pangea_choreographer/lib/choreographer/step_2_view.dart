@@ -10,6 +10,7 @@ import 'models/receive_text_model.dart';
 import 'controller/choreo_controller.dart';
 import 'it_trg_send_button.dart';
 import 'widgets/translation_finished.dart';
+import '../extensions/myList_extionsion.dart';
 
 class Step2View extends StatelessWidget {
   final ChoreoController controller;
@@ -49,8 +50,9 @@ class Step2View extends StatelessWidget {
                             ...renderShimmerIfListEmpty(context,
                                     controller: controller!)
                                 .map((e) => e),
-                            ...controller.step2!.availTranslations!.map((e) =>
-                                controller.step2!.isLoading
+                            ...controller.step2!.availTranslations!
+                                .shuffleReturn()
+                                .map((e) => controller.step2!.isLoading
                                     ? ItShimmer(
                                         text: e.text,
                                       )

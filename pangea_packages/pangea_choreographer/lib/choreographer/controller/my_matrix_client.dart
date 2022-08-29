@@ -13,6 +13,11 @@ class MyMatrixClient {
     _matrixClient = client;
   }
 
+  String get userId {
+    print('user id' + _matrixClient!.userID!);
+    return _matrixClient!.userID!;
+  }
+
   String generateUniqueTransactionId() {
     if (_matrixClient == null) {
       _transactionCounter++;

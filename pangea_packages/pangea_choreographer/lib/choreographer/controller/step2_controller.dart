@@ -42,7 +42,7 @@ class Step2Controller extends LoaderState {
     controller.state!.stopEditing();
     startLoading();
     InitialTextModel initialTextModel = InitialTextModel()
-      ..src_lang = controller.lang!.srcLang!.langCode
+      ..src_lang = controller.lang!.feedBackLang!.langCode
       ..text = controller.textController!.text
       ..tgt_lang = controller.lang!.trgLang!.langCode
       ..room_id = controller.state!.roomId
