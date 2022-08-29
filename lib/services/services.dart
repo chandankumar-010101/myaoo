@@ -109,8 +109,7 @@ class PangeaServices{
     await http.get(
       Uri.parse(ApiUrls.user_details + clientID),
     ).then((value) {
-      if(value.statusCode.isEqual(200)){
-
+      if(value.statusCode == 200 || value.statusCode ==201){
         final UserInfo data = userInfoFromJson(value.body);
         box.write("access", data.access);
         box.write("refresh", data.refresh);
@@ -118,6 +117,7 @@ class PangeaServices{
         box.write("targetlanguage", data.profile!.targetLanguage);
         box.write("usertype", data.profile!.userType);
         box.write("sign_up", false);
+        userAge();
       }
       else{
         if (kDebugMode) {
@@ -148,7 +148,7 @@ class PangeaServices{
           "Authorization": "Bearer $accessToken",
         },
       ).then((value){
-        if(value.statusCode.isEqual(200) || value.statusCode.isEqual(400)){
+        if(value.statusCode ==200 || value.statusCode ==201){
           final data = jsonDecode(value.body);
           box.write("age", data["age"]);
         }else{

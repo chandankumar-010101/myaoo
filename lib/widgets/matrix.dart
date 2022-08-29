@@ -385,8 +385,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 }
 
                 PangeaServices.userDetails(clientID: client.userID.toString());
-                PangeaServices.userAge();
-
                 widget.router!.currentState!.to(
                   '/rooms',
                   queryParameters: widget.router!.currentState!.queryParameters,
