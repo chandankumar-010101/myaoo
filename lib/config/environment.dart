@@ -10,9 +10,6 @@ class Environment {
     return dotenv.env["BASE_API"] ?? 'BASE API not found';
   }
 
-  static String get basePath {
-    return dotenv.env["BASE_URL"] ?? 'BASE URL not found';
-  }
 
   static String get frontendURL {
     return dotenv.env["FRONTEND_URL"] ?? "Frontend URL NOT FOUND";
