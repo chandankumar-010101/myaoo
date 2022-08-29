@@ -579,6 +579,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../services/services.dart';
 
+
+class SearchGetController extends GetxController{
+  var age = 0.obs;
+}
 class SearchDiscoverView extends StatefulWidget {
   const SearchDiscoverView({Key? key}) : super(key: key);
 
@@ -587,6 +591,7 @@ class SearchDiscoverView extends StatefulWidget {
 }
 
 class _SearchDiscoverViewState extends State<SearchDiscoverView> {
+  SearchGetController controller = Get.put(SearchGetController());
   var box = GetStorage();
 
   userAgeDetails() async {
@@ -655,20 +660,18 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     return UserAge;
   }
 
-  RxInt age = 0.obs;
+
   @override
   void initState() {
     // TODO: implement initState
     userAgeDetails();
 
-    age.value = int.parse(box.read("age").toString());
+    controller.age.value = int.parse(box.read("age").toString());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    age.value = int.parse(box.read("age").toString());
     Random random = Random();
     List list = List<int>.generate(31, (i) => i + 1);
     List month = List<int>.generate(12, (i) => i + 1);
@@ -681,7 +684,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Obx(() => age.value <= 18
+              Obx(() => controller.age.value <= 18
                   ? SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

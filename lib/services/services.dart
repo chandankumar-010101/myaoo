@@ -8,12 +8,14 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/pages/search/search.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
 import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/user_info.dart';
+import '../pages/search/search_discover.dart';
 import '../utils/api_helper.dart';
 import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +27,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 class PangeaServices{
   static GetStorage box = GetStorage();
+  static  SearchGetController _searchController = Get.put(SearchGetController());
 
   static inviteAction(BuildContext context, String id,String roomId) async {
     final room = Matrix.of(context).client.getRoomById(roomId);
@@ -183,6 +186,9 @@ class PangeaServices{
         },
         body: jsonEncode(data));
     if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      box.write("age", data["age"]);
+      _searchController.age.value = data["age"];
       Fluttertoast.showToast(
           msg: "User Age Updated",
           toastLength: Toast.LENGTH_SHORT,
