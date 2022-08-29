@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
@@ -7,7 +6,6 @@ import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:swipe_to_action/swipe_to_action.dart';
 import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/pages/chat/chat.dart';
@@ -195,7 +193,7 @@ class ChatView extends StatelessWidget {
                         child: FloatingActionButton(
                           onPressed: controller.scrollDown,
                           mini: true,
-                          child: const Icon(Icons.arrow_downward_outlined),
+                          child: const Icon(Icons.arrow_upward_outlined),//const Icon(Icons.arrow_downward_outlined),
                         ),
                       )
                     : null,
@@ -240,10 +238,8 @@ class ChatView extends StatelessWidget {
                                       // ListView's findChildIndexCallback
                                       final thisEventsKeyMap = <String, int>{};
                                       for (var i = 0;
-                                          i < controller.filteredEvents.length;
-                                          i++) {
-                                        thisEventsKeyMap[controller
-                                            .filteredEvents[i].eventId] = i;
+                                          i < controller.filteredEvents.length; i++) {
+                                        thisEventsKeyMap[controller.filteredEvents[i].eventId] = i;
                                       }
                                       return ListView.custom(
                                         padding: EdgeInsets.only(
@@ -391,6 +387,7 @@ class ChatView extends StatelessWidget {
                             ),
                             if (controller.room!.canSendDefaultMessages &&
                                 controller.room!.membership == Membership.join)
+
                               Container(
                                 margin: EdgeInsets.only(
                                   bottom: bottomSheetPadding,
@@ -421,7 +418,7 @@ class ChatView extends StatelessWidget {
                                       const ConnectionStatusHeader(),
                                       ReactionsPicker(controller),
                                       ReplyDisplay(controller),
-                                      ChatInputRow(controller),
+                                      ChatInputRow(controller,),
                                       ChatEmojiPicker(controller),
                                     ],
                                   ),
