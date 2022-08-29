@@ -380,10 +380,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 );
               }
               else{
-                if (kDebugMode) {
-                  print("fetching userDetails");
-                }
-
                 PangeaServices.userDetails(clientID: client.userID.toString());
                 PangeaServices.userAge();
 

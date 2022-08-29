@@ -6,6 +6,7 @@ import 'package:pangeachat/pages/chat_details/chat_details.dart';
 import 'package:pangeachat/pages/chat_encryption_settings/chat_encryption_settings.dart';
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_permissions_settings/chat_permissions_settings.dart';
+import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
@@ -277,7 +278,12 @@ class AppRoutes {
                 VWidget(
                   path: '/request_to_enroll',
                   widget: RequestToEnroll(),
-                )
+                ),
+                VWidget(
+                  path: '/class_analytics',
+                  widget:  ClassAnalyticsScreen(),
+                  buildTransition: _fadeTransition,
+                ),
               ],
             ),
           ],
@@ -339,11 +345,7 @@ class AppRoutes {
                             widget: const SignupPage(),
                             buildTransition: _fadeTransition,
                           ),
-                          VWidget(
-                            path: 'class_analytics',
-                            widget: const SignupPage(),
-                            buildTransition: _fadeTransition,
-                          ),
+
                         ]),
                   ],
                 ),
