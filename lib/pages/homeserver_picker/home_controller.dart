@@ -198,6 +198,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -224,12 +225,18 @@ class HomeController extends GetxController {
 
   Future getFlags() async {
     var response = await ApiFunctions().get(ApiUrls.get_all_flags);
-    log("response is ${response.body}");
+
+    if (kDebugMode) {
+      log("response is ${response.body}");
+    }
     if (response != null) {
       loading.value = false;
       // var li = jsonDecode(response.body);
       List temp = response.body;
-      log("Flag Response is $temp");
+      if (kDebugMode) {
+        log("Flag Response is $temp");
+      }
+
       countriesList.value =
           temp.map((value) => LanguageFlag.fromJson(value)).toList();
       countriesList.forEach((element) {

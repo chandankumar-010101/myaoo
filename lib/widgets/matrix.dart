@@ -354,96 +354,45 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             queryParameters: widget.router!.currentState!.queryParameters,
           );
         }
-      } else if (state == LoginState.loggedIn) {
-        //matrix access token and client id
-        if (client.accessToken.toString().isEmpty ||
-            client.userID.toString().isEmpty) {
-          PangeaServices.logoutUser(context: context, client: client);
+      }
+      else if (state == LoginState.loggedIn) {
 
+        //matrix access token and client id
+        if (client.accessToken.toString().isEmpty || client.userID.toString().isEmpty) {
+          PangeaServices.logoutUser(context: context, client: client);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Unable to fetch userID and access token.")));
           return;
         }
-        box.write("accessToken", client.accessToken.toString());
-        box.write("clientID", client.userID.toString());
         final bool signUp = box.read("sign_up") ?? false;
-        await ApiFunctions()
-            .get(ApiUrls.validate_user + client.userID.toString())
-            .then((value) async {
+        await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) async {
           if (value.statusCode == 201 || value.statusCode == 200) {
             if (!value.body["is_user_exist"] || signUp) {
+              signUp?box.remove("sign_up"):null;
               widget.router!.currentState!.to(
                 '/home/connect/lang',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
-
             }
-          }
-          else if (state == LoginState.loggedIn) {
-            print("State 1");
-            //matrix access token and client id
-            if(client.accessToken.toString().isEmpty || client.userID.toString().isEmpty){
-              print("State 2");
-              PangeaServices.logoutUser(context: context, client: client);
-              print("State 3");
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Unable to fetch userID and access token.")));
-              return;
-            }
-            box.write("accessToken", client.accessToken.toString());
-            box.write("clientID", client.userID.toString());
-            final bool signUp = box.read("sign_up") ?? false;
-            await ApiFunctions().get(ApiUrls.validate_user + client.userID.toString()).then((value) {
-
-            if(value.statusCode == 201 ||value.statusCode ==200){
-              if(!value.body["is_user_exist"] || signUp){
-                widget.router!.currentState!.to( '/home/connect/lang',
-                  queryParameters: widget.router!.currentState!.queryParameters,
-                );
-              }
-              else{
-                PangeaServices.userDetails(clientID: client.userID.toString());
+            else{
+              box.write("accessToken", client.accessToken.toString());
+              box.write("clientID", client.userID.toString());
+              PangeaServices.userDetails(clientID: client.userID.toString());
                 widget.router!.currentState!.to(
                   '/rooms',
                   queryParameters: widget.router!.currentState!.queryParameters,
                 );
-              }
             }
-            else{
-              print("Err");
-              print(value.statusCode);
-              ApiException.exception(statusCode: value.statusCode!, body: value.body, context: context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Unable to validate User")));
-              PangeaServices.logoutUser(context: context, client: client);
-
-              widget.router!.currentState!.to(
-                '/rooms',
-                queryParameters: widget.router!.currentState!.queryParameters,
-              );
-            }
-
-            }).catchError((e) async {
-              if (kDebugMode) {
-                print("Error: ");
-                print(e);
-              }
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("User validation failed: $e")));
-
-              PangeaServices.logoutUser(context: context, client: client);
-            });
           }
-          else {
-            widget.router!.currentState!.to(
-              '/home',
-              queryParameters: widget.router!.currentState!.queryParameters,
-            );
+          else{
+            ApiException.exception(statusCode: value.statusCode!, body: value.body, context: context);
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Unable to validate User")));
+            PangeaServices.logoutUser(context: context, client: client);
           }
         }).catchError((e) async {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("User validation failed: $e")));
-
           PangeaServices.logoutUser(context: context, client: client);
         });
       } else {

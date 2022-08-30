@@ -105,7 +105,6 @@ class SignupPageController extends State<SignupPage> {
       final box = GetStorage();
       box.write("sign_up", true);
       box.write("full_name", displayname);
-      print("registor");
       await client.uiaRequestBackground(
         (auth) => client.register(
           username: localPart,
