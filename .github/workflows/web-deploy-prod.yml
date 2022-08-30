@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 env:
   WEBAPP_S3_BUCKET: pangea-prod-webapp
-  CF_DISTRIBUTION_ID: E1S16UE3L1ST3J
+  CF_DISTRIBUTION_ID: E21JE50ORPZQWK
 jobs:
   build:
     if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags') }}
@@ -15,7 +15,7 @@ jobs:
       image: cirrusci/flutter:3.0.5
     steps:
       - uses: actions/checkout@v3
-      - run: cp .env.prod .env.development
+      - run: echo "${{secrets.WEB_ENV_PROD }}" > .env
       - run: |
           sudo apt update && sudo apt install curl -y
           chmod -R 0777 scripts

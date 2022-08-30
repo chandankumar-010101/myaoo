@@ -31,8 +31,8 @@ class Step1Controller extends LoaderState {
       if (_choreoResponse!.route == ChoreoRoute.SEND) {
         controller.send();
       } else {
-        controller.lang!
-            .changeSrcLang(LangList.byLangCode(_choreoResponse!.detectedLang!));
+        controller.lang!.setFeedBackLang(
+            LangList.byLangCode(_choreoResponse!.detectedLang!));
         controller.state!.changeRoute(ChoreoRoute.STEP1);
       }
     } catch (err) {

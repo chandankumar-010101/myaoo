@@ -8,6 +8,16 @@ class LangController {
   LangController(this.choreoController);
   ChoreoLangModel? _srcLang;
   ChoreoLangModel? _trgLang;
+  ChoreoLangModel? _feedBackLang;
+
+  ChoreoLangModel? get feedBackLang {
+    return _feedBackLang;
+  }
+
+  void setFeedBackLang(ChoreoLangModel lang) {
+    _feedBackLang = lang;
+  }
+
   void changeSrcLang(ChoreoLangModel lang) {
     _srcLang = lang;
     _setState();

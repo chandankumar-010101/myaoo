@@ -1,13 +1,14 @@
 import 'dart:ui';
 
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/config/environment.dart';
 
 abstract class AppConfig {
   static String _applicationName = 'Pangea Chat';
   static String get applicationName => _applicationName;
   static String? _applicationWelcomeMessage;
   static String? get applicationWelcomeMessage => _applicationWelcomeMessage;
-  static String _defaultHomeserver = 'matrix.pangea.chat';
+  static String _defaultHomeserver = Environment.synapsURL;
   static String get defaultHomeserver => _defaultHomeserver;
   static double bubbleSizeFactor = 1;
   static double fontSizeFactor = 1;

@@ -38,6 +38,7 @@ prime
 .pub/
 /build/
 .env.development
+.env
 .flutter-plugins-dependencies
 .packages
 package_config.json

@@ -675,7 +675,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VRouter.of(context).to('class_analytics');
+                                    VRouter.of(context).to('/class_analytics');
                                   },
                                   child: Text(
                                     "Class Analytics",

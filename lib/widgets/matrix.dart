@@ -45,7 +45,7 @@ import '../utils/platform_infos.dart';
 import 'local_notifications_extension.dart';
 
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+// Adding comment just for the sake of redeployment
 class Matrix extends StatefulWidget {
   final Widget? child;
 
@@ -199,8 +199,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     return candidate;
   }
 
-
-
   Client? getClientByName(String name) =>
       widget.clients.firstWhereOrNull((c) => c.clientName == name);
 
@@ -231,7 +229,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             statusMsg: statusMsg,
           );
         }
-       // box.write("clientID", client.userID ?? "null");
+        // box.write("clientID", client.userID ?? "null");
       }
     } catch (e, s) {
       client.onLoginStateChanged.sink.addError(e, s);
@@ -340,21 +338,45 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     });
     onLoginStateChanged[name] ??=
         c.onLoginStateChanged.stream.listen((state) async {
-          final loggedInWithMultipleClients = widget.clients.length > 1;
-          if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
-            _cancelSubs(c.clientName);
-            widget.clients.remove(c);
-            ClientManager.removeClientNameFromStore(c.clientName);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(L10n.of(context)!.oneClientLoggedOut),
-              ),
-            );
-            if (state != LoginState.loggedIn) {
+      final loggedInWithMultipleClients = widget.clients.length > 1;
+      if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
+        _cancelSubs(c.clientName);
+        widget.clients.remove(c);
+        ClientManager.removeClientNameFromStore(c.clientName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(L10n.of(context)!.oneClientLoggedOut),
+          ),
+        );
+        if (state != LoginState.loggedIn) {
+          widget.router!.currentState!.to(
+            '/home',
+            queryParameters: widget.router!.currentState!.queryParameters,
+          );
+        }
+      } else if (state == LoginState.loggedIn) {
+        //matrix access token and client id
+        if (client.accessToken.toString().isEmpty ||
+            client.userID.toString().isEmpty) {
+          PangeaServices.logoutUser(context: context, client: client);
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Unable to fetch userID and access token.")));
+          return;
+        }
+        box.write("accessToken", client.accessToken.toString());
+        box.write("clientID", client.userID.toString());
+        final bool signUp = box.read("sign_up") ?? false;
+        await ApiFunctions()
+            .get(ApiUrls.validate_user + client.userID.toString())
+            .then((value) async {
+          if (value.statusCode == 201 || value.statusCode == 200) {
+            if (!value.body["is_user_exist"] || signUp) {
               widget.router!.currentState!.to(
-                '/home',
+                '/home/connect/lang',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
+
             }
           }
           else if (state == LoginState.loggedIn) {
@@ -380,10 +402,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                 );
               }
               else{
-                if (kDebugMode) {
-                  print("fetching userDetails");
-                }
-
                 PangeaServices.userDetails(clientID: client.userID.toString());
                 widget.router!.currentState!.to(
                   '/rooms',
@@ -399,7 +417,12 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
                   const SnackBar(content: Text("Unable to validate User")));
               PangeaServices.logoutUser(context: context, client: client);
 
+              widget.router!.currentState!.to(
+                '/rooms',
+                queryParameters: widget.router!.currentState!.queryParameters,
+              );
             }
+
             }).catchError((e) async {
               if (kDebugMode) {
                 print("Error: ");
@@ -417,7 +440,19 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               queryParameters: widget.router!.currentState!.queryParameters,
             );
           }
+        }).catchError((e) async {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("User validation failed: $e")));
+
+          PangeaServices.logoutUser(context: context, client: client);
         });
+      } else {
+        widget.router!.currentState!.to(
+          '/home',
+          queryParameters: widget.router!.currentState!.queryParameters,
+        );
+      }
+    });
 
     // Cache and resend status message
     onOwnPresence[name] ??= c.onPresenceChanged.stream.listen((presence) {
@@ -511,9 +546,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
     createVoipPlugin();
   }
-
-
-
 
   void createVoipPlugin() async {
     if (await store.getItemBool(SettingKeys.experimentalVoip) == false) {

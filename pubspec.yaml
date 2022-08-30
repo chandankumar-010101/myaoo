@@ -122,9 +122,8 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - .env.development
-    - .env.staging
     - .env.example
+    - .env
     - assets/
     - assets/png/
     - assets/sounds/

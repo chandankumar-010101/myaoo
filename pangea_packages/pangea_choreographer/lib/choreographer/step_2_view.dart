@@ -10,6 +10,7 @@ import 'models/receive_text_model.dart';
 import 'controller/choreo_controller.dart';
 import 'it_trg_send_button.dart';
 import 'widgets/translation_finished.dart';
+import '../extensions/myList_extionsion.dart';
 
 class Step2View extends StatelessWidget {
   final ChoreoController controller;
@@ -49,8 +50,9 @@ class Step2View extends StatelessWidget {
                             ...renderShimmerIfListEmpty(context,
                                     controller: controller!)
                                 .map((e) => e),
-                            ...controller.step2!.availTranslations!.map((e) =>
-                                controller.step2!.isLoading
+                            ...controller.step2!.availTranslations!
+                                .shuffleReturn()
+                                .map((e) => controller.step2!.isLoading
                                     ? ItShimmer(
                                         text: e.text,
                                       )
@@ -178,7 +180,7 @@ class Step2View extends StatelessWidget {
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Color(tabledColor(e.probability!))),
+                              color: Color(tabledColor(e.level!))),
                           child: Center(
                               child: Text(
                             e.text!,
@@ -195,19 +197,23 @@ class Step2View extends StatelessWidget {
     );
   }
 
-  int tabledColor(double prob) {
-    if (prob > 0.79) {
-      return 0xFF209c05;
+  int tabledColor(int level) {
+    if (level == 6) {
+      return 0xFF06FF00;
     }
-    if (prob > 0.59) {
-      return 0xFF85e62c;
+    if (level == 5) {
+      return 0xFFD0FF00;
     }
-    if (prob > 0.39) {
-      return 0xFFebff0a;
+    if (level == 4) {
+      return 0xFFFFE400;
     }
-    if (prob > 0.19) {
-      return 0xFFf2ce02;
+    if (level == 3) {
+      return 0xFFFF8E00;
     }
-    return 0xFFFF2D2D;
+
+    if (level == 2) {
+      return 0xFFFF6600;
+    }
+    return 0xFFFF1700;
   }
 }
