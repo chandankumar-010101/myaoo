@@ -43,9 +43,7 @@ class LanguageSelectionController extends State<LanguageSelection> {
       loading = true;
     });
     try {
-      print("step");
       String source_language = getxController.selectedLanguageOne.value;
-      print("step2");
       String target_language = getxController.selectedLanguageTwo.value;
       final client = Matrix.of(context).client;
 
@@ -54,11 +52,7 @@ class LanguageSelectionController extends State<LanguageSelection> {
         var temp2 = temp1.replaceAll("@", "");
         var full_name = temp2;
         String url = ApiUrls.user_details + client.userID.toString();
-        print(full_name);
-        print(user_type);
-        print(client.userID);
-        print(source_language.toString());
-        print(target_language.toString());
+
         await ApiFunctions().post(
           ApiUrls.create_user,
           {
@@ -138,6 +132,13 @@ class LanguageSelectionController extends State<LanguageSelection> {
         setState(() => loading = false);
       }
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getxController.role.value = "";
   }
 
   @override
