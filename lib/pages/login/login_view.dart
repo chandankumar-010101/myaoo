@@ -14,19 +14,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // const String flagsPath = "assets/countryFlags/";
-    // const countries = [
-    //   "zh.svg",
-    //   "tk.svg",
-    //   "td.svg",
-    //   "de.svg",
-    //   "us.svg",
-    //   "ko.svg",
-    //   "ve.svg",
-    //   "pl.svg",
-    //   "mv.svg",
-    //   "no.svg"
-    // ];
     return Scaffold(
       body: Center(
         child: Container(
@@ -46,35 +33,7 @@ class LoginView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // ConstrainedBox(
-                  //   constraints: const BoxConstraints(maxWidth: 700),
-                  //   child: SizedBox(
-                  //     height: 150,
-                  //     child: ListView.builder(
-                  //       scrollDirection: Axis.horizontal,
-                  //       itemBuilder: ((BuildContext context, int index) {
-                  //         final String fullFlagPath = flagsPath + countries[index];
-                  //         return Container(
-                  //           margin: const EdgeInsets.only(right: 10),
-                  //           child: Center(
-                  //             child: CircleAvatar(
-                  //               radius: 30.0,
-                  //               backgroundColor: Colors.transparent,
-                  //               child: ClipRRect(
-                  //                 child: SvgPicture.asset(
-                  //                   fullFlagPath,
-                  //                   fit: BoxFit.contain,
-                  //                 ),
-                  //                 borderRadius: BorderRadius.circular(50.0),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         );
-                  //       }),
-                  //       itemCount: countries.length,
-                  //     ),
-                  //   ),
-                  // ),
+
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -121,7 +80,7 @@ class LoginView extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Container(
-                                            height: 50,
+                                           // height: 50,
                                             child: TextFormField(
                                               readOnly: controller.loading,
                                               autocorrect: false,
@@ -140,6 +99,8 @@ class LoginView extends StatelessWidget {
                                                   ? null
                                                   : [AutofillHints.username],
                                               decoration: InputDecoration(
+                                                contentPadding:
+                                                EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                                 border: OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -177,10 +138,6 @@ class LoginView extends StatelessWidget {
                                                     controller.usernameError,
                                                 hintText: L10n.of(context)!
                                                     .emailOrUsername,
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 25),
                                                 hintStyle: const TextStyle(
                                                   color: Color(0x35204880),
                                                 ),
@@ -195,7 +152,7 @@ class LoginView extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: SizedBox(
-                                            height: 50,
+                                            //height: 50,
                                             child: TextField(
                                               readOnly: controller.loading,
                                               autocorrect: false,
@@ -212,6 +169,8 @@ class LoginView extends StatelessWidget {
                                               style: FluffyThemes
                                                   .loginTextFieldStyle,
                                               decoration: InputDecoration(
+                                                contentPadding:
+                                                EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                                 border: OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -263,10 +222,6 @@ class LoginView extends StatelessWidget {
                                                 ),
                                                 hintText:
                                                     L10n.of(context)!.password,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 25,
-                                                        horizontal: 10),
                                                 hintStyle: const TextStyle(
                                                     color: Color(0x35204880)),
                                               ),
