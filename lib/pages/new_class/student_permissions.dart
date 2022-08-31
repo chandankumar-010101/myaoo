@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
@@ -67,8 +68,12 @@ class _StudentPermissionsState extends State<StudentPermissions> {
         openEnrollment = box.read("openEnrollment");
         openToExchange = box.read("openToExchange");
       } catch (e) {
-        print(e);
-        print("Unable to fetch Data from storage");
+        if (kDebugMode) {
+          print("Unable to fetch Data from storage");
+          print(e);
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Unable to fetch Data from storage")));
         return;
       }
       final matrix = Matrix.of(context);
@@ -87,10 +92,10 @@ class _StudentPermissionsState extends State<StudentPermissions> {
         ),
       );
       if (roomID.result != null) {
-        print(roomID.result);
-
+        if (kDebugMode) {
+          print(roomID.result);
+        }
         await PangeaServices.createClass(
-
           context: context,
           isPublic: publicGroup,
           isSharePhoto: sharePhotos,
@@ -116,12 +121,16 @@ class _StudentPermissionsState extends State<StudentPermissions> {
         );
       }
       if (roomID == null) {
-
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-        print(roomID);
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Something went wrong")));
+
+
     }
   }
 

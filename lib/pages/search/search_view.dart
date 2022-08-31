@@ -20,6 +20,8 @@ import 'search.dart';
 
 class SearchView extends StatefulWidget {
   final SearchController controller;
+  final searchController = Get.put(SearchViewController());
+
 
   SearchView(this.controller, {Key? key}) : super(key: key);
 
@@ -32,13 +34,8 @@ class _SearchViewState extends State<SearchView> {
 
   var box = GetStorage();
   String id = "";
-  @override
-  void initState() {
-    super.initState();
-    PangeaServices.userAge();
-  }
 
-  Rx<bool> firstTime = true.obs;
+
 
   void addAgesAction() => VRouter.of(context).to('/user');
 
@@ -52,12 +49,14 @@ class _SearchViewState extends State<SearchView> {
       });
 
   @override
-  Widget build(BuildContext context) {
-
-    PangeaServices.userAge();
+  void initState() {
+    super.initState();
+    final int age1 = box.read("age") ?? 0;
+    age1 == 0?searchController.age.value = 0:searchController.age.value = age1;
     searchController.getClasses();
-    var age1 = box.read("age")??0;
-    RxInt age = int.parse(age1.toString()).obs;
+  }
+  @override
+  Widget build(BuildContext context) {
 
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
@@ -110,6 +109,7 @@ class _SearchViewState extends State<SearchView> {
               .removeDiacritics()),
     );
     const tabCount = 3;
+
     return DefaultTabController(
       length: tabCount,
       initialIndex: widget.controller.controller.text.startsWith('#') ? 0 : 1,
@@ -145,7 +145,7 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
-            Obx(() => age.value <= 18
+              Obx(() => searchController.age.value <= 18
                 ? SingleChildScrollView(
                     child: Column(
                       children: [
@@ -279,143 +279,6 @@ class _SearchViewState extends State<SearchView> {
                                     )),
                               )
                             : Container(),
-
-                        // ListView(
-                        //   keyboardDismissBehavior: PlatformInfos.isIOS
-                        //       ? ScrollViewKeyboardDismissBehavior.onDrag
-                        //       : ScrollViewKeyboardDismissBehavior.manual,
-                        //   children: [
-                        //     const SizedBox(height: 12),
-                        //
-                        //     // ListTile(
-                        //     //   leading: CircleAvatar(
-                        //     //     foregroundColor: Theme.of(context).colorScheme.secondary,
-                        //     //     backgroundColor: Theme.of(context).secondaryHeaderColor,
-                        //     //     child: const Icon(Icons.edit_outlined),
-                        //     //   ),
-                        //     //   title: Text(L10n.of(context)!.changeTheServer),
-                        //     //   onTap: controller.setServer,
-                        //     // ),
-                        //     FutureBuilder<QueryPublicRoomsResponse>(
-                        //         future: controller.publicRoomsResponse,
-                        //         builder: (BuildContext context,
-                        //             AsyncSnapshot<QueryPublicRoomsResponse> snapshot) {
-                        //           if (snapshot.hasError) {
-                        //             return Column(
-                        //               mainAxisSize: MainAxisSize.min,
-                        //               children: [
-                        //                 const SizedBox(height: 32),
-                        //                 const Icon(
-                        //                   Icons.error_outlined,
-                        //                   size: 80,
-                        //                   color: Colors.grey,
-                        //                 ),
-                        //                 Center(
-                        //                   child: Text(
-                        //                     snapshot.error!.toLocalizedString(context),
-                        //                     textAlign: TextAlign.center,
-                        //                     style: const TextStyle(
-                        //                       color: Colors.grey,
-                        //                       fontSize: 16,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //               ],
-                        //             );
-                        //           }
-                        //           if (snapshot.connectionState != ConnectionState.done) {
-                        //             return const Center(
-                        //                 child: CircularProgressIndicator.adaptive(
-                        //                     strokeWidth: 2));
-                        //           }
-                        //           final publicRoomsResponse = snapshot.data!;
-                        //           if (publicRoomsResponse.chunk.isEmpty) {
-                        //             return Column(
-                        //               mainAxisSize: MainAxisSize.min,
-                        //               children: [
-                        //                 const SizedBox(height: 32),
-                        //                 const Icon(
-                        //                   Icons.search_outlined,
-                        //                   size: 80,
-                        //                   color: Colors.grey,
-                        //                 ),
-                        //                 Center(
-                        //                   child: Text(
-                        //                     L10n.of(context)!.noPublicRoomsFound,
-                        //                     textAlign: TextAlign.center,
-                        //                     style: const TextStyle(
-                        //                       color: Colors.grey,
-                        //                       fontSize: 16,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //               ],
-                        //             );
-                        //           }
-                        //           return GridView.builder(
-                        //             shrinkWrap: true,
-                        //             padding: const EdgeInsets.all(12),
-                        //             physics: const NeverScrollableScrollPhysics(),
-                        //             gridDelegate:
-                        //                 const SliverGridDelegateWithFixedCrossAxisCount(
-                        //               crossAxisCount: 2,
-                        //               childAspectRatio: 1,
-                        //               crossAxisSpacing: 16,
-                        //               mainAxisSpacing: 16,
-                        //             ),
-                        //             itemCount: publicRoomsResponse.chunk.length,
-                        //             itemBuilder: (BuildContext context, int i) => Material(
-                        //               elevation: 2,
-                        //               borderRadius: BorderRadius.circular(16),
-                        //               child: InkWell(
-                        //                 onTap: () => controller.joinGroupAction(
-                        //                   publicRoomsResponse.chunk[i],
-                        //                 ),
-                        //                 borderRadius: BorderRadius.circular(16),
-                        //                 child: Padding(
-                        //                   padding: const EdgeInsets.all(8.0),
-                        //                   child: Column(
-                        //                     mainAxisSize: MainAxisSize.min,
-                        //                     children: [
-                        //                       Avatar(
-                        //                         mxContent:
-                        //                             publicRoomsResponse.chunk[i].avatarUrl,
-                        //                         name: publicRoomsResponse.chunk[i].name,
-                        //                       ),
-                        //                       Text(
-                        //                         publicRoomsResponse.chunk[i].name!,
-                        //                         style: const TextStyle(
-                        //                           fontSize: 16,
-                        //                           fontWeight: FontWeight.bold,
-                        //                         ),
-                        //                         maxLines: 1,
-                        //                         textAlign: TextAlign.center,
-                        //                       ),
-                        //                       Text(
-                        //                         L10n.of(context)!.countParticipants(
-                        //                             publicRoomsResponse
-                        //                                 .chunk[i].numJoinedMembers),
-                        //                         style: const TextStyle(fontSize: 10.5),
-                        //                         maxLines: 1,
-                        //                         textAlign: TextAlign.center,
-                        //                       ),
-                        //                       Expanded(
-                        //                         child: Text(
-                        //                           publicRoomsResponse.chunk[i].topic ??
-                        //                               L10n.of(context)!.noDescription,
-                        //                           maxLines: 4,
-                        //                           textAlign: TextAlign.center,
-                        //                         ),
-                        //                       ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //           );
-                        //         }),
-                        //   ],
-                        // ),
                       ],
                     ),
                   )
@@ -425,15 +288,6 @@ class _SearchViewState extends State<SearchView> {
                         : ScrollViewKeyboardDismissBehavior.manual,
                     children: [
                       const SizedBox(height: 12),
-                      // ListTile(
-                      //   leading: CircleAvatar(
-                      //     foregroundColor: Theme.of(context).colorScheme.secondary,
-                      //     backgroundColor: Theme.of(context).secondaryHeaderColor,
-                      //     child: const Icon(Icons.edit_outlined),
-                      //   ),
-                      //   title: Text(L10n.of(context)!.changeTheServer),
-                      //   onTap: controller.setServer,
-                      // ),
                       FutureBuilder<QueryPublicRoomsResponse>(
                           future: widget.controller.publicRoomsResponse,
                           builder: (BuildContext context,
@@ -578,9 +432,7 @@ class _SearchViewState extends State<SearchView> {
                                               BorderRadius.circular(16),
                                           child: InkWell(
                                             onTap: () async {
-                                              id = searchController.classList[i]
-                                                  .pangea_class_room_id
-                                                  .toString();
+                                              id = searchController.classList[i].pangea_class_room_id!;
                                               
                                               VRouter.of(context).to("/classDetails",queryParameters:{"id":id} );
                                             },

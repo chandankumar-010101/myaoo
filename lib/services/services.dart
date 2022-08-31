@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/pages/search/search.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
 import '../model/class_detail_model.dart';
@@ -16,6 +15,7 @@ import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
+import '../pages/search/search_view_controller.dart';
 import '../utils/api_helper.dart';
 import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
@@ -25,13 +25,14 @@ import 'api_exception.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-class PangeaServices{
+class PangeaServices {
   static GetStorage box = GetStorage();
-  static  SearchGetController _searchController = Get.put(SearchGetController());
+  static final SearchViewController _searchController =
+      Get.put(SearchViewController());
 
-  static inviteAction(BuildContext context, String id,String roomId) async {
+  static inviteAction(BuildContext context, String id, String roomId) async {
     final room = Matrix.of(context).client.getRoomById(roomId);
-    if(room !=null){
+    if (room != null) {
       final success = await showFutureLoadingDialog(
         context: context,
         future: () => room.invite(id),
@@ -40,11 +41,10 @@ class PangeaServices{
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(L10n.of(context)!.contactHasBeenInvitedToTheGroup)));
       }
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Unable to Fetch Room")));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Unable to Fetch Room")));
     }
-
   }
 
   static Future<List<LanguageFlag>> getFlags() async {
@@ -57,18 +57,14 @@ class PangeaServices{
       log("Flag Response is $temp");
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
     } else {
-
-      Fluttertoast.showToast(
-          msg: "Something went wrong",
-          fontSize: 16.0
-      );
+      Fluttertoast.showToast(msg: "Something went wrong", fontSize: 16.0);
     }
     return countryFlag;
   }
 
   static Future<List<LanguageFlag>> getFlags2() async {
     List<LanguageFlag> countryFlag = [];
-    List<LanguageFlag> flags =[];
+    List<LanguageFlag> flags = [];
     var response = await ApiFunctions().get(ApiUrls.get_all_flags);
     log("response is ${response.body}");
     if (response != null) {
@@ -77,155 +73,239 @@ class PangeaServices{
       log("Flag Response is $temp");
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
       countryFlag.forEach((element) {
-       if (element.languageType == 2) {
-         print(element.languageName);
+        if (element.languageType == 2) {
+          print(element.languageName);
           flags.add(element);
         }
       });
     } else {
-
-      Fluttertoast.showToast(
-          msg: "Something went wrong",
-          fontSize: 16.0
-      );
+      Fluttertoast.showToast(msg: "Something went wrong", fontSize: 16.0);
     }
     return flags;
   }
 
-  static accessToken() async {
-
-    final String accessToken =  box.read("access")??"";
-    if(accessToken.isEmpty || JwtDecoder.isExpired(accessToken)){
-      final String clientID = box.read("clientID")??"";
-      if(clientID.isNotEmpty){
-        await userDetails(clientID: clientID);
-      }else{
-        Fluttertoast.showToast(msg: "Client id not found");
+  //------------------------------------Authentication-----------------------------------//
+  static logoutUser(
+      {required BuildContext context, required Client client}) async {
+    await showFutureLoadingDialog(
+      context: context,
+      future: () => client.logout(),
+    ).then((value) {
+      box.erase();
+      ScaffoldMessenger.of(context)
+          .showSnackBar( SnackBar(content: Text("Log out successfully")));
+    }).catchError((e) {
+      if (kDebugMode) {
+        print(e);
+        print("logout error");
       }
-    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error while Log out user")));
+    });
+  }
 
+  //--------------------------------------User Info --------------------------------------//
+  static validateUser(
+      Client client, BuildContext context, Matrix widget) async {
+    final bool signUp = box.read("sign_up") ?? false;
+    final String userID = client.userID??"";
+    if(userID.isNotEmpty){
+      try{
+        final value =  await http
+            .get(
+          Uri.parse(ApiUrls.validate_user + userID),
+        );
+        if (value.statusCode == 201 || value.statusCode == 200) {
+         final data = jsonDecode(value.body);
+          if (!data["is_user_exist"] || signUp) {
+            signUp ? box.remove("sign_up") : null;
+            widget.router!.currentState!.to(
+              '/home/connect/lang',
+              queryParameters: widget.router!.currentState!.queryParameters,
+            );
+          } else {
+            box.write("accessToken", client.accessToken.toString());
+            box.write("clientID", client.userID.toString());
+            PangeaServices.userDetails(clientID: client.userID.toString());
+            fetchUserAge();
+            widget.router!.currentState!.to(
+              '/rooms',
+              queryParameters: widget.router!.currentState!.queryParameters,
+            );
+          }
+        }
+        else {
+          ApiException.exception(
+              statusCode: value.statusCode, body: value.body, context: context);
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Unable to validate User")));
+          PangeaServices.logoutUser(context: context, client: client);
+        }
+      }catch(e){
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("User validation failed: $e")));
+        PangeaServices.logoutUser(context: context, client: client);
+      }
     }
 
   }
 
   static userDetails({required String clientID}) async {
-    await http.get(
-      Uri.parse(ApiUrls.user_details + clientID),
-    ).then((value) {
-      if(value.statusCode == 200 || value.statusCode ==201){
+    try{
+      final value = await http.get(
+        Uri.parse(ApiUrls.user_details + clientID),
+      );
+      if (value.statusCode == 200 || value.statusCode == 201) {
         final UserInfo data = userInfoFromJson(value.body);
         box.write("access", data.access);
         box.write("refresh", data.refresh);
         box.write("sourcelanguage", data.profile!.sourceLanguage);
         box.write("targetlanguage", data.profile!.targetLanguage);
         box.write("usertype", data.profile!.userType);
-        box.write("sign_up", false);
-        userAge();
       }
-      else{
+      else {
         if (kDebugMode) {
           print("Unable to fetch user information");
-          print(value.body+value.statusCode.toString());
+          print(value.statusCode);
+          print(value.body);
         }
-        Fluttertoast.showToast(msg: "API Error:${value.statusCode}");
-        //TODO: logout
+        Fluttertoast.showToast(msg: "Error ${value.statusCode}: Unable to fetch user details");
       }
-    }).catchError((e){
+    }catch(e){
       if (kDebugMode) {
         print(e);
-        print("eeror accured");
+        print("Unable to fetch User Details");
       }
-      Fluttertoast.showToast(msg: "Unable to fetch user information");
-      //TODO: logout
-    });
+      Fluttertoast.showToast(msg: "Error while fetching user details");
+    }
+
   }
 
-  static userAge() async {
-    final String clientID = box.read("clientID")??"";
-    final String accessToken = box.read("access")??"";
-    if(clientID.isNotEmpty && accessToken.isNotEmpty){
-      await http.get(
-        Uri.parse(ApiUrls.user_ages+clientID),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      ).then((value){
-        if(value.statusCode ==200 || value.statusCode ==201){
+  static fetchUserAge() async {
+    final String clientID = box.read("clientID") ?? "";
+    final String accessToken = box.read("access") ?? "";
+    if (clientID.isNotEmpty && accessToken.isNotEmpty) {
+      try{
+       final value = await http.get(
+          Uri.parse(ApiUrls.user_ages + clientID),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $accessToken",
+          },
+        );
+        if (value.statusCode == 200) {
           final data = jsonDecode(value.body);
           box.write("age", data["age"]);
-        }else{
-          if (kDebugMode) {
-            print("Unable to fetch user Age");
-            print(value.body+value.statusCode.toString());
-          }
-          Fluttertoast.showToast(msg: "API Error:${value.statusCode}");
-          //TODO: logout
         }
-      }).catchError((e){
+        else if (value.statusCode == 400) {
+          box.write("age", 0);
+        }
+        else {
+          if (kDebugMode) {
+            print("Unable to fetch user age");
+            print(value.statusCode);
+            print(value.body);
+          }
+          Fluttertoast.showToast(
+              msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+        }
+      }catch(e){
         if (kDebugMode) {
           print(e);
         }
-        Fluttertoast.showToast(msg: "Unable to fetch user age");
-        //TODO: logout
-      });
+        Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      }
+    }
+    else {
+      if (kDebugMode) {
+        print(
+            "Client Id or access token is Empty, \n unable to fetch User Age");
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
     }
   }
 
-  static updateUserAge(day, month, year) async {
-    var Url = "${ApiUrls.update_user_ages}";
+  static accessToken() async {
+    final String accessToken = box.read("access") ?? "";
+    if (accessToken.isEmpty) {
+      print("access token is empty");
+      final String clientID = box.read("clientID") ?? "";
+      if (clientID.isNotEmpty) {
+        await userDetails(clientID: clientID);
+      } else {
+        if (kDebugMode) {
+          print("Client Id is empty");
+        }
+      }
+    } else if(JwtDecoder.isExpired(accessToken)){
+      print("token is expired");
+      final String clientID = box.read("clientID") ?? "";
+      if (clientID.isNotEmpty) {
+        await userDetails(clientID: clientID);
+      } else {
+        if (kDebugMode) {
+          print("Client Id is empty");
+        }
+      }
 
-    final Map<String, dynamic> data = {
-      "pangea_user_id": "${box.read("clientID")}",
-      "date_of_birth": "$day-$month-$year",
-    };
-    http.Response response = await http.post(Uri.parse(Url),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${box.read("access")}",
-        },
-        body: jsonEncode(data));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      box.write("age", data["age"]);
-      _searchController.age.value = data["age"];
-      Fluttertoast.showToast(
-          msg: "User Age Updated",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
-      log("200" + response.body);
-    } else if (response.statusCode == 400) {
-      log("400" + response.body);
-    } else {
-      Get.rawSnackbar(
-          message: "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.zero,
-          snackStyle: SnackStyle.GROUNDED,
-          backgroundColor: Colors.red);
+    }else{
+      if (kDebugMode) {
+        print("every thing is working fine");
+      }
     }
   }
 
-  static logoutUser({ required BuildContext context, required Client client}) async {
-    await showFutureLoadingDialog(
-      context: context,
-      future: () => client.logout(),
-    ).then((value) {
-      box.erase();
-      Fluttertoast.showToast(msg: "Logout Successfully");
 
 
-    }).catchError((e){
-      print("lougout error");
-      print(e);
-    });
+  static updateUserAge(day, month, year, context) async {
+   final String clientID = box.read("clientID")??"";
+   if(clientID.isNotEmpty){
+     await http
+         .post(
+       Uri.parse(ApiUrls.update_user_ages),
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": "Bearer ${box.read("access")}",
+       },
+       body: jsonEncode({
+         "pangea_user_id": clientID,
+         "date_of_birth": "$day-$month-$year",
+       }),
+     ).then((response) {
+       if (response.statusCode == 200) {
+         final data = jsonDecode(response.body);
+         box.write("age", data["age"]);
+         _searchController.age.value = data["age"];
+         _searchController.loading.value = false;
+         Fluttertoast.showToast(msg: "User Age Updated");
+       }
+       else if (response.statusCode == 400) {
+
+         box.write("age", 0);
+         Fluttertoast.showToast(msg: "Unable to update user age");
+         _searchController.age.value = 0;
+         log("400" + response.body);
+       }
+       else {
+         ApiException.exception(
+             statusCode: response.statusCode,
+             context: context,
+             body: response.body);
+       }
+     }).catchError((e) {
+       if (kDebugMode) {
+         print("Error accured");
+         print(e);
+       }
+       Fluttertoast.showToast(msg: "Error: unable to update user age");
+     });
+   }else{
+     Fluttertoast.showToast(msg: "Unable to fetch Client ID");
+   }
+
   }
 
+  //---------------------------------------Class Services-------------------------------------//
 
   static Future<void> createClass({
     required BuildContext context,
@@ -252,31 +332,36 @@ class PangeaServices{
     required String schoolName,
   }) async {
     final String token = box.read("access");
+    if (token.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Token expired please logout and login again")));
+      return;
+    }
     if (kDebugMode) {
-      if (token.isEmpty) {
-        Fluttertoast.showToast(
-            msg: "Token expired please logout and login again");
-        return;
-      }
       print("token: $token");
     }
-    http.post(Uri.parse(ApiUrls.create_class),
-        headers: {"Authorization": "Bearer $token"},
-        body: CreateClassToJson(
-          pangeaClassRoomId: roomId,
-          languageLevel: languageLevel.toString(),
-          dominantLanguage: dominantLanguage,
-          description: desc,
-          country: country,
-          className: className,
-          city: city,
-          targetLanguage: targetLanguage,
-          schoolName: schoolName,
-        ).toJson())
+    http
+        .post(Uri.parse(ApiUrls.create_class),
+            headers: {"Authorization": "Bearer $token"},
+            body: CreateClassToJson(
+              pangeaClassRoomId: roomId,
+              languageLevel: languageLevel.toString(),
+              dominantLanguage: dominantLanguage,
+              description: desc,
+              country: country,
+              className: className,
+              city: city,
+              targetLanguage: targetLanguage,
+              schoolName: schoolName,
+            ).toJson())
         .then((value) async {
       if (value.statusCode == 201 || value.statusCode == 200) {
         final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-        http.post(
+        if (kDebugMode) {
+          print(data.id);
+        }
+        http
+            .post(
           Uri.parse(ApiUrls.addClassPermissions),
           headers: {"Authorization": "Bearer $token"},
           body: AddClassPermissionModel(
@@ -309,21 +394,29 @@ class PangeaServices{
             box.remove('openToExchange');
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Class created successfully")));
-            context.vRouter.to("/invite_students", queryParameters: { "id":roomId });
+            context.vRouter
+                .to("/invite_students", queryParameters: {"id": roomId});
           } else {
-            ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
+            if (kDebugMode) {
+              print("Error accured here");
+            }
+            deleteClass(context: context, roomId: roomId);
+            ApiException.exception(
+                statusCode: value.statusCode,
+                context: context,
+                body: value.body);
           }
         }).catchError((onError) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Error in Permissions: $onError")));
         });
-      }
-      else {
-        ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
+      } else {
+        ApiException.exception(
+            statusCode: value.statusCode, context: context, body: value.body);
       }
     }).catchError((onError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $onError")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: $onError")));
     });
   }
 
@@ -331,31 +424,31 @@ class PangeaServices{
     required BuildContext context,
     required String roomId,
   }) async {
-    final String token = box.read("access")??"";
+    final String token = box.read("access") ?? "";
     if (token.isNotEmpty) {
       await http.delete(
-        Uri.parse(ApiUrls.deleteClass+roomId),
+        Uri.parse(ApiUrls.deleteClass + roomId),
         headers: <String, String>{
           "Authorization": "Bearer $token",
           'Content-Type': 'application/json; charset=UTF-8',
         },
       ).then((value) {
-        if(value.statusCode ==200 || value.statusCode ==201){
+        if (value.statusCode == 200 || value.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Class deleted successfully")));
           return true;
-        }else{
-          ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
+        } else {
+          ApiException.exception(
+              statusCode: value.statusCode, context: context, body: value.body);
         }
-      }).catchError((error){
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Error: $error")));
+      }).catchError((error) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error: $error")));
         log("Error: $error");
       });
-    }
-    else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("JWT Token is null")));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("JWT Token is null")));
       if (kDebugMode) {
         print("JWT Token is null");
       }
@@ -371,8 +464,8 @@ class PangeaServices{
   }) async {
     final String token = box.read("access");
     if (token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Token expired please logout and login again")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Token expired please logout and login again")));
       return null;
     }
     http
@@ -391,21 +484,20 @@ class PangeaServices{
       ),
     )
         .then((value) {
-      if(value.statusCode == 200 || value.statusCode ==201){
+      if (value.statusCode == 200 || value.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Permissions updated successfully")));
         return true;
-      }else{
-        ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
+      } else {
+        ApiException.exception(
+            statusCode: value.statusCode, context: context, body: value.body);
       }
-
     }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error accured: $e")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error accured: $e")));
       print("Error accured: $e");
     });
   }
-
 
   static Future<bool?> updateStudentPermission({
     required BuildContext context,
@@ -425,8 +517,8 @@ class PangeaServices{
       if (kDebugMode) {
         print("JWT Token is null");
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Token expired please logout and login again")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Token expired please logout and login again")));
       return null;
     }
     http
@@ -451,16 +543,17 @@ class PangeaServices{
       ),
     )
         .then((value) {
-      if(value.statusCode ==201 ||value.statusCode ==200){
+      if (value.statusCode == 201 || value.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Permissions updated successfully")));
         return true;
-      }else{
-        ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
+      } else {
+        ApiException.exception(
+            statusCode: value.statusCode, context: context, body: value.body);
       }
     }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error accured: $e")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error accured: $e")));
       print("Error accured: $e");
     });
   }
@@ -479,8 +572,8 @@ class PangeaServices{
       if (kDebugMode) {
         print("JWT Token is null");
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Token expired please logout and login again")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Token expired please logout and login again")));
       return null;
     }
     http
@@ -500,32 +593,29 @@ class PangeaServices{
       }),
     )
         .then((value) {
-      if(value.statusCode ==201 ||value.statusCode ==200){
+      if (value.statusCode == 201 || value.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Class Details updated successfully")));
         return true;
-      }
-      else{
-        ApiException.exception(statusCode: value.statusCode, context: context, body: value.body);
+      } else {
+        ApiException.exception(
+            statusCode: value.statusCode, context: context, body: value.body);
       }
     }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error accrued: $e")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error accrued: $e")));
       if (kDebugMode) {
         print(e);
       }
     });
   }
 
-
-
- static Future<ClassDetailModel> fetchUserInfo(BuildContext context) async {
-
-    try{
+  static Future<ClassDetailModel> fetchClassInfo(BuildContext context) async {
+    try {
       final String accessToken = box.read("access") ?? "";
-      final String roomID =  VRouter.of(context).queryParameters["id"] ?? "";
+      final String roomID = VRouter.of(context).queryParameters["id"] ?? "";
       if (accessToken.isNotEmpty && roomID.isNotEmpty) {
-        final value =  await http.get(
+        final value = await http.get(
           Uri.parse(ApiUrls.getClassDetails + roomID),
           headers: {
             "Content-Type": "application/json",
@@ -533,15 +623,16 @@ class PangeaServices{
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-          return  classDetailModelFromJson(value.body);
+          return classDetailModelFromJson(value.body);
         } else {
-          ApiException.exception(statusCode: value.statusCode, body: value.body, context: context);
+          ApiException.exception(
+              statusCode: value.statusCode, body: value.body, context: context);
           throw Exception("${value.statusCode}");
         }
-      }else{
+      } else {
         throw Exception("Access token or Room ID is empty");
       }
-    }catch(e){
+    } catch (e) {
       print("eero");
       print(e);
       throw Exception(e.toString());
@@ -550,210 +641,7 @@ class PangeaServices{
 
 
 
-
-  // static Future<bool?> enrollClassValidate({
-  //   required BuildContext context,
-  //   required String room_id,
-  // }) async {
-  //   String token = box.read("access");
-  //   if (token.isEmpty) {
-  //     if (kDebugMode) {
-  //       print("JWT Token is null");
-  //     }
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Token expired please logout and login again")));
-  //     return null;
-  //   }
-  //   var Url = "${ApiUrls.enrollClassValidate}";
-  //   log("Url is $Url");
-  //   Map<String,dynamic> data ={
-  //
-  //     "pangea_class_room_id": room_id,
-  //     "student_id":"${box.read("clientID")}"
-  //
-  //   };
-  //   log(room_id);
-  //   http.post(
-  //     Uri.parse(Url),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer ${box.read("access")}",
-  //     },
-  //     body: jsonEncode(data),
-  //   ).then((value) {
-  //     if (value.statusCode == 200) {
-  //
-  //       var body=jsonDecode(value.body);
-  //
-  //
-  //
-  //       if(body["is_enrollment_sent"]==false){
-  //         print("print");
-  //         enrollClass( context: context, room_id: '${room_id}');
-  //       }
-  //       else{
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //             SnackBar(content: Text("Enrollment Request Already send successfully")));
-  //       }
-  //
-  //       return true;
-  //     }}).catchError((e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Error accured: $e")));
-  //     print("Error accured: $e");
-  //   });
-  // }
-
-
-  static Future<bool?> enrollClass({
-    required BuildContext context,
-    required String room_id,
-  }) async {
-    String token = box.read("access");
-    if (token.isEmpty) {
-      if (kDebugMode) {
-        print("JWT Token is null");
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Token expired please logout and login again")));
-      return null;
-    }
-    var Url = "${ApiUrls.enrollClass}";
-    log("Url is $Url");
-    print("value of enrolling section");
-    Map<String,dynamic> data ={
-
-      "pangea_class_room_id": room_id,
-      "student_id":"${box.read("clientID")}"
-
-    };
-    log(data.toString());
-    http.post(
-      Uri.parse(Url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${box.read("access")}",
-      },
-      body: jsonEncode(data),
-    ).then((value) {
-      if (value.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Enrollment Request Send successfully")));
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Enrollment Request Already send successfully")));
-      }
-
-      return true;
-    }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error accured: $e")));
-      print("Error accured: $e");
-    });
-  }
-
-  // static Future<bool?> exchangeClassValidate({
-  //   required BuildContext context,
-  //   required String room_id,
-  // }) async {
-  //   String token = box.read("access");
-  //   if (token.isEmpty) {
-  //     if (kDebugMode) {
-  //       print("JWT Token is null");
-  //     }
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Token expired please logout and login again")));
-  //     return null;
-  //   }
-  //   var Url = "${ApiUrls.enrollClassValidate}";
-  //   log("Url is $Url");
-  //   Map<String,dynamic> data ={
-  //
-  //     "pangea_class_room_id": room_id,
-  //     "teacher_id":"${box.read("clientID")}"
-  //
-  //   };
-  //
-  //   http.post(
-  //     Uri.parse(Url),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer ${box.read("access")}",
-  //     },
-  //     body: jsonEncode(data),
-  //   ).then((value) {
-  //     if (value.statusCode == 200) {
-  //
-  //       var body=jsonDecode(value.body);
-  //
-  //
-  //
-  //       if(body["is_enrollment_sent"]==false){
-  //         print("print");
-  //         enrollClass( context: context, room_id: '${room_id}');
-  //       }
-  //       else{
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //             SnackBar(content: Text("Enrollment Request Already send successfully")));
-  //       }
-  //
-  //       return true;
-  //     }}).catchError((e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Error accured: $e")));
-  //     print("Error accured: $e");
-  //   });
-  // }
-
-
-  static Future<bool?> exchangeClass({
-    required BuildContext context,
-    required String room_id,
-  }) async {
-    String token = box.read("access");
-    if (token.isEmpty) {
-      if (kDebugMode) {
-        print("JWT Token is null");
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Token expired please logout and login again")));
-      return null;
-    }
-    var Url = "${ApiUrls.enrollClass}";
-    log("Url is $Url");
-    print("value of enrolling section");
-    Map<String,dynamic> data ={
-
-      "pangea_class_room_id": room_id,
-      "teacher_id":"${box.read("clientID")}"
-
-    };
-    log(data.toString());
-    http.post(
-      Uri.parse(Url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${box.read("access")}",
-      },
-      body: jsonEncode(data),
-    ).then((value) {
-      if (value.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Enrollment Request Send successfully")));
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Enrollment Request Already send successfully")));
-      }
-
-      return true;
-    }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error accured: $e")));
-      print("Error accured: $e");
-    });
-  }
+  //------------------------------------user Account----------------------------------//
 
 
 
