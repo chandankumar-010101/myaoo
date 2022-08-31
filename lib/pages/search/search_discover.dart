@@ -577,12 +577,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/pages/search/search_view_controller.dart';
 import '../../services/services.dart';
 
 
-class SearchGetController extends GetxController{
-  var age = 0.obs;
-}
+
 class SearchDiscoverView extends StatefulWidget {
   const SearchDiscoverView({Key? key}) : super(key: key);
 
@@ -591,12 +590,9 @@ class SearchDiscoverView extends StatefulWidget {
 }
 
 class _SearchDiscoverViewState extends State<SearchDiscoverView> {
-  SearchGetController controller = Get.put(SearchGetController());
+  SearchViewController controller = Get.put(SearchViewController());
   var box = GetStorage();
 
-  userAgeDetails() async {
-    await PangeaServices.fetchUserAge();
-  }
 
   Object? dayId;
   Object? monthId;
@@ -621,7 +617,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
 
       print("value of conditions is ${UserAge>18}");
       if(UserAge>18){
-      await PangeaServices.updateUserAge(dayId, monthId, yearId);
+      await PangeaServices.updateUserAge(dayId, monthId, yearId, context);
+
       }
       else{
 
@@ -663,11 +660,9 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    userAgeDetails();
-
-    controller.age.value = int.parse(box.read("age").toString());
     super.initState();
+    final int age1 = box.read("age") ?? 0;
+    age1 == 0?controller.age.value = 0:controller.age.value = age1;
   }
 
   @override

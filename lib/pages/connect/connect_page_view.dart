@@ -18,20 +18,6 @@ class ConnectPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = Matrix.of(context).loginAvatar;
     final identityProviders = controller.identityProviders;
-    // const String flagsPath = "assets/countryFlags/";
-    // const countries = [
-    //   "zh.svg",
-    //   "tk.svg",
-    //   "td.svg",
-    //   "de.svg",
-    //   "us.svg",
-    //   "ko.svg",
-    //   "ve.svg",
-    //   "pl.svg",
-    //   "mv.svg",
-    //   "no.svg"
-    // ];
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -56,36 +42,6 @@ class ConnectPageView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ConstrainedBox(
-              //   constraints: const BoxConstraints(maxWidth: 700),
-              //   child: SizedBox(
-              //     height: 150,
-              //     child: ListView.builder(
-              //       scrollDirection: Axis.horizontal,
-              //       itemBuilder: ((BuildContext context, int index) {
-              //         final String fullFlagPath = flagsPath + countries[index];
-              //         return Container(
-              //           margin: const EdgeInsets.only(right: 10),
-              //           child: Center(
-              //             child: CircleAvatar(
-              //               radius: 30.0,
-              //               backgroundColor: Colors.transparent,
-              //               child: ClipRRect(
-              //                 child: SvgPicture.asset(
-              //                   fullFlagPath,
-              //                   fit: BoxFit.contain,
-              //                 ),
-              //                 borderRadius: BorderRadius.circular(50.0),
-              //               ),
-              //             ),
-              //           ),
-              //         );
-              //       }),
-              //       itemCount: countries.length,
-              //     ),
-              //   ),
-              // ),
-
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 60.0),
@@ -122,12 +78,11 @@ class ConnectPageView extends StatelessWidget {
                                   border: Border.all(
                                       width: 1, color: Colors.white)),
                               child: Column(
-                                // mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (Matrix.of(context)
                                           .loginRegistrationSupported ??
                                       false) ...[
-                                    SizedBox(height: 20.0),
+                                    const SizedBox(height: 20.0),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Center(
@@ -193,7 +148,7 @@ class ConnectPageView extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SizedBox(
-                                          height: 50,
+                                          //height: 50,
                                           child: TextField(
                                             controller:
                                                 controller.usernameController,
@@ -201,19 +156,14 @@ class ConnectPageView extends StatelessWidget {
                                                 controller.signUp(),
                                             style: FluffyThemes
                                                 .loginTextFieldStyle,
-                                            // decoration: FluffyThemes.loginTextFieldDecoration(
-                                            //   prefixIcon: const Icon(
-                                            //     Icons.account_box_outlined,
-                                            //     color: Colors.black,
-                                            //   ),
-                                            //   hintText: L10n.of(context)!.chooseAUsername,
-                                            //   errorText: controller.signupError,
-                                            // ),
                                             decoration: InputDecoration(
+                                             contentPadding:
+                                                EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                               fillColor:
                                                   const Color(0xFFDADDE2),
                                               filled: true,
                                               errorText: controller.signupError,
+
                                               hintText: L10n.of(context)!
                                                   .chooseAUsername,
                                               hintStyle: const TextStyle(
