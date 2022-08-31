@@ -37,7 +37,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         title: const Text("Class Profile"),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchUserInfo(context),
+        future: PangeaServices.fetchClassInfo(context),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));

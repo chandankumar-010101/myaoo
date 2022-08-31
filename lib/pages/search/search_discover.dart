@@ -595,7 +595,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
   var box = GetStorage();
 
   userAgeDetails() async {
-    await PangeaServices.userAge();
+    await PangeaServices.fetchUserAge();
   }
 
   Object? dayId;

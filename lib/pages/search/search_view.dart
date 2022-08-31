@@ -35,7 +35,7 @@ class _SearchViewState extends State<SearchView> {
   @override
   void initState() {
     super.initState();
-    PangeaServices.userAge();
+    PangeaServices.fetchUserAge();
   }
 
   Rx<bool> firstTime = true.obs;
@@ -54,7 +54,7 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
 
-    PangeaServices.userAge();
+    PangeaServices.fetchUserAge();
     searchController.getClasses();
     var age1 = box.read("age")??0;
     RxInt age = int.parse(age1.toString()).obs;
