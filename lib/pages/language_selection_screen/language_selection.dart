@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -63,12 +64,9 @@ class LanguageSelectionController extends State<LanguageSelection> {
             "target_lang": target_language.toString()
           },
         ).then((value) async {
-          print(value.statusCode);
-          print(value);
-          print("code");
+
           if (value.statusCode == 201 || value.statusCode == 400) {
-            print(value.status);
-            print(value.body);
+
             await ApiFunctions().get(url).then((value) {
               if (value.statusCode == 200) {
                 UserInfo data = UserInfo.fromJson(value.body);
@@ -78,6 +76,8 @@ class LanguageSelectionController extends State<LanguageSelection> {
                 box.write("sourcelanguage", source_language);
                 box.write("targetlanguage", target_language);
                 box.write("usertype", user_type);
+                box.write("accessToken", client.accessToken.toString());
+                box.write("clientID", client.userID.toString());
                 box.write("sign_up", false);
                 context.vRouter.to('/rooms');
                 getxController.selectedLanguageOne.value = "";
@@ -119,8 +119,12 @@ class LanguageSelectionController extends State<LanguageSelection> {
           log(error);
         });
       } catch (e) {
-        print(e);
-        print("Unable to fetch user name");
+        if (kDebugMode) {
+          print("Unable to fetch user name");
+          print(e);
+        }
+
+
       }
     } catch (e) {
       log(e.toString());
