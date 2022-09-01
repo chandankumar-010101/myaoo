@@ -127,7 +127,7 @@ class PangeaServices {
             box.write("accessToken", client.accessToken.toString());
             box.write("clientID", client.userID.toString());
             PangeaServices.userDetails(clientID: client.userID.toString());
-            fetchUserAge();
+
             widget.router!.currentState!.to(
               '/rooms',
               queryParameters: widget.router!.currentState!.queryParameters,
@@ -150,7 +150,7 @@ class PangeaServices {
 
   }
 
-  static userDetails({required String clientID}) async {
+  static Future userDetails({required String clientID}) async {
     try{
       final value = await http.get(
         Uri.parse(ApiUrls.user_details + clientID),
@@ -162,6 +162,7 @@ class PangeaServices {
         box.write("sourcelanguage", data.profile!.sourceLanguage);
         box.write("targetlanguage", data.profile!.targetLanguage);
         box.write("usertype", data.profile!.userType);
+        fetchUserAge();
       }
       else {
         if (kDebugMode) {
@@ -220,6 +221,8 @@ class PangeaServices {
       if (kDebugMode) {
         print(
             "Client Id or access token is Empty, \n unable to fetch User Age");
+        print(clientID);
+        print(accessToken);
       }
       Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
     }
