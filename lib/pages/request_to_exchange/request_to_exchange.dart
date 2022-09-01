@@ -114,15 +114,11 @@ class RequestToEnrollPopUp extends StatelessWidget {
     String basePath = Environment.baseAPI;
     var data = basePath.split("/api/v1");
     String url = data[0];
-    String date = id.toString();
-
-    // print(dateparts)
 
     List date1=id.split(":");
-    print(date1);
     List date2=date1[0].split("@");
-    List date3=date2[0].replace(",");
-    print(date3);
+    //List date3=date2[0].replace(",");
+
 
 
 
