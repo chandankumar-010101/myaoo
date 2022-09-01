@@ -28,7 +28,7 @@ class _ConfirmRequestState extends State<ConfirmRequest> {
         title: const Text("Class Profile"),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchUserInfo(context),
+        future: PangeaServices.fetchClassInfo(context),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
