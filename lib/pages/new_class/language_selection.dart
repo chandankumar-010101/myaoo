@@ -98,67 +98,73 @@ class _ClassLanguageState extends State<ClassLanguage> {
   void initState() {
     super.initState();
     getFlags();
-    box.read("class_name") != null
-        ? classNameController.text = box.read("class_name")
-        : null;
-    box.read("city_name") != null
-        ? cityController.text = box.read("city_name")
-        : null;
-    box.read("country_name") != null
-        ? countryController.text = box.read("country_name")
-        : null;
-    box.read("school_name") != null
-        ? schoolController.text = box.read("school_name")
-        : null;
-    box.read("disc") != null
-        ? discriptionController.text = box.read("disc")
-        : null;
-    if (box.read("language_level") != null) {
-      switch (box.read("language_level")) {
-        case 1:
-          setState(() {
-            languageLevelDropdownValue = 'A1';
-          });
-          return;
-        case 2:
-          setState(() {
-            languageLevelDropdownValue = 'A2';
-          });
-          return;
-        case 3:
-          setState(() {
-            languageLevelDropdownValue = 'B1';
-          });
-          return;
-        case 4:
-          setState(() {
-            languageLevelDropdownValue = 'B2';
-          });
-          return;
-        case 5:
-          setState(() {
-            languageLevelDropdownValue = 'C1';
-          });
-          return;
-        case 6:
-          setState(() {
-            languageLevelDropdownValue = 'C2';
-          });
-          return;
-      }
-    }
-    box.remove("class_name");
-    box.remove("city_name");
-    box.remove("school_name");
-    box.remove("country_name");
-    box.remove("disc");
-
+    classNameController.text = "";
+    cityController.text = "";
+    countryController.text = "";
+    discriptionController.text = "";
+    schoolController.text = "";
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    String id = context.vRouter.queryParameters['class_id'] ?? "";
+    final Size size = MediaQuery.of(context).size;
+    final String id = context.vRouter.queryParameters['class_id'] ?? "";
+    if(id.isNotEmpty){
+      box.read("class_name") != null  ? classNameController.text = box.read("class_name")
+          : null;
+      box.read("city_name") != null
+          ? cityController.text = box.read("city_name")
+          : null;
+      box.read("country_name") != null
+          ? countryController.text = box.read("country_name")
+          : null;
+      box.read("school_name") != null
+          ? schoolController.text = box.read("school_name")
+          : null;
+      box.read("disc") != null
+          ? discriptionController.text = box.read("disc")
+          : null;
+      if (box.read("language_level") != null) {
+        switch (box.read("language_level")) {
+          case 1:
+            setState(() {
+              languageLevelDropdownValue = 'A1';
+            });
+            break;
+          case 2:
+            setState(() {
+              languageLevelDropdownValue = 'A2';
+            });
+            break;
+          case 3:
+            setState(() {
+              languageLevelDropdownValue = 'B1';
+            });
+            break;
+          case 4:
+            setState(() {
+              languageLevelDropdownValue = 'B2';
+            });
+            break;
+          case 5:
+            setState(() {
+              languageLevelDropdownValue = 'C1';
+            });
+            break;
+          case 6:
+            setState(() {
+              languageLevelDropdownValue = 'C2';
+            });
+            break;
+        }
+      }
+      box.remove("class_name");
+      box.remove("city_name");
+      box.remove("school_name");
+      box.remove("country_name");
+      box.remove("disc");
+    }
+
     return Scaffold(
       appBar: id.isEmpty
           ? AppBar(

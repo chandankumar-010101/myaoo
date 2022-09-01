@@ -34,9 +34,7 @@ class ChatPermissionsSettingsView extends StatelessWidget {
           stream: controller.onChanged,
           builder: (context, _) {
             final roomId = controller.roomId;
-            final room = roomId == null
-                ? null
-                : Matrix.of(context).client.getRoomById(roomId);
+            final room = roomId == null? null: Matrix.of(context).client.getRoomById(roomId);
             if (room == null) {
               return Center(child: Text(L10n.of(context)!.noRoomsFound));
             }

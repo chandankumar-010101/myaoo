@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -65,7 +66,7 @@ class _InviteStudentState extends State<InviteStudent> {
                   ),
                   InkWell(
                     onTap: () {
-                      print(roomId);
+
 
                       FluffyShare.share(
                           AppConfig.inviteLinkPrefix + room!.canonicalAlias,
@@ -96,15 +97,23 @@ class _InviteStudentState extends State<InviteStudent> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   InkWell(
                     onTap: () async {
-                      // await Clipboard.setData(
-                      //     ClipboardData(text: widget.controller.class_code.toString()));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Copied to clipboard")));
+                      final String classCode = GetStorage().read("class_code")?? "";
+                      if(classCode.isNotEmpty){
+                        await Clipboard.setData(
+                            ClipboardData(text: classCode));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Copied to clipboard")));
+
+                      }
+                      else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Unable to find class Code")));
+                      }
                     },
                     child: Container(
                       width: 200,
@@ -168,7 +177,8 @@ class _InviteStudentState extends State<InviteStudent> {
                   // ),
                   InkWell(
                     onTap: () {
-                      print("hellow");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Functionality under progress")));
                     },
                     child: Container(
                       width: 200,
@@ -195,7 +205,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   // InkWell(
