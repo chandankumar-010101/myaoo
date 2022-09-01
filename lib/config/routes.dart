@@ -19,7 +19,6 @@ import 'package:pangeachat/pages/new_class/language_selection.dart';
 import 'package:pangeachat/pages/new_class/student_permissions.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
-import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
 import 'package:pangeachat/pages/request_to_enroll/request_to_enroll.dart';
 import 'package:pangeachat/pages/search/invite_screen.dart';
 import 'package:pangeachat/pages/search/search.dart';
@@ -45,6 +44,7 @@ import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../home_page.dart';
+import '../pages/class_profile/class_profile_view.dart';
 import '../pages/language_selection_screen/language_selection.dart';
 import '../pages/new_class/new_class.dart';
 
