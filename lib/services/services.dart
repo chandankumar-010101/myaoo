@@ -10,6 +10,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
+import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/user_info.dart';
@@ -359,7 +360,7 @@ class PangeaServices {
             schoolName: schoolName,
           ).toJson());
      if (value.statusCode == 201 || value.statusCode == 200) {
-       final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
+     final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
        if (kDebugMode) {
          print(data.id);
        }
@@ -419,7 +420,7 @@ class PangeaServices {
          await room.leave().whenComplete(() {
            deleteClass(context: context, roomId: roomId);
            ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text("Error in Permissions: $e")));
+               SnackBar(content: Text("Unable to update class permissions: $e")));
          }).catchError((e){
            throw Exception("Error: Unable to delete class");
          });
@@ -439,7 +440,7 @@ class PangeaServices {
       await room.leave().whenComplete(() {
         deleteClass(context: context, roomId: roomId);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Error in Permissions: $e")));
+            SnackBar(content: Text("Unable to update class details: $e")));
       }).catchError((e){
         throw Exception("Error: Unable to delete class");
       });
@@ -585,7 +586,8 @@ class PangeaServices {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Permissions updated successfully")));
       return true;
-    } else {
+    }
+    else {
       ApiException.exception(
           statusCode: value.statusCode, context: context, body: value.body);
       throw Exception("Error While Updating data");
@@ -657,7 +659,7 @@ class PangeaServices {
 
   }
 
-  static Future<CreateClassFromJson> fetchClassInfo(BuildContext context,String accessToken, String roomID) async {
+  static Future<FetchClassInfoModel> fetchClassInfo(BuildContext context,String accessToken, String roomID) async {
     try {
 
       if (accessToken.isNotEmpty && roomID.isNotEmpty) {
@@ -669,7 +671,7 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-           return CreateClassFromJson.fromJson(jsonDecode(value.body));
+           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
 
         } else {
           ApiException.exception(

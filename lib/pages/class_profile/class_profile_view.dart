@@ -11,6 +11,7 @@ import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 
@@ -46,7 +47,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
             }
             return Center(child: Text(snapshot.error.toString()));
           } else if (snapshot.hasData) {
-            final CreateClassFromJson data = snapshot.data as CreateClassFromJson;
+            final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
 
             return SingleChildScrollView(
               child: Column(
