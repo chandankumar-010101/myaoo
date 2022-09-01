@@ -57,17 +57,17 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
 
-        PopupMenuItem(
-          value: PopupMenuAction.invite,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.adaptive.share_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.inviteContact),
-            ],
-          ),
-        ),
+        // PopupMenuItem(
+        //   value: PopupMenuAction.invite,
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       Icon(Icons.adaptive.share_outlined),
+        //       const SizedBox(width: 12),
+        //       Text(L10n.of(context)!.inviteContact),
+        //     ],
+        //   ),
+        // ),
         PopupMenuItem(
           value: PopupMenuAction.archive,
           child: Row(
@@ -115,17 +115,17 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-        PopupMenuItem(
-          value: PopupMenuAction.invite,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.adaptive.share_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.inviteContact),
-            ],
-          ),
-        ),
+        // PopupMenuItem(
+        //   value: PopupMenuAction.invite,
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       Icon(Icons.adaptive.share_outlined),
+        //       const SizedBox(width: 12),
+        //       Text(L10n.of(context)!.inviteContact),
+        //     ],
+        //   ),
+        // ),
         PopupMenuItem(
           value: PopupMenuAction.archive,
           child: Row(

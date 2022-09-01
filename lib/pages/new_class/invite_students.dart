@@ -134,38 +134,38 @@ class _InviteStudentState extends State<InviteStudent> {
                   SizedBox(
                     height: 10,
                   ),
-                  InkWell(
-                    onTap: () {
-                      print("hellow");
-                    },
-                    child: Container(
-                      width: 200,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).colorScheme.onPrimary,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Theme.of(context).colorScheme.onPrimary ==
-                                  Colors.white
-                                  ? Theme.of(context).primaryColorLight
-                                  : Theme.of(context).colorScheme.onPrimary)),
-                      child: Center(
-                        child: Text(
-                          "Invite from phone contacts",
-                          style: TextStyle().copyWith(
-                              color: Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     print("hellow");
+                  //   },
+                  //   child: Container(
+                  //     width: 200,
+                  //     height: 40,
+                  //     decoration: BoxDecoration(
+                  //         color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                  //             ? Theme.of(context).primaryColor
+                  //             : Theme.of(context).colorScheme.onPrimary,
+                  //         borderRadius: BorderRadius.circular(10),
+                  //         border: Border.all(
+                  //             color: Theme.of(context).colorScheme.onPrimary ==
+                  //                 Colors.white
+                  //                 ? Theme.of(context).primaryColorLight
+                  //                 : Theme.of(context).colorScheme.onPrimary)),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Invite from phone contacts",
+                  //         style: TextStyle().copyWith(
+                  //             color: Theme.of(context).textTheme.bodyText1!.color,
+                  //             fontSize: 14),
+                  //         overflow: TextOverflow.clip,
+                  //         textAlign: TextAlign.center,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   InkWell(
                     onTap: () {
                       print("hellow");
@@ -198,38 +198,38 @@ class _InviteStudentState extends State<InviteStudent> {
                   SizedBox(
                     height: 10,
                   ),
-                  InkWell(
-                    onTap: () {
-                      print("hellow");
-                    },
-                    child: Container(
-                      width: 200,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).colorScheme.onPrimary,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Theme.of(context).colorScheme.onPrimary ==
-                                  Colors.white
-                                  ? Theme.of(context).primaryColorLight
-                                  : Theme.of(context).colorScheme.onPrimary)),
-                      child: Center(
-                        child: Text(
-                          "Add from Clever",
-                          style: TextStyle().copyWith(
-                              color: Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14),
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     print("hellow");
+                  //   },
+                  //   child: Container(
+                  //     width: 200,
+                  //     height: 40,
+                  //     decoration: BoxDecoration(
+                  //         color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                  //             ? Theme.of(context).primaryColor
+                  //             : Theme.of(context).colorScheme.onPrimary,
+                  //         borderRadius: BorderRadius.circular(10),
+                  //         border: Border.all(
+                  //             color: Theme.of(context).colorScheme.onPrimary ==
+                  //                 Colors.white
+                  //                 ? Theme.of(context).primaryColorLight
+                  //                 : Theme.of(context).colorScheme.onPrimary)),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Add from Clever",
+                  //         style: TextStyle().copyWith(
+                  //             color: Theme.of(context).textTheme.bodyText1!.color,
+                  //             fontSize: 14),
+                  //         overflow: TextOverflow.clip,
+                  //         textAlign: TextAlign.center,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: size.height * 0.03,
+                  // ),
                   Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: size.width * 0.1,
