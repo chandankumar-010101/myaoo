@@ -124,86 +124,8 @@ class HomeserverPickerView extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(16.0),
-                //   child: TextField(
-                //     focusNode: controller.homeserverFocusNode,
-                //     controller: controller.homeserverController,
-                //     onChanged: controller.onChanged,
-                //     style: FluffyThemes.loginTextFieldStyle,
-                //     decoration: FluffyThemes.loginTextFieldDecoration(
-                //       labelText: L10n.of(context)!.homeserver,
-                //       hintText: L10n.of(context)!.enterYourHomeserver,
-                //       suffixIcon: const Icon(
-                //         Icons.search,
-                //         color: Colors.black,
-                //       ),
-                //       errorText: controller.error,
-                //     ),
-                //     readOnly: !AppConfig.allowOtherHomeservers,
-                //     onSubmitted: (_) => controller.checkHomeserverAction(),
-                //     autocorrect: false,
-                //   ),
-                // ),
-                // if (controller.displayServerList)
-                //   Padding(
-                //     padding: const EdgeInsets.all(16.0),
-                //     child: Material(
-                //       borderRadius:
-                //           BorderRadius.circular(AppConfig.borderRadius),
-                //       color: Colors.white.withAlpha(200),
-                //       clipBehavior: Clip.hardEdge,
-                //       child: benchmarkResults == null
-                //           ? const Center(
-                //               child: Padding(
-                //               padding: EdgeInsets.all(16.0),
-                //               child: CircularProgressIndicator.adaptive(),
-                //             ))
-                //           : Column(
-                //               children: controller.filteredHomeservers
-                //                   .map(
-                //                     (server) => ListTile(
-                //                       trailing: IconButton(
-                //                         icon: const Icon(
-                //                           Icons.info_outlined,
-                //                           color: Colors.black,
-                //                         ),
-                //                         onPressed: () =>
-                //                             controller.showServerInfo(server),
-                //                       ),
-                //                       onTap: () => controller.setServer(
-                //                           server.homeserver.baseUrl.host),
-                //                       title: Text(
-                //                         server.homeserver.baseUrl.host,
-                //                         style: const TextStyle(
-                //                             color: Colors.black),
-                //                       ),
-                //                       subtitle: Text(
-                //                         server.homeserver.description ?? '',
-                //                         style: TextStyle(
-                //                             color: Colors.grey.shade700),
-                //                       ),
-                //                     ),
-                //                   )
-                //                   .toList(),
-                //             ),
-                //     ),
-                //   ),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () => launch(AppConfig.privacyUrl),
-                      child: Text(
-                        L10n.of(context)!.privacy,
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+
+
               ],
             ),
           ),

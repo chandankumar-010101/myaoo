@@ -151,7 +151,6 @@ class _ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                 );
                 if (confirmed == OkCancelResult.ok) {
 
-
                  //Todo
                   final success = await showFutureLoadingDialog(
                       context: context, future: () => widget.room.leave());

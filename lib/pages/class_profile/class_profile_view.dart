@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
-import 'package:get/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/config/environment.dart';
+import 'package:pangeachat/model/create_class_model.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
@@ -24,25 +24,30 @@ class RequestScreenView extends StatefulWidget {
 
 class _RequestScreenViewState extends State<RequestScreenView> {
 
+
+
   final box = GetStorage();
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-   String basePath =  Environment.baseAPI;
-    var data =  basePath.split("/api/v1");
-    String url = data[0];
+    final Size size = MediaQuery.of(context).size;
+   final String basePath =  Environment.baseAPI;
+    final List<String> data =  basePath.split("/api/v1");
+    final String url = data[0];
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text("Class Profile"),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context),
+        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",VRouter.of(context).queryParameters["id"] ?? ""),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            if (kDebugMode) {
+              print(snapshot.error);
+            }
             return Center(child: Text(snapshot.error.toString()));
           } else if (snapshot.hasData) {
-            final ClassDetailModel data = snapshot.data! as ClassDetailModel;
+            final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
 
             return SingleChildScrollView(
               child: Column(
@@ -59,7 +64,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: [
                             Container(
                               margin: const EdgeInsets.only(top: 10.0),
-                              child: data.profilePic != null
+                              child: data.profilePic.isNotEmpty
                                   ? CachedNetworkImage(
                                       imageUrl: data.profilePic.toString(),
                                       fit: BoxFit.cover,
@@ -84,7 +89,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     )
                                   : Icon(
                                       Icons.people,
-                                      size: 40,
+                                      size: 60,
                                       color: Theme.of(context).primaryColor,
                                     ),
                               decoration: BoxDecoration(
@@ -131,7 +136,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              data.className ?? "Class Name",
+                              data.className ,
                               style: const TextStyle().copyWith(
                                   color: Theme.of(context)
                                       .textTheme
@@ -160,7 +165,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   size: 20.0,
                                 ),
                                 Text(
-                                  data.city ?? "Add City",
+                                  data.city,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -215,7 +220,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 StarRating(
                                   color: const Color(0xffFFC403),
                                   rating: data.rating != null
-                                      ? data.rating!.toDouble()
+                                      ? data.rating.toDouble()
                                       : 0.0,
                                   starCount: 5,
                                 ),
@@ -331,14 +336,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       width: 20,
                                       height: 20,
                                       child: Image.network(url +
-                                          data.flags![0].languageFlag
+                                          data.flags[0].languageFlag
                                               .toString())),
                                 ]),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage ?? "Language",
+                                  data.dominantLanguage ,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -366,13 +371,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       width: 20,
                                       height: 20,
                                       child: Image.network(url+
-                                          data.flags![1].languageFlag
+                                          data.flags[1].languageFlag
                                               .toString())),
                                   const SizedBox(
                                     width: 5,
                                   ),
                                   Text(
-                                    data.targetLanguage ?? "Language",
+                                    data.targetLanguage,
                                     style: const TextStyle().copyWith(
                                         color: Theme.of(context)
                                             .textTheme
@@ -463,13 +468,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         final box = GetStorage();
                                         if (id.isNotEmpty) {
                                           box.write("public",
-                                              data.permissions!.isPublic);
+                                              data.permissions.isPublic);
                                           box.write(
                                               "openEnrollment",
-                                              data.permissions!
+                                              data.permissions
                                                   .isOpenEnrollment);
                                           box.write("openExchange",
-                                              data.permissions!.isOpenExchange);
+                                              data.permissions.isOpenExchange);
                                           context.vRouter.to(
                                               "/classDetails/exchange_class",
                                               queryParameters: {
@@ -828,11 +833,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                             "";
                                     if (id.isNotEmpty) {
                                       box.write(
-                                          "public", data.permissions!.isPublic);
+                                          "public", data.permissions.isPublic);
                                       box.write("openEnrollment",
-                                          data.permissions!.isOpenEnrollment);
+                                          data.permissions.isOpenEnrollment);
                                       box.write("openExchange",
-                                          data.permissions!.isOpenExchange);
+                                          data.permissions.isOpenExchange);
                                       context.vRouter.to(
                                           "/classDetails/update_class_permissions",
                                           queryParameters: {
@@ -883,28 +888,28 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       try {
                                         box.write(
                                             "oneToOneClass",
-                                            data.permissions!
+                                            data.permissions
                                                 .oneToOneChatClass);
                                         box.write(
                                             "oneToOneExchange",
-                                            data.permissions!
+                                            data.permissions
                                                 .oneToOneChatExchange);
                                         box.write("createRoom",
-                                            data.permissions!.isCreateRooms);
+                                            data.permissions.isCreateRooms);
                                         box.write(
                                             "createRoomExchange",
-                                            data.permissions!
+                                            data.permissions
                                                 .isCreateRoomsExchange);
                                         box.write("createStories",
-                                            data.permissions!.isCreateStories);
+                                            data.permissions.isCreateStories);
                                         box.write("shareVideo",
-                                            data.permissions!.isShareVideo);
+                                            data.permissions.isShareVideo);
                                         box.write("sharePhotos",
-                                            data.permissions!.isSharePhoto);
+                                            data.permissions.isSharePhoto);
                                         box.write("shareFiles",
-                                            data.permissions!.isShareFiles);
+                                            data.permissions.isShareFiles);
                                         box.write("shareLocation",
-                                            data.permissions!.isShareLocation);
+                                            data.permissions.isShareLocation);
                                       } catch (e) {
                                         if (kDebugMode) {
                                           print(e);
@@ -1089,7 +1094,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               ),
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -1105,16 +1110,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               ? Axis.horizontal
               : Axis.vertical,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width / 3.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  permissions.isSharePhoto !=null && permissions.isSharePhoto!
+                  permissions.isSharePhoto !=null && permissions.isSharePhoto
                   // permissions?.isSharePhoto && permissions.isSharePhoto!
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Share Photo"),
@@ -1122,10 +1127,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareVideo !=null && permissions.isShareVideo!
+                  permissions.isShareVideo !=null && permissions.isShareVideo
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Share Video"),
@@ -1133,7 +1138,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.oneToOneChatClass !=null && permissions.oneToOneChatClass!
+                  permissions.oneToOneChatClass !=null && permissions.oneToOneChatClass
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1144,7 +1149,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.oneToOneChatExchange !=null && permissions.oneToOneChatExchange!
+                  permissions.oneToOneChatExchange !=null && permissions.oneToOneChatExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1155,7 +1160,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareFiles !=null && permissions.isShareFiles!
+                  permissions.isShareFiles !=null && permissions.isShareFiles
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1166,7 +1171,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareLocation !=null && permissions.isShareLocation!
+                  permissions.isShareLocation !=null && permissions.isShareLocation
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1185,7 +1190,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  permissions.isCreateRooms !=null && permissions.isCreateRooms!
+                  permissions.isCreateRooms !=null && permissions.isCreateRooms
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1196,7 +1201,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isCreateRoomsExchange !=null && permissions.isCreateRoomsExchange!
+                  permissions.isCreateRoomsExchange !=null && permissions.isCreateRoomsExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1207,7 +1212,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isCreateStories !=null && permissions.isCreateStories!
+                  permissions.isCreateStories !=null && permissions.isCreateStories
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1218,7 +1223,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isOpenEnrollment !=null && permissions.isOpenEnrollment!
+                  permissions.isOpenEnrollment !=null && permissions.isOpenEnrollment
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1229,7 +1234,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isOpenExchange !=null && permissions.isOpenExchange!
+                  permissions.isOpenExchange !=null && permissions.isOpenExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
