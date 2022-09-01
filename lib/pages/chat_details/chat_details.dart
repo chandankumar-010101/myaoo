@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -8,7 +7,6 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/pages/chat_details/chat_details_view.dart';
 import 'package:pangeachat/pages/settings/settings.dart';
 import 'package:pangeachat/utils/matrix_sdk_extensions.dart/matrix_locals.dart';
@@ -318,7 +316,14 @@ class ChatDetailsController extends State<ChatDetails> {
 
   @override
   Widget build(BuildContext context) {
+
     members ??= Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
+    print(roomId);
+    print(members!.length);
+
+    for(int i=0;i<members!.length;i++) {
+      print(members![i].id);
+    }
     return SizedBox(
       width: fixedWidth,
       child: ChatDetailsView(this),

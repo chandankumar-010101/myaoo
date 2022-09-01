@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:matrix/matrix.dart';
 import 'package:matrix_link_text/link_text.dart';
 import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_details/chat_details.dart';
 import 'package:pangeachat/pages/chat_details/participant_list_item.dart';
@@ -25,6 +23,7 @@ class ChatDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final room = Matrix.of(context).client.getRoomById(controller.roomId!);
+
     if (room == null) {
       return Scaffold(
         appBar: AppBar(
@@ -89,8 +88,7 @@ class ChatDetailsView extends StatelessWidget {
               ],
               body: MaxWidthBody(
                 child: ListView.builder(
-                  itemCount: controller.members!.length +
-                      1 +
+                  itemCount: controller.members!.length + 1 +
                       (canRequestMoreMembers ? 1 : 0),
                   itemBuilder: (BuildContext context, int i) => i == 0
                       ? Column(
