@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
+
+import 'class_profile_view.dart';
+
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen({Key? key}) : super(key: key);

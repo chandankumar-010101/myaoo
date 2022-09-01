@@ -89,12 +89,12 @@ class SettingsAccountView extends StatelessWidget {
                             : const Text(""),
               ),
               const Divider(height: 1),
-              ListTile(
-                trailing: const Icon(Icons.person_add_outlined),
-                title: Text(L10n.of(context)!.addAccount),
-                subtitle: Text(L10n.of(context)!.enableMultiAccounts),
-                onTap: controller.addAccountAction,
-              ),
+              // ListTile(
+              //   trailing: const Icon(Icons.person_add_outlined),
+              //   title: Text(L10n.of(context)!.addAccount),
+              //   subtitle: Text(L10n.of(context)!.enableMultiAccounts),
+              //   onTap: controller.addAccountAction,
+              // ),
               ListTile(
                 trailing: const Icon(Icons.exit_to_app_outlined),
                 title: Text(L10n.of(context)!.logout),
