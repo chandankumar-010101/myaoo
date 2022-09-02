@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:matrix/src/room.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
+import '../../config/environment.dart';
 import '../../utils/fluffy_share.dart';
 
 class InviteStudent extends StatefulWidget {
@@ -17,15 +19,11 @@ class InviteStudent extends StatefulWidget {
 class _InviteStudentState extends State<InviteStudent> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    String roomId = VRouter.of(context).queryParameters['id']??"";
-    final room = Matrix.of(context).client.getRoomById(roomId);
-   // print(widget.controller.class_code);
-   // final room =
-   // Matrix.of(context).client.getRoomById(widget.controller.class_code!);
+    final Size size = MediaQuery.of(context).size;
+    final String roomId = VRouter.of(context).queryParameters['id']??"";
+   // final room = Matrix.of(context).client.getRoomById(roomId);
 
     return Scaffold(
-      //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
@@ -41,7 +39,7 @@ class _InviteStudentState extends State<InviteStudent> {
           automaticallyImplyLeading: false,
 
         ),
-        body: Container(
+        body: SizedBox(
           width: size.width,
           height: size.height,
           child: SingleChildScrollView(
@@ -66,11 +64,16 @@ class _InviteStudentState extends State<InviteStudent> {
                   ),
                   InkWell(
                     onTap: () {
+                      Room? room = Matrix.of(context).client.getRoomById(roomId);
+                      if(room != null){
+                        FluffyShare.share(
+                            Environment.frontendURL+"/#"+"/classDetails?id=${room.canonicalAlias}",
+                            context);
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Unable to find class Info")));
+                      }
 
-
-                      FluffyShare.share(
-                          AppConfig.inviteLinkPrefix + room!.canonicalAlias,
-                          context);
                     },
                     child: Container(
                       width: 200,

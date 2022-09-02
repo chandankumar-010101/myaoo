@@ -5,15 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
 import 'package:pangeachat/model/create_class_model.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
+import '../chat_list/spaces_entry.dart';
 
 class RequestScreenView extends StatefulWidget {
   const RequestScreenView({Key? key}) : super(key: key);
@@ -27,19 +30,91 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
 
   final box = GetStorage();
+
+  // void _joinRoom(BuildContext context,String roomAlias) async {
+  //   print(roomAlias);
+  //   // final client = Matrix.of(context).client;
+  //   // final result = await showFutureLoadingDialog<String>(
+  //   //   context: context,
+  //   //   future: () => client.joinRoom(roomAlias),
+  //   // );
+  //   // if (result.error == null) {
+  //   //   if (client.getRoomById(result.result!) == null) {
+  //   //     await client.onSync.stream.firstWhere(
+  //   //             (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
+  //   //   }
+  //   //   VRouter.of(context).toSegments(['rooms', result.result!]);
+  //   //   Navigator.of(context, rootNavigator: false).pop();
+  //   //   return;
+  //   // }
+  // }
+
+
+  SpacesEntry? _activeSpacesEntry;
+  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
+      ? DirectChatsSpacesEntry()
+      : AllRoomsSpacesEntry();
+
+  SpacesEntry get activeSpacesEntry {
+    final id = _activeSpacesEntry;
+    return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
+  }
+
+  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
+  Future<void> _waitForFirstSync() async {
+    final client = Matrix.of(context).client;
+    await client.roomsLoading;
+    await client.accountDataLoading;
+    if (client.prevBatch?.isEmpty ?? true) {
+      await client.onFirstSync.stream.first;
+    }
+    // Load space members to display DM rooms
+    final spaceId = activeSpaceId;
+    if (spaceId != null) {
+      final space = client.getRoomById(spaceId)!;
+      final localMembers = space.getParticipants().length;
+      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
+          (space.summary.mJoinedMemberCount ?? 0);
+      if (localMembers < actualMembersCount) {
+        await space.requestParticipants();
+      }
+    }
+  }
+
+  List<Room> get spaces =>
+      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _waitForFirstSync();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
    final String basePath =  Environment.baseAPI;
     final List<String> data =  basePath.split("/api/v1");
     final String url = data[0];
+    final String roomAlias = VRouter.of(context).queryParameters['id']??"";
+    final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
       appBar: AppBar(
         title: const Text("Class Profile"),
+        // actions: [
+        //   TextButton.icon(
+        //     onPressed: () => _joinRoom(context,roomAlias),
+        //     label: Text(L10n.of(context)!.joinRoom),
+        //     icon: const Icon(Icons.login_outlined),
+        //   ),
+        // ],
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",VRouter.of(context).queryParameters["id"] ?? ""),
+        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
@@ -436,6 +511,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
+                        data.permissions.isOpenExchange?
                         SizedBox(
                           width: 200,
                           child: OutlinedButton(
@@ -456,11 +532,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              final String id = context.vRouter
-                                  .queryParameters['id'] ??
-                                  "";
+
                               final box = GetStorage();
-                              if (id.isNotEmpty) {
+                              if (roomAlias.isNotEmpty) {
                                 box.write("public",
                                     data.permissions.isPublic);
                                 box.write(
@@ -472,7 +546,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 context.vRouter.to(
                                     "/classDetails/exchange_class",
                                     queryParameters: {
-                                      "class_id": id,
+                                      "class_id": roomAlias,
                                     });
                               }
                             },
@@ -487,7 +561,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   fontSize: 12),
                             ),
                           ),
-                        ),
+                        ):Container(),
                         const SizedBox(
                           width: 10,
                           height: 10,
@@ -545,7 +619,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
                           width: 200,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
@@ -576,10 +650,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               if (confirmed == OkCancelResult.ok) {
                                 print("confirm");
                                 print(data.classAuthor);
-                                String roomId =  VRouter.of(context).queryParameters['id']??"";
-                                if(roomId.isNotEmpty){
+
+                                if(roomAlias.isNotEmpty){
                                   UrlLauncher(context,requestToEnroll: true,
-                                      roomId:  roomId,
+                                      roomId:  roomAlias,
                                       'https://matrix.to/#/${data.classAuthorId.toString()}')
                                       .openMatrixToUrl();
                                 }
@@ -597,11 +671,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   fontSize: 12),
                             ),
                           ),
-                        ),
+                        ):Container()):Container(),
+
                         SizedBox(
                           width: 10,
                           height: 10,
                         ),
+
                         SizedBox(
                           width: 200,
                           child: OutlinedButton(
@@ -712,30 +788,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              UrlLauncher(context,
-                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                  .openMatrixToUrl();
-                              // final routes =
-                              //     VRouter.of(context)
-                              //         .queryParameters;
-                              // VRouter.of(context)
-                              //     .pathParameters[
-                              // 'roomid'];
-                              // // print(data
-                              // //     .classAuthorId
-                              // //     .toString());
-                              // // print(data.classAuthor
-                              // //     .toString());
-                              //
-                              // if (routes["id"] !=
-                              //     null) {
-                              //   UrlLauncher(context,
-                              //       'https://matrix.to/#/${data.classAuthorId.toString()}')
-                              //       .openMatrixToUrl();
-                              // } else {
-                              //   // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                              //
-                              // }
+                              if (roomAlias.isNotEmpty) {
+                                context.vRouter.to(
+                                    "/invite_students",
+                                    queryParameters: {
+                                      "id": roomAlias,
+                                    });
+                              }
                             },
                             child: Text(
                               "Add Students",
@@ -822,10 +881,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              final String id =
-                                  context.vRouter.queryParameters['id'] ??
-                                      "";
-                              if (id.isNotEmpty) {
+
+                              if (roomAlias.isNotEmpty) {
                                 box.write(
                                     "public", data.permissions.isPublic);
                                 box.write("openEnrollment",
@@ -835,7 +892,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 context.vRouter.to(
                                     "/classDetails/update_class_permissions",
                                     queryParameters: {
-                                      "class_id": id,
+                                      "class_id": roomAlias,
                                     });
                               }
                             },
@@ -875,10 +932,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              final String id =
-                                  context.vRouter.queryParameters['id'] ??
-                                      "";
-                              if (id.isNotEmpty) {
+
+                              if (roomAlias.isNotEmpty) {
                                 try {
                                   box.write(
                                       "oneToOneClass",
@@ -916,7 +971,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 context.vRouter.to(
                                     "/classDetails/update_student_permissions",
                                     queryParameters: {
-                                      "class_id": id,
+                                      "class_id": roomAlias,
                                     });
                               }
                             },
@@ -956,11 +1011,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              final String id =
-                                  context.vRouter.queryParameters['id'] ??
-                                      "";
 
-                              if (id.isNotEmpty) {
+
+                              if (roomAlias.isNotEmpty) {
                                 box.write("class_name", data.className);
                                 box.write("city_name", data.city);
                                 box.write("country_name", data.country);
@@ -975,7 +1028,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 context.vRouter.to(
                                     "/classDetails/update_language",
                                     queryParameters: {
-                                      "class_id": id,
+                                      "class_id": roomAlias,
                                     });
                               }
                             },
@@ -1028,9 +1081,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () async {
-                              final String id =
-                                  context.vRouter.queryParameters['id'] ??
-                                      "";
+
                               final confirmed =
                               await showOkCancelAlertDialog(
                                 useRootNavigator: false,
@@ -1042,7 +1093,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               if (confirmed == OkCancelResult.ok) {
                                 final room = Matrix.of(context)
                                     .client
-                                    .getRoomById(id);
+                                    .getRoomById(roomAlias);
                                 if (room != null) {
                                   final success =
                                   await showFutureLoadingDialog(
