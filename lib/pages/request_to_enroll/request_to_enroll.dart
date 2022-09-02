@@ -1,4 +1,4 @@
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +32,7 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
     final id = _activeSpacesEntry;
     return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
   }
+
   String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
   Future<void> _waitForFirstSync() async {
     final client = Matrix.of(context).client;
@@ -51,62 +52,67 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
         await space.requestParticipants();
       }
     }
-
-
   }
-  List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+
+  List<Room> get spaces =>
+      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     String roomId = VRouter.of(context).queryParameters['room_id'] ?? "";
     String id = VRouter.of(context).queryParameters['id'] ?? "";
     return Scaffold(
       body: FutureBuilder(
-        future:_waitForFirstSync(),
+        future: _waitForFirstSync(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          }
-          else if (snap.hasError) {
+          } else if (snap.hasError) {
             return Text("Unable to Load USER PROFILE");
-          }
-          else {
-            return RequestToEnrollPopUp(id: id,roomId: roomId,spaces: spaces,);
-
+          } else {
+            return RequestToEnrollPopUp(
+              id: id,
+              roomId: roomId,
+              spaces: spaces,
+            );
           }
         },
       ),
     );
-
   }
-}class RequestToEnrollPopUp extends StatelessWidget {
+}
+
+class RequestToEnrollPopUp extends StatelessWidget {
   List<Room> spaces;
   String roomId;
   String id;
-  RequestToEnrollPopUp({Key? key, required this.spaces, required this.id, required this.roomId}) : super(key: key);
+  RequestToEnrollPopUp(
+      {Key? key, required this.spaces, required this.id, required this.roomId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Room> space =  spaces.where((i) => i.id == roomId).toList();
-    if(space.isNotEmpty && space[0].id == roomId){
+    List<Room> space = spaces.where((i) => i.id == roomId).toList();
+    if (space.isNotEmpty && space[0].id == roomId) {
       return FutureBuilder(
           future: Matrix.of(context).client.getUserProfile(id),
-          builder: (context, snapshot){
-            if(snapshot.hasError){
-
-              return const Center(child:  Text("Unable to fetch user data error accured!"),);
-            }else if(snapshot.hasData){
-              final ProfileInformation data = snapshot.data as ProfileInformation;
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text("Unable to fetch user data error accured!"),
+              );
+            } else if (snapshot.hasData) {
+              final ProfileInformation data =
+                  snapshot.data as ProfileInformation;
               return Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,24 +127,23 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                           children: [
                             data.avatarUrl != null
                                 ? Container(
-                              width: 300,
-                              height: 150,
-                              child: Avatar(
-                                mxContent: data.avatarUrl,
-                              )
-                            )
+                                    width: 300,
+                                    height: 150,
+                                    child: Avatar(
+                                      mxContent: data.avatarUrl,
+                                    ))
                                 : Container(
-                              padding: EdgeInsets.only(top: 10),
-                              width: 200,
-                              height: 100,
-                              child: CircleAvatar(
-                                radius: 24,
-                                backgroundColor: Colors.black12,
-                                child: Avatar(
-                                  mxContent: data.avatarUrl,
-                                ),
-                              ),
-                            ),
+                                    padding: EdgeInsets.only(top: 10),
+                                    width: 200,
+                                    height: 100,
+                                    child: CircleAvatar(
+                                      radius: 24,
+                                      backgroundColor: Colors.black12,
+                                      child: Avatar(
+                                        mxContent: data.avatarUrl,
+                                      ),
+                                    ),
+                                  ),
                             Text(
                               data.displayname ?? "Username",
                               style: TextStyle(
@@ -149,7 +154,6 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                             ),
                             InkWell(
                               onTap: () async {
-
                                 final confirmed = await showOkCancelAlertDialog(
                                   useRootNavigator: false,
                                   context: context,
@@ -158,14 +162,13 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                                   cancelLabel: L10n.of(context)!.cancel,
                                 );
                                 if (confirmed == OkCancelResult.ok) {
-                                  if(roomId.isNotEmpty && id.isNotEmpty){
-                                    PangeaServices.inviteAction(context, id, roomId);
-                                  }else{
+                                  if (roomId.isNotEmpty && id.isNotEmpty) {
+                                    PangeaServices.inviteAction(
+                                        context, id, roomId);
+                                  } else {
                                     print("Room id or id is empty");
                                   }
-
                                 }
-
                               },
                               child: Container(
                                 height: 40,
@@ -175,7 +178,7 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border:
-                                  Border.all(color: Colors.black, width: 1),
+                                      Border.all(color: Colors.black, width: 1),
                                 ),
                                 child: Center(
                                   child: Text("Confirm Enrollment Request"),
@@ -186,8 +189,8 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                               height: 20,
                             ),
                             InkWell(
-                              onTap: (){
-                                window.close();
+                              onTap: () {
+                                // window.close();
                               },
                               child: Container(
                                 height: 40,
@@ -197,7 +200,7 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border:
-                                  Border.all(color: Colors.black, width: 1),
+                                      Border.all(color: Colors.black, width: 1),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -215,14 +218,16 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
                   ],
                 ),
               );
-            }else{
-              return const Center(child: CircularProgressIndicator(),);
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
           });
+    } else {
+      return const Center(
+        child: Text("You are not authorized for this page."),
+      );
     }
-    else{
-      return const Center(child:  Text("You are not authorized for this page."),);
-    }
-
   }
 }
