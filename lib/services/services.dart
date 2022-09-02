@@ -680,13 +680,9 @@ class PangeaServices {
         }
       }
       else {
-        throw Exception("Access token or Room ID is empty");
+        throw Exception("Access token or Room ID is empty".toString());
       }
     } catch (e) {
-      if (kDebugMode) {
-        print("eero");
-        print(e);
-      }
       throw Exception(e.toString());
     }
   }

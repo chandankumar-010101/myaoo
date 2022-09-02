@@ -71,27 +71,48 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
   final box = GetStorage();
   void createLanguage() {
+
     final int languageLevel = fetchLangLevel();
     if (classNameController.text.isEmpty ||
         discriptionController.text.isEmpty) {
       Fluttertoast.showToast(
           msg: "Class name and Description is required!", fontSize: 16.0);
-    } else if (targetLanguage == null ||
-        sourceLanguage == null ||
-        languageLevelDropdownValue.isEmpty ||
+      return;
+    }
+    if (targetLanguage == null ||  sourceLanguage == null || languageLevelDropdownValue.isEmpty ||
         languageLevel == 0) {
       Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0);
-    } else {
-      box.write("className", classNameController.text);
-      box.write("cityName", cityController.text);
-      box.write("countryName", countryController.text);
-      box.write("languageLevel", languageLevel);
-      box.write("scoolName", schoolController.text);
-      box.write("disc", discriptionController.text);
-      box.write("targetLanguage", targetLanguage!.languageName);
-      box.write("sourceLanage", sourceLanguage!.languageName);
-      context.vRouter.to("/newclass/class_permissions");
+      return;
     }
+    if(classNameController.text.length >=20){
+      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0);
+      return;
+    }
+    if(cityController.text.length >=20){
+      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0);
+      return;
+    }
+    if(schoolController.text.length>=20){
+      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0);
+      return;
+    }
+    if(countryController.text.length >= 12){
+      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
+      return;
+    }
+    if(discriptionController.text.length >=100){
+      Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+      return;
+    }
+    box.write("className", classNameController.text);
+    box.write("cityName", cityController.text);
+    box.write("countryName", countryController.text);
+    box.write("languageLevel", languageLevel);
+    box.write("scoolName", schoolController.text);
+    box.write("disc", discriptionController.text);
+    box.write("targetLanguage", targetLanguage!.languageName);
+    box.write("sourceLanage", sourceLanguage!.languageName);
+    context.vRouter.to("/newclass/class_permissions");
   }
 
   @override

@@ -41,14 +41,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
       body: FutureBuilder(
         future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",VRouter.of(context).queryParameters["id"] ?? ""),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            if (kDebugMode) {
-              print(snapshot.error);
-            }
-            return Center(child: Text(snapshot.error.toString()));
-          } else if (snapshot.hasData) {
+          if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
-
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,42 +60,42 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               margin: const EdgeInsets.only(top: 10.0),
                               child: data.profilePic.isNotEmpty
                                   ? CachedNetworkImage(
-                                      imageUrl: data.profilePic.toString(),
-                                      fit: BoxFit.cover,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                      imageBuilder: (context, imageProvider) {
-                                        return Container(
-                                          height: 90,
-                                          width: 90,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: imageProvider)),
-                                        );
-                                      },
-                                    )
+                                imageUrl: data.profilePic.toString(),
+                                fit: BoxFit.cover,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                                imageBuilder: (context, imageProvider) {
+                                  return Container(
+                                    height: 90,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: imageProvider)),
+                                  );
+                                },
+                              )
                                   : Icon(
-                                      Icons.people,
-                                      size: 60,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
+                                Icons.people,
+                                size: 60,
+                                color: Theme.of(context).primaryColor,
+                              ),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
+                                          .colorScheme
+                                          .onPrimary ==
+                                          Colors.white
                                           ? Theme.of(context).primaryColor
                                           : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                          .colorScheme
+                                          .onPrimary,
                                       width: 2.0),
                                   shape: BoxShape.circle),
                             ),
@@ -187,11 +181,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.0),
                       border:
-                          Border.all(color: Colors.grey.shade200, width: 2.0),
+                      Border.all(color: Colors.grey.shade200, width: 2.0),
                     ),
                     child: Flex(
                       direction:
-                          size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                      size.width >= 1000 ? Axis.horizontal : Axis.vertical,
                       mainAxisAlignment: size.width >= 800
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
@@ -429,663 +423,663 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
                   box.read("usertype") == 2
                       ? box.read("clientID") == data.classAuthorId
-                          ? Container()
-                          : Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              padding: EdgeInsets.only(top: 10),
-                              child: Flex(
-                                direction: size.width >= 1000
-                                    ? Axis.horizontal
-                                    : Axis.vertical,
-                                mainAxisAlignment: size.width >= 1000
-                                    ? MainAxisAlignment.start
-                                    : MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 200,
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25.0)),
-                                        side: BorderSide(
-                                          width: 2,
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context).primaryColor
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        final String id = context.vRouter
-                                                .queryParameters['id'] ??
-                                            "";
-                                        final box = GetStorage();
-                                        if (id.isNotEmpty) {
-                                          box.write("public",
-                                              data.permissions.isPublic);
-                                          box.write(
-                                              "openEnrollment",
-                                              data.permissions
-                                                  .isOpenEnrollment);
-                                          box.write("openExchange",
-                                              data.permissions.isOpenExchange);
-                                          context.vRouter.to(
-                                              "/classDetails/exchange_class",
-                                              queryParameters: {
-                                                "class_id": id,
-                                              });
-                                        }
-                                      },
-                                      child: Text(
-                                        "Request an Exchange",
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                    width: 200,
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25.0)),
-                                        side: BorderSide(
-                                          width: 2,
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context).primaryColor
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        UrlLauncher(context,
-                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                            .openMatrixToUrl();
-                                      },
-                                      child: Text(
-                                        "Message ${data.classAuthor}",
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                      : box.read("clientID") == data.classAuthorId
-                          ? Container()
-                          : Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              padding: EdgeInsets.only(top: 10),
-                              child: Flex(
-                                direction: size.width >= 1000
-                                    ? Axis.horizontal
-                                    : Axis.vertical,
-                                mainAxisAlignment: size.width >= 1000
-                                    ? MainAxisAlignment.start
-                                    : MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 200,
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25.0)),
-                                        side: BorderSide(
-                                          width: 2,
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context).primaryColor
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                        ),
-                                      ),
-                                      onPressed: () async {
-                                        final confirmed =
-                                            await showOkCancelAlertDialog(
-                                          useRootNavigator: false,
-                                          context: context,
-                                          title: L10n.of(context)!.areYouSure,
-                                          okLabel: L10n.of(context)!.ok,
-                                          cancelLabel: L10n.of(context)!.cancel,
-                                        );
-                                        if (confirmed == OkCancelResult.ok) {
-                                          print("confirm");
-                                          print(data.classAuthor);
-                                          String roomId =  VRouter.of(context).queryParameters['id']??"";
-                                          if(roomId.isNotEmpty){
-                                            UrlLauncher(context,requestToEnroll: true,
-                                                roomId:  roomId,
-                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                                .openMatrixToUrl();
-                                          }
-
-                                        }
-                                      },
-                                      child: Text(
-                                        "Request an Enroll",
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                    width: 200,
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25.0)),
-                                        side: BorderSide(
-                                          width: 2,
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context).primaryColor
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        UrlLauncher(context,
-                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                            .openMatrixToUrl();
-                                      },
-                                      child: Text(
-                                        "Message ${data.classAuthor}",
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                      ? Container()
+                      : Container(
+                    margin:
+                    const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
                               ),
                             ),
-                  box.read("usertype") == 2 &&
-                          box.read("clientID") == data.classAuthorId
-                      ? Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                          padding: EdgeInsets.only(top: 10),
-                          child: Flex(
-                            direction: size.width >= 1000
-                                ? Axis.horizontal
-                                : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    VRouter.of(context).to('/class_analytics');
-                                  },
-                                  child: Text(
-                                    "Class Analytics",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    UrlLauncher(context,
-                                            'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                        .openMatrixToUrl();
-                                    // final routes =
-                                    //     VRouter.of(context)
-                                    //         .queryParameters;
-                                    // VRouter.of(context)
-                                    //     .pathParameters[
-                                    // 'roomid'];
-                                    // // print(data
-                                    // //     .classAuthorId
-                                    // //     .toString());
-                                    // // print(data.classAuthor
-                                    // //     .toString());
-                                    //
-                                    // if (routes["id"] !=
-                                    //     null) {
-                                    //   UrlLauncher(context,
-                                    //       'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                    //       .openMatrixToUrl();
-                                    // } else {
-                                    //   // String? get roomId => VRouter.of(context).pathParameters['roomid'];
-                                    //
-                                    // }
-                                  },
-                                  child: Text(
-                                    "Add Students",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Find a Language Exchange",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            onPressed: () {
+                              final String id = context.vRouter
+                                  .queryParameters['id'] ??
+                                  "";
+                              final box = GetStorage();
+                              if (id.isNotEmpty) {
+                                box.write("public",
+                                    data.permissions.isPublic);
+                                box.write(
+                                    "openEnrollment",
+                                    data.permissions
+                                        .isOpenEnrollment);
+                                box.write("openExchange",
+                                    data.permissions.isOpenExchange);
+                                context.vRouter.to(
+                                    "/classDetails/exchange_class",
+                                    queryParameters: {
+                                      "class_id": id,
+                                    });
+                              }
+                            },
+                            child: Text(
+                              "Request an Exchange",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
                           ),
-                        )
-                      : Container(),
-                  box.read("usertype") == 2 &&
-                          box.read("clientID") == data.classAuthorId
-                      ? Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                          padding: EdgeInsets.only(top: 10),
-                          child: Flex(
-                            direction: size.width >= 1000
-                                ? Axis.horizontal
-                                : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    final String id =
-                                        context.vRouter.queryParameters['id'] ??
-                                            "";
-                                    if (id.isNotEmpty) {
-                                      box.write(
-                                          "public", data.permissions.isPublic);
-                                      box.write("openEnrollment",
-                                          data.permissions.isOpenEnrollment);
-                                      box.write("openExchange",
-                                          data.permissions.isOpenExchange);
-                                      context.vRouter.to(
-                                          "/classDetails/update_class_permissions",
-                                          queryParameters: {
-                                            "class_id": id,
-                                          });
-                                    }
-                                  },
-                                  child: Text(
-                                    "Class Permissions",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
                               ),
-                              SizedBox(
-                                width: 10,
-                                height: 10,
+                            ),
+                            onPressed: () {
+                              UrlLauncher(context,
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  .openMatrixToUrl();
+                            },
+                            child: Text(
+                              "Message ${data.classAuthor}",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : box.read("clientID") == data.classAuthorId
+                      ? Container()
+                      : Container(
+                    margin:
+                    const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
                               ),
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    final String id =
-                                        context.vRouter.queryParameters['id'] ??
-                                            "";
-                                    if (id.isNotEmpty) {
-                                      try {
-                                        box.write(
-                                            "oneToOneClass",
-                                            data.permissions
-                                                .oneToOneChatClass);
-                                        box.write(
-                                            "oneToOneExchange",
-                                            data.permissions
-                                                .oneToOneChatExchange);
-                                        box.write("createRoom",
-                                            data.permissions.isCreateRooms);
-                                        box.write(
-                                            "createRoomExchange",
-                                            data.permissions
-                                                .isCreateRoomsExchange);
-                                        box.write("createStories",
-                                            data.permissions.isCreateStories);
-                                        box.write("shareVideo",
-                                            data.permissions.isShareVideo);
-                                        box.write("sharePhotos",
-                                            data.permissions.isSharePhoto);
-                                        box.write("shareFiles",
-                                            data.permissions.isShareFiles);
-                                        box.write("shareLocation",
-                                            data.permissions.isShareLocation);
-                                      } catch (e) {
-                                        if (kDebugMode) {
-                                          print(e);
-                                        }
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content:
-                                                    Text("Error accrued: $e")));
-                                      }
-                                      context.vRouter.to(
-                                          "/classDetails/update_student_permissions",
-                                          queryParameters: {
-                                            "class_id": id,
-                                          });
-                                    }
-                                  },
-                                  child: Text(
-                                    "Student Permissions",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    final String id =
-                                        context.vRouter.queryParameters['id'] ??
-                                            "";
+                            ),
+                            onPressed: () async {
+                              final confirmed =
+                              await showOkCancelAlertDialog(
+                                useRootNavigator: false,
+                                context: context,
+                                title: L10n.of(context)!.areYouSure,
+                                okLabel: L10n.of(context)!.ok,
+                                cancelLabel: L10n.of(context)!.cancel,
+                              );
+                              if (confirmed == OkCancelResult.ok) {
+                                print("confirm");
+                                print(data.classAuthor);
+                                String roomId =  VRouter.of(context).queryParameters['id']??"";
+                                if(roomId.isNotEmpty){
+                                  UrlLauncher(context,requestToEnroll: true,
+                                      roomId:  roomId,
+                                      'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                      .openMatrixToUrl();
+                                }
 
-                                    if (id.isNotEmpty) {
-                                      box.write("class_name", data.className);
-                                      box.write("city_name", data.city);
-                                      box.write("country_name", data.country);
-                                      box.write(
-                                          "language_level", data.languageLevel);
-                                      box.write("school_name", data.schoolName);
-                                      box.write("disc", data.description);
-                                      box.write(
-                                          "source_lang", data.dominantLanguage);
-                                      box.write(
-                                          "target_lang", data.targetLanguage);
-                                      context.vRouter.to(
-                                          "/classDetails/update_language",
-                                          queryParameters: {
-                                            "class_id": id,
-                                          });
-                                    }
-                                  },
-                                  child: Text(
-                                    "Class Info",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                            ],
+                              }
+                            },
+                            child: Text(
+                              "Request an Enroll",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              UrlLauncher(context,
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  .openMatrixToUrl();
+                            },
+                            child: Text(
+                              "Message ${data.classAuthor}",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  box.read("usertype") == 2 &&
+                      box.read("clientID") == data.classAuthorId
+                      ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              VRouter.of(context).to('/class_analytics');
+                            },
+                            child: Text(
+                              "Class Analytics",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              UrlLauncher(context,
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  .openMatrixToUrl();
+                              // final routes =
+                              //     VRouter.of(context)
+                              //         .queryParameters;
+                              // VRouter.of(context)
+                              //     .pathParameters[
+                              // 'roomid'];
+                              // // print(data
+                              // //     .classAuthorId
+                              // //     .toString());
+                              // // print(data.classAuthor
+                              // //     .toString());
+                              //
+                              // if (routes["id"] !=
+                              //     null) {
+                              //   UrlLauncher(context,
+                              //       'https://matrix.to/#/${data.classAuthorId.toString()}')
+                              //       .openMatrixToUrl();
+                              // } else {
+                              //   // String? get roomId => VRouter.of(context).pathParameters['roomid'];
+                              //
+                              // }
+                            },
+                            child: Text(
+                              "Add Students",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Find a Language Exchange",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                       : Container(),
                   box.read("usertype") == 2 &&
-                          box.read("clientID") == data.classAuthorId
+                      box.read("clientID") == data.classAuthorId
                       ? Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                          padding: EdgeInsets.only(top: 10),
-                          child: Flex(
-                            direction: size.width >= 1000
-                                ? Axis.horizontal
-                                : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    final String id =
-                                        context.vRouter.queryParameters['id'] ??
-                                            "";
-                                    final confirmed =
-                                        await showOkCancelAlertDialog(
-                                      useRootNavigator: false,
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              final String id =
+                                  context.vRouter.queryParameters['id'] ??
+                                      "";
+                              if (id.isNotEmpty) {
+                                box.write(
+                                    "public", data.permissions.isPublic);
+                                box.write("openEnrollment",
+                                    data.permissions.isOpenEnrollment);
+                                box.write("openExchange",
+                                    data.permissions.isOpenExchange);
+                                context.vRouter.to(
+                                    "/classDetails/update_class_permissions",
+                                    queryParameters: {
+                                      "class_id": id,
+                                    });
+                              }
+                            },
+                            child: Text(
+                              "Class Permissions",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              final String id =
+                                  context.vRouter.queryParameters['id'] ??
+                                      "";
+                              if (id.isNotEmpty) {
+                                try {
+                                  box.write(
+                                      "oneToOneClass",
+                                      data.permissions
+                                          .oneToOneChatClass);
+                                  box.write(
+                                      "oneToOneExchange",
+                                      data.permissions
+                                          .oneToOneChatExchange);
+                                  box.write("createRoom",
+                                      data.permissions.isCreateRooms);
+                                  box.write(
+                                      "createRoomExchange",
+                                      data.permissions
+                                          .isCreateRoomsExchange);
+                                  box.write("createStories",
+                                      data.permissions.isCreateStories);
+                                  box.write("shareVideo",
+                                      data.permissions.isShareVideo);
+                                  box.write("sharePhotos",
+                                      data.permissions.isSharePhoto);
+                                  box.write("shareFiles",
+                                      data.permissions.isShareFiles);
+                                  box.write("shareLocation",
+                                      data.permissions.isShareLocation);
+                                } catch (e) {
+                                  if (kDebugMode) {
+                                    print(e);
+                                  }
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                      content:
+                                      Text("Error accrued: $e")));
+                                }
+                                context.vRouter.to(
+                                    "/classDetails/update_student_permissions",
+                                    queryParameters: {
+                                      "class_id": id,
+                                    });
+                              }
+                            },
+                            child: Text(
+                              "Student Permissions",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              final String id =
+                                  context.vRouter.queryParameters['id'] ??
+                                      "";
+
+                              if (id.isNotEmpty) {
+                                box.write("class_name", data.className);
+                                box.write("city_name", data.city);
+                                box.write("country_name", data.country);
+                                box.write(
+                                    "language_level", data.languageLevel);
+                                box.write("school_name", data.schoolName);
+                                box.write("disc", data.description);
+                                box.write(
+                                    "source_lang", data.dominantLanguage);
+                                box.write(
+                                    "target_lang", data.targetLanguage);
+                                context.vRouter.to(
+                                    "/classDetails/update_language",
+                                    queryParameters: {
+                                      "class_id": id,
+                                    });
+                              }
+                            },
+                            child: Text(
+                              "Class Info",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : Container(),
+                  box.read("usertype") == 2 &&
+                      box.read("clientID") == data.classAuthorId
+                      ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () async {
+                              final String id =
+                                  context.vRouter.queryParameters['id'] ??
+                                      "";
+                              final confirmed =
+                              await showOkCancelAlertDialog(
+                                useRootNavigator: false,
+                                context: context,
+                                title: L10n.of(context)!.areYouSure,
+                                okLabel: L10n.of(context)!.ok,
+                                cancelLabel: L10n.of(context)!.cancel,
+                              );
+                              if (confirmed == OkCancelResult.ok) {
+                                final room = Matrix.of(context)
+                                    .client
+                                    .getRoomById(id);
+                                if (room != null) {
+                                  final success =
+                                  await showFutureLoadingDialog(
                                       context: context,
-                                      title: L10n.of(context)!.areYouSure,
-                                      okLabel: L10n.of(context)!.ok,
-                                      cancelLabel: L10n.of(context)!.cancel,
-                                    );
-                                    if (confirmed == OkCancelResult.ok) {
-                                      final room = Matrix.of(context)
-                                          .client
-                                          .getRoomById(id);
-                                      if (room != null) {
-                                        final success =
-                                            await showFutureLoadingDialog(
-                                                context: context,
-                                                future: () => room.leave());
-                                        if (success.error == null) {
-                                          String token = box.read("access");
-                                          if (kDebugMode) {
-                                            print(token);
-                                          }
-                                          PangeaServices.deleteClass(
-                                              roomId: room.id,
-                                              context: context);
-                                          if (kDebugMode) {
-                                            print(room.id);
-                                          }
-
-                                          VRouter.of(context).to('/rooms');
-                                        }
-                                      }
+                                      future: () => room.leave());
+                                  if (success.error == null) {
+                                    String token = box.read("access");
+                                    if (kDebugMode) {
+                                      print(token);
                                     }
-                                  },
-                                  child: Text(
-                                    "Delete Class",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                            ],
+                                    PangeaServices.deleteClass(
+                                        roomId: room.id,
+                                        context: context);
+                                    if (kDebugMode) {
+                                      print(room.id);
+                                    }
+
+                                    VRouter.of(context).to('/rooms');
+                                  }
+                                }
+                              }
+                            },
+                            child: Text(
+                              "Delete Class",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
                           ),
-                        )
+                        ),
+                      ],
+                    ),
+                  )
                       : Container(),
                   const SizedBox(
                     height: 50,
@@ -1093,9 +1087,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                 ],
               ),
             );
-          } else {
+          }else{
+            if(snapshot.hasError){
+              print(snapshot.error);
+            }
             return const Center(child: CircularProgressIndicator());
           }
+
         },
       ),
     );
