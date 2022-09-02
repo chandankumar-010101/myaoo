@@ -133,7 +133,6 @@ class UrlLauncher {
       }
       servers.addAll(identityParts.via);
       if (room != null) {
-        print("Working here");
         // we have the room, so....just open it
         if (event != null) {
           VRouter.of(context).toSegments(['rooms', room.id],
@@ -144,7 +143,6 @@ class UrlLauncher {
         return;
       }
       else {
-        print("Working here1");
         await showModalBottomSheet(
           context: context,
           builder: (c) => PublicRoomBottomSheet(
@@ -153,8 +151,8 @@ class UrlLauncher {
           ),
         );
       }
+
       if (roomIdOrAlias.sigil == '!') {
-        print("Welcome 2");
         if (await showOkCancelAlertDialog(
               useRootNavigator: false,
               context: context,

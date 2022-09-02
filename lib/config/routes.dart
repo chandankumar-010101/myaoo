@@ -284,6 +284,7 @@ class AppRoutes {
                   widget:  ClassAnalyticsScreen(),
                   buildTransition: _fadeTransition,
                 ),
+
               ],
             ),
           ],

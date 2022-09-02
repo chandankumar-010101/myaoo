@@ -3,6 +3,7 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
@@ -57,27 +58,25 @@ class _RequestToEnrollState extends State<RequestToEnroll> {
   List<Room> get spaces =>
       Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    String roomId = VRouter.of(context).queryParameters['room_id'] ?? "";
-    String id = VRouter.of(context).queryParameters['id'] ?? "";
+    final String roomId = VRouter.of(context).queryParameters['room_id'] ?? "";
+    final String id = VRouter.of(context).queryParameters['id'] ?? "";
+    print(spaces.length);
     return Scaffold(
       body: FutureBuilder(
         future: _waitForFirstSync(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snap.hasError) {
             return Text("Unable to Load USER PROFILE");
           } else {
+
             return RequestToEnrollPopUp(
               id: id,
               roomId: roomId,
@@ -98,11 +97,13 @@ class RequestToEnrollPopUp extends StatelessWidget {
       {Key? key, required this.spaces, required this.id, required this.roomId})
       : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    List<Room> space = spaces.where((i) => i.id == roomId).toList();
-    if (space.isNotEmpty && space[0].id == roomId) {
+    final Size size = MediaQuery.of(context).size;
+    final List<Room> space = spaces.where((i) => i.id == roomId).toList();
+    final int userType = GetStorage().read("usertype")??0;
+    if (space.isNotEmpty && space[0].id == roomId && userType ==2) {
       return FutureBuilder(
           future: Matrix.of(context).client.getUserProfile(id),
           builder: (context, snapshot) {
@@ -111,8 +112,7 @@ class RequestToEnrollPopUp extends StatelessWidget {
                 child: Text("Unable to fetch user data error accured!"),
               );
             } else if (snapshot.hasData) {
-              final ProfileInformation data =
-                  snapshot.data as ProfileInformation;
+              final ProfileInformation data = snapshot.data as ProfileInformation;
               return Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
