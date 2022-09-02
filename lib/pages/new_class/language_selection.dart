@@ -41,6 +41,39 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
 
   }
+ bool validation(){
+    if (classNameController.text.isEmpty || discriptionController.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Class name and Description is required!", fontSize: 16.0);
+      return false;
+    }
+    if (targetLanguage == null ||  sourceLanguage == null || languageLevelDropdownValue.isEmpty ||     languageLevel == 0) {
+      Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0);
+      return false;
+    }
+    if(classNameController.text.length >=20){
+      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0);
+      return false;
+    }
+    if(cityController.text.length >=20){
+      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0);
+      return false;
+    }
+    if(schoolController.text.length>=20){
+      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0);
+      return false;
+    }
+    if(countryController.text.length >= 12){
+      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
+      return false;
+    }
+    if(discriptionController.text.length >=100){
+      Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+      return false;
+    }
+    return true;
+
+  }
 
   int fetchLangLevel() {
     int langlevel = 0;
@@ -71,27 +104,49 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
   final box = GetStorage();
   void createLanguage() {
+    if(!validation()){
+      return;
+    }
     final int languageLevel = fetchLangLevel();
-    if (classNameController.text.isEmpty ||
-        discriptionController.text.isEmpty) {
+    if (classNameController.text.isEmpty || discriptionController.text.isEmpty) {
       Fluttertoast.showToast(
           msg: "Class name and Description is required!", fontSize: 16.0);
-    } else if (targetLanguage == null ||
-        sourceLanguage == null ||
-        languageLevelDropdownValue.isEmpty ||
-        languageLevel == 0) {
-      Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0);
-    } else {
-      box.write("className", classNameController.text);
-      box.write("cityName", cityController.text);
-      box.write("countryName", countryController.text);
-      box.write("languageLevel", languageLevel);
-      box.write("scoolName", schoolController.text);
-      box.write("disc", discriptionController.text);
-      box.write("targetLanguage", targetLanguage!.languageName);
-      box.write("sourceLanage", sourceLanguage!.languageName);
-      context.vRouter.to("/newclass/class_permissions");
+      return;
     }
+    if (targetLanguage == null ||  sourceLanguage == null || languageLevelDropdownValue.isEmpty ||     languageLevel == 0) {
+      Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0);
+      return;
+    }
+    if(classNameController.text.length >=20){
+      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0);
+      return;
+    }
+    if(cityController.text.length >=20){
+      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0);
+      return;
+    }
+    if(schoolController.text.length>=20){
+      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0);
+      return;
+    }
+    if(countryController.text.length >= 12){
+      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
+      return;
+    }
+    if(discriptionController.text.length >=100){
+      Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+      return;
+    }
+
+    box.write("className", classNameController.text);
+    box.write("cityName", cityController.text);
+    box.write("countryName", countryController.text);
+    box.write("languageLevel", languageLevel);
+    box.write("scoolName", schoolController.text);
+    box.write("disc", discriptionController.text);
+    box.write("targetLanguage", targetLanguage!.languageName);
+    box.write("sourceLanage", sourceLanguage!.languageName);
+    context.vRouter.to("/newclass/class_permissions");
   }
 
   @override
@@ -771,28 +826,44 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                     msg:
                                         "Class Description is required!",
                                     fontSize: 16.0);
-                              } else {
-                                final result = await showFutureLoadingDialog(
-                                  context: context,
-                                  future: () =>
+                                return;
+                              }
+                              if(cityController.text.length >=20){
+                                Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0);
+                                return ;
+                              }
+                              if(schoolController.text.length>=20){
+                                Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0);
+                                return ;
+                              }
+                              if(countryController.text.length >= 12){
+                                Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
+                                return;
+                              }
+                              if(discriptionController.text.length >=100){
+                                Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+                                return ;
+                              }
+                              final result = await showFutureLoadingDialog(
+                                context: context,
+                                future: () =>
 
-                                      PangeaServices.updateClassDetails(
+                                    PangeaServices.updateClassDetails(
 
-                                        context: context,
-                                    desc: discriptionController.text,
-                                    city: cityController.text,
-                                    roomId: id.toString(),
-                                    languageLevel: languageLevel,
-                                    country: countryController.text,
-                                    schoolName: schoolController.text,
-                                  ),
-                                );
-                                if (result != null || result.result!) {
-                                  print("updated");
-                                  VRouter.of(context).to('/classDetails',
-                                      queryParameters: {"id": id});
-                                  // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
-                                }
+                                      context: context,
+                                      desc: discriptionController.text,
+                                      city: cityController.text,
+                                      roomId: id.toString(),
+                                      languageLevel: languageLevel,
+                                      country: countryController.text,
+                                      schoolName: schoolController.text,
+                                    ),
+                              );
+                              if (result != null || result.result!) {
+                                print("updated");
+                                VRouter.of(context).to('/classDetails',
+                                    queryParameters: {"id": id});
+                                // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                               }
                             },
                             child: Container(
