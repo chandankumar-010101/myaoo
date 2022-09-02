@@ -178,6 +178,16 @@ class _SearchViewState extends State<SearchView> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Theme.of(context).colorScheme.onPrimary,
+                                  border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary ==
+                                          Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary
+                                  )
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -204,6 +214,16 @@ class _SearchViewState extends State<SearchView> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Theme.of(context).colorScheme.onPrimary,
+                                  border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary ==
+                                          Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary
+                                  )
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -232,6 +252,16 @@ class _SearchViewState extends State<SearchView> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onPrimary,
+                                        border: Border.all(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary ==
+                                                Colors.white
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                        )
                                     ),
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
@@ -263,6 +293,16 @@ class _SearchViewState extends State<SearchView> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onPrimary,
+                                        border: Border.all(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary ==
+                                                Colors.white
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                        )
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -356,13 +396,17 @@ class _SearchViewState extends State<SearchView> {
                                           children: [
                                             searchController.previous.value
                                                 ? InkWell(
-                                                    child: const Padding(
+                                                    child: Padding(
                                                       padding:
                                                           EdgeInsets.all(8.0),
                                                       child: Icon(
                                                         Icons.arrow_back_ios,
                                                         size: 20,
-                                                        color: Colors.white,
+                                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                            ? Theme.of(context).primaryColor
+                                                            : Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
                                                       ),
                                                     ),
                                                     onTap: () {
@@ -390,14 +434,17 @@ class _SearchViewState extends State<SearchView> {
                                                       searchController
                                                           .getClasses();
                                                     },
-                                                    child: const Padding(
+                                                    child:  Padding(
                                                       padding:
                                                           EdgeInsets.all(8.0),
                                                       child: Icon(
                                                         Icons.arrow_forward_ios,
                                                         size: 20,
-                                                        color: Colors.white,
-                                                      ),
+                                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                            ? Theme.of(context).primaryColor
+                                                            : Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,                                                      ),
                                                     ),
                                                   )
                                                 : const SizedBox(),
