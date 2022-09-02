@@ -46,6 +46,7 @@ import 'package:vrouter/vrouter.dart';
 import '../home_page.dart';
 import '../pages/class_profile/class_profile_view.dart';
 import '../pages/language_selection_screen/language_selection.dart';
+import '../pages/new_class/invite_email_view.dart';
 import '../pages/new_class/new_class.dart';
 
 class AppRoutes {
@@ -282,6 +283,11 @@ class AppRoutes {
                 VWidget(
                   path: '/class_analytics',
                   widget:  ClassAnalyticsScreen(),
+                  buildTransition: _fadeTransition,
+                ),
+                VWidget(
+                  path: '/invite_email',
+                  widget:  InviteEmail(),
                   buildTransition: _fadeTransition,
                 ),
 

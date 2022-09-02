@@ -136,8 +136,7 @@ class LoginView extends StatelessWidget {
                                                 ),
                                                 errorText:
                                                     controller.usernameError,
-                                                hintText: L10n.of(context)!
-                                                    .emailOrUsername,
+                                                hintText: "Username",
                                                 hintStyle: const TextStyle(
                                                   color: Color(0x35204880),
                                                 ),
