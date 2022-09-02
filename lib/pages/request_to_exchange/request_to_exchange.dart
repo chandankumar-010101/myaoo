@@ -74,7 +74,9 @@ class _RequestToExchangeState extends State<RequestToExchange> {
   @override
   Widget build(BuildContext context) {
     String roomId = VRouter.of(context).queryParameters['room_id'] ?? "";
+    String receivedroomID = VRouter.of(context).queryParameters['receviedroom_id'] ?? "";
     String id = VRouter.of(context).queryParameters['id'] ?? "";
+    String rid = VRouter.of(context).queryParameters['r_id'] ?? "";
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -91,7 +93,7 @@ class _RequestToExchangeState extends State<RequestToExchange> {
           } else if (snap.hasError) {
             return Text("Unable to Load USER PROFILE");
           } else {
-            return  RequestToEnrollPopUp(id: id,roomId: roomId,spaces: spaces,);
+            return  RequestToExchangePopUp(id: id,roomId: roomId,spaces: spaces,r_id:rid,receivedroomID: receivedroomID,);
 
           }
         },
@@ -100,12 +102,14 @@ class _RequestToExchangeState extends State<RequestToExchange> {
   }
 }
 
-class RequestToEnrollPopUp extends StatelessWidget {
+class RequestToExchangePopUp extends StatelessWidget {
   List<Room> spaces;
   String roomId;
+  String receivedroomID;
   String id;
-  RequestToEnrollPopUp(
-      {Key? key, required this.spaces, required this.id, required this.roomId})
+  String r_id;
+  RequestToExchangePopUp(
+      {Key? key, required this.spaces, required this.id,required this.r_id, required this.roomId,required this.receivedroomID})
       : super(key: key);
 
   @override
@@ -117,15 +121,14 @@ class RequestToEnrollPopUp extends StatelessWidget {
 
     List date1=id.split(":");
     List date2=date1[0].split("@");
-    //List date3=date2[0].replace(",");
 
 
 
 
-    List<Room> space = spaces.where((i) => i.id == roomId).toList();
-    if (space.isNotEmpty && space[0].id == roomId) {
+    List<Room> space = spaces.where((i) => i.id == receivedroomID).toList();
+    if (box.read("clientID")==r_id) {
       return FutureBuilder(
-        future: PangeaServices.fetchExchangeClassInfo(context, roomId),
+        future: PangeaServices.fetchExchangeClassInfo(context, receivedroomID),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
