@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_code_model.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:universal_html/html.dart';
 import 'package:vrouter/vrouter.dart';
+
+import '../../widgets/matrix.dart';
 
 class JoinClassWithLink extends StatefulWidget {
   const JoinClassWithLink({Key? key}) : super(key: key);
@@ -12,6 +15,15 @@ class JoinClassWithLink extends StatefulWidget {
 }
 
 class _JoinClassWithLinkState extends State<JoinClassWithLink> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final loginState = Matrix.of(context).client.loginState;
+    if(loginState == LoginState.loggedIn){
+      print("logged in");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +84,10 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
 
-                                RaisedButton(
+                                ElevatedButton(
                                   child: const Text("Connect To Class"),
                                   onPressed: () {
                                     PangeaServices.joinRoom(context, data.pangeaClassRoomId!);
-
                                   },
                                 )
                               ],

@@ -14,6 +14,7 @@ import '../model/add_class_permissions_model.dart';
 import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
+import '../model/invite_email_model.dart';
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
 import '../pages/search/search_view_controller.dart';
@@ -31,8 +32,7 @@ class PangeaServices {
   static final SearchViewController _searchController =
       Get.put(SearchViewController());
 
-
-  static  joinRoom(BuildContext context,String roomAlias) async {
+  static joinRoom(BuildContext context, String roomAlias) async {
     final client = Matrix.of(context).client;
     final result = await showFutureLoadingDialog<String>(
       context: context,
@@ -41,7 +41,7 @@ class PangeaServices {
     if (result.error == null) {
       if (client.getRoomById(result.result!) == null) {
         await client.onSync.stream.firstWhere(
-                (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
+            (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
       }
       VRouter.of(context).toSegments(['rooms', result.result!]);
       Navigator.of(context, rootNavigator: false).pop();
@@ -51,38 +51,35 @@ class PangeaServices {
 
   static joinClassWithCode(String classCode, BuildContext context) async {
     final String accessToken = box.read("access") ?? "";
-    if(accessToken.isEmpty){
-      Fluttertoast.showToast(
-          msg: "Access token not found");
+    if (accessToken.isEmpty) {
+      Fluttertoast.showToast(msg: "Access token not found");
       return;
     }
-    try{
+    try {
       final value = await http.get(
-        Uri.parse(ApiUrls.join_code+classCode),
+        Uri.parse(ApiUrls.join_code + classCode),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $accessToken",
         },
       );
       if (value.statusCode == 200) {
-      ClassCodeModel data =  ClassCodeModel.fromJson(jsonDecode(value.body));
-      print(data.classCode);
-      print(data.className);
-      print(data.pangeaClassRoomId);
-      if(data.pangeaClassRoomId != null){
-        joinRoom(context, data.pangeaClassRoomId!);
-      }else{
-        print("id not found");
-      }
+        ClassCodeModel data = ClassCodeModel.fromJson(jsonDecode(value.body));
+        print(data.classCode);
+        print(data.className);
+        print(data.pangeaClassRoomId);
+        if (data.pangeaClassRoomId != null) {
+          joinRoom(context, data.pangeaClassRoomId!);
+        } else {
+          print("id not found");
+        }
 
-
-      //   final data = jsonDecode(value.body);
-      //   box.write("age", data["age"]);
-      // }
-      // else if (value.statusCode == 400) {
-      //   box.write("age", 0);
-      }
-      else{
+        //   final data = jsonDecode(value.body);
+        //   box.write("age", data["age"]);
+        // }
+        // else if (value.statusCode == 400) {
+        //   box.write("age", 0);
+      } else {
         print(value.statusCode);
         if (kDebugMode) {
           print("Unable to fetch user age");
@@ -92,34 +89,68 @@ class PangeaServices {
         Fluttertoast.showToast(
             msg: "Api Error ${value.statusCode}: Unable to fetch user age");
       }
-    }catch(e){
+    } catch (e) {
       if (kDebugMode) {
         print(e);
       }
       Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
     }
-
   }
-  static Future<ClassCodeModel?> fetchClassWithCode(String classCode, BuildContext context) async {
+
+  static sendEmailToJoinClass(
+      String data, String roomId, String teacherName) async {
+    try {
+      var result = await http.post(Uri.parse(ApiUrls.update_user_ages),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(InviteEmail(
+            pangeaClassRoomId: roomId,
+            data: data,
+            teacherName: teacherName,
+          ).toJson()));
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        Fluttertoast.showToast(msg: "Mail Sent Successfully");
+      } else {
+        if (kDebugMode) {
+          print("Unable to fetch user age");
+          print(result.statusCode);
+          print(result.body);
+        }
+        Fluttertoast.showToast(
+            msg: "Api Error ${result.statusCode}: Unable to fetch user age");
+        throw Exception(
+            "Api Error ${result.statusCode}: Unable to fetch user age");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      throw Exception("Error: Unable to fetch user age");
+    }
+  }
+
+  static Future<ClassCodeModel?> fetchClassWithCode(
+      String classCode, BuildContext context) async {
     final String accessToken = box.read("access") ?? "";
-    if(accessToken.isEmpty){
-      Fluttertoast.showToast(
-          msg: "Access token not found");
+    if (accessToken.isEmpty) {
+      Fluttertoast.showToast(msg: "Access token not found");
       throw Exception("Access Token not found");
     }
-    try{
+    try {
       final value = await http.get(
-        Uri.parse(ApiUrls.join_code+classCode),
+        Uri.parse(ApiUrls.join_code + classCode),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $accessToken",
         },
       );
       if (value.statusCode == 200) {
-       // ClassCodeModel data =
+        // ClassCodeModel data =
         return ClassCodeModel.fromJson(jsonDecode(value.body));
-      }
-      else{
+      } else {
         if (kDebugMode) {
           print("Unable to fetch user age");
           print(value.statusCode);
@@ -127,17 +158,18 @@ class PangeaServices {
         }
         Fluttertoast.showToast(
             msg: "Api Error ${value.statusCode}: Unable to fetch user age");
-        throw Exception("Api Error ${value.statusCode}: Unable to fetch user age");
+        throw Exception(
+            "Api Error ${value.statusCode}: Unable to fetch user age");
       }
-    }catch(e){
+    } catch (e) {
       if (kDebugMode) {
         print(e);
       }
       Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
       throw Exception("Error: Unable to fetch user age");
     }
-
   }
+
   static inviteAction(BuildContext context, String id, String roomId) async {
     final room = Matrix.of(context).client.getRoomById(roomId);
     if (room != null) {
@@ -201,7 +233,7 @@ class PangeaServices {
     ).then((value) {
       box.erase();
       ScaffoldMessenger.of(context)
-          .showSnackBar( SnackBar(content: Text("Log out successfully")));
+          .showSnackBar(SnackBar(content: Text("Log out successfully")));
     }).catchError((e) {
       if (kDebugMode) {
         print(e);
@@ -216,15 +248,14 @@ class PangeaServices {
   static validateUser(
       Client client, BuildContext context, Matrix widget) async {
     final bool signUp = box.read("sign_up") ?? false;
-    final String userID = client.userID??"";
-    if(userID.isNotEmpty){
-      try{
-        final value =  await http
-            .get(
+    final String userID = client.userID ?? "";
+    if (userID.isNotEmpty) {
+      try {
+        final value = await http.get(
           Uri.parse(ApiUrls.validate_user + userID),
         );
         if (value.statusCode == 201 || value.statusCode == 200) {
-         final data = jsonDecode(value.body);
+          final data = jsonDecode(value.body);
           if (!data["is_user_exist"] || signUp) {
             signUp ? box.remove("sign_up") : null;
             widget.router!.currentState!.to(
@@ -241,25 +272,23 @@ class PangeaServices {
               queryParameters: widget.router!.currentState!.queryParameters,
             );
           }
-        }
-        else {
+        } else {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body, context: context);
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Unable to validate User")));
           PangeaServices.logoutUser(context: context, client: client);
         }
-      }catch(e){
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("User validation failed: $e")));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("User validation failed: $e")));
         PangeaServices.logoutUser(context: context, client: client);
       }
     }
-
   }
 
   static Future userDetails({required String clientID}) async {
-    try{
+    try {
       final value = await http.get(
         Uri.parse(ApiUrls.user_details + clientID),
       );
@@ -271,31 +300,30 @@ class PangeaServices {
         box.write("targetlanguage", data.profile!.targetLanguage);
         box.write("usertype", data.profile!.userType);
         fetchUserAge();
-      }
-      else {
+      } else {
         if (kDebugMode) {
           print("Unable to fetch user information");
           print(value.statusCode);
           print(value.body);
         }
-        Fluttertoast.showToast(msg: "Error ${value.statusCode}: Unable to fetch user details");
+        Fluttertoast.showToast(
+            msg: "Error ${value.statusCode}: Unable to fetch user details");
       }
-    }catch(e){
+    } catch (e) {
       if (kDebugMode) {
         print(e);
         print("Unable to fetch User Details");
       }
       Fluttertoast.showToast(msg: "Error while fetching user details");
     }
-
   }
 
   static fetchUserAge() async {
     final String clientID = box.read("clientID") ?? "";
     final String accessToken = box.read("access") ?? "";
     if (clientID.isNotEmpty && accessToken.isNotEmpty) {
-      try{
-       final value = await http.get(
+      try {
+        final value = await http.get(
           Uri.parse(ApiUrls.user_ages + clientID),
           headers: {
             "Content-Type": "application/json",
@@ -305,11 +333,9 @@ class PangeaServices {
         if (value.statusCode == 200) {
           final data = jsonDecode(value.body);
           box.write("age", data["age"]);
-        }
-        else if (value.statusCode == 400) {
+        } else if (value.statusCode == 400) {
           box.write("age", 0);
-        }
-        else {
+        } else {
           if (kDebugMode) {
             print("Unable to fetch user age");
             print(value.statusCode);
@@ -318,14 +344,13 @@ class PangeaServices {
           Fluttertoast.showToast(
               msg: "Api Error ${value.statusCode}: Unable to fetch user age");
         }
-      }catch(e){
+      } catch (e) {
         if (kDebugMode) {
           print(e);
         }
         Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
       }
-    }
-    else {
+    } else {
       if (kDebugMode) {
         print(
             "Client Id or access token is Empty, \n unable to fetch User Age");
@@ -348,7 +373,7 @@ class PangeaServices {
           print("Client Id is empty");
         }
       }
-    } else if(JwtDecoder.isExpired(accessToken)){
+    } else if (JwtDecoder.isExpired(accessToken)) {
       print("token is expired");
       final String clientID = box.read("clientID") ?? "";
       if (clientID.isNotEmpty) {
@@ -358,62 +383,56 @@ class PangeaServices {
           print("Client Id is empty");
         }
       }
-
-    }else{
+    } else {
       if (kDebugMode) {
         print("every thing is working fine");
       }
     }
   }
 
-
-
   static updateUserAge(day, month, year, context) async {
-   final String clientID = box.read("clientID")??"";
-   if(clientID.isNotEmpty){
-     await http
-         .post(
-       Uri.parse(ApiUrls.update_user_ages),
-       headers: {
-         "Content-Type": "application/json",
-         "Authorization": "Bearer ${box.read("access")}",
-       },
-       body: jsonEncode({
-         "pangea_user_id": clientID,
-         "date_of_birth": "$day-$month-$year",
-       }),
-     ).then((response) {
-       if (response.statusCode == 200) {
-         final data = jsonDecode(response.body);
-         box.write("age", data["age"]);
-         _searchController.age.value = data["age"];
-         _searchController.loading.value = false;
-         Fluttertoast.showToast(msg: "User Age Updated");
-       }
-       else if (response.statusCode == 400) {
-
-         box.write("age", 0);
-         Fluttertoast.showToast(msg: "Unable to update user age");
-         _searchController.age.value = 0;
-         log("400" + response.body);
-       }
-       else {
-         ApiException.exception(
-             statusCode: response.statusCode,
-             context: context,
-             body: response.body);
-       }
-     }).catchError((e) {
-       if (kDebugMode) {
-         print("Error accured");
-         print(e);
-       }
-       Fluttertoast.showToast(msg: "Error: unable to update user age");
-     });
-   }else{
-     Fluttertoast.showToast(msg: "Unable to fetch Client ID");
-   }
-
+    final String clientID = box.read("clientID") ?? "";
+    if (clientID.isNotEmpty) {
+      await http
+          .post(
+        Uri.parse(ApiUrls.update_user_ages),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${box.read("access")}",
+        },
+        body: jsonEncode({
+          "pangea_user_id": clientID,
+          "date_of_birth": "$day-$month-$year",
+        }),
+      )
+          .then((response) {
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          box.write("age", data["age"]);
+          _searchController.age.value = data["age"];
+          _searchController.loading.value = false;
+          Fluttertoast.showToast(msg: "User Age Updated");
+        } else if (response.statusCode == 400) {
+          box.write("age", 0);
+          Fluttertoast.showToast(msg: "Unable to update user age");
+          _searchController.age.value = 0;
+          log("400" + response.body);
+        } else {
+          ApiException.exception(
+              statusCode: response.statusCode,
+              context: context,
+              body: response.body);
+        }
+      }).catchError((e) {
+        if (kDebugMode) {
+          print("Error accured");
+          print(e);
+        }
+        Fluttertoast.showToast(msg: "Error: unable to update user age");
+      });
+    } else {
+      Fluttertoast.showToast(msg: "Unable to fetch Client ID");
+    }
   }
 
   //---------------------------------------Class Services-------------------------------------//
@@ -452,9 +471,8 @@ class PangeaServices {
     if (kDebugMode) {
       print("token: $token");
     }
-    try{
-     final value = await  http
-          .post(Uri.parse(ApiUrls.create_class),
+    try {
+      final value = await http.post(Uri.parse(ApiUrls.create_class),
           headers: {"Authorization": "Bearer $token"},
           body: CreateClassToJson(
             pangeaClassRoomId: roomId,
@@ -467,94 +485,88 @@ class PangeaServices {
             targetLanguage: targetLanguage,
             schoolName: schoolName,
           ).toJson());
-     if (value.statusCode == 201 || value.statusCode == 200) {
-     final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-       if (kDebugMode) {
-         print(data.id);
-       }
-       box.write("class_code", data.classCode);
-       try{
-        final value = await http
-             .post(
-           Uri.parse(ApiUrls.addClassPermissions),
-           headers: {"Authorization": "Bearer $token"},
-           body: AddClassPermissionModel(
-             pangeaClass: data.id.toString(),
-             oneToOneChatExchange: oneToOneChatExchange.toString(),
-             oneToOneChatClass: oneToOneChatClass.toString(),
-             isShareVideo: isShareVideo.toString(),
-             isCreateRooms: isCreateRooms.toString(),
-             isCreateRoomsExchange: isCreateRoomsExchange.toString(),
-             isCreateStories: isCreateStories.toString(),
-             isOpenEnrollment: isOpenEnrollment.toString(),
-             isOpenExchange: isOpenExchange.toString(),
-             isSharePhoto: isSharePhoto.toString(),
-             isShareLocation: isShareLocation.toString(),
-             isShareFiles: isShareFiles.toString(),
-             isPublic: isPublic.toString(),
-           ).toJson(),
-         );
-           if (value.statusCode == 201 || value.statusCode == 200) {
-             box.remove('className');
-             box.remove('cityName');
-             box.remove('countryName');
-             box.remove('languageLevel');
-             box.remove('scoolName');
-             box.remove('targetLanguage');
-             box.remove('sourceLanage');
-             box.remove('publicGroup');
-             box.remove('openEnrollment');
-             box.remove('openToExchange');
-             ScaffoldMessenger.of(context).showSnackBar(
-                 const SnackBar(content: Text("Class created successfully")));
-             context.vRouter
-                 .to("/invite_students", queryParameters: {"id": roomId});
-           }
-           else {
-             if (kDebugMode) {
-               print("Error accured here");
-             }
-             await room.leave().whenComplete(() {
-               deleteClass(context: context, roomId: roomId);
-               ApiException.exception(
-                   statusCode: value.statusCode,
-                   context: context,
-                   body: value.body);
-             }).catchError((e){
-               throw Exception("Error: Unable to delete class");
-             });
-           }
-       }catch(e){
-         await room.leave().whenComplete(() {
-           deleteClass(context: context, roomId: roomId);
-           ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text("Unable to update class permissions: $e")));
-         }).catchError((e){
-           throw Exception("Error: Unable to delete class");
-         });
-       }
-     }
-     else {
-       await room.leave().whenComplete(() {
-         deleteClass(context: context, roomId: roomId);
-         ApiException.exception(
-             statusCode: value.statusCode, context: context, body: value.body);
-       }).catchError((e){
-         throw Exception("Error: Unable to delete class");
-       });
-     }
-
-    }catch(e){
+      if (value.statusCode == 201 || value.statusCode == 200) {
+        final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
+        if (kDebugMode) {
+          print(data.id);
+        }
+        box.write("class_code", data.classCode);
+        try {
+          final value = await http.post(
+            Uri.parse(ApiUrls.addClassPermissions),
+            headers: {"Authorization": "Bearer $token"},
+            body: AddClassPermissionModel(
+              pangeaClass: data.id.toString(),
+              oneToOneChatExchange: oneToOneChatExchange.toString(),
+              oneToOneChatClass: oneToOneChatClass.toString(),
+              isShareVideo: isShareVideo.toString(),
+              isCreateRooms: isCreateRooms.toString(),
+              isCreateRoomsExchange: isCreateRoomsExchange.toString(),
+              isCreateStories: isCreateStories.toString(),
+              isOpenEnrollment: isOpenEnrollment.toString(),
+              isOpenExchange: isOpenExchange.toString(),
+              isSharePhoto: isSharePhoto.toString(),
+              isShareLocation: isShareLocation.toString(),
+              isShareFiles: isShareFiles.toString(),
+              isPublic: isPublic.toString(),
+            ).toJson(),
+          );
+          if (value.statusCode == 201 || value.statusCode == 200) {
+            box.remove('className');
+            box.remove('cityName');
+            box.remove('countryName');
+            box.remove('languageLevel');
+            box.remove('scoolName');
+            box.remove('targetLanguage');
+            box.remove('sourceLanage');
+            box.remove('publicGroup');
+            box.remove('openEnrollment');
+            box.remove('openToExchange');
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Class created successfully")));
+            context.vRouter
+                .to("/invite_students", queryParameters: {"id": roomId});
+          } else {
+            if (kDebugMode) {
+              print("Error accured here");
+            }
+            await room.leave().whenComplete(() {
+              deleteClass(context: context, roomId: roomId);
+              ApiException.exception(
+                  statusCode: value.statusCode,
+                  context: context,
+                  body: value.body);
+            }).catchError((e) {
+              throw Exception("Error: Unable to delete class");
+            });
+          }
+        } catch (e) {
+          await room.leave().whenComplete(() {
+            deleteClass(context: context, roomId: roomId);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Unable to update class permissions: $e")));
+          }).catchError((e) {
+            throw Exception("Error: Unable to delete class");
+          });
+        }
+      } else {
+        await room.leave().whenComplete(() {
+          deleteClass(context: context, roomId: roomId);
+          ApiException.exception(
+              statusCode: value.statusCode, context: context, body: value.body);
+        }).catchError((e) {
+          throw Exception("Error: Unable to delete class");
+        });
+      }
+    } catch (e) {
       await room.leave().whenComplete(() {
         deleteClass(context: context, roomId: roomId);
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Unable to update class details: $e")));
-      }).catchError((e){
+      }).catchError((e) {
         throw Exception("Error: Unable to delete class");
       });
     }
-
-
   }
 
   static Future<bool?> deleteClass({
@@ -562,7 +574,7 @@ class PangeaServices {
     required String roomId,
   }) async {
     final String token = box.read("access") ?? "";
-    if(token.isEmpty){
+    if (token.isEmpty) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("JWT Token is null")));
       if (kDebugMode) {
@@ -570,31 +582,31 @@ class PangeaServices {
       }
       return null;
     }
-    try{
-      final value =   await http.delete(
+    try {
+      final value = await http.delete(
         Uri.parse(ApiUrls.deleteClass + roomId),
         headers: <String, String>{
           "Authorization": "Bearer $token",
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      if (value.statusCode == 200 || value.statusCode == 201 || value.statusCode ==204) {
+      if (value.statusCode == 200 ||
+          value.statusCode == 201 ||
+          value.statusCode == 204) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Class deleted successfully")));
         return true;
-      }
-      else {
+      } else {
         ApiException.exception(
             statusCode: value.statusCode, context: context, body: value.body);
         throw Exception("Error${value.statusCode}: Unable to delete");
       }
-    }catch(e){
+    } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error: $e")));
       log("Error: $e");
       throw Exception("Unable to delete");
     }
-
   }
 
   static Future<bool?> updateClassPermission({
@@ -610,9 +622,8 @@ class PangeaServices {
           content: Text("Token expired please logout and login again")));
       return null;
     }
-    try{
-      final value = await http
-          .put(
+    try {
+      final value = await http.put(
         Uri.parse(ApiUrls.updateClassPermissions + classId),
         headers: {
           "Authorization": "Bearer $token",
@@ -630,13 +641,12 @@ class PangeaServices {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Permissions updated successfully")));
         return true;
-      }
-      else {
+      } else {
         ApiException.exception(
             statusCode: value.statusCode, context: context, body: value.body);
         throw Exception("Error While Updating data");
       }
-    }catch(e){
+    } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error accured: $e")));
       if (kDebugMode) {
@@ -659,7 +669,7 @@ class PangeaServices {
     required String shareFiles,
     required String shareLocation,
   }) async {
-    final String token = box.read("access")??"";
+    final String token = box.read("access") ?? "";
     if (token.isEmpty) {
       if (kDebugMode) {
         print("JWT Token is null");
@@ -668,9 +678,8 @@ class PangeaServices {
           content: Text("Token expired please logout and login again")));
       return null;
     }
-    try{
-    final value = await http
-          .put(
+    try {
+      final value = await http.put(
         Uri.parse(ApiUrls.updateClassPermissions + classId),
         headers: {
           "Authorization": "Bearer $token",
@@ -690,18 +699,16 @@ class PangeaServices {
           },
         ),
       );
-    if (value.statusCode == 201 || value.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Permissions updated successfully")));
-      return true;
-    }
-    else {
-      ApiException.exception(
-          statusCode: value.statusCode, context: context, body: value.body);
-      throw Exception("Error While Updating data");
-    }
-
-    }catch(e){
+      if (value.statusCode == 201 || value.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Permissions updated successfully")));
+        return true;
+      } else {
+        ApiException.exception(
+            statusCode: value.statusCode, context: context, body: value.body);
+        throw Exception("Error While Updating data");
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error accured: $e")));
       if (kDebugMode) {
@@ -725,11 +732,11 @@ class PangeaServices {
       if (kDebugMode) {
         print("JWT Token is null");
       }
-      ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Token expired please logout and login again")));
       return null;
     }
-    try{
+    try {
       final value = await http.put(
         Uri.parse(ApiUrls.updateClassDetail + roomId),
         headers: {
@@ -746,30 +753,27 @@ class PangeaServices {
         }),
       );
       if (value.statusCode == 201 || value.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Class Details updated successfully")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Class Details updated successfully")));
         return true;
-      }
-      else {
+      } else {
         ApiException.exception(
             statusCode: value.statusCode, context: context, body: value.body);
         throw Exception("Error While Updating data");
       }
-    }catch(e){
+    } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error accrued: $e")));
       if (kDebugMode) {
         print(e);
       }
       throw Exception("Error at data fetching");
-
     }
-
   }
 
-  static Future<FetchClassInfoModel> fetchClassInfo(BuildContext context,String accessToken, String roomID) async {
+  static Future<FetchClassInfoModel> fetchClassInfo(
+      BuildContext context, String accessToken, String roomID) async {
     try {
-
       if (accessToken.isNotEmpty && roomID.isNotEmpty) {
         final value = await http.get(
           Uri.parse(ApiUrls.getClassDetails + roomID),
@@ -779,15 +783,13 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
-
+          return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body, context: context);
           throw Exception("${value.statusCode}");
         }
-      }
-      else {
+      } else {
         throw Exception("Access token or Room ID is empty".toString());
       }
     } catch (e) {
@@ -796,6 +798,5 @@ class PangeaServices {
   }
 
   //------------------------------------user Account----------------------------------//
-
 
 }
