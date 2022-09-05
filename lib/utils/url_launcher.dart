@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
@@ -15,6 +16,8 @@ import 'package:pangeachat/widgets/matrix.dart';
 import 'package:pangeachat/widgets/profile_bottom_sheet.dart';
 import 'package:pangeachat/widgets/public_room_bottom_sheet.dart';
 import 'platform_infos.dart';
+
+import 'package:universal_html/html.dart' as html;
 
 class UrlLauncher {
   final String? url;
@@ -203,7 +206,9 @@ class UrlLauncher {
          String userId =  Matrix.of(context).client.userID??"";
          if(userId.isNotEmpty){
            //TODO Env update
-           await client.getRoomById(result.result!)!.sendTextEvent(Environment.frontendURL+"/#"+"/request_to_enroll?id=$userId&room_id=$roomId").then((value){
+           final String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
+
+           await client.getRoomById(result.result!)!.sendTextEvent(initial_url+"/#"+"/request_to_enroll?id=$userId&room_id=$roomId").then((value){
              VRouter.of(context).toSegments(['rooms', result.result!]);
              Navigator.of(context, rootNavigator: false).pop();
            }).catchError((e){

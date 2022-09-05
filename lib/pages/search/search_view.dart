@@ -244,77 +244,79 @@ class _SearchViewState extends State<SearchView> {
                         // const SizedBox(
                         //   height: 19,
                         // ),
-                        // box.read("usertype") == 2
-                        //     ? GestureDetector(
-                        //         onTap: () {
-                        //           createNewClassAction();
-                        //         },
-                        //         child: Container(
-                        //             decoration: BoxDecoration(
-                        //               // borderRadius: BorderRadius.circular(10),
-                        //               borderRadius: BorderRadius.circular(10),
-                        //               color: Theme.of(context)
-                        //                   .colorScheme
-                        //                   .onPrimary,
-                        //                 border: Border.all(
-                        //                     color: Theme.of(context)
-                        //                         .colorScheme
-                        //                         .onPrimary ==
-                        //                         Colors.white
-                        //                         ? Theme.of(context).primaryColor
-                        //                         : Theme.of(context)
-                        //                         .colorScheme
-                        //                         .onPrimary
-                        //                 )
-                        //             ),
-                        //             child: Padding(
-                        //               padding: const EdgeInsets.symmetric(
-                        //                   horizontal: 42, vertical: 6),
-                        //               child: Text(
-                        //                 "Create a class",
-                        //                 style: TextStyle().copyWith(
-                        //                     color: Theme.of(context)
-                        //                         .textTheme
-                        //                         .bodyText1!
-                        //                         .color,
-                        //                     fontSize: 16),
-                        //               ),
-                        //             )),
-                        //       )
-                        //     : GestureDetector(
-                        //   onTap: () {},
-                        //   child: Container(
-                        //       decoration: BoxDecoration(
-                        //         // borderRadius: BorderRadius.circular(10),
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           color: Theme.of(context)
-                        //               .colorScheme
-                        //               .onPrimary,
-                        //           border: Border.all(
-                        //               color: Theme.of(context)
-                        //                   .colorScheme
-                        //                   .onPrimary ==
-                        //                   Colors.white
-                        //                   ? Theme.of(context).primaryColor
-                        //                   : Theme.of(context)
-                        //                   .colorScheme
-                        //                   .onPrimary
-                        //           )
-                        //       ),
-                        //       child: Padding(
-                        //         padding: EdgeInsets.symmetric(
-                        //             horizontal: 42, vertical: 6),
-                        //         child: Text(
-                        //           "Join with a class code",
-                        //           style: TextStyle().copyWith(
-                        //               color: Theme.of(context)
-                        //                   .textTheme
-                        //                   .bodyText1!
-                        //                   .color,
-                        //               fontSize: 16),
-                        //         ),
-                        //       )),
-                        // ),
+                        box.read("usertype") == 2
+                            ? GestureDetector(
+                                onTap: () {
+                                  createNewClassAction();
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      // borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                        border: Border.all(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary ==
+                                                Colors.white
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                        )
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 42, vertical: 6),
+                                      child: Text(
+                                        "Create a class",
+                                        style: TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontSize: 16),
+                                      ),
+                                    )),
+                              )
+                            : InkWell(
+                            onTap: () {
+                              VRouter.of(context).to("/join_with_code");
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  // borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary,
+                                    border: Border.all(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary ==
+                                            Colors.white
+                                            ? Theme.of(context).primaryColor
+                                            : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                    )
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 42, vertical: 6),
+                                  child: Text(
+                                    "Join with a class code",
+                                    style: TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 16),
+                                  ),
+                                ))
+                        )
                       ],
                     ),
                   )

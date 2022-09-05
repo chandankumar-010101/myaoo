@@ -29,4 +29,8 @@ class ApiUrls {
   static String exchangeClass = Environment.baseAPI+"/class/class_exchange";
  // static String enrollClassValidate = Environment.baseAPI+"/class/validate_enroll";
   static String enrollClass = Environment.baseAPI+"/class/class_enroll";
+
+  static String join_code =
+      Environment.baseAPI + "/class/class_by_code?class_code=";
+
 }

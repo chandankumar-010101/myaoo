@@ -2,14 +2,20 @@ import 'dart:async';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
+import '../../config/app_config.dart';
+import '../../main.dart';
 import '../../utils/platform_infos.dart';
 import 'login_view.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -234,6 +240,70 @@ class LoginController extends State<Login> {
   }
 
   static int sendAttempt = 0;
+  void ssoLoginAction(String id) async {
+    final redirectUrl = kIsWeb
+        ? html.window.origin! + '/auth.html'
+        : AppConfig.appOpenUrlScheme.toLowerCase() + '://login';
+    final url =
+        '${Matrix.of(context).getLoginClient().homeserver?.toString()}/_matrix/client/r0/login/sso/redirect/${Uri.encodeComponent(id)}?redirectUrl=${Uri.encodeQueryComponent(redirectUrl)}';
+    final urlScheme = Uri.parse(redirectUrl).scheme;
+    print("here ${url}");
+    print("here1 ${urlScheme}");
+    final result = await FlutterWebAuth.authenticate(
+      url: url,
+      callbackUrlScheme: urlScheme,
+    );
+    print("here2 ${result}");
+    final token = Uri.parse(result).queryParameters['loginToken'];
+
+    print("here3 ${token}");
+    if (token?.isEmpty ?? false) return;
+    print(token);
+    await showFutureLoadingDialog(
+      context: context,
+      future: () => Matrix.of(context).getLoginClient().login(
+        LoginType.mLoginToken,
+        token: token,
+        initialDeviceDisplayName: PlatformInfos.clientName,
+      ),
+    );
+  }
+
+  GoogleSignInAccount? _currentUser;
+  String _contactText = '';
+
+
+  Future<void> handleSignIn() async {
+    try {
+      var result =   await  googleSignIn.signIn();
+      var googleKey = await result!.authentication;
+      print(googleKey.idToken);
+      await showFutureLoadingDialog(
+        context: context,
+        future: () => Matrix.of(context).getLoginClient().login(
+          LoginType.mLoginToken,
+          token: googleKey.idToken,
+          initialDeviceDisplayName: PlatformInfos.clientName,
+        ),
+      );
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> handleSignOut() => googleSignIn.disconnect();
+
+  @override
+  void initState() {
+    super.initState();
+    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+      setState(() {
+        _currentUser = account;
+      });
+    });
+    googleSignIn.signInSilently();
+  }
+
 
   @override
   Widget build(BuildContext context) => LoginView(this);

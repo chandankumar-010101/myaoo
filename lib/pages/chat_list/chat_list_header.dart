@@ -79,6 +79,17 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+        // PopupMenuItem(
+        //   value: PopupMenuAction.copyCode,
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       const Icon(Icons.class_outlined),
+        //       const SizedBox(width: 12),
+        //       Text("Join with Code"),
+        //     ],
+        //   ),
+        // ),
         PopupMenuItem(
           value: PopupMenuAction.settings,
           child: Row(
@@ -134,6 +145,17 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
               const Icon(Icons.archive_outlined),
               const SizedBox(width: 12),
               Text(L10n.of(context)!.archive),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: PopupMenuAction.copyCode,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.class_outlined),
+              const SizedBox(width: 12),
+              Text("Join with Code"),
             ],
           ),
         ),

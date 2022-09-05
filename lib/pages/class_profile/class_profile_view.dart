@@ -651,6 +651,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 print(data.classAuthor);
 
                                 if(roomAlias.isNotEmpty){
+
                                   UrlLauncher(context,requestToEnroll: true,
                                       roomId:  roomAlias,
                                       'https://matrix.to/#/${data.classAuthorId.toString()}')
