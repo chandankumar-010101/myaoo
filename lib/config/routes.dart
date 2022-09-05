@@ -7,6 +7,7 @@ import 'package:pangeachat/pages/chat_encryption_settings/chat_encryption_settin
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_permissions_settings/chat_permissions_settings.dart';
 import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
+import 'package:pangeachat/pages/class_join/join_with_link.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
@@ -44,8 +45,10 @@ import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../home_page.dart';
+import '../pages/class_join/join_with_code.dart';
 import '../pages/class_profile/class_profile_view.dart';
 import '../pages/language_selection_screen/language_selection.dart';
+import '../pages/new_class/invite_email_view.dart';
 import '../pages/new_class/new_class.dart';
 
 class AppRoutes {
@@ -269,6 +272,7 @@ class AppRoutes {
                         widget: const StudentPermissions(),
                         buildTransition: _dynamicTransition,
                       ),
+
                     ]),
                 VWidget(
                   path: '/invite_students',
@@ -283,6 +287,20 @@ class AppRoutes {
                   path: '/class_analytics',
                   widget:  ClassAnalyticsScreen(),
                   buildTransition: _fadeTransition,
+                ),
+                VWidget(
+                  path: '/invite_email',
+                  widget:  InviteEmail(),
+                  buildTransition: _fadeTransition,
+                ),
+                VWidget(
+                  path: '/join_with_code',
+                  widget:  JoinClassWithCode(),
+                  buildTransition: _fadeTransition,
+                ), VWidget(
+                  path: '/join_with_link',
+                  widget: const JoinClassWithLink(),
+                  buildTransition: _dynamicTransition,
                 ),
 
               ],

@@ -136,8 +136,7 @@ class LoginView extends StatelessWidget {
                                                 ),
                                                 errorText:
                                                     controller.usernameError,
-                                                hintText: L10n.of(context)!
-                                                    .emailOrUsername,
+                                                hintText: "Username",
                                                 hintStyle: const TextStyle(
                                                   color: Color(0x35204880),
                                                 ),
@@ -239,8 +238,8 @@ class LoginView extends StatelessWidget {
                                             child: ElevatedButton(
                                               onPressed: controller.loading
                                                   ? null
-                                                  : () =>
-                                                      controller.login(context),
+                                                  : () =>//controller.handleSignIn(),
+                                                  controller.login(context),
                                               style: ElevatedButton.styleFrom(
                                                 primary:
                                                     const Color(0xFF352048),

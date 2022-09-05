@@ -7,7 +7,6 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
-import 'package:pangeachat/model/create_class_model.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
@@ -502,7 +501,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       : Container(
                     margin:
                     const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     child: Flex(
                       direction: size.width >= 1000
                           ? Axis.horizontal
@@ -619,7 +618,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
-                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
+                        space.isEmpty?(data.permissions.isOpenEnrollment?SizedBox(
                           width: 200,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
@@ -652,6 +651,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 print(data.classAuthor);
 
                                 if(roomAlias.isNotEmpty){
+
                                   UrlLauncher(context,requestToEnroll: true,
                                       roomId:  roomAlias,
                                       'https://matrix.to/#/${data.classAuthorId.toString()}')
@@ -1190,7 +1190,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.oneToOneChatClass !=null && permissions.oneToOneChatClass
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("One To One Chat"),
@@ -1201,7 +1201,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.oneToOneChatExchange !=null && permissions.oneToOneChatExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("One to One Chat Exchange"),
@@ -1212,7 +1212,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.isShareFiles !=null && permissions.isShareFiles
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Share Files"),
@@ -1264,7 +1264,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.isCreateStories !=null && permissions.isCreateStories
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Create Stories"),
@@ -1275,7 +1275,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.isOpenEnrollment !=null && permissions.isOpenEnrollment
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Open Enrollment"),
@@ -1286,7 +1286,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.isOpenExchange !=null && permissions.isOpenExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Open Exchange"),
@@ -1297,7 +1297,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   permissions.isPublic !=null && permissions.isPublic!
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text("• "),
                             Expanded(
                               child: Text("Public"),
@@ -1312,7 +1312,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         ),
       );
     } else {
-      return Center(child: Text("Unable to load data"),);
+      return const Center(child: Text("Unable to load data"),);
     }
   }
 }
