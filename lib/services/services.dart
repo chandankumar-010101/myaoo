@@ -99,36 +99,38 @@ class PangeaServices {
 
   static sendEmailToJoinClass(
       String data, String roomId, String teacherName) async {
+
     try {
-      var result = await http.post(Uri.parse(ApiUrls.update_user_ages),
+      print(box.read("access"));
+
+      var result = await http.post(Uri.parse(ApiUrls.send_email_link),
           headers: {
-            "Content-Type": "application/json",
             "Authorization": "Bearer ${box.read("access")}",
           },
-          body: jsonEncode(InviteEmail(
+          body: InviteEmail(
             pangeaClassRoomId: roomId,
             data: data,
             teacherName: teacherName,
-          ).toJson()));
+          ).toJson());
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(msg: "Mail Sent Successfully");
       } else {
         if (kDebugMode) {
-          print("Unable to fetch user age");
+          print("Mail send unsuccessfull");
           print(result.statusCode);
           print(result.body);
         }
         Fluttertoast.showToast(
-            msg: "Api Error ${result.statusCode}: Unable to fetch user age");
+            msg: "Api Error ${result.statusCode}: Unable to send email");
         throw Exception(
-            "Api Error ${result.statusCode}: Unable to fetch user age");
+            "Api Error ${result.statusCode}: Unable to send email");
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
-      throw Exception("Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: Unable to send email");
+      throw Exception("Error: Unable to email");
     }
   }
 
@@ -783,6 +785,7 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
+          print("Hello");
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(

@@ -93,32 +93,14 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       snapBackSpacesSheet();
     }
     setState(() => _activeSpacesEntry = spaceId);
-   print( _activeSpacesEntry!.getSpace(context)!.id);
-   print( _activeSpacesEntry!.getSpace(context)!.canonicalAlias);
-
   }
 
-  bool oneToOneChat = false;
 
-  fetchClassInfo(){
-    String accessToken = GetStorage().read("access")??"";
-    String roomID = _activeSpacesEntry!.getSpace(context)!.id??"";
-    if(accessToken.isNotEmpty && roomID.isNotEmpty){
-      FetchClassInfoModel data =   PangeaServices.fetchClassInfo(context, accessToken,accessToken, ) as FetchClassInfoModel;
-      setState(() => oneToOneChat = data.permissions.oneToOneChatClass);
-    }
 
-  }
 
   void editSpace(BuildContext context, String spaceId) async {
     await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
-    // print(spaceId);
-    // // final searchController = Get.put(SearchViewController());
-    // // print(searchController
-    // //     .classList[i]
-    // //     .pangea_class_room_id
-    // //     .toString());
-   // print(spaceId);
+
     VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
     //VRouter.of(context).toSegments(['classes', spaceId]);
   }

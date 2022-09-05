@@ -31,5 +31,6 @@ class ApiUrls {
   static String enrollClass = Environment.baseAPI+"/class/class_enroll";
 
   static String join_code = Environment.baseAPI + "/class/class_by_code?class_code=";
+  static String send_email_link = Environment.baseAPI+"/class/invite/email";
 
 }

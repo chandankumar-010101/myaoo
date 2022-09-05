@@ -98,7 +98,7 @@ class ChatListView extends StatelessWidget {
                       child: FloatingActionButton.extended(
                         isExtended: controller.scrolledToTop,
                         onPressed: () =>
-                            VRouter.of(context).to('/newprivatechat'),
+                            VRouter.of(context).to('/newprivatechat',queryParameters: {"class_id":controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
                         icon: const Icon(CupertinoIcons.chat_bubble),
                         label: Text(L10n.of(context)!.newChat),
                       ),
@@ -107,7 +107,7 @@ class ChatListView extends StatelessWidget {
                         LogicalKeyboardKey.keyN
                       },
                       onKeysPressed: () =>
-                          VRouter.of(context).to('/newprivatechat'),
+                          VRouter.of(context).to('/newprivatechat',queryParameters: {"class_id":controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
                       helpLabel: L10n.of(context)!.newChat,
                     ),
                   )

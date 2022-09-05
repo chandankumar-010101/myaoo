@@ -15,15 +15,7 @@ class JoinClassWithLink extends StatefulWidget {
 }
 
 class _JoinClassWithLinkState extends State<JoinClassWithLink> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    final loginState = Matrix.of(context).client.loginState;
-    if(loginState == LoginState.loggedIn){
-      print("logged in");
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,17 +72,11 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                           SizedBox(height: 10,),
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-
-                                ElevatedButton(
-                                  child: const Text("Connect To Class"),
-                                  onPressed: () {
-                                    PangeaServices.joinRoom(context, data.pangeaClassRoomId!);
-                                  },
-                                )
-                              ],
+                            child: ElevatedButton(
+                              child: const Text("Connect To Class"),
+                              onPressed: () {
+                                PangeaServices.joinRoom(context, data.pangeaClassRoomId!);
+                              },
                             ),
                           )
                         ],
