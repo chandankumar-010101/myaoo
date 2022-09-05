@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/model/class_code_model.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
 import '../model/class_detail_model.dart';
@@ -30,6 +31,113 @@ class PangeaServices {
   static final SearchViewController _searchController =
       Get.put(SearchViewController());
 
+
+  static  joinRoom(BuildContext context,String roomAlias) async {
+    final client = Matrix.of(context).client;
+    final result = await showFutureLoadingDialog<String>(
+      context: context,
+      future: () => client.joinRoom(roomAlias),
+    );
+    if (result.error == null) {
+      if (client.getRoomById(result.result!) == null) {
+        await client.onSync.stream.firstWhere(
+                (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
+      }
+      VRouter.of(context).toSegments(['rooms', result.result!]);
+      Navigator.of(context, rootNavigator: false).pop();
+      return;
+    }
+  }
+
+  static joinClassWithCode(String classCode, BuildContext context) async {
+    final String accessToken = box.read("access") ?? "";
+    if(accessToken.isEmpty){
+      Fluttertoast.showToast(
+          msg: "Access token not found");
+      return;
+    }
+    try{
+      final value = await http.get(
+        Uri.parse(ApiUrls.join_code+classCode),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+      if (value.statusCode == 200) {
+      ClassCodeModel data =  ClassCodeModel.fromJson(jsonDecode(value.body));
+      print(data.classCode);
+      print(data.className);
+      print(data.pangeaClassRoomId);
+      if(data.pangeaClassRoomId != null){
+        joinRoom(context, data.pangeaClassRoomId!);
+      }else{
+        print("id not found");
+      }
+
+
+      //   final data = jsonDecode(value.body);
+      //   box.write("age", data["age"]);
+      // }
+      // else if (value.statusCode == 400) {
+      //   box.write("age", 0);
+      }
+      else{
+        print(value.statusCode);
+        if (kDebugMode) {
+          print("Unable to fetch user age");
+          print(value.statusCode);
+          print(value.body);
+        }
+        Fluttertoast.showToast(
+            msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+      }
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+    }
+
+  }
+  static Future<ClassCodeModel?> fetchClassWithCode(String classCode, BuildContext context) async {
+    final String accessToken = box.read("access") ?? "";
+    if(accessToken.isEmpty){
+      Fluttertoast.showToast(
+          msg: "Access token not found");
+      throw Exception("Access Token not found");
+    }
+    try{
+      final value = await http.get(
+        Uri.parse(ApiUrls.join_code+classCode),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+      if (value.statusCode == 200) {
+       // ClassCodeModel data =
+        return ClassCodeModel.fromJson(jsonDecode(value.body));
+      }
+      else{
+        if (kDebugMode) {
+          print("Unable to fetch user age");
+          print(value.statusCode);
+          print(value.body);
+        }
+        Fluttertoast.showToast(
+            msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+        throw Exception("Api Error ${value.statusCode}: Unable to fetch user age");
+      }
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      throw Exception("Error: Unable to fetch user age");
+    }
+
+  }
   static inviteAction(BuildContext context, String id, String roomId) async {
     final room = Matrix.of(context).client.getRoomById(roomId);
     if (room != null) {

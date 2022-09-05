@@ -37,6 +37,7 @@ enum PopupMenuAction {
   newSpace,
   setStatus,
   archive,
+  copyCode,
 }
 
 class ChatList extends StatefulWidget {
@@ -355,6 +356,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         break;
       case PopupMenuAction.settings:
         VRouter.of(context).to('/settings');
+        break;
+      case PopupMenuAction.copyCode:
+        VRouter.of(context).to('/join_with_code');
         break;
       case PopupMenuAction.invite:
         FluffyShare.share(
