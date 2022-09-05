@@ -8,11 +8,13 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_view.dart';
 import 'package:pangeachat/pages/chat_list/spaces_bottom_bar.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/utils/fluffy_share.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -22,6 +24,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../../../utils/account_bundles.dart';
 import '../../main.dart';
+import '../../model/class_detail_model.dart';
 import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
@@ -86,13 +89,25 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   void setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) {
-    if ((snappingSheetController.isAttached
-            ? snappingSheetController.currentPosition
-            : 0) !=
-        kSpacesBottomBarHeight) {
+    if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition: 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
     setState(() => _activeSpacesEntry = spaceId);
+   print( _activeSpacesEntry!.getSpace(context)!.id);
+   print( _activeSpacesEntry!.getSpace(context)!.canonicalAlias);
+
+  }
+
+  bool oneToOneChat = false;
+
+  fetchClassInfo(){
+    String accessToken = GetStorage().read("access")??"";
+    String roomID = _activeSpacesEntry!.getSpace(context)!.id??"";
+    if(accessToken.isNotEmpty && roomID.isNotEmpty){
+      FetchClassInfoModel data =   PangeaServices.fetchClassInfo(context, accessToken,accessToken, ) as FetchClassInfoModel;
+      setState(() => oneToOneChat = data.permissions.oneToOneChatClass);
+    }
+
   }
 
   void editSpace(BuildContext context, String spaceId) async {
@@ -242,6 +257,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         showChatBackupBanner = true;
       });
     }
+
   }
 
   @override

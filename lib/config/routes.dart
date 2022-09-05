@@ -302,7 +302,6 @@ class AppRoutes {
                   widget: const JoinClassWithLink(),
                   buildTransition: _dynamicTransition,
                 ),
-
               ],
             ),
           ],

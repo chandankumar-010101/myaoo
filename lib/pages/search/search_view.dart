@@ -451,9 +451,9 @@ class _SearchViewState extends State<SearchView> {
                                             horizontal: 10),
                                       )
                                     : const SizedBox()),
-                                Obx(() => !searchController.loading.value
+                                Obx(() => !searchController.loading.value && searchController.classList != Null
                                     ? GridView.builder(
-                                        // controller: searchController.controller,
+                                         //controller: searchController.controller,
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.all(12),
                                         physics:
@@ -477,8 +477,7 @@ class _SearchViewState extends State<SearchView> {
                                             BorderRadius.circular(16),
                                             child: InkWell(
                                               onTap: () async {
-                                                id = searchController.classList[i].pangea_class_room_id!;
-
+                                                id = searchController.classList[i].pangea_class_room_id.toString();
                                                 VRouter.of(context).to("/classDetails",queryParameters:{"id":id} );
                                               },
                                               borderRadius:
@@ -510,8 +509,7 @@ class _SearchViewState extends State<SearchView> {
                                                         children: [
                                                           Container(
                                                             child: searchController
-                                                                .classList[
-                                                            i]
+                                                                .classList[i]
                                                                 .profilePic !=
                                                                 null
                                                                 ? Avatar(
@@ -570,7 +568,8 @@ class _SearchViewState extends State<SearchView> {
                                                         height: 10.0,
                                                       ),
                                                       Text(
-                                                          "${searchController.classList[i].classAuthor}",
+                                                          searchController.classList[i].classAuthor != Null ?
+                                                          "${searchController.classList[i].classAuthor}":"Na",
                                                           style: TextStyle()
                                                               .copyWith(
                                                             color:
@@ -585,7 +584,8 @@ class _SearchViewState extends State<SearchView> {
                                                             TextOverflow.clip,
                                                           )),
                                                       Text(
-                                                          "${searchController.classList[i].className}",
+                                                          searchController.classList[i].className != Null?
+                                                          "${searchController.classList[i].className}":"Na",
                                                           style: TextStyle()
                                                               .copyWith(
                                                             color:
@@ -661,7 +661,8 @@ class _SearchViewState extends State<SearchView> {
                                                               .toString()
                                                               .isNotEmpty
                                                               ? Text(
-                                                              "${searchController.classList[i].rating.toString()}",
+                                                              searchController.classList[i].rating.toString() != Null?
+                                                              "${searchController.classList[i].rating.toString()}":"Na",
                                                               style: TextStyle()
                                                                   .copyWith(
                                                                 color: Theme.of(
@@ -706,7 +707,8 @@ class _SearchViewState extends State<SearchView> {
                                                           ),
                                                           Expanded(
                                                             child: Text(
-                                                                "${searchController.classList[i].total_student.toString()} Students",
+                                                          searchController.classList[i].total_student.toString() != Null?
+                                                                "${searchController.classList[i].total_student.toString()} Students":"Na",
                                                                 style: TextStyle()
                                                                     .copyWith(
                                                                   color: Theme.of(
@@ -734,10 +736,14 @@ class _SearchViewState extends State<SearchView> {
                                                             width: 10.0,
                                                           ),
                                                           Text(
+                                                          searchController
+                                                              .classList[i]
+                                                              .languageLevel
+                                                  .toString() != Null ?
                                                               level(searchController
                                                                   .classList[i]
                                                                   .languageLevel
-                                                                  .toString()),
+                                                                  .toString()):"Na",
                                                               style: TextStyle()
                                                                   .copyWith(
                                                                 color: Theme.of(
@@ -809,7 +815,7 @@ class _SearchViewState extends State<SearchView> {
                                                           Avatar(
                                                             mxContent: Uri.parse(
                                                                 "https://staging.api.pangea.chat" +
-                                                                    "${searchController.classList[i].flags![1].languageFlag}"),
+                                                                    "${searchController.classList[i].flags![0].languageFlag}"),
                                                             name:
                                                             "publicRoomsResponse.chunk[i].name",
                                                             size: 15,

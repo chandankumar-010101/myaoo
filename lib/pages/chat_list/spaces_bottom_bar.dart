@@ -29,8 +29,7 @@ class SpacesBottomBar extends StatelessWidget {
       child: SafeArea(
         child: StreamBuilder<Object>(
           stream: Matrix.of(context).client.onSync.stream.where((sync) =>
-              (sync.rooms?.join?.values.any((r) =>
-                      r.state?.any((s) => s.type.startsWith('m.space')) ??
+              (sync.rooms?.join?.values.any((r) =>   r.state?.any((s) => s.type.startsWith('m.space')) ??
                       false) ??
                   false) ||
               (sync.rooms?.leave?.isNotEmpty ?? false)),
@@ -123,9 +122,7 @@ class _SpacesBottomNavigation extends StatelessWidget {
               icon: const Icon(Icons.keyboard_arrow_up),
               title: Text(L10n.of(context)!.showSpaces),
             ),
-            ...controller.spacesEntries
-                .map((space) => _buildSpacesEntryUI(context, space))
-                .toList(),
+            ...controller.spacesEntries.map((space) => _buildSpacesEntryUI(context, space)).toList(),
           ],
         ),
       ),
@@ -139,10 +136,13 @@ class _SpacesBottomNavigation extends StatelessWidget {
       return SalomonBottomBarItem(
         icon: InkWell(
           borderRadius: BorderRadius.circular(28),
-          onTap: () => controller.setActiveSpacesEntry(
-            context,
-            entry,
-          ),
+          onTap: () {
+
+            controller.setActiveSpacesEntry(
+              context,
+              entry,
+            );
+          },
           onLongPress: () => controller.editSpace(context, space.id),
           child: Avatar(
             mxContent: space.avatar,

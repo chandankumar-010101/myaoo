@@ -60,7 +60,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
               SizedBox(height: 10,),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: RaisedButton(
+                child: ElevatedButton(
                   child: const Text("Connect To Class"),
                   onPressed: () {
                     if(codeController.text.length == 6){
