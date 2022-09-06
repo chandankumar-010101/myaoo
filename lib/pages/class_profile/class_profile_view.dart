@@ -412,9 +412,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.network(url +
-                                          data.flags[0].languageFlag
-                                              .toString())),
+                                      child: Image.network(url +data.flags[0].languageFlag.toString())),
                                 ]),
                                 const SizedBox(
                                   width: 5,
@@ -447,9 +445,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.network(url+
-                                          data.flags[1].languageFlag
-                                              .toString())),
+                                      child: Image.network(url+ data.flags[1].languageName !=null?data.flags[1].languageName.toString():""??"")),
                                   const SizedBox(
                                     width: 5,
                                   ),

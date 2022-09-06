@@ -4,10 +4,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -193,14 +193,10 @@ class _InviteEmailState extends State<InviteEmail> {
                   child: Text("Send Invitation"),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      final List data = [];
+                      final List<inviteEmail.Data> info = [];
                       print(name.length);
-                      for(int i=0; i< name.length; i++){
-                        print(i);
-                       data.add({"name":name[i].text,"email":email[i].text});
-
-                      }
-                      print(data);
+                      List.generate(name.length, (index) => info.add(inviteEmail.Data(email: email[index].text,name: name[index].text,))
+                      );
                       final roomId = VRouter.of(context).queryParameters['id']??"";
                       if(roomId.isEmpty){
                         Fluttertoast.showToast(msg: "Unable to find Room ID");
@@ -212,7 +208,10 @@ class _InviteEmailState extends State<InviteEmail> {
                         Fluttertoast.showToast(msg: "Unable to find Room Name");
                         return;
                       }
-                    PangeaServices.sendEmailToJoinClass(data.toString(), roomId, teacherName);
+
+                      if(info.isNotEmpty){
+                        PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
+                      }
                     }
                   },
                 ),
