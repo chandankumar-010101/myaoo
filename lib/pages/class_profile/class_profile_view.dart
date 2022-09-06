@@ -16,6 +16,7 @@ import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
+import "dart:developer";
 
 class RequestScreenView extends StatefulWidget {
   const RequestScreenView({Key? key}) : super(key: key);
@@ -91,6 +92,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     _waitForFirstSync();
   }
 
+  fetchParti(String roomAlias)async{
+   final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
+    log(members.toList().toString());
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -99,6 +106,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id']??"";
     final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
+
+   fetchParti(roomAlias);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
@@ -403,9 +412,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.network(url +
-                                          data.flags[0].languageFlag
-                                              .toString())),
+                                      child: Image.network(url +data.flags[0].languageFlag.toString())),
                                 ]),
                                 const SizedBox(
                                   width: 5,
@@ -438,9 +445,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.network(url+
-                                          data.flags[1].languageFlag
-                                              .toString())),
+                                      child: Image.network(url+ data.flags[1].languageName !=null?data.flags[1].languageName.toString():""??"")),
                                   const SizedBox(
                                     width: 5,
                                   ),
@@ -1138,13 +1143,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                 ],
               ),
             );
-          }else{
+          }
+          else{
             if(snapshot.hasError){
               print(snapshot.error);
             }
             return const Center(child: CircularProgressIndicator());
           }
-
         },
       ),
     );

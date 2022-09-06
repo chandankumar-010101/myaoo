@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart' as sdk;
+import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/new_group/new_group_view.dart';
@@ -39,7 +40,21 @@ class NewGroupController extends State<NewGroup> {
       VRouter.of(context).toSegments(['rooms', roomID.result!, 'invite']);
     }
   }
+  List<User> members =[];
+
+  void requestMoreMembersAction(context, classId) async {
+    final room = Matrix.of(context).client.getRoomById(classId);
+    final participants = await room!.requestParticipants();
+    if(participants.isNotEmpty){
+      setState(() => members = participants);
+    }
+  }
+  String classId = "";
 
   @override
-  Widget build(BuildContext context) => NewGroupView(this);
+  Widget build(BuildContext context){
+    classId = VRouter.of(context).queryParameters['class_id'] ?? "";
+    classId.isNotEmpty?requestMoreMembersAction(context,classId): null;
+    return NewGroupView(this);
+  }
 }

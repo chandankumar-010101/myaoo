@@ -1,7 +1,13 @@
 import 'dart:convert';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
+import 'package:pangeachat/services/services.dart';
+import 'package:pangeachat/widgets/matrix.dart';
+import 'package:vrouter/vrouter.dart';
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -13,275 +19,204 @@ class _InviteEmailState extends State<InviteEmail> {
   List<TextEditingController> name = [];
   List<TextEditingController> email = [];
 
-  List alldetails = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  int value = 1;
 
-  FocusNode _emailfoucs = FocusNode();
-  FocusNode _namefoucs = FocusNode();
-  int fromcount = 1;
+  _addItem() {
+    setState(() {
+      value = value + 1;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name.add(TextEditingController());
+    email.add(TextEditingController());
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFF352048),
+        title: Text("Invitations",
+            style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 17,
+                color: Colors.black)),
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.only(left: 17, top: 15),
-              child: const Text("Invitations",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
-                      color: Colors.black)),
-            ),
-            const Divider(
-              indent: 1,
-              thickness: 1,
-              color: Colors.black26,
-            ),
             const SizedBox(
               height: 20,
             ),
-
-            Column(
+            Form(
+              key: _formKey,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: value,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text("Name",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: Colors.black)),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10, right: 10),
+                              // height: 45,
+                              width: size.width / 3,
+                              child: Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  controller: name[index],
+                                  keyboardType: TextInputType.text,
+                                  validator: (value) => value!.isEmpty
+                                      ? "Please type user name"
+                                      : null,
+                                  keyboardAppearance: Brightness.light,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  textInputAction: TextInputAction.next,
+                                  //focusNode: _namefoucs,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(12),
+                                    hintText: "Enter Name",
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text("Recipient Email id",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: Colors.black)),
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              //height: 45,
+                              width: size.width / 3,
+                              child: Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  validator: (value) =>
+                                      EmailValidator.validate(value!)
+                                          ? null
+                                          : 'Please enter a valid email',
+                                  controller: email[index],
+                                  keyboardType: TextInputType.emailAddress,
+                                  keyboardAppearance: Brightness.light,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  textInputAction: TextInputAction.next,
+                                  //focusNode: _emailfoucs,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(12),
+                                    hintText: "Enter Recipient Email id",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
               children: [
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
+                const SizedBox(
+                  height: 20,
+                  width: 17,
+                ),
+                const Icon(
+                  Icons.add_circle_outline_sharp,
+                  color: Colors.black,
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                InkWell(
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _addItem();
                       name.add(TextEditingController());
                       email.add(TextEditingController());
-                      return Column(
-                        children: [
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: fromcount,
-                              itemBuilder: (context, index) {
-                                name.add(TextEditingController());
-                                email.add(TextEditingController());
-                                return Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        const Padding(
-                                          padding:
-                                          EdgeInsets.all(10.0),
-                                          child: Text(
-                                              "Recipient Email id",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  fontSize: 13,
-                                                  color: Colors.black)),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          height: 45,
-                                          width: size.width / 3,
-                                          child: Expanded(
-                                            flex: 2,
-                                            child: TextField(
-                                              controller: email[index],
-                                              keyboardType: TextInputType
-                                                  .emailAddress,
-                                              keyboardAppearance:
-                                              Brightness.light,
-                                              textAlignVertical:
-                                              TextAlignVertical.center,
-                                              textInputAction:
-                                              TextInputAction.next,
-                                              //focusNode: _emailfoucs,
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                EdgeInsets.all(12),
-                                                hintText:
-                                                "Enter Recipient Email id",
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                      20),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        const Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text("Name",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  fontSize: 13,
-                                                  color: Colors.black)),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          height: 45,
-                                          width: size.width / 3,
-                                          child: Expanded(
-                                            flex: 2,
-                                            child: TextField(
-                                              controller: name[index],
-                                              keyboardType:
-                                              TextInputType.text,
-                                              keyboardAppearance:
-                                              Brightness.light,
-                                              textAlignVertical:
-                                              TextAlignVertical.center,
-                                              textInputAction:
-                                              TextInputAction.next,
-                                              //focusNode: _namefoucs,
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                EdgeInsets.all(12),
-                                                hintText: "Enter Name",
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(20)),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              }),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 1,
-                              itemBuilder: (context, ind) {
-                                return Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const SizedBox(
-                                          height: 20,
-                                          width: 17,
-                                        ),
-                                        const Icon(
-                                          Icons.add_circle_outline_sharp,
-                                          color: Colors.black,
-                                        ),
-                                        const SizedBox(
-                                          width: 12,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-
-                                            print(name[index].text.toString());
-                                            print(email[index].text.toString());
-                                            if (name[index].text ==
-                                                "" ||
-                                                email[index].text ==
-                                                    "") {
-                                              print(name[index].text);
-                                              print(email[index].text);
-                                            }
-                                            else {
-                                              setState(() {
-                                                fromcount++;
-                                              });
-                                            }
-                                            // Fluttertoast.showToast(
-                                            //     msg: "Form Added!!!!!!");
-                                          },
-                                          child: const Text(
-                                            "Add Recipient",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                            maxWidth: 300),
-                                        child: Hero(
-                                          tag: 'Send invitation',
-                                          child: Padding(
-                                            padding:
-                                            const EdgeInsets.all(16),
-                                            child: ElevatedButton(
-                                              style:
-                                              ElevatedButton.styleFrom(
-                                                primary:
-                                                const Color(0xFF352048),
-                                                onPrimary: Colors.white,
-                                                shadowColor: Colors.white,
-                                              ),
-                                              onPressed: () {
-                                                if (name[index].text ==
-                                                    "" ||
-                                                    email[index].text ==
-                                                        "") {
-                                                  print(name[index].text);
-                                                  print(email[index].text);
-                                                } else {
-                                                  print("no data");
-                                                  alldetails.clear();
-                                                  for(int i=0;i<fromcount;i++){
-                                                    Map<String,dynamic>  trendColorMap = {
-                                                      "Email-Id": email[i].text.toString(),
-                                                      'name': name[i].text.toString(),
-                                                    };
-                                                    jsonEncode(trendColorMap);
-
-                                                    alldetails.add( jsonEncode(trendColorMap));
-                                                    print(jsonDecode(alldetails.toString()));
-
-                                                  }
-                                                }
-                                              },
-                                              child: const Text(
-                                                  "Send invitation"),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              })
-                        ],
-                      );
-                    })
+                    }
+                  },
+                  child: const Text(
+                    "Add Recipient",
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                )
               ],
             ),
+            Center(
+              child: Container(
+                width: 200,
+                margin: EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  child: Text("Send Invitation"),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final List<inviteEmail.Data> info = [];
+                      print(name.length);
+                      List.generate(name.length, (index) => info.add(inviteEmail.Data(email: email[index].text,name: name[index].text,))
+                      );
+                      final roomId = VRouter.of(context).queryParameters['id']??"";
+                      if(roomId.isEmpty){
+                        Fluttertoast.showToast(msg: "Unable to find Room ID");
+                        return;
+                      }
+                     String teacherName =Matrix.of(context).client.getRoomById(roomId)!.displayname??"";
+                      if(teacherName.isEmpty){
+
+                        Fluttertoast.showToast(msg: "Unable to find Room Name");
+                        return;
+                      }
+
+                      if(info.isNotEmpty){
+                        PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
+                      }
+                    }
+                  },
+                ),
+              ),
+            )
           ],
         ),
       ),

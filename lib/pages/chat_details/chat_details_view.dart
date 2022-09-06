@@ -39,8 +39,7 @@ class ChatDetailsView extends StatelessWidget {
     controller.members!.removeWhere((u) => u.membership == Membership.leave);
     final actualMembersCount = (room.summary.mInvitedMemberCount ?? 0) +
         (room.summary.mJoinedMemberCount ?? 0);
-    final canRequestMoreMembers =
-        controller.members!.length < actualMembersCount;
+    final canRequestMoreMembers = controller.members!.length < actualMembersCount;
     final iconColor = Theme.of(context).textTheme.bodyText1!.color;
     return StreamBuilder(
         stream: room.onUpdate.stream,
@@ -366,9 +365,7 @@ class ChatDetailsView extends StatelessWidget {
                                 : Container(),
                           ],
                         )
-                      : i < controller.members!.length + 1
-                          ? ParticipantListItem(controller.members![i - 1])
-                          : ListTile(
+                      : i < controller.members!.length + 1 ? ParticipantListItem(controller.members![i - 1]):ListTile(
                               title: Text(L10n.of(context)!
                                   .loadCountMoreParticipants(
                                       (actualMembersCount -

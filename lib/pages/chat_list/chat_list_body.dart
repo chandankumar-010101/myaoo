@@ -90,51 +90,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
         );
       }
       else {
-        try{
-         // print("empty");
-        // final value =  widget.controller.defaultSpacesEntry;
-        //  if(value.getRooms(context).isNotEmpty){
-        //   value.getRooms(context).forEach((element) {
-        //     print(element.displayname);
-        //   });
-        //  }
 
-         //  print(widget.controller.defaultSpacesEntry);
-          // print(Matrix.of(context)
-          //     .client
-          //     .getRoomById(widget.controller.activeSpaceId!)!
-          //     .displayname);
-          // print(widget.controller.activeSpaceId);
-        List<String> ids =[];
-          widget.controller.spaces.forEach((element) {
-            ids.add(element.id);
-            //print(element.getParticipants().length);
-           // List<Room> data = Matrix.of(context).client.rooms;
-           // print(data.length);
-            //element.id;
-            //print("is class: ${element.isSpace}");
-            //print();
-          });
-          // ids.forEach((element) {
-          //   Future.delayed(const Duration(milliseconds: 500), () {
-          //    // print(element);
-          //     List<User> user = Matrix
-          //         .of(context)
-          //         .client
-          //         .getRoomById(element)!
-          //         .getParticipants();
-          //     user.forEach((element) {
-          //       print(element.displayName);
-          //     });
-          //   });
-          //
-          //   // List<User> classUsers = [];
-          // });
-
-        //  print(classUsers.length);
-        }catch(e){
-          print("eerrr");
-        }
         final displayStoriesHeader = widget.controller.activeSpacesEntry
             .shouldShowStoriesHeader(context);
         child = ListView.builder(
@@ -154,43 +110,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
             if (i >= rooms.length) {
               return const ListTile();
             }
-          //  print(Matrix.of(context).client.getRoomById(rooms[i].id)!.getParticipants());
 
-          //   print(widget.controller.activeChat);
-          //   print(widget.controller.selectedRoomIds);
-          //   print(widget.controller.selectedRoomIds.contains(rooms[i].id));
-
-            //   Room? classRoom = Matrix.of(context).client.getRoomById(listOfClasses.id);
-            //Room? space = Matrix.of(context).client.getRoomById(widget.controller.spaces[0].id);
-            //{"class": "listofClasses","students":"[id]"},{"class": "listofClasses","students":"[id]"}
-            final List<String> studentsList =[];
-            for (final listOfClasses in widget.controller.spaces) {
-              print(listOfClasses.id);
-              final classRoom =  Matrix.of(context).client.getRoomById(listOfClasses.id)!.getParticipants();
-              for (final student in classRoom) {
-                if(!studentsList.contains(student.id)){
-                  studentsList.add(student.id);
-                }
-              }
-            }
-         //  //  print(space!.displayname);
-         // // print(widget.controller.spaces[0].displayname);List<String> classIds =[];
-         // final data =  Matrix.of(context).client.getRoomById(widget.controller.spaces[0].id)!.getParticipants();
-         //
-         // data.forEach((element) {
-         //   print(element.displayName);
-         //   print(element.id);
-         //
-         // });
-          //     print(widget.controller.spaces[1].displayname);
-          //     print(widget.controller.spaces[0].spaceParents);
-           // print(space.spaceChildren.any((child) => child.roomId == rooms[i].id));
-           // print(rooms[i].spaceParents.any((parent) => parent.roomId == space.id));
-          //   }else{
-          //    print("no room");
-          //   }
-            GetStorage().write("studentList", studentsList);
-            print(studentsList);
             return ChatListItem(
               rooms[i],
               selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
