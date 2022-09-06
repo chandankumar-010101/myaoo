@@ -24,7 +24,8 @@ class ChatListView extends StatelessWidget {
       stream: Matrix.of(context).onShareContentChanged.stream,
       builder: (_, __) {
         final selectMode = controller.selectMode;
-        final showSpaces = controller.spacesEntries.length > 1 && controller.selectedRoomIds.isEmpty;
+        final showSpaces = controller.spacesEntries.length > 1 &&
+            controller.selectedRoomIds.isEmpty;
         return VWidgetGuard(
           onSystemPop: (redirector) async {
             final selMode = controller.selectMode;
@@ -37,7 +38,8 @@ class ChatListView extends StatelessWidget {
               builder: (context, size) {
                 controller.snappingSheetContainerSize = size;
                 return SnappingSheet(
-                  key: ValueKey(Matrix.of(context).client.userID.toString() + showSpaces.toString()),
+                  key: ValueKey(Matrix.of(context).client.userID.toString() +
+                      showSpaces.toString()),
                   controller: controller.snappingSheetController,
                   child: Column(
                     children: [
@@ -65,7 +67,8 @@ class ChatListView extends StatelessWidget {
                     ],
                   ),
                   initialSnappingPosition: showSpaces
-                      ? const SnappingPosition.pixels(positionPixels: kSpacesBottomBarHeight)
+                      ? const SnappingPosition.pixels(
+                          positionPixels: kSpacesBottomBarHeight)
                       : const SnappingPosition.factor(positionFactor: 0.0),
                   snappingPositions: showSpaces
                       ? const [
@@ -76,7 +79,8 @@ class ChatListView extends StatelessWidget {
                       : [const SnappingPosition.factor(positionFactor: 0.0)],
                   sheetBelow: showSpaces
                       ? SnappingSheetContent(
-                          childScrollController: controller.snappingSheetScrollContentController,
+                          childScrollController:
+                              controller.snappingSheetScrollContentController,
                           draggable: true,
                           child: SpacesBottomBar(controller),
                         )
