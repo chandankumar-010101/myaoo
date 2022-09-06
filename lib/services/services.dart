@@ -15,6 +15,7 @@ import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/invite_email_model.dart';
+import '../model/invite_email_model.dart' as inviteModel;
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
 import '../pages/search/search_view_controller.dart';
@@ -98,42 +99,44 @@ class PangeaServices {
   }
 
   static sendEmailToJoinClass(
-      String data, String roomId, String teacherName) async {
+      List<inviteModel.Data> data, String roomId, String teacherName) async {
+
     try {
-      var result = await http.post(Uri.parse(ApiUrls.update_user_ages),
+      var result = await http.post(Uri.parse(ApiUrls.send_email_link),
           headers: {
-            "Content-Type": "application/json",
             "Authorization": "Bearer ${box.read("access")}",
+            "Content-Type": "application/json",
           },
-          body: jsonEncode(InviteEmail(
+          body:jsonEncode(InviteEmail(
             pangeaClassRoomId: roomId,
-            data: data,
+            data:data,
             teacherName: teacherName,
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(msg: "Mail Sent Successfully");
       } else {
         if (kDebugMode) {
-          print("Unable to fetch user age");
+          print("Mail send unsuccessfull");
           print(result.statusCode);
           print(result.body);
         }
         Fluttertoast.showToast(
-            msg: "Api Error ${result.statusCode}: Unable to fetch user age");
+            msg: "Api Error ${result.statusCode}: Unable to send email");
         throw Exception(
-            "Api Error ${result.statusCode}: Unable to fetch user age");
+            "Api Error ${result.statusCode}: Unable to send email");
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
-      throw Exception("Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: Unable to send email");
+      throw Exception("Error: Unable to email");
     }
   }
 
   static Future<ClassCodeModel?> fetchClassWithCode(
       String classCode, BuildContext context) async {
+
     final String accessToken = box.read("access") ?? "";
     if (accessToken.isEmpty) {
       Fluttertoast.showToast(msg: "Access token not found");
@@ -248,6 +251,10 @@ class PangeaServices {
   static validateUser(
       Client client, BuildContext context, Matrix widget) async {
     final bool signUp = box.read("sign_up") ?? false;
+    final String classCode = GetStorage().read("classCode")??"";
+    print(classCode);
+    print("Hello");
+
     final String userID = client.userID ?? "";
     if (userID.isNotEmpty) {
       try {
@@ -263,14 +270,25 @@ class PangeaServices {
               queryParameters: widget.router!.currentState!.queryParameters,
             );
           } else {
+            print("fetching the data1");
             box.write("accessToken", client.accessToken.toString());
             box.write("clientID", client.userID.toString());
             PangeaServices.userDetails(clientID: client.userID.toString());
+            print("fetching the data");
 
-            widget.router!.currentState!.to(
-              '/rooms',
-              queryParameters: widget.router!.currentState!.queryParameters,
-            );
+          if(classCode.isNotEmpty){
+              GetStorage().remove("classCode");
+              Future.delayed( const Duration(seconds: 2), () {
+                print("data removed from box");
+                VRouter.of(context).to('/join_with_link', queryParameters: {"code":classCode});
+              });
+                  }else{
+              widget.router!.currentState!.to(
+                '/rooms',
+                queryParameters: widget.router!.currentState!.queryParameters,
+              );
+            }
+
           }
         } else {
           ApiException.exception(
@@ -783,6 +801,7 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
+          //print("Hello");
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(

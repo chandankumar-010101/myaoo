@@ -206,7 +206,7 @@ class _InviteStudentState extends State<InviteStudent> {
                         // ),
                         InkWell(
                           onTap: () {
-                            VRouter.of(context).to("/invite_email");
+                            VRouter.of(context).to("/invite_email",queryParameters: {"id":roomId});
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text("Functionality under progress")));
                           },
