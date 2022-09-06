@@ -33,15 +33,13 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
   String? _lastUserId;
   SpacesEntry? _lastSpace;
 
+  // booleans for expansion of Rooms and People Panel
+  bool isRoomExpanded = false;
+  bool isPeopleExpanded = false;
   @override
   void initState() {
-    _subscription = Matrix.of(context)
-        .client
-        .onSync
-        .stream
-        .where((s) => s.hasRoomUpdate)
-        .rateLimit(const Duration(seconds: 1))
-        .listen((d) => setState(() {}));
+    _subscription =
+        Matrix.of(context).client.onSync.stream.where((s) => s.hasRoomUpdate).rateLimit(const Duration(seconds: 1)).listen((d) => setState(() {}));
     super.initState();
   }
 
@@ -57,13 +55,11 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     return true;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final reversed = !_animationReversed();
     Widget child;
-    if (widget.controller.waitForFirstSync &&  Matrix.of(context).client.prevBatch != null) {
+    if (widget.controller.waitForFirstSync && Matrix.of(context).client.prevBatch != null) {
       final rooms = widget.controller.activeSpacesEntry.getRooms(context);
       if (rooms.isEmpty) {
         child = Column(
@@ -88,47 +84,72 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
             ),
           ],
         );
-      }
-      else {
+      } else {
+        final displayStoriesHeader = widget.controller.activeSpacesEntry.shouldShowStoriesHeader(context);
+        child = Column(children: [
+          ExpansionPanelList(
+            elevation: 2,
+            animationDuration: Duration(milliseconds: 400),
+            expansionCallback: (panelIndex, isExpanded) => setState(() {
+              isRoomExpanded = !isExpanded;
+            }),
+            children: <ExpansionPanel>[
+              ExpansionPanel(
+                canTapOnHeader: true,
+                isExpanded: isRoomExpanded,
+                headerBuilder: ((context, isExpanded) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Rooms",
+                            // Todo: Style needs to be updated
+                          ),
+                        ),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                      ],
+                    )),
+                body: Container(
+                  height: 400,
+                  child: ListView.builder(
+                    key: ValueKey(Matrix.of(context).client.userID.toString() +
+                        widget.controller.activeSpaceId.toString() +
+                        widget.controller.activeSpacesEntry.runtimeType.toString()),
+                    controller: widget.controller.scrollController,
+                    // add +1 space below in order to properly scroll below the spaces bar
+                    itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
+                    itemBuilder: (BuildContext context, int i) {
+                      if (displayStoriesHeader) {
+                        if (i == 0) {
+                          return const StoriesHeader();
+                        }
+                        i--;
+                      }
+                      if (i >= rooms.length) {
+                        return const ListTile();
+                      }
 
-        final displayStoriesHeader = widget.controller.activeSpacesEntry
-            .shouldShowStoriesHeader(context);
-        child = ListView.builder(
-          key: ValueKey(Matrix.of(context).client.userID.toString() +
-              widget.controller.activeSpaceId.toString() +
-              widget.controller.activeSpacesEntry.runtimeType.toString()),
-          controller: widget.controller.scrollController,
-          // add +1 space below in order to properly scroll below the spaces bar
-          itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
-          itemBuilder: (BuildContext context, int i) {
-            if (displayStoriesHeader) {
-              if (i == 0) {
-                return const StoriesHeader();
-              }
-              i--;
-            }
-            if (i >= rooms.length) {
-              return const ListTile();
-            }
-
-            return ChatListItem(
-              rooms[i],
-              selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
-              onTap: widget.controller.selectMode == SelectMode.select? () => widget.controller.toggleSelection(rooms[i].id)
-                  : null,
-              onLongPress: () => widget.controller.toggleSelection(rooms[i].id),
-              activeChat: widget.controller.activeChat == rooms[i].id,
-            );
-          },
-        );
+                      return ChatListItem(
+                        rooms[i],
+                        selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
+                        onTap: widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(rooms[i].id) : null,
+                        onLongPress: () => widget.controller.toggleSelection(rooms[i].id),
+                        activeChat: widget.controller.activeChat == rooms[i].id,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          )
+        ]);
       }
-    }
-    else {
+    } else {
       const dummyChatCount = 5;
-      final titleColor =
-          Theme.of(context).textTheme.bodyText1!.color!.withAlpha(100);
-      final subtitleColor =
-          Theme.of(context).textTheme.bodyText1!.color!.withAlpha(50);
+      final titleColor = Theme.of(context).textTheme.bodyText1!.color!.withAlpha(100);
+      final subtitleColor = Theme.of(context).textTheme.bodyText1!.color!.withAlpha(50);
       child = ListView.builder(
         itemCount: dummyChatCount,
         itemBuilder: (context, i) => Opacity(
@@ -194,10 +215,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
         return SharedAxisTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
-          transitionType: (widget.controller.snappingSheetController.isAttached
-                      ? widget
-                          .controller.snappingSheetController.currentPosition
-                      : 0) ==
+          transitionType: (widget.controller.snappingSheetController.isAttached ? widget.controller.snappingSheetController.currentPosition : 0) ==
                   kSpacesBottomBarHeight
               ? SharedAxisTransitionType.horizontal
               : SharedAxisTransitionType.vertical,
@@ -220,19 +238,13 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     // in case the matrix id changes, check the indexOf the matrix id
     final newClient = Matrix.of(context).client;
     if (_lastUserId != newClient.userID) {
-      reversed = Matrix.of(context)
-              .currentBundle!
-              .indexWhere((element) => element!.userID == _lastUserId) <
-          Matrix.of(context)
-              .currentBundle!
-              .indexWhere((element) => element!.userID == newClient.userID);
+      reversed = Matrix.of(context).currentBundle!.indexWhere((element) => element!.userID == _lastUserId) <
+          Matrix.of(context).currentBundle!.indexWhere((element) => element!.userID == newClient.userID);
     }
     // otherwise, the space changed...
     else {
-      reversed = widget.controller.spacesEntries
-              .indexWhere((element) => element == _lastSpace) <
-          widget.controller.spacesEntries.indexWhere(
-              (element) => element == widget.controller.activeSpacesEntry);
+      reversed = widget.controller.spacesEntries.indexWhere((element) => element == _lastSpace) <
+          widget.controller.spacesEntries.indexWhere((element) => element == widget.controller.activeSpacesEntry);
     }
     _lastUserId = newClient.userID;
     _lastSpace = widget.controller.activeSpacesEntry;

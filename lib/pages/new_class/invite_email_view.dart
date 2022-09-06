@@ -196,11 +196,12 @@ class _InviteEmailState extends State<InviteEmail> {
                       final List data = [];
                       print(name.length);
                       for(int i=0; i< name.length; i++){
-                        print(i);
+
                        data.add({"name":name[i].text,"email":email[i].text});
 
                       }
                       print(data);
+
                       final roomId = VRouter.of(context).queryParameters['id']??"";
                       if(roomId.isEmpty){
                         Fluttertoast.showToast(msg: "Unable to find Room ID");
@@ -208,7 +209,6 @@ class _InviteEmailState extends State<InviteEmail> {
                       }
                      String teacherName =Matrix.of(context).client.getRoomById(roomId)!.displayname??"";
                       if(teacherName.isEmpty){
-
                         Fluttertoast.showToast(msg: "Unable to find Room Name");
                         return;
                       }

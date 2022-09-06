@@ -26,9 +26,6 @@ class RequestScreenView extends StatefulWidget {
 }
 
 class _RequestScreenViewState extends State<RequestScreenView> {
-
-
-
   final box = GetStorage();
 
   // void _joinRoom(BuildContext context,String roomAlias) async {
@@ -49,11 +46,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
   //   // }
   // }
 
-
   SpacesEntry? _activeSpacesEntry;
-  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
-      ? DirectChatsSpacesEntry()
-      : AllRoomsSpacesEntry();
+  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes ? DirectChatsSpacesEntry() : AllRoomsSpacesEntry();
 
   SpacesEntry get activeSpacesEntry {
     final id = _activeSpacesEntry;
@@ -73,17 +67,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     if (spaceId != null) {
       final space = client.getRoomById(spaceId)!;
       final localMembers = space.getParticipants().length;
-      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
-          (space.summary.mJoinedMemberCount ?? 0);
+      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) + (space.summary.mJoinedMemberCount ?? 0);
       if (localMembers < actualMembersCount) {
         await space.requestParticipants();
       }
     }
   }
 
-  List<Room> get spaces =>
-      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
-
+  List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
   @override
   void initState() {
@@ -92,25 +83,23 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     _waitForFirstSync();
   }
 
-  fetchParti(String roomAlias)async{
-   final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
+  fetchParti(String roomAlias) async {
+    final members = await Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
     log(members.toList().toString());
-
   }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-   final String basePath =  Environment.baseAPI;
-    final List<String> data =  basePath.split("/api/v1");
+    final String basePath = Environment.baseAPI;
+    final List<String> data = basePath.split("/api/v1");
     final String url = data[0];
-    final String roomAlias = VRouter.of(context).queryParameters['id']??"";
+    final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
 
-   fetchParti(roomAlias);
+    fetchParti(roomAlias);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       appBar: AppBar(
         title: const Text("Class Profile"),
         // actions: [
@@ -122,7 +111,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         // ],
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",roomAlias),
+        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "", roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
@@ -133,9 +122,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Row(
-                      mainAxisAlignment: size.width >= 1000
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
+                      mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
                       children: [
                         Stack(
                           children: [
@@ -143,42 +130,29 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               margin: const EdgeInsets.only(top: 10.0),
                               child: data.profilePic.isNotEmpty
                                   ? CachedNetworkImage(
-                                imageUrl: data.profilePic.toString(),
-                                fit: BoxFit.cover,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                                imageBuilder: (context, imageProvider) {
-                                  return Container(
-                                    height: 90,
-                                    width: 90,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: imageProvider)),
-                                  );
-                                },
-                              )
+                                      imageUrl: data.profilePic.toString(),
+                                      fit: BoxFit.cover,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                      imageBuilder: (context, imageProvider) {
+                                        return Container(
+                                          height: 90,
+                                          width: 90,
+                                          decoration: BoxDecoration(shape: BoxShape.circle, image: DecorationImage(image: imageProvider)),
+                                        );
+                                      },
+                                    )
                                   : Icon(
-                                Icons.people,
-                                size: 60,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                                      Icons.people,
+                                      size: 60,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary ==
-                                          Colors.white
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                                          : Theme.of(context).colorScheme.onPrimary,
                                       width: 2.0),
                                   shape: BoxShape.circle),
                             ),
@@ -189,14 +163,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   padding: EdgeInsets.all(2),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          width: 2)),
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                      border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2)),
                                   child: const Icon(
                                     Icons.school,
                                     color: Colors.black,
@@ -213,42 +181,25 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              data.className ,
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                              data.className,
+                              style: const TextStyle()
+                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "${data.classAuthor}",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 15),
+                              style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 15),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Icon(
                                   Icons.location_pin,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                                   size: 20.0,
                                 ),
                                 Text(
                                   data.city,
-                                  style: const TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 12),
+                                  style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 12),
                                 )
                               ],
                             ),
@@ -259,19 +210,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.0),
-                      border:
-                      Border.all(color: Colors.grey.shade200, width: 2.0),
+                      border: Border.all(color: Colors.grey.shade200, width: 2.0),
                     ),
                     child: Flex(
-                      direction:
-                      size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                      mainAxisAlignment: size.width >= 800
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
+                      direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                      mainAxisAlignment: size.width >= 800 ? MainAxisAlignment.start : MainAxisAlignment.center,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -279,13 +225,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: [
                             Text(
                               "Ratings",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
+                              style: const TextStyle()
+                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -296,9 +237,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               children: [
                                 StarRating(
                                   color: const Color(0xffFFC403),
-                                  rating: data.rating != null
-                                      ? data.rating.toDouble()
-                                      : 0.0,
+                                  rating: data.rating != null ? data.rating.toDouble() : 0.0,
                                   starCount: 5,
                                 ),
                                 const SizedBox(
@@ -317,13 +256,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: [
                             Text(
                               "Number of Students",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
+                              style: const TextStyle()
+                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -342,13 +276,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
                                 Text(
                                   data.totalStudent.toString(),
-                                  style: const TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12),
+                                  style: const TextStyle()
+                                      .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
                                 )
                               ],
                             )
@@ -368,13 +297,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 children: [
                                   Text(
                                     "Source Language",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -382,23 +306,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   Icon(
                                     Icons.arrow_right_alt_outlined,
                                     size: 20,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
+                                    color: Theme.of(context).textTheme.bodyText1!.color,
                                   ),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     "Target Language",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
                                   ),
                                 ]),
                             const SizedBox(
@@ -409,25 +325,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Image.network(url +
-                                          data.flags[0].languageFlag
-                                              .toString())),
+                                  SizedBox(width: 20, height: 20, child: Image.network(url + data.flags[0].languageFlag.toString())),
                                 ]),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage ,
-                                  style: const TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14),
+                                  data.dominantLanguage,
+                                  style: const TextStyle()
+                                      .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -435,33 +341,20 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 Icon(
                                   Icons.arrow_right_alt_outlined,
                                   size: 20,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
+                                  color: Theme.of(context).textTheme.bodyText1!.color,
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Image.network(url+
-                                          data.flags[1].languageFlag
-                                              .toString())),
+                                  SizedBox(width: 20, height: 20, child: Image.network(url + data.flags[0].languageFlag.toString())),
                                   const SizedBox(
                                     width: 5,
                                   ),
                                   Text(
                                     data.targetLanguage,
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14),
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
                                   ),
                                 ]),
                               ],
@@ -476,20 +369,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
                       "About me ",
-                      style: const TextStyle().copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14),
+                      style:
+                          const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w700, fontSize: 14),
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      data.description.toString() ,
-                      style: const TextStyle().copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14),
+                      data.description.toString(),
+                      style:
+                          const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
                     ),
                   ),
                   Container(
@@ -497,649 +386,434 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       padding: EdgeInsets.only(top: 10),
                       child: Text(
                         "Class Permissions",
-                        style: const TextStyle().copyWith(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14),
+                        style: const TextStyle()
+                            .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w700, fontSize: 14),
                       )),
                   fetchPermissions(data.permissions),
-
                   box.read("usertype") == 2
                       ? box.read("clientID") == data.classAuthorId
-                      ? Container()
-                      : Container(
-                    margin:
-                    const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Flex(
-                      direction: size.width >= 1000
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                      mainAxisAlignment: size.width >= 1000
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        data.permissions.isOpenExchange?
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                          ? Container()
+                          : Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Flex(
+                                direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                                mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                children: [
+                                  data.permissions.isOpenExchange
+                                      ? SizedBox(
+                                          width: 200,
+                                          child: OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                              side: BorderSide(
+                                                width: 2,
+                                                color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                    ? Theme.of(context).primaryColor
+                                                    : Theme.of(context).colorScheme.onPrimary,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              final box = GetStorage();
+                                              if (roomAlias.isNotEmpty) {
+                                                box.write("public", data.permissions.isPublic);
+                                                box.write("openEnrollment", data.permissions.isOpenEnrollment);
+                                                box.write("openExchange", data.permissions.isOpenExchange);
+                                                context.vRouter.to("/classDetails/exchange_class", queryParameters: {
+                                                  "class_id": roomAlias,
+                                                });
+                                              }
+                                            },
+                                            child: Text(
+                                              "Request an Exchange",
+                                              style: const TextStyle().copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                            ),
+                                          ),
+                                        )
+                                      : Container(),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 200,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                        side: BorderSide(
+                                          width: 2,
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                              ? Theme.of(context).primaryColor
+                                              : Theme.of(context).colorScheme.onPrimary,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        UrlLauncher(context, 'https://matrix.to/#/${data.classAuthorId.toString()}').openMatrixToUrl();
+                                      },
+                                      child: Text(
+                                        "Message ${data.classAuthor}",
+                                        style: const TextStyle()
+                                            .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            onPressed: () {
-
-                              final box = GetStorage();
-                              if (roomAlias.isNotEmpty) {
-                                box.write("public",
-                                    data.permissions.isPublic);
-                                box.write(
-                                    "openEnrollment",
-                                    data.permissions
-                                        .isOpenEnrollment);
-                                box.write("openExchange",
-                                    data.permissions.isOpenExchange);
-                                context.vRouter.to(
-                                    "/classDetails/exchange_class",
-                                    queryParameters: {
-                                      "class_id": roomAlias,
-                                    });
-                              }
-                            },
-                            child: Text(
-                              "Request an Exchange",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ):Container(),
-                        const SizedBox(
-                          width: 10,
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                            onPressed: () {
-                              UrlLauncher(context,
-                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                  .openMatrixToUrl();
-                            },
-                            child: Text(
-                              "Message ${data.classAuthor}",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                            )
                       : box.read("clientID") == data.classAuthorId
-                      ? Container()
-                      : Container(
-                    margin:
-                    const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: EdgeInsets.only(top: 10),
-                    child: Flex(
-                      direction: size.width >= 1000
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                      mainAxisAlignment: size.width >= 1000
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        space.isEmpty?(data.permissions.isOpenEnrollment?SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                          ? Container()
+                          : Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                              padding: EdgeInsets.only(top: 10),
+                              child: Flex(
+                                direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                                mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                children: [
+                                  space.isEmpty
+                                      ? (data.permissions.isOpenEnrollment
+                                          ? SizedBox(
+                                              width: 200,
+                                              child: OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                                  side: BorderSide(
+                                                    width: 2,
+                                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                        ? Theme.of(context).primaryColor
+                                                        : Theme.of(context).colorScheme.onPrimary,
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  final confirmed = await showOkCancelAlertDialog(
+                                                    useRootNavigator: false,
+                                                    context: context,
+                                                    title: L10n.of(context)!.areYouSure,
+                                                    okLabel: L10n.of(context)!.ok,
+                                                    cancelLabel: L10n.of(context)!.cancel,
+                                                  );
+                                                  if (confirmed == OkCancelResult.ok) {
+                                                    print("confirm");
+                                                    print(data.classAuthor);
+
+                                                    if (roomAlias.isNotEmpty) {
+                                                      UrlLauncher(
+                                                              context,
+                                                              requestToEnroll: true,
+                                                              roomId: roomAlias,
+                                                              'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                                          .openMatrixToUrl();
+                                                    }
+                                                  }
+                                                },
+                                                child: Text(
+                                                  "Request an Enroll",
+                                                  style: const TextStyle().copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                                ),
+                                              ),
+                                            )
+                                          : Container())
+                                      : Container(),
+                                  SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 200,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                        side: BorderSide(
+                                          width: 2,
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                              ? Theme.of(context).primaryColor
+                                              : Theme.of(context).colorScheme.onPrimary,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        UrlLauncher(context, 'https://matrix.to/#/${data.classAuthorId.toString()}').openMatrixToUrl();
+                                      },
+                                      child: Text(
+                                        "Message ${data.classAuthor}",
+                                        style: const TextStyle()
+                                            .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            onPressed: () async {
-                              final confirmed =
-                              await showOkCancelAlertDialog(
-                                useRootNavigator: false,
-                                context: context,
-                                title: L10n.of(context)!.areYouSure,
-                                okLabel: L10n.of(context)!.ok,
-                                cancelLabel: L10n.of(context)!.cancel,
-                              );
-                              if (confirmed == OkCancelResult.ok) {
-                                print("confirm");
-                                print(data.classAuthor);
-
-                                if(roomAlias.isNotEmpty){
-
-                                  UrlLauncher(context,requestToEnroll: true,
-                                      roomId:  roomAlias,
-                                      'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                      .openMatrixToUrl();
-                                }
-
-                              }
-                            },
-                            child: Text(
-                              "Request an Enroll",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ):Container()):Container(),
-
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                        ),
-
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                            onPressed: () {
-                              UrlLauncher(context,
-                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                  .openMatrixToUrl();
-                            },
-                            child: Text(
-                              "Message ${data.classAuthor}",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  box.read("usertype") == 2 && box.read("clientID") == data.classAuthorId
                       ? Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: EdgeInsets.only(top: 10),
-                    child: Flex(
-                      direction: size.width >= 1000
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                      mainAxisAlignment: size.width >= 1000
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: EdgeInsets.only(top: 10),
+                          child: Flex(
+                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    VRouter.of(context).to('/class_analytics');
+                                  },
+                                  child: Text(
+                                    "Class Analytics",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-                              VRouter.of(context).to('/class_analytics');
-                            },
-                            child: Text(
-                              "Class Analytics",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                              SizedBox(
+                                width: 10,
+                                height: 10,
                               ),
-                            ),
-                            onPressed: () {
-                              if (roomAlias.isNotEmpty) {
-                                context.vRouter.to(
-                                    "/invite_students",
-                                    queryParameters: {
-                                      "id": roomAlias,
-                                    });
-                              }
-                            },
-                            child: Text(
-                              "Add Students",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (roomAlias.isNotEmpty) {
+                                      context.vRouter.to("/invite_students", queryParameters: {
+                                        "id": roomAlias,
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    "Add Students",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
                               ),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Find a Language Exchange",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
+                              SizedBox(
+                                width: 10,
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Find a Language Exchange",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  )
+                        )
                       : Container(),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  box.read("usertype") == 2 && box.read("clientID") == data.classAuthorId
                       ? Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: EdgeInsets.only(top: 10),
-                    child: Flex(
-                      direction: size.width >= 1000
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                      mainAxisAlignment: size.width >= 1000
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: EdgeInsets.only(top: 10),
+                          child: Flex(
+                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (roomAlias.isNotEmpty) {
+                                      box.write("public", data.permissions.isPublic);
+                                      box.write("openEnrollment", data.permissions.isOpenEnrollment);
+                                      box.write("openExchange", data.permissions.isOpenExchange);
+                                      context.vRouter.to("/classDetails/update_class_permissions", queryParameters: {
+                                        "class_id": roomAlias,
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    "Class Permissions",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-
-                              if (roomAlias.isNotEmpty) {
-                                box.write(
-                                    "public", data.permissions.isPublic);
-                                box.write("openEnrollment",
-                                    data.permissions.isOpenEnrollment);
-                                box.write("openExchange",
-                                    data.permissions.isOpenExchange);
-                                context.vRouter.to(
-                                    "/classDetails/update_class_permissions",
-                                    queryParameters: {
-                                      "class_id": roomAlias,
-                                    });
-                              }
-                            },
-                            child: Text(
-                              "Class Permissions",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                              SizedBox(
+                                width: 10,
+                                height: 10,
                               ),
-                            ),
-                            onPressed: () {
-
-                              if (roomAlias.isNotEmpty) {
-                                try {
-                                  box.write(
-                                      "oneToOneClass",
-                                      data.permissions
-                                          .oneToOneChatClass);
-                                  box.write(
-                                      "oneToOneExchange",
-                                      data.permissions
-                                          .oneToOneChatExchange);
-                                  box.write("createRoom",
-                                      data.permissions.isCreateRooms);
-                                  box.write(
-                                      "createRoomExchange",
-                                      data.permissions
-                                          .isCreateRoomsExchange);
-                                  box.write("createStories",
-                                      data.permissions.isCreateStories);
-                                  box.write("shareVideo",
-                                      data.permissions.isShareVideo);
-                                  box.write("sharePhotos",
-                                      data.permissions.isSharePhoto);
-                                  box.write("shareFiles",
-                                      data.permissions.isShareFiles);
-                                  box.write("shareLocation",
-                                      data.permissions.isShareLocation);
-                                } catch (e) {
-                                  if (kDebugMode) {
-                                    print(e);
-                                  }
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                      content:
-                                      Text("Error accrued: $e")));
-                                }
-                                context.vRouter.to(
-                                    "/classDetails/update_student_permissions",
-                                    queryParameters: {
-                                      "class_id": roomAlias,
-                                    });
-                              }
-                            },
-                            child: Text(
-                              "Student Permissions",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (roomAlias.isNotEmpty) {
+                                      try {
+                                        box.write("oneToOneClass", data.permissions.oneToOneChatClass);
+                                        box.write("oneToOneExchange", data.permissions.oneToOneChatExchange);
+                                        box.write("createRoom", data.permissions.isCreateRooms);
+                                        box.write("createRoomExchange", data.permissions.isCreateRoomsExchange);
+                                        box.write("createStories", data.permissions.isCreateStories);
+                                        box.write("shareVideo", data.permissions.isShareVideo);
+                                        box.write("sharePhotos", data.permissions.isSharePhoto);
+                                        box.write("shareFiles", data.permissions.isShareFiles);
+                                        box.write("shareLocation", data.permissions.isShareLocation);
+                                      } catch (e) {
+                                        if (kDebugMode) {
+                                          print(e);
+                                        }
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error accrued: $e")));
+                                      }
+                                      context.vRouter.to("/classDetails/update_student_permissions", queryParameters: {
+                                        "class_id": roomAlias,
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    "Student Permissions",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-
-
-                              if (roomAlias.isNotEmpty) {
-                                box.write("class_name", data.className);
-                                box.write("city_name", data.city);
-                                box.write("country_name", data.country);
-                                box.write(
-                                    "language_level", data.languageLevel);
-                                box.write("school_name", data.schoolName);
-                                box.write("disc", data.description);
-                                box.write(
-                                    "source_lang", data.dominantLanguage);
-                                box.write(
-                                    "target_lang", data.targetLanguage);
-                                context.vRouter.to(
-                                    "/classDetails/update_language",
-                                    queryParameters: {
-                                      "class_id": roomAlias,
-                                    });
-                              }
-                            },
-                            child: Text(
-                              "Class Info",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
+                              SizedBox(
+                                width: 10,
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (roomAlias.isNotEmpty) {
+                                      box.write("class_name", data.className);
+                                      box.write("city_name", data.city);
+                                      box.write("country_name", data.country);
+                                      box.write("language_level", data.languageLevel);
+                                      box.write("school_name", data.schoolName);
+                                      box.write("disc", data.description);
+                                      box.write("source_lang", data.dominantLanguage);
+                                      box.write("target_lang", data.targetLanguage);
+                                      context.vRouter.to("/classDetails/update_language", queryParameters: {
+                                        "class_id": roomAlias,
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    "Class Info",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  )
+                        )
                       : Container(),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  box.read("usertype") == 2 && box.read("clientID") == data.classAuthorId
                       ? Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: EdgeInsets.only(top: 10),
-                    child: Flex(
-                      direction: size.width >= 1000
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                      mainAxisAlignment: size.width >= 1000
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(25.0)),
-                              side: BorderSide(
-                                width: 2,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary ==
-                                    Colors.white
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                            onPressed: () async {
-
-                              final confirmed =
-                              await showOkCancelAlertDialog(
-                                useRootNavigator: false,
-                                context: context,
-                                title: L10n.of(context)!.areYouSure,
-                                okLabel: L10n.of(context)!.ok,
-                                cancelLabel: L10n.of(context)!.cancel,
-                              );
-                              if (confirmed == OkCancelResult.ok) {
-                                final room = Matrix.of(context)
-                                    .client
-                                    .getRoomById(roomAlias);
-                                if (room != null) {
-                                  final success =
-                                  await showFutureLoadingDialog(
+                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: EdgeInsets.only(top: 10),
+                          child: Flex(
+                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final confirmed = await showOkCancelAlertDialog(
+                                      useRootNavigator: false,
                                       context: context,
-                                      future: () => room.leave());
-                                  if (success.error == null) {
-                                    String token = box.read("access");
-                                    if (kDebugMode) {
-                                      print(token);
-                                    }
-                                    PangeaServices.deleteClass(
-                                        roomId: room.id,
-                                        context: context);
-                                    if (kDebugMode) {
-                                      print(room.id);
-                                    }
+                                      title: L10n.of(context)!.areYouSure,
+                                      okLabel: L10n.of(context)!.ok,
+                                      cancelLabel: L10n.of(context)!.cancel,
+                                    );
+                                    if (confirmed == OkCancelResult.ok) {
+                                      final room = Matrix.of(context).client.getRoomById(roomAlias);
+                                      if (room != null) {
+                                        final success = await showFutureLoadingDialog(context: context, future: () => room.leave());
+                                        if (success.error == null) {
+                                          String token = box.read("access");
+                                          if (kDebugMode) {
+                                            print(token);
+                                          }
+                                          PangeaServices.deleteClass(roomId: room.id, context: context);
+                                          if (kDebugMode) {
+                                            print(room.id);
+                                          }
 
-                                    VRouter.of(context).to('/rooms');
-                                  }
-                                }
-                              }
-                            },
-                            child: Text(
-                              "Delete Class",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                            ),
+                                          VRouter.of(context).to('/rooms');
+                                        }
+                                      }
+                                    }
+                                  },
+                                  child: Text(
+                                    "Delete Class",
+                                    style: const TextStyle()
+                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  )
+                        )
                       : Container(),
                   const SizedBox(
                     height: 50,
@@ -1147,9 +821,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                 ],
               ),
             );
-          }
-          else{
-            if(snapshot.hasError){
+          } else {
+            if (snapshot.hasError) {
               print(snapshot.error);
             }
             return const Center(child: CircularProgressIndicator());
@@ -1164,17 +837,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Flex(
-          direction: MediaQuery.of(context).size.width >= 1000
-              ? Axis.horizontal
-              : Axis.vertical,
+          direction: MediaQuery.of(context).size.width >= 1000 ? Axis.horizontal : Axis.vertical,
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width / 3.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  permissions.isSharePhoto !=null && permissions.isSharePhoto
-                  // permissions?.isSharePhoto && permissions.isSharePhoto!
+                  permissions.isSharePhoto != null && permissions.isSharePhoto
+                      // permissions?.isSharePhoto && permissions.isSharePhoto!
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1185,7 +856,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareVideo !=null && permissions.isShareVideo
+                  permissions.isShareVideo != null && permissions.isShareVideo
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1196,7 +867,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.oneToOneChatClass !=null && permissions.oneToOneChatClass
+                  permissions.oneToOneChatClass != null && permissions.oneToOneChatClass
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1207,7 +878,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.oneToOneChatExchange !=null && permissions.oneToOneChatExchange
+                  permissions.oneToOneChatExchange != null && permissions.oneToOneChatExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1218,7 +889,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareFiles !=null && permissions.isShareFiles
+                  permissions.isShareFiles != null && permissions.isShareFiles
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1229,7 +900,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareLocation !=null && permissions.isShareLocation
+                  permissions.isShareLocation != null && permissions.isShareLocation
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1248,7 +919,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  permissions.isCreateRooms !=null && permissions.isCreateRooms
+                  permissions.isCreateRooms != null && permissions.isCreateRooms
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1259,7 +930,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isCreateRoomsExchange !=null && permissions.isCreateRoomsExchange
+                  permissions.isCreateRoomsExchange != null && permissions.isCreateRoomsExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1270,7 +941,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isCreateStories !=null && permissions.isCreateStories
+                  permissions.isCreateStories != null && permissions.isCreateStories
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1281,7 +952,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isOpenEnrollment !=null && permissions.isOpenEnrollment
+                  permissions.isOpenEnrollment != null && permissions.isOpenEnrollment
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1292,7 +963,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isOpenExchange !=null && permissions.isOpenExchange
+                  permissions.isOpenExchange != null && permissions.isOpenExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1303,7 +974,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isPublic !=null && permissions.isPublic!
+                  permissions.isPublic != null && permissions.isPublic!
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -1321,7 +992,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         ),
       );
     } else {
-      return const Center(child: Text("Unable to load data"),);
+      return const Center(
+        child: Text("Unable to load data"),
+      );
     }
   }
 }

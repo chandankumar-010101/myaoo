@@ -18,7 +18,7 @@ import '../chat_details/participant_list_item.dart';
 class NewPrivateChatView extends StatelessWidget {
   final NewPrivateChatController controller;
 
-   NewPrivateChatView(this.controller, {Key? key}) : super(key: key);
+  NewPrivateChatView(this.controller, {Key? key}) : super(key: key);
 
   static const double _qrCodePadding = 8;
 
@@ -47,21 +47,8 @@ class NewPrivateChatView extends StatelessWidget {
   //   return;
   // }
 
-  void requestMoreMembersAction(context, classId) async {
-    final room = Matrix.of(context).client.getRoomById(classId);
-    print(room);
-    final participants = await showFutureLoadingDialog(
-        context: context, future: () => room!.requestParticipants());
-    if (participants.error == null) {
-      print(participants.result);
-      // setState(() => members = participants.result);
-    }
-  }
-  List<User>? members;
   @override
   Widget build(BuildContext context) {
-    final String classId = VRouter.of(context).queryParameters['class_id'] ?? "";
-
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -115,34 +102,49 @@ class NewPrivateChatView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            
-            ElevatedButton(onPressed: (){controller.requestMoreMembersAction();}, child: Text("Clicke"))
 
-            // Padding(
-            //   padding: const EdgeInsets.all(12),
-            //   child: Form(
-            //     key: controller.formKey,
-            //     child: TextFormField(
-            //       controller: controller.controller,
-            //       autocorrect: false,
-            //       autofocus: !PlatformInfos.isMobile,
-            //       textInputAction: TextInputAction.go,
-            //       focusNode: controller.textFieldFocus,
-            //       onFieldSubmitted: controller.submitAction,
-            //       validator: controller.validateForm,
-            //       inputFormatters: controller.removeMatrixToFormatters,
-            //       decoration: InputDecoration(
-            //         labelText: L10n.of(context)!.typeInInviteLinkManually,
-            //         hintText: '@username',
-            //         prefixText: NewPrivateChatController.prefixNoProtocol,
-            //         suffixIcon: IconButton(
-            //           icon: const Icon(Icons.send_outlined),
-            //           onPressed: controller.submitAction,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            controller.oneToOneChat
+                ?controller.createRoom? controller.members != null
+                ? ListView.builder(
+                itemCount: controller.members!.length,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int i) {
+                  print(i);
+                  return ParticipantListItem(controller.members![i]);
+                })
+                : Container():Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Form(
+                      key: controller.formKey,
+                      child: TextFormField(
+                        controller: controller.controller,
+                        autocorrect: false,
+                        autofocus: !PlatformInfos.isMobile,
+                        textInputAction: TextInputAction.go,
+                        focusNode: controller.textFieldFocus,
+                        onFieldSubmitted: controller.submitAction,
+                        validator: controller.validateForm,
+                        inputFormatters: controller.removeMatrixToFormatters,
+                        decoration: InputDecoration(
+                          labelText: L10n.of(context)!.typeInInviteLinkManually,
+                          hintText: '@username',
+                       //   prefixText: NewPrivateChatController.prefixNoProtocol,
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.send_outlined),
+                            onPressed: controller.submitAction,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+
+            // controller.oneToOneChat? controller.classId.isNotEmpty ? ElevatedButton(
+            //         onPressed: () {
+            //           controller.requestMoreMembersAction(controller.classId);
+            //         },
+            //         child: Text("")): Container():Container(),
           ],
         ),
       ),

@@ -102,6 +102,7 @@ class PangeaServices {
 
     try {
       print(box.read("access"));
+      print(data.runtimeType);
 
       var result = await http.post(Uri.parse(ApiUrls.send_email_link),
           headers: {
@@ -785,7 +786,6 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-          print("Hello");
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(
