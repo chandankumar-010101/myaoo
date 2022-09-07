@@ -8,7 +8,7 @@ import 'package:pangeachat/pages/language_selection_screen/language_selection.da
 class LanguageSelectionView extends StatelessWidget {
   final LanguageSelectionController controller;
 
-  LanguageSelectionView(
+  const LanguageSelectionView(
     this.controller, {
     Key? key,
   }) : super(key: key);

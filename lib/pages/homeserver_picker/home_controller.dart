@@ -200,6 +200,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -225,12 +226,8 @@ class HomeController extends GetxController {
 
   Future getFlags() async {
     var response = await ApiFunctions().get(ApiUrls.get_all_flags);
-    if (kDebugMode) {
-      log("response is ${response.body}");
-    }
     if (response != null) {
       loading.value = false;
-      // var li = jsonDecode(response.body);
       List temp = response.body;
       if (kDebugMode) {
         log("Flag Response is $temp");
@@ -246,15 +243,11 @@ class HomeController extends GetxController {
         }
       });
     } else {
+      Fluttertoast.showToast(msg: "API Error: ${response.statusCode}");
       loading.value = false;
-      Get.rawSnackbar(
-          message: "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.zero,
-          snackStyle: SnackStyle.GROUNDED,
-          backgroundColor: Colors.red);
     }
   }
+
   @override
   void onInit() {
     super.onInit();
@@ -274,9 +267,6 @@ class HomeController extends GetxController {
       var response = await ApiFunctions().get(
         Url,
       );
-      print(name);
-      print(Url);
-
       log("details record is ${response.body}");
       if (response.statusCode == 200) {
         loading.value = false;
@@ -303,4 +293,3 @@ class HomeController extends GetxController {
     } catch (e) {}
   }
 }
-
