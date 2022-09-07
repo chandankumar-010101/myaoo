@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
@@ -13,6 +14,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
+import '../../services/controllers.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
@@ -30,7 +32,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
 
   final box = GetStorage();
-
+  PangeaControllers getxController = Get.put(PangeaControllers());
 
   SpacesEntry? _activeSpacesEntry;
   SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
@@ -69,14 +71,26 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
   fetchFlag(FetchClassInfoModel data,String url){
     try{
-      return SizedBox(
+      String path = url + data.flags[1].languageFlag.toString()??"";
+      print(path);
+      return path.isNotEmpty?SizedBox(
         width: 20,
         height: 20,
-        child: Image.network(url + data.flags[1].languageName.toString()),
-      );
+        child: Image.network(path),
+      ):Container();
     }catch(e){
+
       return Container();
     }
+  }
+  fetchFlag2(FetchClassInfoModel data,String url){
+    String path = url +data.flags[0].languageFlag.toString();
+    print(path);
+   return SizedBox(
+        width: 20,
+        height: 20,
+        child: Image.network(path));
+
   }
 
   @override
@@ -85,11 +99,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     _waitForFirstSync();
   }
 
-  fetchParti(String roomAlias)async{
-   // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
-   //  log(members.toList().toString());
-
-  }
+  // fetchParti(String roomAlias)async{
+  //  // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
+  //  //  log(members.toList().toString());
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +113,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id']??"";
     final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
-    print(space);
 
-   fetchParti(roomAlias);
+   //fetchParti(roomAlias);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
@@ -403,11 +416,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Image.network(url +data.flags[0].languageFlag.toString())),
-                                ]),
+                                  fetchFlag2(data, url)
+                                    ]),
                                 const SizedBox(
                                   width: 5,
                                 ),
@@ -827,7 +837,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     .onPrimary,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              getxController.throughClassProfile.value = true;
+                            },
                             child: Text(
                               "Find a Language Exchange",
                               style: const TextStyle().copyWith(
@@ -1137,6 +1149,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
           }
           else{
             if(snapshot.hasError){
+              print("hello");
               print(snapshot.error);
             }
             return const Center(child: CircularProgressIndicator());
