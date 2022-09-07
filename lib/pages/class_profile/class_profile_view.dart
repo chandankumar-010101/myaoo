@@ -34,32 +34,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
 
 
-  final box = GetStorage();
-  PangeaControllers getxController = Get.put(PangeaControllers());
 
-  fetchFlag(FetchClassInfoModel data,String url){
-    try{
-      String path = url + data.flags[1].languageFlag.toString()??"";
-      print(path);
-      return path.isNotEmpty?SizedBox(
-        width: 20,
-        height: 20,
-        child: Image.network(path),
-      ):Container();
-    }catch(e){
-
-      return Container();
-    }
-  }
-  fetchFlag2(FetchClassInfoModel data,String url){
-    String path = url +data.flags[0].languageFlag.toString();
-    print(path);
-   return SizedBox(
-        width: 20,
-        height: 20,
-        child: Image.network(path));
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +54,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         title: const Text("Class Profile"),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",roomAlias),
+        future: PangeaServices.fetchClassInfo(context, widget.controller.box.read("access") ?? "",roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
@@ -366,7 +341,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  fetchFlag2(data, url)
+                                  widget.controller.fetchFlag2(data, url)
                                     ]),
                                 const SizedBox(
                                   width: 5,
@@ -396,7 +371,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  fetchFlag(data, url),
+                                  widget.controller.fetchFlag(data, url),
                                     const SizedBox(
                                     width: 5,
                                   ),
@@ -451,8 +426,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       )),
                   fetchPermissions(data.permissions),
 
-                  box.read("usertype") == 2
-                      ? box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2
+                      ? widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container()
                       : Container(
                     margin:
@@ -561,7 +536,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       ],
                     ),
                   )
-                      : box.read("clientID") == data.classAuthorId
+                      : widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container()
                       : Container(
                     margin:
@@ -674,8 +649,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       ],
                     ),
                   ),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                      widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
@@ -789,7 +764,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              getxController.throughClassProfile.value = true;
+                              widget.controller.getxController.throughClassProfile.value = true;
                             },
                             child: Text(
                               "Find a Language Exchange",
@@ -807,8 +782,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     ),
                   )
                       : Container(),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                      widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
@@ -842,11 +817,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             onPressed: () {
 
                               if (roomAlias.isNotEmpty) {
-                                box.write(
+                                widget.controller.box.write(
                                     "public", data.permissions.isPublic);
-                                box.write("openEnrollment",
+                                widget.controller.box.write("openEnrollment",
                                     data.permissions.isOpenEnrollment);
-                                box.write("openExchange",
+                                widget.controller.box.write("openExchange",
                                     data.permissions.isOpenExchange);
                                 context.vRouter.to(
                                     "/classDetails/update_class_permissions",
@@ -894,29 +869,29 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
                               if (roomAlias.isNotEmpty) {
                                 try {
-                                  box.write(
+                                  widget.controller.box.write(
                                       "oneToOneClass",
                                       data.permissions
                                           .oneToOneChatClass);
-                                  box.write(
+                                  widget.controller.box.write(
                                       "oneToOneExchange",
                                       data.permissions
                                           .oneToOneChatExchange);
-                                  box.write("createRoom",
+                                  widget.controller.box.write("createRoom",
                                       data.permissions.isCreateRooms);
-                                  box.write(
+                                  widget.controller.box.write(
                                       "createRoomExchange",
                                       data.permissions
                                           .isCreateRoomsExchange);
-                                  box.write("createStories",
+                                  widget.controller.box.write("createStories",
                                       data.permissions.isCreateStories);
-                                  box.write("shareVideo",
+                                  widget.controller.box.write("shareVideo",
                                       data.permissions.isShareVideo);
-                                  box.write("sharePhotos",
+                                  widget.controller.box.write("sharePhotos",
                                       data.permissions.isSharePhoto);
-                                  box.write("shareFiles",
+                                  widget.controller.box.write("shareFiles",
                                       data.permissions.isShareFiles);
-                                  box.write("shareLocation",
+                                  widget.controller.box.write("shareLocation",
                                       data.permissions.isShareLocation);
                                 } catch (e) {
                                   if (kDebugMode) {
@@ -973,16 +948,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
 
                               if (roomAlias.isNotEmpty) {
-                                box.write("class_name", data.className);
-                                box.write("city_name", data.city);
-                                box.write("country_name", data.country);
-                                box.write(
+                                widget.controller.box.write("class_name", data.className);
+                                widget.controller.box.write("city_name", data.city);
+                                widget.controller.box.write("country_name", data.country);
+                                widget.controller. box.write(
                                     "language_level", data.languageLevel);
-                                box.write("school_name", data.schoolName);
-                                box.write("disc", data.description);
-                                box.write(
+                                widget.controller.box.write("school_name", data.schoolName);
+                                widget.controller.box.write("disc", data.description);
+                                widget.controller.box.write(
                                     "source_lang", data.dominantLanguage);
-                                box.write(
+                                widget.controller.box.write(
                                     "target_lang", data.targetLanguage);
                                 context.vRouter.to(
                                     "/classDetails/update_language",
@@ -1007,8 +982,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     ),
                   )
                       : Container(),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                      widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
@@ -1050,29 +1025,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 cancelLabel: L10n.of(context)!.cancel,
                               );
                               if (confirmed == OkCancelResult.ok) {
-                                print(roomAlias);
-                                try{
-
-                                  final room = Matrix.of(context).client.getRoomById(roomAlias);
-                                  if (room != null) {
-                                    room.canKick ? widget.controller
-                                        .kickAndRemoveClass(room) : Fluttertoast
-                                        .showToast(
-                                        msg: "You don't have permissions!");
-                                  }
-                                  else{
-                                    print("no room");
-                                    Fluttertoast
-                                        .showToast(
-                                        msg: "Unable to find user Class Information");
-                                  }
-                                }catch(e){
-                                  Fluttertoast
-                                      .showToast(
-                                      msg: "Unable to find user Class Information");
-                                  print("Error accured");
-                                }
-
+                                widget.controller.kickAndRemoveClass(roomAlias);
 
                               }
                             },

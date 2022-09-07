@@ -2,10 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
+import '../../model/class_detail_model.dart';
+import '../../services/controllers.dart';
+import '../../services/services.dart';
 import '../chat_list/spaces_entry.dart';
 import 'class_profile_view.dart';
 
@@ -17,82 +24,38 @@ class RequestScreen extends StatefulWidget {
 }
 
 class RequestScreenState extends State<RequestScreen> {
-  kickAndRemoveClass(Room room) async {
-    try {
-      List<User> rooms = await room.requestParticipants();
-      String? userId = Matrix.of(context).client.userID;
-      if (rooms != null && userId != null) {
+  final box = GetStorage();
 
-        for (final element in rooms) {
-          if (userId == element.id) {
-            continue;
-          }
-          print(element.displayName);
-        //  await room.kick(element.id);
-          print(element.id);
-        }
-      }
+  ///list of classes for current user
+  List<User> space = [];
+
+  ///getx controller to toggle the UI
+  PangeaControllers getxController = Get.put(PangeaControllers());
+
+  ///load flag to the UI
+  fetchFlag(FetchClassInfoModel data, String url) {
+    try {
+      String path = url + data.flags[1].languageFlag.toString() ?? "";
+      print(path);
+      return path.isNotEmpty
+          ? SizedBox(
+              width: 20,
+              height: 20,
+              child: Image.network(path),
+            )
+          : Container();
     } catch (e) {
-      Fluttertoast.showToast(msg: "Unable to fetch Class Info");
-      if (kDebugMode) {
-        print(e);
-      }
+      return Container();
     }
   }
 
-  // final value = await showFutureLoadingDialog(
-  //   context: context,
-  //   future: () => room.requestParticipants(),
-  // );
-  // if(value.result !=null){
-  //
-  //   value.result!.forEach((element) async {
-  //
-  //     await room.kick(element.id);
-  //   });
-  //   final listOfUsers = await showFutureLoadingDialog(
-  //     context: context,
-  //     future: () => room.requestParticipants(),
-  //   );
-  //   if(listOfUsers.result !=null){
-  //
-  //     print(listOfUsers.result!.length);
-  //     listOfUsers.result!.forEach((element) {element.id;});
-  //   }else{
-  //     print("eerror");
-  //   }
-  // }
-  // else{
-  //   print("JLKJLKJ");
-  // }
+  fetchFlag2(FetchClassInfoModel data, String url) {
+    String path = url + data.flags[0].languageFlag.toString();
+    print(path);
+    return SizedBox(width: 20, height: 20, child: Image.network(path));
+  }
 
-// if(room !=null){
-//   final success = await showFutureLoadingDialog(context: context, future:)
-// }
-// if (room != null) {
-//   final success = await showFutureLoadingDialog(
-//       context: context,
-//       future: () => room.leave());
-//   if (success.error == null) {
-//     String token = box.read("access");
-//     if (kDebugMode) {
-//       print(token);
-//     }
-//     PangeaServices.deleteClass(
-//         roomId: room.id,
-//         context: context);
-//     if (kDebugMode) {
-//       print(room.id);
-//     }
-//
-//     VRouter.of(context).to('/rooms');
-//   }
-// }
-
-  List<User> space = [];
-  List<Room> get spaces =>
-      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
-
+  ///Fetch User info, if it exist in the class or not
   fetchSpaceInfo(String roomAlias) async {
     final Room? rooms = Matrix.of(context).client.getRoomById(roomAlias);
     final String? userId = Matrix.of(context).client.userID;
@@ -109,6 +72,53 @@ class RequestScreenState extends State<RequestScreen> {
     } else {
       Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info");
     }
+  }
+
+  ///kick the students and leave the class
+  kickAndRemoveClass(String roomAlias) async {
+    try {
+      final room = Matrix.of(context).client.getRoomById(roomAlias);
+      if (room != null) {
+        if (room.canKick) {
+          final List<User> rooms = await room.requestParticipants();
+          final String? userId = Matrix.of(context).client.userID;
+          if (userId != null) {
+            for (final element in rooms) {
+              if (userId == element.id) {
+                continue;
+              }
+              await room.kick(element.id);
+            }
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Students removed from the class")));
+            final success = await showFutureLoadingDialog(
+                context: context, future: () => room.leave());
+            if (success.error == null) {
+              final bool? result = await PangeaServices.deleteClass(
+                  roomId: room.id, context: context);
+              result != null && result
+                  ? VRouter.of(context).to('/rooms')
+                  : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Unable to delete class records")));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to leave the class")));
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Unable to fetch current user information")));
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("You don't have permissions!n")));
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Exception Accrued")));
+      print(e);
+    }
+
   }
 
   @override
