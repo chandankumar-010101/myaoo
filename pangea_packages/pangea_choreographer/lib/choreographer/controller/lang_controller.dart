@@ -18,6 +18,18 @@ class LangController {
     _feedBackLang = lang;
   }
 
+  void setSrcLangByName(String name) {
+    _srcLang = LangList.byLangName(name);
+    print('Src lang ' + _srcLang!.toJson().toString());
+    _setState();
+  }
+
+  void setTrgLangByName(String name) {
+    _trgLang = LangList.byLangName(name);
+    print('Trg lang' + _trgLang!.toJson().toString());
+    _setState();
+  }
+
   void changeSrcLang(ChoreoLangModel lang) {
     _srcLang = lang;
     _setState();
@@ -33,11 +45,17 @@ class LangController {
   }
 
   ChoreoLangModel? get srcLang {
+    if (_srcLang != null) {
+      return _srcLang;
+    }
     _srcLang ??= LangList.byLangCode('en');
     return _srcLang;
   }
 
   ChoreoLangModel? get trgLang {
+    if (_trgLang != null) {
+      return _trgLang;
+    }
     _trgLang ??= LangList.byLangCode('es');
     return _trgLang;
   }

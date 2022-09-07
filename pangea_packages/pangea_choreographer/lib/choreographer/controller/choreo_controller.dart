@@ -105,6 +105,14 @@ class ChoreoController {
     }
   }
 
+  setSrcLang(String name) {
+    lang?.setSrcLangByName(name);
+  }
+
+  setTrgLang(String name) {
+    lang?.setTrgLangByName(name);
+  }
+
   void _firstProcess() async {}
 
   ChoreoController() {
@@ -126,9 +134,11 @@ class ChoreoController {
 
   void _addClearOnEditListener() {
     this.textController!.addListener(() {
-      print('Text Event');
-      if (!state!.isEditing) {
-        clearState();
+      if (this.textController!.value != originalText) {
+        print('Text Event');
+        if (!state!.isEditing) {
+          clearState();
+        }
       }
     });
   }
