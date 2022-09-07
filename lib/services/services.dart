@@ -66,35 +66,27 @@ class PangeaServices {
       );
       if (value.statusCode == 200) {
         ClassCodeModel data = ClassCodeModel.fromJson(jsonDecode(value.body));
-        print(data.classCode);
-        print(data.className);
-        print(data.pangeaClassRoomId);
         if (data.pangeaClassRoomId != null) {
           joinRoom(context, data.pangeaClassRoomId!);
         } else {
-          print("id not found");
+          Fluttertoast.showToast(
+              msg: "Unable to find User Information");
         }
-
-        //   final data = jsonDecode(value.body);
-        //   box.write("age", data["age"]);
-        // }
-        // else if (value.statusCode == 400) {
-        //   box.write("age", 0);
-      } else {
-        print(value.statusCode);
+      }
+      else {
         if (kDebugMode) {
-          print("Unable to fetch user age");
+          print("API Error Occurred");
           print(value.statusCode);
           print(value.body);
         }
         Fluttertoast.showToast(
-            msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+            msg: "Api Error ${value.statusCode}: Unable to fetch code information");
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: $e");
     }
   }
 
@@ -116,7 +108,7 @@ class PangeaServices {
         Fluttertoast.showToast(msg: "Mail Sent Successfully");
       } else {
         if (kDebugMode) {
-          print("Mail send unsuccessfull");
+          print("Mail send unsuccessful");
           print(result.statusCode);
           print(result.body);
         }
@@ -151,25 +143,24 @@ class PangeaServices {
         },
       );
       if (value.statusCode == 200) {
-        // ClassCodeModel data =
         return ClassCodeModel.fromJson(jsonDecode(value.body));
       } else {
         if (kDebugMode) {
-          print("Unable to fetch user age");
+          print("Unable to fetch code information");
           print(value.statusCode);
           print(value.body);
         }
         Fluttertoast.showToast(
-            msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+            msg: "Api Error ${value.statusCode}: Unable to fetch code information");
         throw Exception(
-            "Api Error ${value.statusCode}: Unable to fetch user age");
+            "Api Error ${value.statusCode}: Unable to fetch code information");
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
-      throw Exception("Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: $e");
+      throw Exception("Error: $e");
     }
   }
 
@@ -184,7 +175,8 @@ class PangeaServices {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(L10n.of(context)!.contactHasBeenInvitedToTheGroup)));
       }
-    } else {
+    }
+    else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Unable to Fetch Room")));
     }
@@ -366,16 +358,17 @@ class PangeaServices {
         if (kDebugMode) {
           print(e);
         }
-        Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+        Fluttertoast.showToast(msg: "Error: $e");
       }
-    } else {
+    }
+    else {
       if (kDebugMode) {
         print(
-            "Client Id or access token is Empty, \n unable to fetch User Age");
+            "Client Id or access token is Empty.");
         print(clientID);
         print(accessToken);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: Unable to fetch Admin Information");
     }
   }
 
@@ -430,12 +423,14 @@ class PangeaServices {
           _searchController.age.value = data["age"];
           _searchController.loading.value = false;
           Fluttertoast.showToast(msg: "User Age Updated");
-        } else if (response.statusCode == 400) {
+        }
+        else if (response.statusCode == 400) {
           box.write("age", 0);
           Fluttertoast.showToast(msg: "Unable to update user age");
           _searchController.age.value = 0;
           log("400" + response.body);
-        } else {
+        }
+        else {
           ApiException.exception(
               statusCode: response.statusCode,
               context: context,
@@ -446,9 +441,10 @@ class PangeaServices {
           print("Error accured");
           print(e);
         }
-        Fluttertoast.showToast(msg: "Error: unable to update user age");
+        Fluttertoast.showToast(msg: "Error: $e");
       });
-    } else {
+    }
+    else {
       Fluttertoast.showToast(msg: "Unable to fetch Client ID");
     }
   }
