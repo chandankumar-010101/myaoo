@@ -71,12 +71,16 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat && _roomCheckCommon(room, context)).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => !room.isDirectChat && !room.name.contains("#") && _roomCheckCommon(room, context))
+        .toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
+    return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && _roomCheckCommon(room, context)).toList();
   }
 
   @override
@@ -104,7 +108,7 @@ class DirectChatsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat && _roomCheckCommon(room, context)).toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat).toList();
   }
 
   @override
@@ -177,12 +181,12 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => roomCheck(room, context)).toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat && !room.name.contains("#") && roomCheck(room, context)).toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
+    return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && roomCheck(room, context)).toList();
   }
 
   bool roomCheck(Room room, BuildContext context) {

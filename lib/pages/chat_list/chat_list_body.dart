@@ -14,6 +14,7 @@ import 'package:pangeachat/pages/chat_list/chat_list_item.dart';
 import 'package:pangeachat/pages/chat_list/spaces_bottom_bar.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
 import 'package:pangeachat/pages/chat_list/stories_header.dart';
+import 'package:vrouter/vrouter.dart';
 import '../../utils/stream_extension.dart';
 import '../../widgets/matrix.dart';
 
@@ -120,7 +121,15 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               // Todo: Style needs to be updated
                             ),
                           ),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                          IconButton(
+                              onPressed: () {
+                                widget.controller.activeSpacesEntry.getSpace(context) == null
+                                    ? VRouter.of(context).to('/newprivatechat')
+                                    : VRouter.of(context).to('/newprivatechat', queryParameters: {
+                                        "classId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                      });
+                              },
+                              icon: Icon(Icons.add)),
                         ],
                       )),
                   body: ListView.builder(
@@ -167,7 +176,15 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               // Todo: Style needs to be updated
                             ),
                           ),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                          IconButton(
+                              onPressed: () {
+                                widget.controller.activeSpacesEntry.getSpace(context) == null
+                                    ? VRouter.of(context).to('/newgroup')
+                                    : VRouter.of(context).to('/newgroup', queryParameters: {
+                                        "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                      });
+                              },
+                              icon: Icon(Icons.add)),
                         ],
                       )),
                   body: ListView.builder(

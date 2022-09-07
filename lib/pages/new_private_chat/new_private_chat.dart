@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +40,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
   final FocusNode textFieldFocus = FocusNode();
   final formKey = GlobalKey<FormState>();
   bool loading = false;
-
+  String classId = "";
   bool _hideFab = false;
 
   // remove leading matrix.to from text field in order to simplify pasting
@@ -59,10 +62,13 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     }
   }
 
+  Random random = new Random();
   @override
   void initState() {
     super.initState();
     textFieldFocus.addListener(setHideFab);
+
+    Future.delayed(Duration(seconds: 1)).whenComplete(() => classId = VRouter.of(context).queryParameters['classId'].toString());
   }
 
   @override
@@ -76,54 +82,79 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     if (!formKey.currentState!.validate()) return;
 
     final matrix = Matrix.of(context);
-    String className = classId.isNotEmpty
-        ? matrix.client.getRoomById(classId)!.displayname
-        : "";
+    String className = classId.isNotEmpty ? matrix.client.getRoomById(classId)!.displayname : "";
     Fluttertoast.showToast(msg: "Functionality under process");
-    if (className.isNotEmpty) {
-      final roomID = await showFutureLoadingDialog(
-        context: context,
-        future: () => matrix.client.createRoom(
-          preset: sdk.CreateRoomPreset.privateChat,
-          initialState: [
-            sdk.StateEvent(
-                content: {"guest_access": "can_join"},
-                type: EventTypes.GuestAccess,
-                stateKey: ""),
-            sdk.StateEvent(content: {
-              "via": ["matrix.staging.pangea.chat"],
-              "canonical": true
-            }, type: EventTypes.spaceParent, stateKey: classId),
-            sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility)
-          ],
-          // creationContent: {'type': RoomCreationTypes.mSpace},
-          visibility: sdk.Visibility.private,
-          roomAliasName: className.isNotEmpty
-              ? className.trim().toLowerCase().replaceAll(' ', '_')
-              : null,
-          name: className.isNotEmpty ? className : null,
-        ),
-      );
-      if (roomID.result != null) {
-        if (kDebugMode) {
-          print(roomID.result);
-        }
-       Fluttertoast.showToast(msg: "Created Successfully");
+    print("CreatePrivateChat :  ${{
+      "mxid": controller.text,
+      "initialState": [
+        sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: "").toJson().toString(),
+        sdk.StateEvent(content: {
+          "via": ["matrix.staging.pangea.chat"],
+          "canonical": true
+        }, type: EventTypes.spaceParent, stateKey: classId)
+            .toJson()
+            .toString(),
+        sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility).toJson().toString()
+      ],
+      "enableEncryption": false,
+      "waitForSync": false
+    }}");
+
+    final roomID = await showFutureLoadingDialog(
+      context: context,
+
+      future: () => matrix.client.createRoom(
+        invite: [controller.text],
+        preset: sdk.CreateRoomPreset.privateChat,
+        isDirect: true,
+        initialState: [
+          sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
+          sdk.StateEvent(content: {
+            "via": ["matrix.staging.pangea.chat"],
+            "canonical": true
+          }, type: EventTypes.spaceParent, stateKey: classId),
+          sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility)
+        ],
+        // creationContent: {'type': RoomCreationTypes.mSpace},
+        visibility: sdk.Visibility.private,
+        roomAliasName: controller.text.split(":").first.replaceAll("@", "") + "#" + random.nextInt(9999).toString(),
+        name: controller.text.split(":").first.replaceAll("@", "") + "#" + random.nextInt(9999).toString(),
+      ),
+
+      // matrix.client.startDirectChat(controller.text,
+      //     initialState: [
+      //       sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
+      //       sdk.StateEvent(
+      //         content: {
+      //           "via": ["matrix.staging.pangea.chat"],
+      //           "canonical": true
+      //         },
+      //         type: EventTypes.spaceParent,
+      //         stateKey: classId,
+      //       ),
+      //       sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility),
+      //     ],
+      //     enableEncryption: false,
+      //     waitForSync: false),
+    );
+    if (roomID.result != null) {
+      if (kDebugMode) {
+        print(roomID.result);
       }
-      if (roomID == null) {
-        VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-      }
+      Fluttertoast.showToast(msg: "Created Successfully");
+    }
+    if (roomID == null) {
+      VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
     }
 
-    UrlLauncher(context, '$prefix${controller.text}').openMatrixToUrl();
+    //  UrlLauncher(context, '$prefix${controller.text}').openMatrixToUrl();
   }
 
   String? validateForm(String? value) {
     if (value!.isEmpty) {
       return L10n.of(context)!.pleaseEnterAMatrixIdentifier;
     }
-    if (!controller.text.isValidMatrixId ||
-        !supportedSigils.contains(controller.text.sigil)) {
+    if (!controller.text.isValidMatrixId || !supportedSigils.contains(controller.text.sigil)) {
       return L10n.of(context)!.makeSureTheIdentifierIsValid;
     }
     if (controller.text == Matrix.of(context).client.userID) {
@@ -139,8 +170,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
 
   void requestMoreMembersAction(String classId) async {
     final room = Matrix.of(context).client.getRoomById(classId);
-    final participants = await showFutureLoadingDialog(
-        context: context, future: () => room!.requestParticipants());
+    final participants = await showFutureLoadingDialog(context: context, future: () => room!.requestParticipants());
     if (participants.error == null) {
       setState(() => members = participants.result);
     }
@@ -178,34 +208,16 @@ class NewPrivateChatController extends State<NewPrivateChat> {
   fetchClassInfo(String roomId) async {
     String accessToken = box.read("access") ?? "g";
     if (accessToken.isNotEmpty) {
-      FetchClassInfoModel data =
-          await PangeaServices.fetchClassInfo(context, accessToken, roomId);
-      if (data.permissions != null &&
-          data.permissions.oneToOneChatClass != null) {
-        data.permissions.oneToOneChatClass
-            ? setState(() => oneToOneChat = true)
-            : setState(() => oneToOneChat = false);
-        data.permissions.isCreateRooms
-            ? setState(() => createRoom = true)
-            : setState(() => createRoom = false);
+      FetchClassInfoModel data = await PangeaServices.fetchClassInfo(context, accessToken, roomId);
+      if (data.permissions != null && data.permissions.oneToOneChatClass != null) {
+        data.permissions.oneToOneChatClass ? setState(() => oneToOneChat = true) : setState(() => oneToOneChat = false);
+        data.permissions.isCreateRooms ? setState(() => createRoom = true) : setState(() => createRoom = false);
       }
     }
   }
 
-  String classId = "";
   @override
   Widget build(BuildContext context) {
-    try {
-      classId = VRouter.of(context).queryParameters['class_id'] ?? "";
-      classId.isNotEmpty
-          ? members ??=
-              Matrix.of(context).client.getRoomById(classId)!.getParticipants()
-          : null;
-      classId.isNotEmpty ? fetchClassInfo(classId) : null;
-    } catch (e) {
-      print("Error");
-    }
-
     return NewPrivateChatView(this);
   }
 }

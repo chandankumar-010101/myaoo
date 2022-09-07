@@ -620,7 +620,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           : Theme.of(context).colorScheme.onPrimary,
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    VRouter.of(context).to("/search");
+                                  },
                                   child: Text(
                                     "Find a Language Exchange",
                                     style: const TextStyle()

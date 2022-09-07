@@ -89,19 +89,16 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   void setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) {
-    if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition: 0) != kSpacesBottomBarHeight) {
+    if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
     setState(() => _activeSpacesEntry = spaceId);
   }
 
-
-
-
   void editSpace(BuildContext context, String spaceId) async {
     await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
 
-    VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
+    VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
     //VRouter.of(context).toSegments(['classes', spaceId]);
   }
 
@@ -110,22 +107,13 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   // Note that this could change due to configuration, etc.
   // Also be aware that _activeSpacesEntry = null is the expected reset method.
-  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
-      ? DirectChatsSpacesEntry()
-      : AllRoomsSpacesEntry();
+  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes ? DirectChatsSpacesEntry() : AllRoomsSpacesEntry();
 
   List<SpacesEntry> get spacesEntries {
     if (AppConfig.separateChatTypes) {
-      return [
-        defaultSpacesEntry,
-        GroupsSpacesEntry(),
-        ...spaces.map((space) => SpaceSpacesEntry(space)).toList()
-      ];
+      return [defaultSpacesEntry, GroupsSpacesEntry(), ...spaces.map((space) => SpaceSpacesEntry(space)).toList()];
     }
-    return [
-      defaultSpacesEntry,
-      ...spaces.map((space) => SpaceSpacesEntry(space)).toList()
-    ];
+    return [defaultSpacesEntry, ...spaces.map((space) => SpaceSpacesEntry(space)).toList()];
   }
 
   final selectedRoomIds = <String>{};
@@ -169,8 +157,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (text == null) return;
     if (text.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
         text.toLowerCase().startsWith(AppConfig.inviteLinkPrefix) ||
-        (text.toLowerCase().startsWith(AppConfig.schemePrefix) &&
-            !RegExp(r'\s').hasMatch(text))) {
+        (text.toLowerCase().startsWith(AppConfig.schemePrefix) && !RegExp(r'\s').hasMatch(text))) {
       return _processIncomingUris(text);
     }
     Matrix.of(context).shareContent = {
@@ -192,15 +179,13 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (!PlatformInfos.isMobile) return;
 
     // For sharing images coming from outside the app while the app is in the memory
-    _intentFileStreamSubscription = ReceiveSharingIntent.getMediaStream()
-        .listen(_processIncomingSharedFiles, onError: print);
+    _intentFileStreamSubscription = ReceiveSharingIntent.getMediaStream().listen(_processIncomingSharedFiles, onError: print);
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then(_processIncomingSharedFiles);
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
-    _intentDataStreamSubscription = ReceiveSharingIntent.getTextStream()
-        .listen(_processIncomingSharedText, onError: print);
+    _intentDataStreamSubscription = ReceiveSharingIntent.getTextStream().listen(_processIncomingSharedText, onError: print);
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then(_processIncomingSharedText);
@@ -227,19 +212,14 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (!Matrix.of(context).client.encryptionEnabled) return;
     await Matrix.of(context).client.accountDataLoading;
     await Matrix.of(context).client.userDeviceKeysLoading;
-    final crossSigning =
-        await Matrix.of(context).client.encryption?.crossSigning.isCached() ??
-            false;
-    final needsBootstrap =
-        Matrix.of(context).client.encryption?.crossSigning.enabled == false ||
-            crossSigning == false;
+    final crossSigning = await Matrix.of(context).client.encryption?.crossSigning.isCached() ?? false;
+    final needsBootstrap = Matrix.of(context).client.encryption?.crossSigning.enabled == false || crossSigning == false;
     final isUnknownSession = Matrix.of(context).client.isUnknownSession;
     if (needsBootstrap || isUnknownSession) {
       setState(() {
         showChatBackupBanner = true;
       });
     }
-
   }
 
   @override
@@ -252,9 +232,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   void toggleSelection(String roomId) {
-    setState(() => selectedRoomIds.contains(roomId)
-        ? selectedRoomIds.remove(roomId)
-        : selectedRoomIds.add(roomId));
+    setState(() => selectedRoomIds.contains(roomId) ? selectedRoomIds.remove(roomId) : selectedRoomIds.add(roomId));
   }
 
   Future<void> toggleUnread() async {
@@ -293,9 +271,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     await showFutureLoadingDialog(
       context: context,
       future: () async {
-        final newState = anySelectedRoomNotMuted
-            ? PushRuleState.mentionsOnly
-            : PushRuleState.notify;
+        final newState = anySelectedRoomNotMuted ? PushRuleState.mentionsOnly : PushRuleState.notify;
         final client = Matrix.of(context).client;
         for (final roomId in selectedRoomIds) {
           final room = client.getRoomById(roomId)!;
@@ -360,11 +336,11 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         break;
       case PopupMenuAction.invite:
         FluffyShare.share(
-            L10n.of(context)!.inviteText("" + Matrix.of(context).client.userID!,
-                'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'),
+            L10n.of(context)!
+                .inviteText("" + Matrix.of(context).client.userID!, 'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'),
             context);
-        log(L10n.of(context)!.inviteText(Matrix.of(context).client.userID!,
-            'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'));
+        log(L10n.of(context)!
+            .inviteText(Matrix.of(context).client.userID!, 'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'));
         log(Matrix.of(context).client.userID!);
         break;
       case PopupMenuAction.newGroup:
@@ -463,15 +439,12 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     setState(() => selectedRoomIds.clear());
   }
 
-  bool get anySelectedRoomNotMarkedUnread => selectedRoomIds.any(
-      (roomId) => !Matrix.of(context).client.getRoomById(roomId)!.markedUnread);
+  bool get anySelectedRoomNotMarkedUnread => selectedRoomIds.any((roomId) => !Matrix.of(context).client.getRoomById(roomId)!.markedUnread);
 
-  bool get anySelectedRoomNotFavorite => selectedRoomIds.any(
-      (roomId) => !Matrix.of(context).client.getRoomById(roomId)!.isFavourite);
+  bool get anySelectedRoomNotFavorite => selectedRoomIds.any((roomId) => !Matrix.of(context).client.getRoomById(roomId)!.isFavourite);
 
-  bool get anySelectedRoomNotMuted => selectedRoomIds.any((roomId) =>
-      Matrix.of(context).client.getRoomById(roomId)!.pushRuleState ==
-      PushRuleState.notify);
+  bool get anySelectedRoomNotMuted =>
+      selectedRoomIds.any((roomId) => Matrix.of(context).client.getRoomById(roomId)!.pushRuleState == PushRuleState.notify);
 
   bool waitForFirstSync = false;
 
@@ -487,8 +460,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (spaceId != null) {
       final space = client.getRoomById(spaceId)!;
       final localMembers = space.getParticipants().length;
-      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
-          (space.summary.mJoinedMemberCount ?? 0);
+      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) + (space.summary.mJoinedMemberCount ?? 0);
       if (localMembers < actualMembersCount) {
         await space.requestParticipants();
       }
@@ -526,19 +498,14 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       _activeSpacesEntry = null;
       selectedRoomIds.clear();
       Matrix.of(context).activeBundle = bundle;
-      if (!Matrix.of(context)
-          .currentBundle!
-          .any((client) => client == Matrix.of(context).client)) {
-        Matrix.of(context)
-            .setActiveClient(Matrix.of(context).currentBundle!.first);
+      if (!Matrix.of(context).currentBundle!.any((client) => client == Matrix.of(context).client)) {
+        Matrix.of(context).setActiveClient(Matrix.of(context).currentBundle!.first);
       }
     });
   }
 
   void editBundlesForAccount(String? userId, String? activeBundle) async {
-    final client = Matrix.of(context)
-        .widget
-        .clients[Matrix.of(context).getClientIndexByMatrixId(userId!)];
+    final client = Matrix.of(context).widget.clients[Matrix.of(context).getClientIndexByMatrixId(userId!)];
     final action = await showConfirmationDialog<EditBundleAction>(
       context: context,
       title: L10n.of(context)!.editBundlesForAccount,
@@ -558,11 +525,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     switch (action) {
       case EditBundleAction.addToBundle:
         final bundle = await showTextInputDialog(
-            context: context,
-            title: L10n.of(context)!.bundleName,
-            textFields: [
-              DialogTextField(hintText: L10n.of(context)!.bundleName)
-            ]);
+            context: context, title: L10n.of(context)!.bundleName, textFields: [DialogTextField(hintText: L10n.of(context)!.bundleName)]);
         if (bundle == null || bundle.isEmpty || bundle.single.isEmpty) return;
         await showFutureLoadingDialog(
           context: context,
@@ -577,16 +540,10 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  bool get displayBundles =>
-      Matrix.of(context).hasComplexBundles &&
-      Matrix.of(context).accountBundles.keys.length > 1;
+  bool get displayBundles => Matrix.of(context).hasComplexBundles && Matrix.of(context).accountBundles.keys.length > 1;
 
   String? get secureActiveBundle {
-    if (Matrix.of(context).activeBundle == null ||
-        !Matrix.of(context)
-            .accountBundles
-            .keys
-            .contains(Matrix.of(context).activeBundle)) {
+    if (Matrix.of(context).activeBundle == null || !Matrix.of(context).accountBundles.keys.contains(Matrix.of(context).activeBundle)) {
       return Matrix.of(context).accountBundles.keys.first;
     }
     return Matrix.of(context).activeBundle;
