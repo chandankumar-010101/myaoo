@@ -31,24 +31,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
   final box = GetStorage();
 
-  // void _joinRoom(BuildContext context,String roomAlias) async {
-  //   print(roomAlias);
-  //   // final client = Matrix.of(context).client;
-  //   // final result = await showFutureLoadingDialog<String>(
-  //   //   context: context,
-  //   //   future: () => client.joinRoom(roomAlias),
-  //   // );
-  //   // if (result.error == null) {
-  //   //   if (client.getRoomById(result.result!) == null) {
-  //   //     await client.onSync.stream.firstWhere(
-  //   //             (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
-  //   //   }
-  //   //   VRouter.of(context).toSegments(['rooms', result.result!]);
-  //   //   Navigator.of(context, rootNavigator: false).pop();
-  //   //   return;
-  //   // }
-  // }
-
 
   SpacesEntry? _activeSpacesEntry;
   SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
@@ -85,16 +67,27 @@ class _RequestScreenViewState extends State<RequestScreenView> {
       Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
 
+  fetchFlag(FetchClassInfoModel data,String url){
+    try{
+      return SizedBox(
+        width: 20,
+        height: 20,
+        child: Image.network(url + data.flags[1].languageName.toString()),
+      );
+    }catch(e){
+      return Container();
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _waitForFirstSync();
   }
 
   fetchParti(String roomAlias)async{
-   final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
-    log(members.toList().toString());
+   // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
+   //  log(members.toList().toString());
 
   }
 
@@ -106,6 +99,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id']??"";
     final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
+    print(space);
 
    fetchParti(roomAlias);
     return Scaffold(
@@ -442,11 +436,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Image.network(url+ data.flags[1].languageName !=null?data.flags[1].languageName.toString():""??"")),
-                                  const SizedBox(
+                                  fetchFlag(data, url),
+                                    const SizedBox(
                                     width: 5,
                                   ),
                                   Text(
@@ -623,7 +614,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
-                        space.isEmpty?(data.permissions.isOpenEnrollment?SizedBox(
+                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
                           width: 200,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
