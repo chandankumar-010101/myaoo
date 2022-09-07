@@ -501,9 +501,6 @@ class PangeaServices {
           ).toJson());
       if (value.statusCode == 201 || value.statusCode == 200) {
         final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-        if (kDebugMode) {
-          print(data.id);
-        }
         box.write("class_code", data.classCode);
         try {
           final value = await http.post(
@@ -540,10 +537,8 @@ class PangeaServices {
                 const SnackBar(content: Text("Class created successfully")));
             context.vRouter
                 .to("/invite_students", queryParameters: {"id": roomId});
-          } else {
-            if (kDebugMode) {
-              print("Error accured here");
-            }
+          }
+          else {
             await room.leave().whenComplete(() {
               deleteClass(context: context, roomId: roomId);
               ApiException.exception(
@@ -553,6 +548,10 @@ class PangeaServices {
             }).catchError((e) {
               throw Exception("Error: Unable to delete class");
             });
+
+            if (kDebugMode) {
+              print("Error accured here");
+            }
           }
         } catch (e) {
           await room.leave().whenComplete(() {

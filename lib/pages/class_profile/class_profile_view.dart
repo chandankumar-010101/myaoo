@@ -3,11 +3,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
+import 'package:pangeachat/pages/class_profile/class_profile.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
@@ -21,7 +23,8 @@ import '../chat_list/spaces_entry.dart';
 import "dart:developer";
 
 class RequestScreenView extends StatefulWidget {
-  const RequestScreenView({Key? key}) : super(key: key);
+  final RequestScreenState controller;
+   const RequestScreenView(this.controller,{Key? key}) : super(key: key);
 
   @override
   State<RequestScreenView> createState() => _RequestScreenViewState();
@@ -31,79 +34,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
 
 
-  final box = GetStorage();
-  PangeaControllers getxController = Get.put(PangeaControllers());
 
-  SpacesEntry? _activeSpacesEntry;
-  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
-      ? DirectChatsSpacesEntry()
-      : AllRoomsSpacesEntry();
-
-  SpacesEntry get activeSpacesEntry {
-    final id = _activeSpacesEntry;
-    return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
-  }
-
-  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
-  Future<void> _waitForFirstSync() async {
-    final client = Matrix.of(context).client;
-    await client.roomsLoading;
-    await client.accountDataLoading;
-    if (client.prevBatch?.isEmpty ?? true) {
-      await client.onFirstSync.stream.first;
-    }
-    // Load space members to display DM rooms
-    final spaceId = activeSpaceId;
-    if (spaceId != null) {
-      final space = client.getRoomById(spaceId)!;
-      final localMembers = space.getParticipants().length;
-      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
-          (space.summary.mJoinedMemberCount ?? 0);
-      if (localMembers < actualMembersCount) {
-        await space.requestParticipants();
-      }
-    }
-  }
-
-  List<Room> get spaces =>
-      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
-
-
-  fetchFlag(FetchClassInfoModel data,String url){
-    try{
-      String path = url + data.flags[1].languageFlag.toString()??"";
-      print(path);
-      return path.isNotEmpty?SizedBox(
-        width: 20,
-        height: 20,
-        child: Image.network(path),
-      ):Container();
-    }catch(e){
-
-      return Container();
-    }
-  }
-  fetchFlag2(FetchClassInfoModel data,String url){
-    String path = url +data.flags[0].languageFlag.toString();
-    print(path);
-   return SizedBox(
-        width: 20,
-        height: 20,
-        child: Image.network(path));
-
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _waitForFirstSync();
-  }
-
-  // fetchParti(String roomAlias)async{
-  //  // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
-  //  //  log(members.toList().toString());
-  //
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +43,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final List<String> data =  basePath.split("/api/v1");
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id']??"";
-    final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
+    widget.controller.fetchSpaceInfo(roomAlias);
+
 
    //fetchParti(roomAlias);
     return Scaffold(
@@ -120,16 +52,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
       appBar: AppBar(
         title: const Text("Class Profile"),
-        // actions: [
-        //   TextButton.icon(
-        //     onPressed: () => _joinRoom(context,roomAlias),
-        //     label: Text(L10n.of(context)!.joinRoom),
-        //     icon: const Icon(Icons.login_outlined),
-        //   ),
-        // ],
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",roomAlias),
+        future: PangeaServices.fetchClassInfo(context, widget.controller.box.read("access") ?? "",roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
@@ -416,7 +341,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  fetchFlag2(data, url)
+                                  widget.controller.fetchFlag2(data, url)
                                     ]),
                                 const SizedBox(
                                   width: 5,
@@ -446,7 +371,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  fetchFlag(data, url),
+                                  widget.controller.fetchFlag(data, url),
                                     const SizedBox(
                                     width: 5,
                                   ),
@@ -501,8 +426,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       )),
                   fetchPermissions(data.permissions),
 
-                  box.read("usertype") == 2
-                      ? box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2
+                      ? widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container()
                       : Container(
                     margin:
@@ -516,6 +441,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
+                        widget.controller.space.isEmpty?
                         data.permissions.isOpenExchange?
                         SizedBox(
                           width: 200,
@@ -566,7 +492,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   fontSize: 12),
                             ),
                           ),
-                        ):Container(),
+                        ):Container():Container(),
                         const SizedBox(
                           width: 10,
                           height: 10,
@@ -610,7 +536,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       ],
                     ),
                   )
-                      : box.read("clientID") == data.classAuthorId
+                      : widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container()
                       : Container(
                     margin:
@@ -624,7 +550,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
-                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
+                       widget.controller.space.isEmpty?(data.permissions.isOpenEnrollment?SizedBox(
                           width: 200,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
@@ -723,8 +649,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       ],
                     ),
                   ),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                      widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
@@ -838,7 +764,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
                             onPressed: () {
-                              getxController.throughClassProfile.value = true;
+                              widget.controller.getxController.throughClassProfile.value = true;
                             },
                             child: Text(
                               "Find a Language Exchange",
@@ -856,8 +782,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     ),
                   )
                       : Container(),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                      widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
@@ -891,11 +817,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             onPressed: () {
 
                               if (roomAlias.isNotEmpty) {
-                                box.write(
+                                widget.controller.box.write(
                                     "public", data.permissions.isPublic);
-                                box.write("openEnrollment",
+                                widget.controller.box.write("openEnrollment",
                                     data.permissions.isOpenEnrollment);
-                                box.write("openExchange",
+                                widget.controller.box.write("openExchange",
                                     data.permissions.isOpenExchange);
                                 context.vRouter.to(
                                     "/classDetails/update_class_permissions",
@@ -943,29 +869,29 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
                               if (roomAlias.isNotEmpty) {
                                 try {
-                                  box.write(
+                                  widget.controller.box.write(
                                       "oneToOneClass",
                                       data.permissions
                                           .oneToOneChatClass);
-                                  box.write(
+                                  widget.controller.box.write(
                                       "oneToOneExchange",
                                       data.permissions
                                           .oneToOneChatExchange);
-                                  box.write("createRoom",
+                                  widget.controller.box.write("createRoom",
                                       data.permissions.isCreateRooms);
-                                  box.write(
+                                  widget.controller.box.write(
                                       "createRoomExchange",
                                       data.permissions
                                           .isCreateRoomsExchange);
-                                  box.write("createStories",
+                                  widget.controller.box.write("createStories",
                                       data.permissions.isCreateStories);
-                                  box.write("shareVideo",
+                                  widget.controller.box.write("shareVideo",
                                       data.permissions.isShareVideo);
-                                  box.write("sharePhotos",
+                                  widget.controller.box.write("sharePhotos",
                                       data.permissions.isSharePhoto);
-                                  box.write("shareFiles",
+                                  widget.controller.box.write("shareFiles",
                                       data.permissions.isShareFiles);
-                                  box.write("shareLocation",
+                                  widget.controller.box.write("shareLocation",
                                       data.permissions.isShareLocation);
                                 } catch (e) {
                                   if (kDebugMode) {
@@ -1022,16 +948,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
 
                               if (roomAlias.isNotEmpty) {
-                                box.write("class_name", data.className);
-                                box.write("city_name", data.city);
-                                box.write("country_name", data.country);
-                                box.write(
+                                widget.controller.box.write("class_name", data.className);
+                                widget.controller.box.write("city_name", data.city);
+                                widget.controller.box.write("country_name", data.country);
+                                widget.controller. box.write(
                                     "language_level", data.languageLevel);
-                                box.write("school_name", data.schoolName);
-                                box.write("disc", data.description);
-                                box.write(
+                                widget.controller.box.write("school_name", data.schoolName);
+                                widget.controller.box.write("disc", data.description);
+                                widget.controller.box.write(
                                     "source_lang", data.dominantLanguage);
-                                box.write(
+                                widget.controller.box.write(
                                     "target_lang", data.targetLanguage);
                                 context.vRouter.to(
                                     "/classDetails/update_language",
@@ -1056,8 +982,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     ),
                   )
                       : Container(),
-                  box.read("usertype") == 2 &&
-                      box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                      widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.only(top: 10),
@@ -1099,29 +1025,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 cancelLabel: L10n.of(context)!.cancel,
                               );
                               if (confirmed == OkCancelResult.ok) {
-                                final room = Matrix.of(context)
-                                    .client
-                                    .getRoomById(roomAlias);
-                                if (room != null) {
-                                  final success =
-                                  await showFutureLoadingDialog(
-                                      context: context,
-                                      future: () => room.leave());
-                                  if (success.error == null) {
-                                    String token = box.read("access");
-                                    if (kDebugMode) {
-                                      print(token);
-                                    }
-                                    PangeaServices.deleteClass(
-                                        roomId: room.id,
-                                        context: context);
-                                    if (kDebugMode) {
-                                      print(room.id);
-                                    }
+                                widget.controller.kickAndRemoveClass(roomAlias);
 
-                                    VRouter.of(context).to('/rooms');
-                                  }
-                                }
                               }
                             },
                             child: Text(
@@ -1149,8 +1054,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
           }
           else{
             if(snapshot.hasError){
-              print("hello");
-              print(snapshot.error);
+              if (kDebugMode) {
+                print("Unable to fetch data: ${snapshot.error}");
+              }
             }
             return const Center(child: CircularProgressIndicator());
           }
