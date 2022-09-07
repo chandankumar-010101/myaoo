@@ -614,7 +614,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
-                        space.isEmpty?(data.permissions.isOpenEnrollment?SizedBox(
+                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
                           width: 200,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
