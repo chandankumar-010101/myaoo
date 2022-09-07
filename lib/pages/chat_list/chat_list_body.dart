@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -60,8 +61,10 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     final reversed = !_animationReversed();
     Widget child;
     if (widget.controller.waitForFirstSync && Matrix.of(context).client.prevBatch != null) {
+      final peoplerooms = widget.controller.activeSpacesEntry.getPeopleRooms(context);
       final rooms = widget.controller.activeSpacesEntry.getRooms(context);
-      if (rooms.isEmpty) {
+
+      if (rooms.isEmpty && peoplerooms.isEmpty) {
         child = Column(
           key: const ValueKey(null),
           mainAxisAlignment: MainAxisAlignment.center,
@@ -86,34 +89,91 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
         );
       } else {
         final displayStoriesHeader = widget.controller.activeSpacesEntry.shouldShowStoriesHeader(context);
-        child = Column(children: [
-          ExpansionPanelList(
-            elevation: 2,
-            animationDuration: Duration(milliseconds: 400),
-            expansionCallback: (panelIndex, isExpanded) => setState(() {
-              isRoomExpanded = !isExpanded;
-            }),
-            children: <ExpansionPanel>[
-              ExpansionPanel(
-                canTapOnHeader: true,
-                isExpanded: isRoomExpanded,
-                headerBuilder: ((context, isExpanded) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Rooms",
-                            // Todo: Style needs to be updated
+        child = SingleChildScrollView(
+          child: Column(children: [
+            StoriesHeader(),
+            ExpansionPanelList(
+              elevation: 2,
+              animationDuration: Duration(milliseconds: 400),
+              expansionCallback: (panelIndex, isExpanded) => setState(() {
+                if (panelIndex == 0) {
+                  isPeopleExpanded = !isExpanded;
+                  isRoomExpanded = false;
+                }
+                if (panelIndex == 1) {
+                  isRoomExpanded = !isExpanded;
+                  isPeopleExpanded = false;
+                }
+              }),
+              children: <ExpansionPanel>[
+                ExpansionPanel(
+                  canTapOnHeader: true,
+                  isExpanded: isPeopleExpanded,
+                  headerBuilder: ((context, isExpanded) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              "People",
+                              // Todo: Style needs to be updated
+                            ),
                           ),
-                        ),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-                      ],
-                    )),
-                body: Container(
-                  height: 400,
-                  child: ListView.builder(
+                          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                        ],
+                      )),
+                  body: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    key: ValueKey(Matrix.of(context).client.userID.toString() +
+                        widget.controller.activeSpaceId.toString() +
+                        widget.controller.activeSpacesEntry.runtimeType.toString()),
+                    controller: widget.controller.scrollController,
+                    // add +1 space below in order to properly scroll below the spaces bar
+                    itemCount: peoplerooms.length + (displayStoriesHeader ? 2 : 1),
+                    itemBuilder: (BuildContext context, int i) {
+                      // if (displayStoriesHeader) {
+                      //   if (i == 0) {
+                      //     return const
+                      //   }
+                      //   i--;
+                      // }
+                      if (i >= peoplerooms.length) {
+                        return Container();
+                      }
+
+                      return ChatListItem(
+                        peoplerooms[i],
+                        selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
+                        onTap: widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(peoplerooms[i].id) : null,
+                        onLongPress: () => widget.controller.toggleSelection(peoplerooms[i].id),
+                        activeChat: widget.controller.activeChat == peoplerooms[i].id,
+                      );
+                    },
+                  ),
+                ),
+                ExpansionPanel(
+                  canTapOnHeader: true,
+                  isExpanded: isRoomExpanded,
+                  headerBuilder: ((context, isExpanded) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              "Rooms",
+                              // Todo: Style needs to be updated
+                            ),
+                          ),
+                          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                        ],
+                      )),
+                  body: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+
+                    shrinkWrap: true,
                     key: ValueKey(Matrix.of(context).client.userID.toString() +
                         widget.controller.activeSpaceId.toString() +
                         widget.controller.activeSpacesEntry.runtimeType.toString()),
@@ -121,14 +181,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                     // add +1 space below in order to properly scroll below the spaces bar
                     itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
                     itemBuilder: (BuildContext context, int i) {
-                      if (displayStoriesHeader) {
-                        if (i == 0) {
-                          return const StoriesHeader();
-                        }
-                        i--;
-                      }
                       if (i >= rooms.length) {
-                        return const ListTile();
+                        return Container();
                       }
 
                       return ChatListItem(
@@ -141,10 +195,13 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                     },
                   ),
                 ),
-              ),
-            ],
-          )
-        ]);
+              ],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+          ]),
+        );
       }
     } else {
       const dummyChatCount = 5;
@@ -220,7 +277,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
               ? SharedAxisTransitionType.horizontal
               : SharedAxisTransitionType.vertical,
           fillColor: Theme.of(context).scaffoldBackgroundColor,
-          child: child,
+          child: Align(alignment: Alignment.topLeft, child: child),
         );
       },
       child: child,
