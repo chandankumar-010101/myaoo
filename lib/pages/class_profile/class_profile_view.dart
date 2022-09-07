@@ -3,11 +3,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
+import 'package:pangeachat/pages/class_profile/class_profile.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
@@ -21,7 +23,8 @@ import '../chat_list/spaces_entry.dart';
 import "dart:developer";
 
 class RequestScreenView extends StatefulWidget {
-  const RequestScreenView({Key? key}) : super(key: key);
+  final RequestScreenState controller;
+   const RequestScreenView(this.controller,{Key? key}) : super(key: key);
 
   @override
   State<RequestScreenView> createState() => _RequestScreenViewState();
@@ -33,41 +36,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
   final box = GetStorage();
   PangeaControllers getxController = Get.put(PangeaControllers());
-
-  SpacesEntry? _activeSpacesEntry;
-  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
-      ? DirectChatsSpacesEntry()
-      : AllRoomsSpacesEntry();
-
-  SpacesEntry get activeSpacesEntry {
-    final id = _activeSpacesEntry;
-    return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
-  }
-
-  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
-  Future<void> _waitForFirstSync() async {
-    final client = Matrix.of(context).client;
-    await client.roomsLoading;
-    await client.accountDataLoading;
-    if (client.prevBatch?.isEmpty ?? true) {
-      await client.onFirstSync.stream.first;
-    }
-    // Load space members to display DM rooms
-    final spaceId = activeSpaceId;
-    if (spaceId != null) {
-      final space = client.getRoomById(spaceId)!;
-      final localMembers = space.getParticipants().length;
-      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
-          (space.summary.mJoinedMemberCount ?? 0);
-      if (localMembers < actualMembersCount) {
-        await space.requestParticipants();
-      }
-    }
-  }
-
-  List<Room> get spaces =>
-      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
-
 
   fetchFlag(FetchClassInfoModel data,String url){
     try{
@@ -94,25 +62,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _waitForFirstSync();
-  }
-
-  // fetchParti(String roomAlias)async{
-  //  // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
-  //  //  log(members.toList().toString());
-  //
-  // }
-
-  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
    final String basePath =  Environment.baseAPI;
     final List<String> data =  basePath.split("/api/v1");
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id']??"";
-    final List<Room> space = spaces.where((i) => i.id == roomAlias).toList();
+    widget.controller.fetchSpaceInfo(roomAlias);
+
 
    //fetchParti(roomAlias);
     return Scaffold(
@@ -120,13 +77,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
       appBar: AppBar(
         title: const Text("Class Profile"),
-        // actions: [
-        //   TextButton.icon(
-        //     onPressed: () => _joinRoom(context,roomAlias),
-        //     label: Text(L10n.of(context)!.joinRoom),
-        //     icon: const Icon(Icons.login_outlined),
-        //   ),
-        // ],
       ),
       body: FutureBuilder(
         future: PangeaServices.fetchClassInfo(context, box.read("access") ?? "",roomAlias),
@@ -516,6 +466,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
+                        widget.controller.space.isEmpty?
                         data.permissions.isOpenExchange?
                         SizedBox(
                           width: 200,
@@ -566,7 +517,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   fontSize: 12),
                             ),
                           ),
-                        ):Container(),
+                        ):Container():Container(),
                         const SizedBox(
                           width: 10,
                           height: 10,
@@ -624,7 +575,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
                       children: [
-                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
+                       widget.controller.space.isEmpty?(data.permissions.isOpenEnrollment?SizedBox(
                           width: 200,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
@@ -1099,29 +1050,30 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 cancelLabel: L10n.of(context)!.cancel,
                               );
                               if (confirmed == OkCancelResult.ok) {
-                                final room = Matrix.of(context)
-                                    .client
-                                    .getRoomById(roomAlias);
-                                if (room != null) {
-                                  final success =
-                                  await showFutureLoadingDialog(
-                                      context: context,
-                                      future: () => room.leave());
-                                  if (success.error == null) {
-                                    String token = box.read("access");
-                                    if (kDebugMode) {
-                                      print(token);
-                                    }
-                                    PangeaServices.deleteClass(
-                                        roomId: room.id,
-                                        context: context);
-                                    if (kDebugMode) {
-                                      print(room.id);
-                                    }
+                                print(roomAlias);
+                                try{
 
-                                    VRouter.of(context).to('/rooms');
+                                  final room = Matrix.of(context).client.getRoomById(roomAlias);
+                                  if (room != null) {
+                                    room.canKick ? widget.controller
+                                        .kickAndRemoveClass(room) : Fluttertoast
+                                        .showToast(
+                                        msg: "You don't have permissions!");
                                   }
+                                  else{
+                                    print("no room");
+                                    Fluttertoast
+                                        .showToast(
+                                        msg: "Unable to find user Class Information");
+                                  }
+                                }catch(e){
+                                  Fluttertoast
+                                      .showToast(
+                                      msg: "Unable to find user Class Information");
+                                  print("Error accured");
                                 }
+
+
                               }
                             },
                             child: Text(
@@ -1149,8 +1101,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
           }
           else{
             if(snapshot.hasError){
-              print("hello");
-              print(snapshot.error);
+              if (kDebugMode) {
+                print("Unable to fetch data: ${snapshot.error}");
+              }
             }
             return const Center(child: CircularProgressIndicator());
           }
