@@ -187,7 +187,7 @@ class ChatController extends State<Chat> {
       choreoController.setMatrixClient(room!.client);
       final box = GetStorage();
       choreoController.setSrcLang(box.read('sourcelanguage'));
-      choreoController.setSrcLang(box.read('targetlanguage'));
+      choreoController.setTrgLang(box.read('targetlanguage'));
       choreoController.stateListener.stream.listen((event) {
         setState(() {});
       });
