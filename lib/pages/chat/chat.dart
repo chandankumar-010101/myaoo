@@ -12,6 +12,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
 import 'package:provider/provider.dart';
@@ -184,6 +185,9 @@ class ChatController extends State<Chat> {
       choreoController.setTextEditingController(sendController);
       choreoController.setSendCallback(send);
       choreoController.setMatrixClient(room!.client);
+      final box = GetStorage();
+      choreoController.setSrcLang(box.read('sourcelanguage'));
+      choreoController.setSrcLang(box.read('targetlanguage'));
       choreoController.stateListener.stream.listen((event) {
         setState(() {});
       });
@@ -446,6 +450,9 @@ class ChatController extends State<Chat> {
   }
 
   void emojiPickerAction() {
+    if (choreoController.isOpen) {
+      return;
+    }
     if (showEmojiPicker) {
       inputFocus.requestFocus();
     } else {
@@ -827,6 +834,9 @@ class ChatController extends State<Chat> {
   }
 
   void onSelectMessage(Event event) {
+    if (choreoController.isOpen) {
+      return;
+    }
     if (!event.redacted) {
       if (selectedEvents.contains(event)) {
         setState(

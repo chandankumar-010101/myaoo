@@ -286,8 +286,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
   Future<void> initConfig() async {
     try {
-      final configJsonString =
-          utf8.decode((await http.get(Uri.parse('config.sample.json'))).bodyBytes);
+      final configJsonString = utf8
+          .decode((await http.get(Uri.parse('config.sample.json'))).bodyBytes);
       final configJson = json.decode(configJsonString);
       AppConfig.loadFromJson(configJson);
     } on FormatException catch (_) {
@@ -311,9 +311,13 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
       return;
     }
 
-    c.onSyncStatus.stream.where((s) => s.status == SyncStatus.error).listen(_reportSyncError);
-    onRoomKeyRequestSub[name] ??= c.onRoomKeyRequest.stream.listen((RoomKeyRequest request) async {
-      if (widget.clients.any(((cl) => cl.userID == request.requestingDevice.userId &&
+    c.onSyncStatus.stream
+        .where((s) => s.status == SyncStatus.error)
+        .listen(_reportSyncError);
+    onRoomKeyRequestSub[name] ??=
+        c.onRoomKeyRequest.stream.listen((RoomKeyRequest request) async {
+      if (widget.clients.any(((cl) =>
+          cl.userID == request.requestingDevice.userId &&
           cl.identityKey == request.requestingDevice.curve25519Key))) {
         Logs().i(
             '[Key Request] Request is from one of our own clients, forwarding the key...');
@@ -354,19 +358,17 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             queryParameters: widget.router!.currentState!.queryParameters,
           );
         }
-      }
-      else if (state == LoginState.loggedIn) {
-
+      } else if (state == LoginState.loggedIn) {
         //matrix access token and client id
-        if (client.accessToken.toString().isEmpty || client.userID.toString().isEmpty) {
+        if (client.accessToken.toString().isEmpty ||
+            client.userID.toString().isEmpty) {
           PangeaServices.logoutUser(context: context, client: client);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Unable to fetch userID and access token.")));
           return;
         }
         PangeaServices.validateUser(client, context, widget);
-      }
-      else {
+      } else {
         widget.router!.currentState!.to(
           '/home',
           queryParameters: widget.router!.currentState!.queryParameters,

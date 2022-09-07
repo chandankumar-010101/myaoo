@@ -105,6 +105,7 @@ class Step1View extends StatelessWidget {
             runSpacing: 5,
             spacing: 1,
             children: [
+              Text(controller.step1!.orignalText!, textAlign: TextAlign.center),
               ...controller.step1!.tokens!.map((e) => InkWell(
                     onTap: () {
                       showDialog(

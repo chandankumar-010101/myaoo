@@ -67,10 +67,16 @@ class Step1Controller extends LoaderState {
     return 'Help me rewrite ';
   }
 
+  String? get orignalText {
+    return _choreoResponse!.grammarData!.text;
+  }
+
   List<Tokens>? get tokens {
+    return [];
     if (_choreoResponse!.grammarData == null) {
       return [Tokens()..token = ''];
     }
+    return _choreoResponse!.grammarData!.tokens;
     if (_choreoResponse!.grammarData!.tokens!.length < 6) {
       return _choreoResponse!.grammarData!.tokens;
     }
