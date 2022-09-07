@@ -120,8 +120,12 @@ class ItSrcSendButton extends StatelessWidget {
             child: SizedBox(
               height: flagSize,
               width: flagSize,
-              child: Image.asset(controller.lang!.srcLang!.flagWithPath,
-                  package: 'pangea_choreographer', fit: BoxFit.contain),
+              child: controller.step1!.isLoading
+                  ? CircularProgressIndicator()
+                  : controller.lang!.feedBackLang == null
+                      ? SizedBox.shrink()
+                      : Image.asset(controller.lang!.srcLang!.flagWithPath,
+                          package: 'pangea_choreographer', fit: BoxFit.contain),
             ),
           ),
         ),
