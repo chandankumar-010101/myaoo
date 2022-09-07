@@ -196,11 +196,12 @@ class UrlLauncher {
             outerContext: context,
           ),
         );
-      }else{
+      }
+      else{
         final client = Matrix.of(context).client;
         final result = await showFutureLoadingDialog<String>(
           context: context,
-          future: () => client.startDirectChat(identityParts.primaryIdentifier),
+          future: () => client.startDirectChat(identityParts.primaryIdentifier, enableEncryption: false),
         );
         if (result.error == null) {
          String userId =  Matrix.of(context).client.userID??"";
@@ -216,7 +217,8 @@ class UrlLauncher {
              print(e);
            });
            return;
-         }else{
+         }
+         else{
 
            print("userid empty");
            return;
