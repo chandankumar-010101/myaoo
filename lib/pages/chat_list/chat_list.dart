@@ -25,10 +25,12 @@ import 'package:vrouter/vrouter.dart';
 import '../../../utils/account_bundles.dart';
 import '../../main.dart';
 import '../../model/class_detail_model.dart';
+import '../../services/controllers.dart';
 import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 import '../bootstrap/bootstrap_dialog.dart';
+import '../search/search.dart';
 import '../search/search_view_controller.dart';
 
 enum SelectMode { normal, share, select }
@@ -599,11 +601,12 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       });
     });
   }
-
+  PangeaControllers getxController = Get.put(PangeaControllers());
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
-    return ChatListView(this);
+
+    return Obx(()=>getxController.throughClassProfile.value?const Search():ChatListView(this));
   }
 
   void _hackyWebRTCFixForWeb() {
