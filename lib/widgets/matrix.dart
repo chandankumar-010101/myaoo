@@ -20,6 +20,7 @@ import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/services/api_exception.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
@@ -367,6 +368,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               content: Text("Unable to fetch userID and access token.")));
           return;
         }
+
         PangeaServices.validateUser(client, context, widget);
       } else {
         widget.router!.currentState!.to(

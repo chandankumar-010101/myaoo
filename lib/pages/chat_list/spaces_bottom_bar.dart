@@ -153,6 +153,7 @@ class _SpacesBottomNavigation extends StatelessWidget {
         title: Text(entry.getName(context)),
       );
     }
+
     return SalomonBottomBarItem(
       icon: entry.getIcon(false),
       activeIcon: entry.getIcon(true),

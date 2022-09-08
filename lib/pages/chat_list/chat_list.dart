@@ -97,20 +97,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if(spaceId !=null){
       setState(() => _activeSpacesEntry = spaceId);
       getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
-    }else{
-      getxController.isPublic.value = true;
-      getxController.isOpenEnrollment.value = true;
-      getxController.isOpenExchange.value = true;
-      getxController.oneToOneChatClass.value = true;
-      getxController.isCreateRooms.value = true;
-      getxController.isCreateRoomsExchange.value = true;
-      getxController.isSharePhoto.value = true;
-      getxController.isShareLocation.value = true;
-      getxController.isShareVideo.value = true;
-      getxController.isShareFiles.value = true;
-      getxController.isCreateStories.value = true;
-      //getxController.oneToOneChatClass.value = true;
-
     }
   }
 
@@ -578,6 +564,52 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   PangeaControllers getxController = Get.put(PangeaControllers());
 
+
+  canCreateRoom(){
+    if(getxController.classInfoModel.value !=null){
+      return  getxController.classInfoModel.value!.permissions.isCreateRooms? IconButton(
+          onPressed: () {
+            activeSpacesEntry.getSpace(context) == null
+                ? VRouter.of(context).to('/newgroup')
+                : VRouter.of(context).to('/newgroup', queryParameters: {
+              "spaceId": activeSpacesEntry.getSpace(context)!.id,
+            });
+          },
+          icon: const Icon(Icons.add)):Container();
+
+  }
+    else if(activeSpacesEntry.getSpace(context) == null){
+      return  IconButton(
+          onPressed: () {
+            activeSpacesEntry.getSpace(context) == null
+                ? VRouter.of(context).to('/newgroup')
+                : VRouter.of(context).to('/newgroup', queryParameters: {
+              "spaceId": activeSpacesEntry.getSpace(context)!.id,
+            });
+          },
+          icon: const Icon(Icons.add));
+
+    }
+    else{
+       return Container();
+    }
+  }
+  canAddPeople(){
+    if(getxController.classInfoModel.value !=null){
+      return Obx(()=>getxController.classInfoModel.value!.permissions.oneToOneChatClass?IconButton(
+          onPressed: () {
+            activeSpacesEntry.getSpace(context) == null
+                ? VRouter.of(context).to('/newprivatechat')
+                : VRouter.of(context).to('/newprivatechat', queryParameters: {
+              "classId": activeSpacesEntry.getSpace(context)!.id,
+            });
+          },
+          icon: const Icon(Icons.add)):Container());
+    }else{
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
@@ -601,6 +633,20 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     snappingSheetController.snapToPosition(
       const SnappingPosition.factor(positionFactor: 0.5),
     );
+
+    // getxController.isPublic.value = true;
+    // getxController.isOpenEnrollment.value = true;
+    // getxController.isOpenExchange.value = true;
+    // getxController.oneToOneChatClass.value = true;
+    // getxController.isCreateRooms.value = true;
+    // getxController.isCreateRoomsExchange.value = true;
+    // getxController.isSharePhoto.value = true;
+    // getxController.isShareLocation.value = true;
+    // getxController.isShareVideo.value = true;
+    // getxController.isShareFiles.value = true;
+    // getxController.isCreateStories.value = true;
+    //getxController.oneToOneChatClass.value = true;
+
   }
 }
 

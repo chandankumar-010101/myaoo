@@ -41,13 +41,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
   bool isPeopleExpanded = false;
   @override
   void initState() {
-    _subscription = Matrix.of(context)
-        .client
-        .onSync
-        .stream
-        .where((s) => s.hasRoomUpdate)
-        .rateLimit(const Duration(seconds: 1))
-        .listen((d) => setState(() {}));
+    _subscription =
+        Matrix.of(context).client.onSync.stream.where((s) => s.hasRoomUpdate).rateLimit(const Duration(seconds: 1)).listen((d) => setState(() {}));
     super.initState();
   }
 
@@ -67,8 +62,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
   Widget build(BuildContext context) {
     final reversed = !_animationReversed();
     Widget child;
-    final peoplerooms =
-        widget.controller.activeSpacesEntry.getPeopleRooms(context);
+    final peoplerooms = widget.controller.activeSpacesEntry.getPeopleRooms(context);
     final rooms = widget.controller.activeSpacesEntry.getRooms(context);
 
     // if (rooms.isEmpty && peoplerooms.isEmpty) {
@@ -95,8 +89,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     //     ],
     //   );
     // } else {
-    final displayStoriesHeader =
-        widget.controller.activeSpacesEntry.shouldShowStoriesHeader(context);
+    final displayStoriesHeader = widget.controller.activeSpacesEntry.shouldShowStoriesHeader(context);
 
     // } else {
     //   const dummyChatCount = 5;
@@ -167,10 +160,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
         return SharedAxisTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
-          transitionType: (widget.controller.snappingSheetController.isAttached
-                      ? widget
-                          .controller.snappingSheetController.currentPosition
-                      : 0) ==
+          transitionType: (widget.controller.snappingSheetController.isAttached ? widget.controller.snappingSheetController.currentPosition : 0) ==
                   kSpacesBottomBarHeight
               ? SharedAxisTransitionType.horizontal
               : SharedAxisTransitionType.vertical,
@@ -212,26 +202,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                             // Todo: Style needs to be updated
                           ),
                         ),
-                        Obx(() => widget.controller.getxController
-                                .oneToOneChatClass.value
-                            ? IconButton(
-                                onPressed: () {
-                                  widget.controller.activeSpacesEntry
-                                              .getSpace(context) ==
-                                          null
-                                      ? VRouter.of(context)
-                                          .to('/newprivatechat')
-                                      : VRouter.of(context).to(
-                                          '/newprivatechat',
-                                          queryParameters: {
-                                              "classId": widget
-                                                  .controller.activeSpacesEntry
-                                                  .getSpace(context)!
-                                                  .id,
-                                            });
-                                },
-                                icon: const Icon(Icons.add))
-                            : Container()),
+                        widget.controller.canAddPeople(),
                       ],
                     )),
                 body: ListView.builder(
@@ -239,12 +210,10 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                   physics: const NeverScrollableScrollPhysics(),
                   key: ValueKey(Matrix.of(context).client.userID.toString() +
                       widget.controller.activeSpaceId.toString() +
-                      widget.controller.activeSpacesEntry.runtimeType
-                          .toString()),
+                      widget.controller.activeSpacesEntry.runtimeType.toString()),
                   controller: widget.controller.scrollController,
                   // add +1 space below in order to properly scroll below the spaces bar
-                  itemCount:
-                      peoplerooms.length + (displayStoriesHeader ? 2 : 1),
+                  itemCount: peoplerooms.length + (displayStoriesHeader ? 2 : 1),
                   itemBuilder: (BuildContext context, int i) {
                     // if (displayStoriesHeader) {
                     //   if (i == 0) {``
@@ -257,16 +226,10 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                     }
                     return ChatListItem(
                       peoplerooms[i],
-                      selected: widget.controller.selectedRoomIds
-                          .contains(peoplerooms[i].id),
-                      onTap: widget.controller.selectMode == SelectMode.select
-                          ? () => widget.controller
-                              .toggleSelection(peoplerooms[i].id)
-                          : null,
-                      onLongPress: () =>
-                          widget.controller.toggleSelection(peoplerooms[i].id),
-                      activeChat:
-                          widget.controller.activeChat == peoplerooms[i].id,
+                      selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
+                      onTap: widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(peoplerooms[i].id) : null,
+                      onLongPress: () => widget.controller.toggleSelection(peoplerooms[i].id),
+                      activeChat: widget.controller.activeChat == peoplerooms[i].id,
                     );
                   },
                 ),
@@ -285,24 +248,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                             // Todo: Style needs to be updated
                           ),
                         ),
-                        Obx(() => widget.controller.getxController
-                                .isCreateRooms.value
-                            ? IconButton(
-                                onPressed: () {
-                                  widget.controller.activeSpacesEntry
-                                              .getSpace(context) ==
-                                          null
-                                      ? VRouter.of(context).to('/newgroup')
-                                      : VRouter.of(context)
-                                          .to('/newgroup', queryParameters: {
-                                          "spaceId": widget
-                                              .controller.activeSpacesEntry
-                                              .getSpace(context)!
-                                              .id,
-                                        });
-                                },
-                                icon: const Icon(Icons.add))
-                            : Container()),
+                        Obx(()=>widget.controller.canCreateRoom()),
+
                       ],
                     )),
                 body: ListView.builder(
@@ -311,8 +258,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                   shrinkWrap: true,
                   key: ValueKey(Matrix.of(context).client.userID.toString() +
                       widget.controller.activeSpaceId.toString() +
-                      widget.controller.activeSpacesEntry.runtimeType
-                          .toString()),
+                      widget.controller.activeSpacesEntry.runtimeType.toString()),
                   controller: widget.controller.scrollController,
                   // add +1 space below in order to properly scroll below the spaces bar
                   itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
@@ -323,13 +269,9 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
 
                     return ChatListItem(
                       rooms[i],
-                      selected: widget.controller.selectedRoomIds
-                          .contains(rooms[i].id),
-                      onTap: widget.controller.selectMode == SelectMode.select
-                          ? () => widget.controller.toggleSelection(rooms[i].id)
-                          : null,
-                      onLongPress: () =>
-                          widget.controller.toggleSelection(rooms[i].id),
+                      selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
+                      onTap: widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(rooms[i].id) : null,
+                      onLongPress: () => widget.controller.toggleSelection(rooms[i].id),
                       activeChat: widget.controller.activeChat == rooms[i].id,
                     );
                   },
@@ -356,19 +298,13 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     // in case the matrix id changes, check the indexOf the matrix id
     final newClient = Matrix.of(context).client;
     if (_lastUserId != newClient.userID) {
-      reversed = Matrix.of(context)
-              .currentBundle!
-              .indexWhere((element) => element!.userID == _lastUserId) <
-          Matrix.of(context)
-              .currentBundle!
-              .indexWhere((element) => element!.userID == newClient.userID);
+      reversed = Matrix.of(context).currentBundle!.indexWhere((element) => element!.userID == _lastUserId) <
+          Matrix.of(context).currentBundle!.indexWhere((element) => element!.userID == newClient.userID);
     }
     // otherwise, the space changed...
     else {
-      reversed = widget.controller.spacesEntries
-              .indexWhere((element) => element == _lastSpace) <
-          widget.controller.spacesEntries.indexWhere(
-              (element) => element == widget.controller.activeSpacesEntry);
+      reversed = widget.controller.spacesEntries.indexWhere((element) => element == _lastSpace) <
+          widget.controller.spacesEntries.indexWhere((element) => element == widget.controller.activeSpacesEntry);
     }
     _lastUserId = newClient.userID;
     _lastSpace = widget.controller.activeSpacesEntry;

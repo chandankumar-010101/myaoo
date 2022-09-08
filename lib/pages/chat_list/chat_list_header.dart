@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:pangeachat/config/app_config.dart';
@@ -237,18 +238,18 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   if (selectMode == SelectMode.normal)
                     sp != null
-                        ? IconButton(
-                            icon: const Icon(Icons.camera_alt_outlined),
-                            tooltip: L10n.of(context)!.addToStory,
-                            onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
-                                ? VRouter.of(context).to(
-                                    '/stories/create',
-                                    queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
-                                  )
-                                : VRouter.of(context).to(
-                                    '/stories/create',
-                                  ),
-                          )
+                        ? Obx(()=>controller.getxController.classInfoModel.value!.permissions.isCreateStories?IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      tooltip: L10n.of(context)!.addToStory,
+                      onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
+                          ? VRouter.of(context).to(
+                        '/stories/create',
+                        queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
+                      )
+                          : VRouter.of(context).to(
+                        '/stories/create',
+                      ),
+                    ):Container())
                         : Container(),
                   PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,

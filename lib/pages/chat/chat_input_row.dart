@@ -29,14 +29,18 @@ class _ChatInputRowState extends State<ChatInputRow> {
   bool showImage = false;
   bool showFile = false;
   bool showVideo = false;
+  bool showLocation = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     setState(() {
-      showImage = widget.controller.getxController.isSharePhoto.value;
-      showFile = widget.controller.getxController.isShareFiles.value;
-      showVideo = widget.controller.getxController.isShareVideo.value;
+      if(widget.controller.getxController.classInfoModel.value !=null){
+        showImage = widget.controller.getxController.classInfoModel.value!.permissions.isSharePhoto;
+        showFile = widget.controller.getxController.classInfoModel.value!.permissions.isShareFiles;
+        showVideo = widget.controller.getxController.classInfoModel.value!.permissions.isShareVideo;
+      }
 
     });
   }
@@ -126,6 +130,19 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                 child: Icon(Icons.attachment_outlined),
                               ),
                               title: Text(L10n.of(context)!.sendFile),
+                              contentPadding: const EdgeInsets.all(0),
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            enabled: showLocation,
+                            value: 'location',
+                            child: ListTile(
+                              leading: const CircleAvatar(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                child: Icon(Icons.location_pin),
+                              ),
+                              title: Text("Send Location"),
                               contentPadding: const EdgeInsets.all(0),
                             ),
                           ),
