@@ -5,7 +5,9 @@ import 'package:matrix/matrix.dart';
 import 'package:pangea_choreographer/choreographer/constants/route_type.dart';
 import 'package:pangea_choreographer/choreographer/controller/error_service.dart';
 import 'package:pangea_choreographer/choreographer/controller/ml_controller.dart';
+import 'package:pangea_choreographer/choreographer/network/urls.dart';
 
+import 'flag_controller.dart';
 import 'lang_controller.dart';
 import 'my_matrix_client.dart';
 import 'state_controller.dart';
@@ -17,7 +19,7 @@ class ChoreoController {
   LangController? lang;
   Step1Controller? step1;
   Step2Controller? step2;
-
+  FlagController? flagController;
   ErrorService? errorService;
   MlController? mlController;
   MyMatrixClient? myMatrixClient;
@@ -34,6 +36,7 @@ class ChoreoController {
     step1 = Step1Controller(this);
     mlController = MlController(this);
     myMatrixClient = MyMatrixClient(this);
+    flagController = FlagController(this);
   }
 
   String get originalText => state!.originalText;
@@ -117,11 +120,17 @@ class ChoreoController {
   void _firstProcess() async {}
 
   ChoreoController() {
-    initialize();
+    _setup();
+  }
+  void _setup() {
+    this.addRefInObjects();
   }
 
-  void initialize() {
-    this.addRefInObjects();
+  static Future<void> initialize(
+      {required String choreoBaseUrl, required String flagBaseUrl}) async {
+    Urls.baseUrl = choreoBaseUrl;
+    Urls.flagsBaseUrl = flagBaseUrl;
+    await FlagController.initialize();
   }
 
   dismissKeyboard() {
