@@ -10,7 +10,6 @@ class Environment {
     return dotenv.env["BASE_API"] ?? 'BASE API not found';
   }
 
-
   static String get frontendURL {
     return dotenv.env["FRONTEND_URL"] ?? "Frontend URL NOT FOUND";
   }
@@ -21,5 +20,9 @@ class Environment {
 
   static String get homeServer {
     return dotenv.env["HOME_SERVER"] ?? 'Home Server not found';
+  }
+
+  static String get choreo_api {
+    return dotenv.env['CHOREO_API'] ?? 'https://api.staging.pangea.chat';
   }
 }
