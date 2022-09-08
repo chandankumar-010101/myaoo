@@ -834,7 +834,13 @@ class _SearchViewState extends State<SearchView> {
                                                                     width: 10.0,
                                                                   ),
                                                                   Text(
-                                                                      "Not disclosed",
+                                                                      searchController
+                                                                          .classList[
+                                                                      i]
+                                                                          .schoolName !=
+                                                                          Null
+                                                                          ? "${searchController.classList[i].schoolName}"
+                                                                          : "Na",
                                                                       style: TextStyle()
                                                                           .copyWith(
                                                                         color: Theme.of(context)

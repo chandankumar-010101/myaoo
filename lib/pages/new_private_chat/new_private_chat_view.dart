@@ -1,19 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:future_loading_dialog/future_loading_dialog.dart';
-import 'package:matrix/matrix.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/widgets/layouts/max_width_body.dart';
 import 'package:pangeachat/widgets/matrix.dart';
-
-import '../chat_details/participant_list_item.dart';
 
 class NewPrivateChatView extends StatelessWidget {
   final NewPrivateChatController controller;

@@ -94,8 +94,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
-    if(spaceId !=null){
+    if (spaceId != null) {
       setState(() => _activeSpacesEntry = spaceId);
+
       getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
     }
   }
@@ -564,49 +565,57 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   PangeaControllers getxController = Get.put(PangeaControllers());
 
-
-  canCreateRoom(){
-    if(getxController.classInfoModel.value !=null){
-      return  getxController.classInfoModel.value!.permissions.isCreateRooms? IconButton(
+  canCreateRoom() {
+    if (activeSpacesEntry.getSpace(context) == null) {
+      getxController.classInfoModel.value = null;
+    }
+    if (getxController.classInfoModel.value != null && _activeSpacesEntry != null) {
+      return getxController.classInfoModel.value!.permissions.isCreateRooms
+          ? IconButton(
+              onPressed: () {
+                activeSpacesEntry.getSpace(context) == null
+                    ? VRouter.of(context).to('/newgroup')
+                    : VRouter.of(context).to('/newgroup', queryParameters: {
+                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
+                      });
+              },
+              icon: const Icon(Icons.add))
+          : Container();
+    } else {
+      return IconButton(
           onPressed: () {
-            activeSpacesEntry.getSpace(context) == null
-                ? VRouter.of(context).to('/newgroup')
-                : VRouter.of(context).to('/newgroup', queryParameters: {
-              "spaceId": activeSpacesEntry.getSpace(context)!.id,
-            });
-          },
-          icon: const Icon(Icons.add)):Container();
-
-  }
-    else if(activeSpacesEntry.getSpace(context) == null){
-      return  IconButton(
-          onPressed: () {
-            activeSpacesEntry.getSpace(context) == null
-                ? VRouter.of(context).to('/newgroup')
-                : VRouter.of(context).to('/newgroup', queryParameters: {
-              "spaceId": activeSpacesEntry.getSpace(context)!.id,
-            });
+            VRouter.of(context).to('/newgroup');
           },
           icon: const Icon(Icons.add));
-
-    }
-    else{
-       return Container();
     }
   }
-  canAddPeople(){
-    if(getxController.classInfoModel.value !=null){
-      return Obx(()=>getxController.classInfoModel.value!.permissions.oneToOneChatClass?IconButton(
+
+  canAddPeople() {
+    if (activeSpacesEntry.getSpace(context) == null) {
+      getxController.classInfoModel.value = null;
+    }
+
+    if (getxController.classInfoModel.value != null) {
+      log("Space here");
+      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass
+          ? IconButton(
+              onPressed: () {
+                activeSpacesEntry.getSpace(context) == null
+                    ? VRouter.of(context).to('/newprivatechat')
+                    : VRouter.of(context).to('/newprivatechat', queryParameters: {
+                        "classId": activeSpacesEntry.getSpace(context)!.id,
+                      });
+              },
+              icon: const Icon(Icons.add))
+          : Container());
+    } else {
+      log("No space");
+
+      return IconButton(
           onPressed: () {
-            activeSpacesEntry.getSpace(context) == null
-                ? VRouter.of(context).to('/newprivatechat')
-                : VRouter.of(context).to('/newprivatechat', queryParameters: {
-              "classId": activeSpacesEntry.getSpace(context)!.id,
-            });
+            VRouter.of(context).to('/newprivatechat');
           },
-          icon: const Icon(Icons.add)):Container());
-    }else{
-      return Container();
+          icon: const Icon(Icons.add));
     }
   }
 
@@ -646,7 +655,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     // getxController.isShareFiles.value = true;
     // getxController.isCreateStories.value = true;
     //getxController.oneToOneChatClass.value = true;
-
   }
 }
 
