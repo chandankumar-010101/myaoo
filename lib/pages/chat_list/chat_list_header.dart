@@ -239,10 +239,14 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     IconButton(
                       icon: const Icon(Icons.camera_alt_outlined),
                       tooltip: L10n.of(context)!.addToStory,
-                      onPressed: () => VRouter.of(context).to(
-                        '/stories/create',
-                        queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
-                      ),
+                      onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
+                          ? VRouter.of(context).to(
+                              '/stories/create',
+                              queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
+                            )
+                          : VRouter.of(context).to(
+                              '/stories/create',
+                            ),
                     ),
                   PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,

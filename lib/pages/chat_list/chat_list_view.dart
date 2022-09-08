@@ -24,8 +24,7 @@ class ChatListView extends StatelessWidget {
       stream: Matrix.of(context).onShareContentChanged.stream,
       builder: (_, __) {
         final selectMode = controller.selectMode;
-        final showSpaces = controller.spacesEntries.length > 1 &&
-            controller.selectedRoomIds.isEmpty;
+        final showSpaces = controller.spacesEntries.length > 1 && controller.selectedRoomIds.isEmpty;
         return VWidgetGuard(
           onSystemPop: (redirector) async {
             final selMode = controller.selectMode;
@@ -38,8 +37,7 @@ class ChatListView extends StatelessWidget {
               builder: (context, size) {
                 controller.snappingSheetContainerSize = size;
                 return SnappingSheet(
-                  key: ValueKey(Matrix.of(context).client.userID.toString() +
-                      showSpaces.toString()),
+                  key: ValueKey(Matrix.of(context).client.userID.toString() + showSpaces.toString()),
                   controller: controller.snappingSheetController,
                   child: Column(
                     children: [
@@ -67,8 +65,7 @@ class ChatListView extends StatelessWidget {
                     ],
                   ),
                   initialSnappingPosition: showSpaces
-                      ? const SnappingPosition.pixels(
-                          positionPixels: kSpacesBottomBarHeight)
+                      ? const SnappingPosition.pixels(positionPixels: kSpacesBottomBarHeight)
                       : const SnappingPosition.factor(positionFactor: 0.0),
                   snappingPositions: showSpaces
                       ? const [
@@ -79,8 +76,7 @@ class ChatListView extends StatelessWidget {
                       : [const SnappingPosition.factor(positionFactor: 0.0)],
                   sheetBelow: showSpaces
                       ? SnappingSheetContent(
-                          childScrollController:
-                              controller.snappingSheetScrollContentController,
+                          childScrollController: controller.snappingSheetScrollContentController,
                           draggable: true,
                           child: SpacesBottomBar(controller),
                         )
@@ -89,32 +85,28 @@ class ChatListView extends StatelessWidget {
               },
             ),
             floatingActionButton: selectMode == SelectMode.normal
-                ?controller.activeSpaceId !=null && controller.activeSpaceId!.isNotEmpty?Padding(
-
-              padding: showSpaces
-                  ? const EdgeInsets.only(bottom: 64.0)
-                  : const EdgeInsets.all(0),
-              child: KeyBoardShortcuts(
-                child: FloatingActionButton.extended(
-                  isExtended: controller.scrolledToTop,
-                  onPressed: () =>
-                      VRouter.of(context).to('/newprivatechat',queryParameters: {"class_id":controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
-                  icon: const Icon(CupertinoIcons.chat_bubble),
-                  label: Text(L10n.of(context)!.newChat),
-                ),
-                keysToPress: {
-                  LogicalKeyboardKey.controlLeft,
-                  LogicalKeyboardKey.keyN
-                },
-                onKeysPressed: () =>
-                    VRouter.of(context).to('/newprivatechat',queryParameters: {"class_id":controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
-                helpLabel: L10n.of(context)!.newChat,
-              ),
-            ):Container()
+                ? controller.activeSpaceId != null && controller.activeSpaceId!.isNotEmpty
+                    ? Padding(
+                        padding: showSpaces ? const EdgeInsets.only(bottom: 64.0) : const EdgeInsets.all(0),
+                        child: KeyBoardShortcuts(
+                          child: FloatingActionButton.extended(
+                            isExtended: controller.scrolledToTop,
+                            onPressed: () => VRouter.of(context)
+                                .to('/newprivatechat', queryParameters: {"class_id": controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
+                            icon: const Icon(CupertinoIcons.chat_bubble),
+                            label: Text(L10n.of(context)!.newChat),
+                          ),
+                          keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyN},
+                          onKeysPressed: () => VRouter.of(context)
+                              .to('/newprivatechat', queryParameters: {"class_id": controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
+                          helpLabel: L10n.of(context)!.newChat,
+                        ),
+                      )
+                    : Container()
                 : Container(),
             bottomNavigationBar: const SafeArea(
               child: ConnectionStatusHeader(),
-           ),
+            ),
           ),
         );
       },

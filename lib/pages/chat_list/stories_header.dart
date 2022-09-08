@@ -20,7 +20,8 @@ enum ContextualRoomAction {
 
 class StoriesHeader extends StatelessWidget {
   ChatListController? controller;
-  StoriesHeader({this.controller, Key? key}) : super(key: key);
+  List<Room>? spaceStories;
+  StoriesHeader({this.controller, this.spaceStories, Key? key}) : super(key: key);
 
   void _addToStoryAction(BuildContext context) => VRouter.of(context).to('/stories/create');
 
@@ -113,31 +114,30 @@ class StoriesHeader extends StatelessWidget {
               if (ownStoryRoom != null) ownStoryRoom,
               ...client.storiesRooms..remove(ownStoryRoom),
             ];
-            return controller!.activeSpacesEntry.getSpace(context) != null &&
-                    stories.where((element) => element.spaceParents.first.roomId == controller!.activeSpacesEntry.getSpace(context)!.id).isNotEmpty
+            final sp = controller!.activeSpacesEntry.getSpace(context);
+
+            return controller!.activeSpacesEntry.getSpace(context) != null
                 ? SizedBox(
-                    height: 106,
+                    height: 150,
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       scrollDirection: Axis.horizontal,
                       itemCount: controller!.activeSpacesEntry.getSpace(context) != null
-                          ? stories
-                              .where((element) => element.spaceParents.first.roomId == controller!.activeSpacesEntry.getSpace(context)!.id)
-                              .length
+                          ? spaceStories!.where((room) => room.displayname.contains(sp!.displayname)).length
                           : 0,
                       itemBuilder: (context, i) {
-                        final room = stories[i];
+                        final room = spaceStories![i];
                         return Opacity(
                           opacity: room.hasPosts ? 1 : 0.75,
                           child: FutureBuilder<Profile>(
                               future: room.getCreatorProfile(),
                               builder: (context, snapshot) {
                                 final userId = room.creatorId;
-                                final displayname = snapshot.data?.displayName ?? userId?.localpart ?? 'Unknown';
+                                final displayname = room.displayname;
                                 final avatarUrl = snapshot.data?.avatarUrl;
                                 return _StoryButton(
                                   profile: Profile(
-                                    displayName: displayname,
+                                    displayName: room.displayname,
                                     avatarUrl: avatarUrl,
                                     userId: userId ?? 'Unknown',
                                   ),
@@ -242,35 +242,36 @@ class _StoryButton extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (showEditFab)
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: FloatingActionButton.small(
-                              heroTag: null,
-                              onPressed: () => VRouter.of(context).to('/stories/create'),
-                              child: const Icon(
-                                Icons.add_outlined,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
+                      // if (showEditFab)
+                      //   Positioned(
+                      //     right: 0,
+                      //     bottom: 0,
+                      //     child: SizedBox(
+                      //       width: 24,
+                      //       height: 24,
+                      //       child: FloatingActionButton.small(
+                      //         heroTag: null,
+                      //         onPressed: () => VRouter.of(context).to('/stories/create'),
+                      //         child: const Icon(
+                      //           Icons.add_outlined,
+                      //           size: 16,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
               ),
               Center(
-                child: Text(
-                  profile.displayName ?? '',
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: unread ? FontWeight.bold : null,
+                child: Expanded(
+                  child: Text(
+                    profile.displayName ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: unread ? FontWeight.bold : null,
+                    ),
                   ),
                 ),
               ),

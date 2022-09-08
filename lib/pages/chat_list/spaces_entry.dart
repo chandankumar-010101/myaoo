@@ -71,11 +71,7 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) => !room.isDirectChat && !room.name.contains("#") && _roomCheckCommon(room, context))
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#")).toList();
   }
 
   @override
@@ -181,7 +177,7 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat && !room.name.contains("#") && roomCheck(room, context)).toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && _roomInsideSpace(room, space)).toList();
   }
 
   @override
@@ -196,6 +192,7 @@ class SpaceSpacesEntry extends SpacesEntry {
     if (_roomInsideSpace(room, space)) {
       return true;
     }
+
     if (AppConfig.showDirectChatsInSpaces) {
       if (room.isDirectChat &&
           room.summary.mHeroes != null &&
@@ -206,6 +203,17 @@ class SpaceSpacesEntry extends SpacesEntry {
         return true;
       }
     }
+    return false;
+  }
+
+  bool roomCheckSpace(Room room, BuildContext context) {
+    if (!_roomCheckCommon(room, context)) {
+      return false;
+    }
+    if (_roomInsideSpace(room, space)) {
+      return true;
+    }
+
     return false;
   }
 

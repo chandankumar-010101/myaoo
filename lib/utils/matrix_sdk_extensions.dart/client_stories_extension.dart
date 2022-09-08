@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/widgets/matrix.dart';
 
 extension ClientStoriesExtension on Client {
   static const String storiesRoomType = 'msc3588.stories.stories-room';
@@ -31,12 +34,14 @@ extension ClientStoriesExtension on Client {
         {'users': users},
       );
 
-  Future<Room> createStoriesRoom(List<String>? invite, String spaceId) async {
+  Future<Room> createStoriesRoom(BuildContext context, List<String>? invite, String spaceId) async {
+    final space = Matrix.of(context).client.getRoomById(spaceId);
+
     final roomId = await createRoom(
       creationContent: {"type": "msc3588.stories.stories-room"},
       preset: CreateRoomPreset.privateChat,
       powerLevelContentOverride: {"events_default": 100},
-      name: 'Stories from ${userID!.localpart}',
+      name: 'Stories from ${userID!.localpart} in ${space!.displayname}',
       topic:
           'This is a room for stories sharing, not unlike the similarly named features in other messaging networks. For best experience please use Pangea Chat or minesTrix. Feature development can be followed on: https://github.com/matrix-org/matrix-doc/pull/3588',
       initialState: [
@@ -62,9 +67,11 @@ extension ClientStoriesExtension on Client {
     return getRoomById(roomId)!;
   }
 
-  Future<Room?> getStoriesRoom(BuildContext context) async {
-    final candidates =
-        rooms.where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == storiesRoomType && room.ownPowerLevel >= 100);
+  Future<Room?> getStoriesRoom(BuildContext context, String spaceId) async {
+    final candidates = rooms.where((room) =>
+        room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == storiesRoomType &&
+        room.ownPowerLevel >= 100 &&
+        room.spaceParents.first.roomId == spaceId);
     if (candidates.isEmpty) return null;
     if (candidates.length == 1) return candidates.single;
     return await showModalActionSheet<Room>(

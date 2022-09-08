@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
 
@@ -133,29 +134,53 @@ class AddStoryController extends State<AddStoryPage> {
   void postStory() async {
     if (video == null && image == null && controller.text.isEmpty) return;
     final client = Matrix.of(context).client;
-    var storiesRoom = await client.createStoriesRoom([], spaceId);
-    // Invite contacts if necessary
+
+    var storiesRoom = await client.getStoriesRoom(context, spaceId);
+
     final undecided = await showFutureLoadingDialog(
       context: context,
       future: () => client.getUndecidedContactsForStories(storiesRoom),
     );
-    final result = undecided.result;
-    if (result == null) return;
-    if (result.isNotEmpty) {
+    var result = undecided.result;
+
+    if (result!.isEmpty) {
+      final activespace = await client.getRoomById(spaceId);
+
+      List<User> contact = await activespace!.requestParticipants();
+
+      result = contact.where((element) => element.id != client.userID).toList();
+
+      dev.log(result.toList().toString());
       final created = await showDialog<bool>(
         context: context,
         useRootNavigator: false,
-        builder: (context) => InviteStoryPage(storiesRoom: storiesRoom, spaceId: spaceId),
+        builder: (context) => InviteStoryPage(
+          storiesRoom: storiesRoom,
+          spaceId: spaceId,
+          contacts: result,
+        ),
       );
-      if (created != true) return;
-      storiesRoom ??= await client.createStoriesRoom([], spaceId);
+      // if (created != true) return;
+      // storiesRoom ??= await client.getStoriesRoom(context);
+    } else {
+      final created = await showDialog<bool>(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) => InviteStoryPage(
+          storiesRoom: storiesRoom,
+          spaceId: spaceId,
+          contacts: result,
+        ),
+      );
+      // if (created != true) return;
+      // storiesRoom ??= await client.getStoriesRoom(context);
     }
-
-    // Post story
+    // post story
     final postResult = await showFutureLoadingDialog(
       context: context,
       future: () async {
         if (storiesRoom == null) throw ('Stories room is null');
+
         var video = this.video?.detectFileType;
         if (video != null) {
           video = await video.resizeVideo();
@@ -202,8 +227,14 @@ class AddStoryController extends State<AddStoryPage> {
         });
       },
     );
+
     if (postResult.error == null) {
       VRouter.of(context).pop();
+    }
+
+    if (postResult.error == null) {
+      VRouter.of(context).pop();
+      // }
     }
   }
 

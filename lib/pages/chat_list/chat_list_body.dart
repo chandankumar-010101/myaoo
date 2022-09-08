@@ -171,6 +171,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
         child: Column(children: [
           StoriesHeader(
             controller: widget.controller,
+            spaceStories: rooms,
           ),
           ExpansionPanelList(
             elevation: 2,
