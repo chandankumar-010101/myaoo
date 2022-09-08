@@ -4,9 +4,6 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/widgets/layouts/max_width_body.dart';
-import 'package:vrouter/vrouter.dart';
-
-import '../../widgets/avatar.dart';
 
 class NewGroupView extends StatelessWidget {
   final NewGroupController controller;
@@ -42,23 +39,6 @@ class NewGroupView extends StatelessWidget {
               value: controller.publicGroup,
               onChanged: controller.setPublicGroup,
             ),
-
-            Expanded(
-                child: ListView.builder(
-              itemCount: controller.members.length,
-              itemBuilder: (BuildContext context, int i) {
-                return ListTile(
-                  title: Text(controller.members[i].displayName??""),
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                    radius: Avatar.defaultSize / 2,
-                    child: const Icon(Icons.add_outlined),
-                  ),
-                  onTap: () => VRouter.of(context).to('invite'),
-                );
-              },
-            )),
             Expanded(
               child: Image.asset('assets/private_chat_wallpaper.png'),
             ),
