@@ -402,6 +402,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.1"
+  dropdown_plus:
+    dependency: "direct main"
+    description:
+      name: dropdown_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.9"
   dynamic_color:
     dependency: "direct main"
     description:
