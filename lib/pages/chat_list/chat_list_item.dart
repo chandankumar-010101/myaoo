@@ -37,7 +37,7 @@ class ChatListItem extends StatelessWidget {
 
   dynamic clickAction(BuildContext context) async {
     if (onTap != null) return onTap!();
-    print("hii");
+
     if (!activeChat) {
       if (room.membership == Membership.invite &&(await showFutureLoadingDialog( context: context,future: () async {
                         final joinedFuture = room.client.onSync.stream.where((u) =>u.rooms?.join?.containsKey(room.id) ?? false).first;
