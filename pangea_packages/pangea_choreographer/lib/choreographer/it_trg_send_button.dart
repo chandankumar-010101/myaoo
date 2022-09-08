@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pangea_choreographer/choreographer/Repo/chreo_repo.dart';
 import 'package:pangea_choreographer/choreographer/constants/route_type.dart';
 import 'package:pangea_choreographer/choreographer/controller/state_controller.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'config/colors.dart';
 import 'controller/choreo_controller.dart';
 import 'widgets/it_dropdown/it_dropdown.dart';
@@ -114,7 +114,7 @@ class ItTrgSendButton extends StatelessWidget {
                       itController.lang!.changeTrgLand(lang);
                     },
                     selectedLang: itController.lang!.trgLang!,
-                    languages: itController.lang!.langList),
+                    languages: itController.flagController!.langList!),
                 useRootNavigator: false,
               )
             : null;
@@ -125,11 +125,17 @@ class ItTrgSendButton extends StatelessWidget {
           child: SizedBox(
             height: flagSize,
             width: flagSize,
-            child: Image.asset(itController.lang!.trgLang!.flagWithPath,
-                package: 'pangea_choreographer', fit: BoxFit.contain),
+            child: CachedNetworkImage(
+              imageUrl: itController.lang!.trgLang!.flagWithPath,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
           ),
         ),
       ),
     );
   }
 }
+ // Image.asset(itController.lang!.trgLang!.flagWithPath,
+            //     package: 'pangea_choreographer', fit: BoxFit.contain),

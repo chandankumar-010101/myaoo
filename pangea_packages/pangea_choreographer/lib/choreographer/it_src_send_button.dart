@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -124,8 +125,15 @@ class ItSrcSendButton extends StatelessWidget {
                   ? CircularProgressIndicator()
                   : controller.lang!.feedBackLang == null
                       ? SizedBox.shrink()
-                      : Image.asset(controller.lang!.srcLang!.flagWithPath,
-                          package: 'pangea_choreographer', fit: BoxFit.contain),
+                      : CachedNetworkImage(
+                          imageUrl: controller.lang!.srcLang!.flagWithPath,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
             ),
           ),
         ),
@@ -133,3 +141,7 @@ class ItSrcSendButton extends StatelessWidget {
     );
   }
 }
+
+
+    //  Image.asset(controller.lang!.srcLang!.flagWithPath,
+    //                       package: 'pangea_choreographer', fit: BoxFit.contain),

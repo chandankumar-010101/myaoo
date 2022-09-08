@@ -57,6 +57,25 @@ class Requests {
     return response;
   }
 
+  Future<Response> get({required String url}) async {
+    print('calling' + _uriBuilder(url).toString());
+
+    Response response = await http.get(_uriBuilder(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    });
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      try {
+        print(jsonDecode(response.body).toString());
+      } catch (err) {}
+      throw HttpException(jsonDecode(response.body)['detail'].toString());
+    }
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      print(response.body);
+    }
+    return response;
+  }
+
   Uri _uriBuilder(url) => Uri.parse(baseUrl + url);
 
   Map<dynamic, dynamic> _parseEachToString(Map<dynamic, dynamic> json) {
