@@ -79,9 +79,9 @@ class ConnectPageController extends State<ConnectPage> {
     try {
       try {
         await Matrix.of(context).getLoginClient().register(username: localpart);
-        print("success");
+
       } on MatrixException catch (e) {
-        print("error $e");
+
         if (!e.requireAdditionalAuthentication) rethrow;
       }
       setState(() {
@@ -155,17 +155,14 @@ class ConnectPageController extends State<ConnectPage> {
     final url =
         '${Matrix.of(context).getLoginClient().homeserver?.toString()}/_matrix/client/r0/login/sso/redirect/${Uri.encodeComponent(id)}?redirectUrl=${Uri.encodeQueryComponent(redirectUrl)}';
     final urlScheme = Uri.parse(redirectUrl).scheme;
-    print("here ${url}");
-    print("here1 ${urlScheme}");
+
     final result = await FlutterWebAuth.authenticate(
       url: url,
       callbackUrlScheme: urlScheme,
     );
-    print("here2 ${result}");
-    final token = Uri.parse(result).queryParameters['loginToken'];
-    print("here3 ${token}");
-    if (token?.isEmpty ?? false) return;
 
+    final token = Uri.parse(result).queryParameters['loginToken'];
+    if (token?.isEmpty ?? false) return;
     await showFutureLoadingDialog(
       context: context,
       future: () => Matrix.of(context).getLoginClient().login(
@@ -187,7 +184,6 @@ class ConnectPageController extends State<ConnectPage> {
             '/client/r0/login',
           )
           .then((loginTypes) => setState(() {
-            print(loginTypes);
                 _rawLoginTypes = loginTypes;
               }));
     }

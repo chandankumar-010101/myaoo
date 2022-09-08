@@ -1,10 +1,13 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
-
+import 'package:matrix/matrix.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:pangeachat/model/teacher_all_class_model.dart';
 import 'package:pangeachat/services/services.dart';
-
+import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:vrouter/vrouter.dart';
+import '../../model/flag_model.dart';
 
 class ExchangeClass extends StatefulWidget {
   const ExchangeClass({Key? key}) : super(key: key);
@@ -14,45 +17,32 @@ class ExchangeClass extends StatefulWidget {
 }
 
 class _ExchangeClassState extends State<ExchangeClass> {
-  late bool publicGroup;
-  late bool openEnrollment;
-  late bool openToExchange;
-
-  late String class_url;
-  late String class_code;
-
-  void setPublicGroup(bool b) => setState(() => publicGroup = b);
-  void setOpenEnrollment(bool b) => setState(() => openEnrollment = b);
-  void setOpentToExchange(bool b) => setState(() => openToExchange = b);
-
+  List<User>? members;
+  Client? client;
   final box = GetStorage();
-  createClassPermissions() {
-    box.write("publicGroup", publicGroup);
-    box.write("openEnrollment", openEnrollment);
-    box.write("openToExchange", openToExchange);
-    context.vRouter.to("/newclass/student_permissions");
+  List languageFlagList=[];
+  TeacherAllClassModel? teacherAllClassModel;
+  Object? sourceLanguage;
+
+  String get roomId => VRouter.of(context).queryParameters['class_id']??"";
+  // String? get ClientId => VRouter.of(context).queryParameters['client_id'];
+  getClass() async {
+    teacherAllClassModel = await PangeaServices.fetchTeacherAllClassInfo(context);
+    PangeaServices.createExchangeValidateRequest(roomId:roomId,teacherID: box.read("ExchangeClientID"),context: context,);
   }
 
   @override
   void initState() {
     super.initState();
-    box.read("public") == null? publicGroup = false : publicGroup = box.read("public");
-    box.read("openEnrollment") == null
-        ? openEnrollment = false
-        : openEnrollment = box.read("openEnrollment");
-    box.read("openExchange") == null
-        ? openToExchange = false
-        : openToExchange = box.read("openExchange");
-    box.remove("public");
-    box.remove("openEnrollment");
-    box.remove("openExchange");
+    getClass();
   }
 
   @override
   Widget build(BuildContext context) {
+    getClass();
     Size size = MediaQuery.of(context).size;
     String id = context.vRouter.queryParameters['class_id'] ?? "";
-    print(id);
+
     return Scaffold(
         appBar: id.isEmpty
             ? AppBar(
@@ -125,7 +115,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               child: Padding(
                                 padding: EdgeInsets.only(right: 5),
                                 child: Text(
-                                 "A space will be made where you can both create rooms for your students to chat. Students from both classes will see these rooms in the exchange tab, and be able to join and chat within them.",
+                                  "A space will be made where you can both create rooms for your students to chat. Students from both classes will see these rooms in the exchange tab, and be able to join and chat within them.",
                                   style: TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -205,7 +195,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                 child: Text(
                                   "While both teachers allow students to create rooms in the exchange, students will have this permission.",
 
-                                style: TextStyle().copyWith(
+                                  style: TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
@@ -219,6 +209,97 @@ class _ExchangeClassState extends State<ExchangeClass> {
                           ],
                         ),
                       ),
+                      FutureBuilder(
+                          future: PangeaServices.fetchTeacherAllClassInfo(context),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(child: Text(
+                                  snapshot.error.toString()));
+                            } else if (snapshot.hasData) {
+                              final TeacherAllClassModel data = snapshot.data! as TeacherAllClassModel;
+                              return ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                                itemCount:  1,
+                                itemBuilder: (context,index){
+                                  languageFlagList.add(data.results![index].className);
+                                  //print("value of dropdown is ${languageFlagList[0].val(teacherAllClassModel?.results![index].className)}");
+                                  // print("${languageFlagList[index].val(teacherAllClassModel?.results![index].className)}");
+                                  var singledata=data.results![index];
+                                  return Container(
+                                      constraints: BoxConstraints(
+                                          minWidth: 100, maxWidth: 400),
+                                      padding: EdgeInsets.all(size.height * 0.01),
+                                      child: //languageFlagList.isNotEmpty
+                                      Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Theme
+                                                    .of(context)
+                                                    .primaryColorLight),
+                                          ),
+                                          child:
+                                          DropdownButton(
+                                            hint: sourceLanguage == null ? Center(child: Text(
+                                              "Select Class",
+                                              style: TextStyle().copyWith(
+                                                  color: Theme
+                                                      .of(context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontSize: 14),
+                                              overflow: TextOverflow.clip,
+                                              textAlign: TextAlign.center,
+                                            ),)
+                                                :  Text(" ${sourceLanguage!}"
+                                                .toString(),
+                                              style: TextStyle().copyWith(
+                                                  color: Theme
+                                                      .of(context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontSize: 14),
+                                              overflow: TextOverflow.clip,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            isExpanded: true,
+                                            items: data.results!.map((map) => DropdownMenuItem(
+                                              child: Text(map.className.toString()),
+                                              value: map.pangeaClassRoomId,//"${map.className.toString()} (${map.pangeaClassRoomId})",// map.pangeaClassRoomId,
+                                            ),
+                                            ).toList(), onChanged: (value) {
+
+                                            print(value);
+
+                                            setState(() {
+                                              sourceLanguage = value;
+                                            });
+
+                                          },
+                                          )
+
+
+
+                                      )
+                                    //: Container()
+                                  );;
+                                },
+                                separatorBuilder: (BuildContext context, int index){
+                                  return SizedBox( height: 10,);
+                                },
+
+                              );
+
+                            }
+                            else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          } ),
+
                     ],
                   ),
                 ),
@@ -253,7 +334,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                         onTap: () {
                           if (ModalRoute.of(context)!.settings.name ==
                               "class_permissions") {
-                            createClassPermissions();
+                            // createClassPermissions();
                           } else {
                             //update
                           }
@@ -296,7 +377,7 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       InkWell(
                         onTap: () {
 
-                         // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
+                          // VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
 
 
                         },
@@ -347,26 +428,25 @@ class _ExchangeClassState extends State<ExchangeClass> {
                       ),
                       InkWell(
                         onTap: () async {
+                          var clientid=box.read("ExchangeClientID");
+                          var toClass=box.read("toClass");
+                          PangeaServices.createExchangeRequest(roomId: sourceLanguage.toString(), context: context, teacherID: clientid, toClass: roomId,);
+                          // print(sourceLanguage.toString());
+                          // print(sourceLanguage.toString()=="null");
+                          if(sourceLanguage.toString()!="null"){
+                            UrlLauncher(
+                                context,
+                                requestExchange:true,
+                                roomId: roomId.toString(),
+                                rid: clientid.toString(),
+                                receivedroomID: sourceLanguage.toString(),
+                                'https://matrix.to/#/${clientid.toString()}')
+                                .openMatrixToUrl();
 
-
-                        // UserDetails.enrollClassValidate(context: context, room_id: '${room_ID}');
-
-                        final result = await showFutureLoadingDialog(
-                            context: context,
-                            future: () =>
-                                PangeaServices.updateClassPermission(
-
-                                  context: context,
-                                  classId: id,
-                                  isPublic: publicGroup.toString(),
-                                  openEnrollment: openEnrollment.toString(),
-                                  openToExchange: openToExchange.toString(),
-                                ),
-                          );
-                          if(result !=null){
-                            print("updated");
-                            VRouter.of(context).to('/classDetails', queryParameters: { "id":id });
-                            // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
+                          }
+                          else{
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text("Select Class with whom you to merge classes")));
                           }
 
                         },
@@ -386,16 +466,15 @@ class _ExchangeClassState extends State<ExchangeClass> {
                               border: Border.all(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onPrimary ==
-                                      Colors.white
-                                      ? Theme.of(context)
+                                      .onPrimary == Colors.white
+                                      ?Theme.of(context)
                                       .primaryColorLight
-                                      : Theme.of(context)
+                                      :Theme.of(context)
                                       .colorScheme
                                       .onPrimary)),
                           child: Center(
                             child: Text(
-                              "Save",
+                              "Request",
                               style: TextStyle().copyWith(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -408,7 +487,6 @@ class _ExchangeClassState extends State<ExchangeClass> {
                                       .textTheme
                                       .bodyText1!
                                       .color,
-
                                   fontSize: 14),
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
@@ -428,3 +506,5 @@ class _ExchangeClassState extends State<ExchangeClass> {
         ));
   }
 }
+
+

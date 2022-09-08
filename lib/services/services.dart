@@ -15,6 +15,8 @@ import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/invite_email_model.dart';
+import '../model/invite_email_model.dart' as inviteModel;
+import '../model/teacher_all_class_model.dart';
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
 import '../pages/search/search_view_controller.dart';
@@ -65,66 +67,53 @@ class PangeaServices {
       );
       if (value.statusCode == 200) {
         ClassCodeModel data = ClassCodeModel.fromJson(jsonDecode(value.body));
-        print(data.classCode);
-        print(data.className);
-        print(data.pangeaClassRoomId);
         if (data.pangeaClassRoomId != null) {
           joinRoom(context, data.pangeaClassRoomId!);
         } else {
-          print("id not found");
+          Fluttertoast.showToast(msg: "Unable to find User Information");
         }
-
-        //   final data = jsonDecode(value.body);
-        //   box.write("age", data["age"]);
-        // }
-        // else if (value.statusCode == 400) {
-        //   box.write("age", 0);
       } else {
-        print(value.statusCode);
         if (kDebugMode) {
-          print("Unable to fetch user age");
+          print("API Error Occurred");
           print(value.statusCode);
           print(value.body);
         }
         Fluttertoast.showToast(
-            msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+            msg:
+                "Api Error ${value.statusCode}: Unable to fetch code information");
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: $e");
     }
   }
 
   static sendEmailToJoinClass(
-      String data, String roomId, String teacherName) async {
-
+      List<inviteModel.Data> data, String roomId, String teacherName) async {
     try {
-      print(box.read("access"));
-      print(data.runtimeType);
-
       var result = await http.post(Uri.parse(ApiUrls.send_email_link),
           headers: {
             "Authorization": "Bearer ${box.read("access")}",
+            "Content-Type": "application/json",
           },
-          body: InviteEmail(
+          body: jsonEncode(InviteEmail(
             pangeaClassRoomId: roomId,
             data: data,
             teacherName: teacherName,
-          ).toJson());
+          ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(msg: "Mail Sent Successfully");
       } else {
         if (kDebugMode) {
-          print("Mail send unsuccessfull");
+          print("Mail send unsuccessful");
           print(result.statusCode);
           print(result.body);
         }
         Fluttertoast.showToast(
             msg: "Api Error ${result.statusCode}: Unable to send email");
-        throw Exception(
-            "Api Error ${result.statusCode}: Unable to send email");
+        throw Exception("Api Error ${result.statusCode}: Unable to send email");
       }
     } catch (e) {
       if (kDebugMode) {
@@ -151,25 +140,25 @@ class PangeaServices {
         },
       );
       if (value.statusCode == 200) {
-        // ClassCodeModel data =
         return ClassCodeModel.fromJson(jsonDecode(value.body));
       } else {
         if (kDebugMode) {
-          print("Unable to fetch user age");
+          print("Unable to fetch code information");
           print(value.statusCode);
           print(value.body);
         }
         Fluttertoast.showToast(
-            msg: "Api Error ${value.statusCode}: Unable to fetch user age");
+            msg:
+                "Api Error ${value.statusCode}: Unable to fetch code information");
         throw Exception(
-            "Api Error ${value.statusCode}: Unable to fetch user age");
+            "Api Error ${value.statusCode}: Unable to fetch code information");
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
-      throw Exception("Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: $e");
+      throw Exception("Error: $e");
     }
   }
 
@@ -251,6 +240,7 @@ class PangeaServices {
   static validateUser(
       Client client, BuildContext context, Matrix widget) async {
     final bool signUp = box.read("sign_up") ?? false;
+    final String classCode = GetStorage().read("classCode") ?? "";
     final String userID = client.userID ?? "";
     if (userID.isNotEmpty) {
       try {
@@ -266,14 +256,25 @@ class PangeaServices {
               queryParameters: widget.router!.currentState!.queryParameters,
             );
           } else {
+            print("fetching the data1");
             box.write("accessToken", client.accessToken.toString());
             box.write("clientID", client.userID.toString());
             PangeaServices.userDetails(clientID: client.userID.toString());
+            print("fetching the data");
 
-            widget.router!.currentState!.to(
-              '/rooms',
-              queryParameters: widget.router!.currentState!.queryParameters,
-            );
+            if (classCode.isNotEmpty) {
+              GetStorage().remove("classCode");
+              Future.delayed(const Duration(seconds: 2), () {
+                print("data removed from box");
+                VRouter.of(context).to('/join_with_link',
+                    queryParameters: {"code": classCode});
+              });
+            } else {
+              widget.router!.currentState!.to(
+                '/rooms',
+                queryParameters: widget.router!.currentState!.queryParameters,
+              );
+            }
           }
         } else {
           ApiException.exception(
@@ -351,16 +352,15 @@ class PangeaServices {
         if (kDebugMode) {
           print(e);
         }
-        Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+        Fluttertoast.showToast(msg: "Error: $e");
       }
     } else {
       if (kDebugMode) {
-        print(
-            "Client Id or access token is Empty, \n unable to fetch User Age");
+        print("Client Id or access token is Empty.");
         print(clientID);
         print(accessToken);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: Unable to fetch Admin Information");
     }
   }
 
@@ -431,7 +431,7 @@ class PangeaServices {
           print("Error accured");
           print(e);
         }
-        Fluttertoast.showToast(msg: "Error: unable to update user age");
+        Fluttertoast.showToast(msg: "Error: $e");
       });
     } else {
       Fluttertoast.showToast(msg: "Unable to fetch Client ID");
@@ -490,9 +490,6 @@ class PangeaServices {
           ).toJson());
       if (value.statusCode == 201 || value.statusCode == 200) {
         final data = CreateClassFromJson.fromJson(jsonDecode(value.body));
-        if (kDebugMode) {
-          print(data.id);
-        }
         box.write("class_code", data.classCode);
         try {
           final value = await http.post(
@@ -530,9 +527,6 @@ class PangeaServices {
             context.vRouter
                 .to("/invite_students", queryParameters: {"id": roomId});
           } else {
-            if (kDebugMode) {
-              print("Error accured here");
-            }
             await room.leave().whenComplete(() {
               deleteClass(context: context, roomId: roomId);
               ApiException.exception(
@@ -542,6 +536,10 @@ class PangeaServices {
             }).catchError((e) {
               throw Exception("Error: Unable to delete class");
             });
+
+            if (kDebugMode) {
+              print("Error accured here");
+            }
           }
         } catch (e) {
           await room.leave().whenComplete(() {
@@ -786,6 +784,7 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
+          //print("Hello");
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(
@@ -802,4 +801,218 @@ class PangeaServices {
 
   //------------------------------------user Account----------------------------------//
 
+
+
+
+  ///-----------------------------------saurabh side code------------------------------
+
+
+  static Future<TeacherAllClassModel> fetchTeacherAllClassInfo(BuildContext context) async {
+    try {
+      final String accessToken = box.read("access") ?? "";
+      //final String roomID = VRouter.of(context).queryParameters["id"] ?? "";
+      if (accessToken.isNotEmpty ) {
+        final value = await http.get(
+          Uri.parse(ApiUrls.teacherAllClass ),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $accessToken",
+          },
+        );
+
+        if (value.statusCode == 200 || value.statusCode == 201) {
+
+          return teacherAllClassModelFromJson(value.body);
+        } else {
+          ApiException.exception(
+              statusCode: value.statusCode, body: value.body, context: context);
+          throw Exception("${value.statusCode}");
+        }
+      } else {
+        throw Exception("Access token");
+      }
+    } catch (e) {
+      print("eero");
+      print(e);
+      throw Exception(e.toString());
+    }
+  }
+
+  static createExchangeRequest({
+
+    required String roomId,
+    required String teacherID,
+    required String toClass,
+    required BuildContext context,
+  })
+  async {
+    try {
+      Map<String,dynamic>data={
+        "pangea_class_room_id": roomId,
+        "teacher_id": teacherID,
+        "to_class": toClass,
+      };
+      var result = await http.post(Uri.parse(ApiUrls.exchangeClass),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(data)
+      );
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+
+        Fluttertoast.showToast(msg: "Mail Sent Successfully");
+      } else {
+        if (kDebugMode) {
+          print("Unable to fetch user age");
+          print(result.statusCode);
+          print(result.body);
+          print(roomId);
+          print(teacherID);
+          print(box.read("clientID"));
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      throw Exception("Error: unable to create request");
+    }
+  }
+  static createExchangeValidateRequest({
+    required String roomId,
+    required String teacherID,
+    required BuildContext context,
+  }) async {
+    try {
+      Map<String,dynamic>data={
+        "pangea_class_room_id": roomId,
+        "teacher_id": teacherID,
+      };
+      var result = await http.post(Uri.parse(ApiUrls.exchangeClassValidate),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(data)
+      );
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        box.write("exchangevalidate",false);
+      } else if(result.statusCode ==400) {
+        box.write("exchangevalidate",true);
+        var body=jsonDecode(result.body);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("${body["error"]}")));
+      }else{
+        ApiException.exception(
+            statusCode: result.statusCode, body: result.body, context: context);
+        throw Exception("${result.statusCode}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      throw Exception("Error: unable to create request");
+    }
+  }
+  static ExchangeAcceptRequest(
+      String roomId, String teacherName) async {
+    try {
+
+      Map<String,dynamic>data={
+
+        "pangea_class_room_id": roomId,
+        "teacher_id": box.read("clientID"),//teacherName,
+        "is_accepted":true,
+      };
+      var result = await http.post(Uri.parse(ApiUrls.exchangeAcceptRequest),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(data));
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        print("confirm value ${result.body}");
+      } else {
+        if (kDebugMode) {
+          print("Unable to fetch user age");
+          print(result.statusCode);
+          print(result.body);
+        }
+
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      throw Exception("Error: unable to confirm request");
+    }
+  }
+
+  static ExchangeRejectRequest(
+      String roomId, String teacherName) async {
+    try {
+      Map<String,dynamic>data={
+
+        "pangea_class_room_id": roomId,
+        "teacher_id": teacherName,
+        "is_accepted":false,
+      };
+      var result = await http.post(Uri.parse(ApiUrls.exchangeAcceptRequest),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(data));
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        print("reject value ${result.body}");
+        Fluttertoast.showToast(msg: "Mail Sent Successfully");
+      } else {
+        if (kDebugMode) {
+          print("unable to reject request");
+          print(result.statusCode);
+          print(result.body);
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: unable to reject request");
+      throw Exception("Error: unable to reject request");
+    }
+  }
+
+
+  static Future<FetchClassInfoModel> fetchExchangeClassInfo(BuildContext context,roomID) async {
+    try {
+      final String accessToken = box.read("access") ?? "";
+      //final String roomID = VRouter.of(context).queryParameters["id"] ?? "";
+      if (accessToken.isNotEmpty && roomID.isNotEmpty) {
+        final value = await http.get(
+          Uri.parse(ApiUrls.getClassDetails + roomID),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $accessToken",
+          },
+        );
+        if (value.statusCode == 200 || value.statusCode == 201) {
+          return FetchClassInfoModel.fromJson(jsonDecode(value.body));
+        } else {
+          ApiException.exception(
+              statusCode: value.statusCode, body: value.body, context: context);
+          throw Exception("${value.statusCode}");
+        }
+      } else {
+        throw Exception("Access token or Room ID is empty");
+      }
+    } catch (e) {
+      print("eero");
+      print(e);
+      throw Exception(e.toString());
+    }
+  }
 }

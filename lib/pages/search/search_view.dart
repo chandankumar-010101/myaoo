@@ -14,6 +14,8 @@ import 'package:pangeachat/widgets/contacts_list.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../config/environment.dart';
+import '../../services/controllers.dart';
 import '../../utils/localized_exception_extension.dart';
 import '../../utils/platform_infos.dart';
 import 'search.dart';
@@ -21,7 +23,6 @@ import 'search.dart';
 class SearchView extends StatefulWidget {
   final SearchController controller;
   final searchController = Get.put(SearchViewController());
-
 
   SearchView(this.controller, {Key? key}) : super(key: key);
 
@@ -35,8 +36,6 @@ class _SearchViewState extends State<SearchView> {
   var box = GetStorage();
   String id = "";
 
-
-
   void addAgesAction() => VRouter.of(context).to('/user');
 
   void createInviteAction() => VRouter.of(context).to('/inviteScreen');
@@ -48,16 +47,35 @@ class _SearchViewState extends State<SearchView> {
         "id": id,
       });
 
+  PangeaControllers getxController = Get.put(PangeaControllers());
   @override
   void initState() {
     super.initState();
     final int age1 = box.read("age") ?? 0;
-    age1 == 0?searchController.age.value = 0:searchController.age.value = age1;
+    age1 == 0
+        ? searchController.age.value = 0
+        : searchController.age.value = age1;
     searchController.getClasses();
   }
+
+  fetchFlag(String url, int i) {
+    try {
+      final String path =
+          url + "${searchController.classList[i].flags![1].languageFlag}" ?? "";
+      return path.isNotEmpty
+          ? Avatar(
+              mxContent: Uri.parse(path),
+              name: "publicRoomsResponse.chunk[i].name",
+              size: 15,
+            )
+          : Container();
+    } catch (e) {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     final server = widget.controller.genericSearchTerm?.isValidMatrixId ?? false
         ? widget.controller.genericSearchTerm!.domain
         : widget.controller.server;
@@ -109,13 +127,25 @@ class _SearchViewState extends State<SearchView> {
               .removeDiacritics()),
     );
     const tabCount = 3;
+    final String basePath = Environment.baseAPI;
+    final List<String> data = basePath.split("/api/v1");
+    final String url = data[0];
 
     return DefaultTabController(
       length: tabCount,
-      initialIndex: widget.controller.controller.text.startsWith('#') ? 0 : 1,
+      initialIndex: widget.controller.controller.text.startsWith('#')
+          ? 0
+          : getxController.throughClassProfile.value
+              ? 0
+              : 1,
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(),
+          leading: BackButton(
+            onPressed: () {
+              getxController.throughClassProfile.value = false;
+              VRouter.of(context).to("/rooms");
+            },
+          ),
           titleSpacing: 0,
           title: TextField(
             autofocus: true,
@@ -145,7 +175,7 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
-              Obx(() => searchController.age.value <= 18
+            Obx(() => searchController.age.value <= 18
                 ? SingleChildScrollView(
                     child: Column(
                       children: [
@@ -176,19 +206,18 @@ class _SearchViewState extends State<SearchView> {
                           },
                           child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                  borderRadius: BorderRadius.circular(10),
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   border: Border.all(
                                       color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary ==
-                                          Colors.white
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
                                           : Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary
-                                  )
-                              ),
+                                              .colorScheme
+                                              .onPrimary)),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 42, vertical: 6),
@@ -251,22 +280,20 @@ class _SearchViewState extends State<SearchView> {
                                 },
                                 child: Container(
                                     decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.circular(10),
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                                        // borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                         border: Border.all(
                                             color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary ==
-                                                Colors.white
+                                                        .colorScheme
+                                                        .onPrimary ==
+                                                    Colors.white
                                                 ? Theme.of(context).primaryColor
                                                 : Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary
-                                        )
-                                    ),
+                                                    .colorScheme
+                                                    .onPrimary)),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 42, vertical: 6),
@@ -282,41 +309,38 @@ class _SearchViewState extends State<SearchView> {
                                     )),
                               )
                             : InkWell(
-                            onTap: () {
-                              VRouter.of(context).to("/join_with_code");
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  // borderRadius: BorderRadius.circular(10),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
-                                    border: Border.all(
+                                onTap: () {
+                                  VRouter.of(context).to("/join_with_code");
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        // borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onPrimary ==
-                                            Colors.white
-                                            ? Theme.of(context).primaryColor
-                                            : Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary
-                                    )
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 42, vertical: 6),
-                                  child: Text(
-                                    "Join with a class code",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 16),
-                                  ),
-                                ))
-                        )
+                                            .onPrimary,
+                                        border: Border.all(
+                                            color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary ==
+                                                    Colors.white
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary)),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 42, vertical: 6),
+                                      child: Text(
+                                        "Join with a class code",
+                                        style: TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontSize: 16),
+                                      ),
+                                    )))
                       ],
                     ),
                   )
@@ -355,7 +379,8 @@ class _SearchViewState extends State<SearchView> {
                                 ],
                               );
                             }
-                            if (snapshot.connectionState != ConnectionState.done) {
+                            if (snapshot.connectionState !=
+                                ConnectionState.done) {
                               return const Center(
                                   child: CircularProgressIndicator.adaptive(
                                       strokeWidth: 2));
@@ -399,11 +424,15 @@ class _SearchViewState extends State<SearchView> {
                                                       child: Icon(
                                                         Icons.arrow_back_ios,
                                                         size: 20,
-                                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                            ? Theme.of(context).primaryColor
+                                                        color: Theme.of(context)
+                                                                    .colorScheme
+                                                                    .onPrimary ==
+                                                                Colors.white
+                                                            ? Theme.of(context)
+                                                                .primaryColor
                                                             : Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
+                                                                .colorScheme
+                                                                .onPrimary,
                                                       ),
                                                     ),
                                                     onTap: () {
@@ -431,17 +460,22 @@ class _SearchViewState extends State<SearchView> {
                                                       searchController
                                                           .getClasses();
                                                     },
-                                                    child:  Padding(
+                                                    child: Padding(
                                                       padding:
                                                           EdgeInsets.all(8.0),
                                                       child: Icon(
                                                         Icons.arrow_forward_ios,
                                                         size: 20,
-                                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                            ? Theme.of(context).primaryColor
+                                                        color: Theme.of(context)
+                                                                    .colorScheme
+                                                                    .onPrimary ==
+                                                                Colors.white
+                                                            ? Theme.of(context)
+                                                                .primaryColor
                                                             : Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,                                                      ),
+                                                                .colorScheme
+                                                                .onPrimary,
+                                                      ),
                                                     ),
                                                   )
                                                 : const SizedBox(),
@@ -451,412 +485,431 @@ class _SearchViewState extends State<SearchView> {
                                             horizontal: 10),
                                       )
                                     : const SizedBox()),
-                                Obx(() => !searchController.loading.value && searchController.classList != Null
-                                    ? GridView.builder(
-                                         //controller: searchController.controller,
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.all(12),
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 0.75,
-                                          crossAxisSpacing: 10,
-                                          mainAxisSpacing: 10,
-                                        ),
-                                        itemCount:
-                                            searchController.classList.length,
-                                        itemBuilder:
-                                            (BuildContext context, int i) {
-                                        //  if(searchController.classList[i])
-                                          return Material(
-                                            elevation: 15,
-                                            color: const Color(0xffF6F6F6),
-                                            borderRadius:
-                                            BorderRadius.circular(16),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                id = searchController.classList[i].pangea_class_room_id.toString();
-                                                VRouter.of(context).to("/classDetails",queryParameters:{"id":id} );
-                                              },
-                                              borderRadius:
-                                              BorderRadius.circular(16),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        16.0),
-                                                    boxShadow: const [
-                                                      BoxShadow(
-                                                          color: Colors.black12,
-                                                          blurRadius: 1.0,
-                                                          offset:
-                                                          Offset(2.0, 2.0),
-                                                          spreadRadius: 1.0)
-                                                    ],
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .background),
-                                                child: Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(10.0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                    MainAxisSize.min,
-                                                    children: [
-                                                      Stack(
-                                                        children: [
-                                                          Container(
-                                                            child: searchController
-                                                                .classList[i]
-                                                                .profilePic !=
-                                                                null
-                                                                ? Avatar(
-                                                              mxContent:
-                                                              Uri.parse(
-                                                                  "${searchController.classList[i].profilePic}"),
-                                                            )
-                                                                : const Padding(
-                                                              padding:
-                                                              EdgeInsets
-                                                                  .all(
-                                                                  5.0),
-                                                              child: Icon(
-                                                                Icons
-                                                                    .people,
-                                                                size: 40,
-                                                              ),
-                                                            ),
-                                                            decoration: BoxDecoration(
-                                                                border: Border.all(
-                                                                    color: Theme.of(
-                                                                        context)
-                                                                        .colorScheme
-                                                                        .onPrimary,
-                                                                    width: 2.0),
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                          ),
-                                                          Positioned(
-                                                            child: Container(
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                              decoration: BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  color: Theme.of(
-                                                                      context)
-                                                                      .colorScheme
-                                                                      .onPrimary,
-                                                                  border: Border.all(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      width: 2)),
-                                                              child: const Icon(
-                                                                Icons.school,
-                                                                size: 15.0,
-                                                              ),
-                                                            ),
-                                                            bottom: 0,
-                                                            right: 0,
-                                                          )
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Text(
-                                                          searchController.classList[i].classAuthor != Null ?
-                                                          "${searchController.classList[i].classAuthor}":"Na",
-                                                          style: TextStyle()
-                                                              .copyWith(
-                                                            color:
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText1!
-                                                                .color,
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                            FontWeight.w400,
-                                                            overflow:
-                                                            TextOverflow.clip,
-                                                          )),
-                                                      Text(
-                                                          searchController.classList[i].className != Null?
-                                                          "${searchController.classList[i].className}":"Na",
-                                                          style: TextStyle()
-                                                              .copyWith(
-                                                            color:
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText1!
-                                                                .color,
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                            FontWeight.w400,
-                                                            overflow:
-                                                            TextOverflow.clip,
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                              Icons.location_pin,
-                                                              size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          searchController
-                                                              .classList[i]
-                                                              .city!
-                                                              .isNotEmpty
-                                                              ? Text(
-                                                              "${searchController.classList[i].city}",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              ))
-                                                              : Text("N/A",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              )),
-                                                          const SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          const Icon(Icons.star,
-                                                              size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          searchController
-                                                              .classList[i]
-                                                              .rating
-                                                              .toString()
-                                                              .isNotEmpty
-                                                              ? Text(
-                                                              searchController.classList[i].rating.toString() != Null?
-                                                              "${searchController.classList[i].rating.toString()}":"Na",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              ))
-                                                              : Text("N/A",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              )),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                              Icons
-                                                                  .supervisor_account_sharp,
-                                                              size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                          searchController.classList[i].total_student.toString() != Null?
-                                                                "${searchController.classList[i].total_student.toString()} Students":"Na",
-                                                                style: TextStyle()
-                                                                    .copyWith(
-                                                                  color: Theme.of(
-                                                                      context)
-                                                                      .textTheme
-                                                                      .bodyText1!
-                                                                      .color,
-                                                                  fontSize: 10,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                                  overflow:
-                                                                  TextOverflow
-                                                                      .clip,
-                                                                )),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                              Icons.query_stats,
-                                                              size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Text(
-                                                          searchController
-                                                              .classList[i]
-                                                              .languageLevel
-                                                  .toString() != Null ?
-                                                              level(searchController
-                                                                  .classList[i]
-                                                                  .languageLevel
-                                                                  .toString()):"Na",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              ))
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                              Icons
-                                                                  .account_balance,
-                                                              size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Text("Not disclosed",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              ))
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Spacer(),
-                                                          Avatar(
-                                                            mxContent: Uri.parse(
-                                                                "https://staging.api.pangea.chat" +
-                                                                    "${searchController.classList[i].flags![0].languageFlag}"),
-                                                            name:
-                                                            "publicRoomsResponse.chunk[i].name",
-                                                            size: 15,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          const Icon(
-                                                              Icons
-                                                                  .arrow_right_alt_outlined,
-                                                              size: 17),
-                                                          const SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          Avatar(
-                                                            mxContent: Uri.parse(
-                                                                "https://staging.api.pangea.chat" +
-                                                                    "${searchController.classList[i].flags![0].languageFlag}"),
-                                                            name:
-                                                            "publicRoomsResponse.chunk[i].name",
-                                                            size: 15,
-                                                          ),
-                                                          const Spacer(),
-                                                          Text("free",
-                                                              style: TextStyle()
-                                                                  .copyWith(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .textTheme
-                                                                    .bodyText1!
-                                                                    .color,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400,
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                              ))
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
+                                Obx(
+                                    () =>
+                                        !searchController.loading.value &&
+                                                searchController.classList !=
+                                                    Null
+                                            ? GridView.builder(
+                                                //controller: searchController.controller,
+                                                shrinkWrap: true,
+                                                padding:
+                                                    const EdgeInsets.all(12),
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio: 0.75,
+                                                  crossAxisSpacing: 10,
+                                                  mainAxisSpacing: 10,
                                                 ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : const Center(
-                                        child: CupertinoActivityIndicator(),
-                                      )),
+                                                itemCount: searchController
+                                                    .classList.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int i) {
+                                                  //  if(searchController.classList[i])
+                                                  return Material(
+                                                    elevation: 15,
+                                                    color:
+                                                        const Color(0xffF6F6F6),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        id = searchController
+                                                            .classList[i]
+                                                            .pangea_class_room_id
+                                                            .toString();
+                                                        VRouter.of(context).to(
+                                                            "/classDetails",
+                                                            queryParameters: {
+                                                              "id": id
+                                                            });
+                                                      },
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16.0),
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                      color: Colors
+                                                                          .black12,
+                                                                      blurRadius:
+                                                                          1.0,
+                                                                      offset: Offset(
+                                                                          2.0,
+                                                                          2.0),
+                                                                      spreadRadius:
+                                                                          1.0)
+                                                                ],
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .background),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              Stack(
+                                                                children: [
+                                                                  Container(
+                                                                    child: searchController.classList[i].profilePic !=
+                                                                            null
+                                                                        ? Avatar(
+                                                                            mxContent:
+                                                                                Uri.parse("${searchController.classList[i].profilePic}"),
+                                                                          )
+                                                                        : const Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(5.0),
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.people,
+                                                                              size: 40,
+                                                                            ),
+                                                                          ),
+                                                                    decoration: BoxDecoration(
+                                                                        border: Border.all(
+                                                                            color: Theme.of(context)
+                                                                                .colorScheme
+                                                                                .onPrimary,
+                                                                            width:
+                                                                                2.0),
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                  ),
+                                                                  Positioned(
+                                                                    child:
+                                                                        Container(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onPrimary,
+                                                                          border: Border.all(
+                                                                              color: Colors.white,
+                                                                              width: 2)),
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .school,
+                                                                        size:
+                                                                            15.0,
+                                                                      ),
+                                                                    ),
+                                                                    bottom: 0,
+                                                                    right: 0,
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 10.0,
+                                                              ),
+                                                              Text(
+                                                                  searchController
+                                                                              .classList[
+                                                                                  i]
+                                                                              .classAuthor !=
+                                                                          Null
+                                                                      ? "${searchController.classList[i].classAuthor}"
+                                                                      : "Na",
+                                                                  style: TextStyle()
+                                                                      .copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyText1!
+                                                                        .color,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .clip,
+                                                                  )),
+                                                              Text(
+                                                                  searchController
+                                                                              .classList[
+                                                                                  i]
+                                                                              .className !=
+                                                                          Null
+                                                                      ? "${searchController.classList[i].className}"
+                                                                      : "Na",
+                                                                  style: TextStyle()
+                                                                      .copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyText1!
+                                                                        .color,
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .clip,
+                                                                  )),
+                                                              const SizedBox(
+                                                                height: 10.0,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  const Icon(
+                                                                      Icons
+                                                                          .location_pin,
+                                                                      size: 12),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  searchController
+                                                                          .classList[
+                                                                              i]
+                                                                          .city!
+                                                                          .isNotEmpty
+                                                                      ? Text(
+                                                                          "${searchController.classList[i].city}",
+                                                                          style: TextStyle()
+                                                                              .copyWith(
+                                                                            color:
+                                                                                Theme.of(context).textTheme.bodyText1!.color,
+                                                                            fontSize:
+                                                                                10,
+                                                                            fontWeight:
+                                                                                FontWeight.w400,
+                                                                            overflow:
+                                                                                TextOverflow.clip,
+                                                                          ))
+                                                                      : Text(
+                                                                          "N/A",
+                                                                          style:
+                                                                              TextStyle().copyWith(
+                                                                            color:
+                                                                                Theme.of(context).textTheme.bodyText1!.color,
+                                                                            fontSize:
+                                                                                10,
+                                                                            fontWeight:
+                                                                                FontWeight.w400,
+                                                                            overflow:
+                                                                                TextOverflow.clip,
+                                                                          )),
+                                                                  const SizedBox(
+                                                                    width: 20,
+                                                                  ),
+                                                                  const Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      size: 12),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  searchController
+                                                                          .classList[
+                                                                              i]
+                                                                          .rating
+                                                                          .toString()
+                                                                          .isNotEmpty
+                                                                      ? Text(
+                                                                          searchController.classList[i].rating.toString() != Null
+                                                                              ? "${searchController.classList[i].rating.toString()}"
+                                                                              : "Na",
+                                                                          style: TextStyle()
+                                                                              .copyWith(
+                                                                            color:
+                                                                                Theme.of(context).textTheme.bodyText1!.color,
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.w400,
+                                                                            overflow:
+                                                                                TextOverflow.clip,
+                                                                          ))
+                                                                      : Text(
+                                                                          "N/A",
+                                                                          style:
+                                                                              TextStyle().copyWith(
+                                                                            color:
+                                                                                Theme.of(context).textTheme.bodyText1!.color,
+                                                                            fontSize:
+                                                                                10,
+                                                                            fontWeight:
+                                                                                FontWeight.w400,
+                                                                            overflow:
+                                                                                TextOverflow.clip,
+                                                                          )),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  const Icon(
+                                                                      Icons
+                                                                          .supervisor_account_sharp,
+                                                                      size: 12),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                        searchController.classList[i].total_student.toString() !=
+                                                                                Null
+                                                                            ? "${searchController.classList[i].total_student.toString()} Students"
+                                                                            : "Na",
+                                                                        style: TextStyle()
+                                                                            .copyWith(
+                                                                          color: Theme.of(context)
+                                                                              .textTheme
+                                                                              .bodyText1!
+                                                                              .color,
+                                                                          fontSize:
+                                                                              10,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                          overflow:
+                                                                              TextOverflow.clip,
+                                                                        )),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  const Icon(
+                                                                      Icons
+                                                                          .query_stats,
+                                                                      size: 12),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  Text(
+                                                                      searchController.classList[i].languageLevel.toString() !=
+                                                                              Null
+                                                                          ? level(searchController
+                                                                              .classList[
+                                                                                  i]
+                                                                              .languageLevel
+                                                                              .toString())
+                                                                          : "Na",
+                                                                      style: TextStyle()
+                                                                          .copyWith(
+                                                                        color: Theme.of(context)
+                                                                            .textTheme
+                                                                            .bodyText1!
+                                                                            .color,
+                                                                        fontSize:
+                                                                            10,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        overflow:
+                                                                            TextOverflow.clip,
+                                                                      ))
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  const Icon(
+                                                                      Icons
+                                                                          .account_balance,
+                                                                      size: 12),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  Text(
+                                                                      "Not disclosed",
+                                                                      style: TextStyle()
+                                                                          .copyWith(
+                                                                        color: Theme.of(context)
+                                                                            .textTheme
+                                                                            .bodyText1!
+                                                                            .color,
+                                                                        fontSize:
+                                                                            10,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        overflow:
+                                                                            TextOverflow.clip,
+                                                                      ))
+                                                                ],
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 10.0,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  const Spacer(),
+                                                                  Avatar(
+                                                                    mxContent: Uri
+                                                                        .parse(url +
+                                                                            "${searchController.classList[i].flags![0].languageFlag}"),
+                                                                    name:
+                                                                        "publicRoomsResponse.chunk[i].name",
+                                                                    size: 15,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 5.0,
+                                                                  ),
+                                                                  const Icon(
+                                                                      Icons
+                                                                          .arrow_right_alt_outlined,
+                                                                      size: 17),
+                                                                  const SizedBox(
+                                                                    width: 5.0,
+                                                                  ),
+                                                                  fetchFlag(
+                                                                      url, i),
+                                                                  const Spacer(),
+                                                                  Text("free",
+                                                                      style: TextStyle()
+                                                                          .copyWith(
+                                                                        color: Theme.of(context)
+                                                                            .textTheme
+                                                                            .bodyText1!
+                                                                            .color,
+                                                                        fontSize:
+                                                                            10,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        overflow:
+                                                                            TextOverflow.clip,
+                                                                      ))
+                                                                ],
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : const Center(
+                                                child:
+                                                    CupertinoActivityIndicator(),
+                                              )),
                               ],
                             );
                           }),
                     ],
-
                   )),
-
             ListView.builder(
               keyboardDismissBehavior: PlatformInfos.isIOS
                   ? ScrollViewKeyboardDismissBehavior.onDrag
@@ -878,8 +931,9 @@ class _SearchViewState extends State<SearchView> {
                             context: context,
                             future: () async {
                               final client = Matrix.of(context).client;
-                              final roomId = await client
-                                  .startDirectChat(foundProfile.userId);
+                              final roomId = await client.startDirectChat(
+                                  foundProfile.userId,
+                                  enableEncryption: false);
                               return roomId;
                             },
                           );

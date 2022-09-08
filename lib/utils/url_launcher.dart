@@ -23,8 +23,16 @@ class UrlLauncher {
   final String? url;
   final BuildContext context;
   bool requestToEnroll;
+  bool requestExchange;
   final String? roomId;
-  UrlLauncher(this.context, this.url,{this.roomId="", this.requestToEnroll = false});
+  String rid;
+  String receivedroomID;
+  UrlLauncher(this.context, this.url,
+      {this.roomId = "",
+      this.requestToEnroll = false,
+      this.requestExchange = false,
+      this.receivedroomID = "",
+      this.rid = ""});
 
   void launchUrl() {
     if (url!.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
@@ -185,10 +193,74 @@ class UrlLauncher {
       }
     }
     else if (identityParts.primaryIdentifier.sigil == '@') {
-     // final roomIdOrAlias = identityParts.primaryIdentifier;
+      // final roomIdOrAlias = identityParts.primaryIdentifier;
 
       //await Matrix.of(context).client.getRoomById(roomID)!.sendTextEvent('Hello world');
-      if(!requestToEnroll){
+
+      if(requestExchange){
+
+        final client = Matrix.of(context).client;
+        final result = await showFutureLoadingDialog<String>(
+          context: context,
+          future: () => client.startDirectChat(identityParts.primaryIdentifier, enableEncryption: false),
+        );
+        if (result.error == null) {
+          final String userId =  Matrix.of(context).client.userID??"";
+          if(userId.isNotEmpty){
+            //TODO Env update
+            final String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
+
+            await client.getRoomById(result.result!)!.sendTextEvent(initial_url+"/#"+"/request_to_exchange?id=$userId&room_id=$roomId&r_id=$rid&receviedroom_id=$receivedroomID").then((value){
+              VRouter.of(context).toSegments(['rooms', result.result!]);
+              Navigator.of(context, rootNavigator: false).pop();}).catchError((e){
+              print("Error Accured");
+              print(e);
+            });
+            return;
+          }
+          else{
+
+            print("userid empty");
+            return;
+          }
+
+        }
+
+      }
+      else if(requestToEnroll){
+        final client = Matrix.of(context).client;
+        final result = await showFutureLoadingDialog<String>(
+          context: context,
+          future: () => client.startDirectChat(identityParts.primaryIdentifier,
+              enableEncryption: false),
+        );
+        if (result.error == null) {
+          String userId = Matrix.of(context).client.userID ?? "";
+          if (userId.isNotEmpty) {
+            //TODO Env update
+            final String initial_url =
+                kIsWeb ? html.window.origin! : Environment.frontendURL;
+
+            await client
+                .getRoomById(result.result!)!
+                .sendTextEvent(initial_url +
+                    "/#" +
+                    "/request_to_enroll?id=$userId&room_id=$roomId")
+                .then((value) {
+              VRouter.of(context).toSegments(['rooms', result.result!]);
+              Navigator.of(context, rootNavigator: false).pop();
+            }).catchError((e) {
+              print("Error Accured");
+              print(e);
+            });
+            return;
+          } else {
+            print("userid empty");
+            return;
+          }
+        }
+      }
+      else {
         await showModalBottomSheet(
           context: context,
           builder: (c) => ProfileBottomSheet(
@@ -196,37 +268,7 @@ class UrlLauncher {
             outerContext: context,
           ),
         );
-      }else{
-        final client = Matrix.of(context).client;
-        final result = await showFutureLoadingDialog<String>(
-          context: context,
-          future: () => client.startDirectChat(identityParts.primaryIdentifier),
-        );
-        if (result.error == null) {
-         String userId =  Matrix.of(context).client.userID??"";
-         if(userId.isNotEmpty){
-           //TODO Env update
-           final String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
-
-           await client.getRoomById(result.result!)!.sendTextEvent(initial_url+"/#"+"/request_to_enroll?id=$userId&room_id=$roomId").then((value){
-             VRouter.of(context).toSegments(['rooms', result.result!]);
-             Navigator.of(context, rootNavigator: false).pop();
-           }).catchError((e){
-             print("Error Accured");
-             print(e);
-           });
-           return;
-         }else{
-
-           print("userid empty");
-           return;
-         }
-
-
-        }
       }
-
-
     }
   }
 }

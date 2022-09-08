@@ -8,6 +8,7 @@ import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_permissions_settings/chat_permissions_settings.dart';
 import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
 import 'package:pangeachat/pages/class_join/join_with_link.dart';
+import 'package:pangeachat/pages/class_profile/class_profile.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
@@ -223,7 +224,7 @@ class AppRoutes {
                 //Todo classDetails
                 VWidget(
                   path: '/classDetails',
-                  widget: RequestScreenView(),
+                  widget: RequestScreen(),
                   buildTransition: _dynamicTransition,
                   stackedRoutes: [
                     VWidget(

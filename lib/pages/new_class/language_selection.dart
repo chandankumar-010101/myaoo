@@ -67,8 +67,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
       Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
       return false;
     }
-    if(discriptionController.text.length >=100){
-      Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+    if(discriptionController.text.length >=2000){
+      Fluttertoast.showToast(msg: "Description length should below  2000", fontSize: 16.0);
       return false;
     }
     return true;
@@ -133,8 +133,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
       Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
       return;
     }
-    if(discriptionController.text.length >=100){
-      Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+    if(discriptionController.text.length >=2000){
+      Fluttertoast.showToast(msg: "Description length should below  2000", fontSize: 16.0);
       return;
     }
 
@@ -476,7 +476,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "1000",
+                    "2000",
                     style: TextStyle().copyWith(
                         color: Theme.of(context).textTheme.bodyText1!.color,
                         fontSize: 14),
@@ -840,8 +840,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                 Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
                                 return;
                               }
-                              if(discriptionController.text.length >=100){
-                                Fluttertoast.showToast(msg: "Description length should below  100", fontSize: 16.0);
+                              if(discriptionController.text.length >=2000){
+                                Fluttertoast.showToast(msg: "Description length should below 2000", fontSize: 16.0);
                                 return ;
                               }
                               final result = await showFutureLoadingDialog(

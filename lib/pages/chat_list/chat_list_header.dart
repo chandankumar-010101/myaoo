@@ -176,7 +176,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final selectMode = controller.selectMode;
-
+    final sp = controller.activeSpacesEntry.getSpace(context);
     return AppBar(
       elevation: controller.scrolledToTop ? 0 : null,
       actionsIconTheme: IconThemeData(
@@ -236,18 +236,20 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                   if (selectMode == SelectMode.normal)
-                    IconButton(
-                      icon: const Icon(Icons.camera_alt_outlined),
-                      tooltip: L10n.of(context)!.addToStory,
-                      onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
-                          ? VRouter.of(context).to(
-                              '/stories/create',
-                              queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
-                            )
-                          : VRouter.of(context).to(
-                              '/stories/create',
-                            ),
-                    ),
+                    sp != null
+                        ? IconButton(
+                            icon: const Icon(Icons.camera_alt_outlined),
+                            tooltip: L10n.of(context)!.addToStory,
+                            onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
+                                ? VRouter.of(context).to(
+                                    '/stories/create',
+                                    queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
+                                  )
+                                : VRouter.of(context).to(
+                                    '/stories/create',
+                                  ),
+                          )
+                        : Container(),
                   PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,
                     itemBuilder: (_) => checkUser(context),
