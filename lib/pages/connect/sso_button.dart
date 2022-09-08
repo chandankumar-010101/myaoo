@@ -36,10 +36,7 @@ class SsoButton extends StatelessWidget {
                 child: identityProvider.icon == null
                     ? const Icon(Icons.web_outlined)
                     : CachedNetworkImage(
-                        imageUrl: Uri.parse(identityProvider.icon!)
-                            .getDownloadLink(
-                                Matrix.of(context).getLoginClient())
-                            .toString(),
+                        imageUrl: Uri.parse(identityProvider.icon!).getDownloadLink( Matrix.of(context).getLoginClient()).toString(),
                         width: 30,
                         height: 30,
                       ),
