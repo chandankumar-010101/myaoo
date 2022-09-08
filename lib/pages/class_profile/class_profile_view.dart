@@ -260,7 +260,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.totalStudent.toString(),
+                                  widget.controller.noOfStudents.toString(),
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme

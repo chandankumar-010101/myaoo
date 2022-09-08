@@ -62,6 +62,7 @@ class RequestScreenState extends State<RequestScreen> {
     if (rooms != null && userId != null) {
       try {
         space = await rooms.requestParticipants();
+        noOfStudents = space.length;
         space = space.where((i) => i.id == userId).toList();
       } catch (e) {
         Fluttertoast.showToast(msg: "Unable to fetch Class Info");
@@ -120,6 +121,8 @@ class RequestScreenState extends State<RequestScreen> {
     }
 
   }
+
+  int noOfStudents =0;
 
   @override
   Widget build(BuildContext context) {
