@@ -12,9 +12,11 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:provider/provider.dart';
 
 import 'package:record/record.dart';
@@ -875,7 +877,7 @@ class ChatController extends State<Chat> {
     choreoController.openIt();
     FocusScope.of(context).requestFocus(inputFocus);
   }
-
+  PangeaControllers getxController = Get.put(PangeaControllers());
   void onAddPopupMenuButtonSelected(String choice) {
     if (choice == 'file') {
       sendFileAction();

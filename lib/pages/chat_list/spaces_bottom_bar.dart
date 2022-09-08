@@ -137,7 +137,6 @@ class _SpacesBottomNavigation extends StatelessWidget {
         icon: InkWell(
           borderRadius: BorderRadius.circular(28),
           onTap: () {
-
             controller.setActiveSpacesEntry(
               context,
               entry,

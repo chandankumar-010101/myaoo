@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:matrix/matrix.dart';
 
@@ -15,29 +16,50 @@ import 'chat.dart';
 import 'input_bar.dart';
 import 'package:pangea_choreographer/pangea_choreographer.dart';
 
-class ChatInputRow extends StatelessWidget {
+class ChatInputRow extends StatefulWidget {
   final ChatController controller;
 
   const ChatInputRow(this.controller, {Key? key}) : super(key: key);
 
   @override
+  State<ChatInputRow> createState() => _ChatInputRowState();
+}
+
+class _ChatInputRowState extends State<ChatInputRow> {
+  bool showImage = false;
+  bool showFile = false;
+  bool showVideo = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      showImage = widget.controller.getxController.isSharePhoto.value;
+      showFile = widget.controller.getxController.isShareFiles.value;
+      showVideo = widget.controller.getxController.isShareVideo.value;
+
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    if (controller.showEmojiPicker &&
-        controller.emojiPickerType == EmojiPickerType.reaction) {
+    if (widget.controller.showEmojiPicker &&
+        widget.controller.emojiPickerType == EmojiPickerType.reaction) {
       return Container();
     }
+
     return Column(
       children: [
-        ChoreoBar(controller: controller.choreoController),
+        ChoreoBar(controller: widget.controller.choreoController),
+
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: controller.selectMode
+          children: widget.controller.selectMode
               ? <Widget>[
                   SizedBox(
                     height: 56,
                     child: TextButton(
-                      onPressed: controller.forwardEventsAction,
+                      onPressed: widget.controller.forwardEventsAction,
                       child: Row(
                         children: <Widget>[
                           const Icon(Icons.keyboard_arrow_left_outlined),
@@ -46,15 +68,15 @@ class ChatInputRow extends StatelessWidget {
                       ),
                     ),
                   ),
-                  controller.selectedEvents.length == 1
-                      ? controller.selectedEvents.first
-                              .getDisplayEvent(controller.timeline!)
+                  widget.controller.selectedEvents.length == 1
+                      ? widget.controller.selectedEvents.first
+                              .getDisplayEvent(widget.controller.timeline!)
                               .status
                               .isSent
                           ? SizedBox(
                               height: 56,
                               child: TextButton(
-                                onPressed: controller.replyAction,
+                                onPressed: widget.controller.replyAction,
                                 child: Row(
                                   children: <Widget>[
                                     Text(L10n.of(context)!.reply),
@@ -66,7 +88,7 @@ class ChatInputRow extends StatelessWidget {
                           : SizedBox(
                               height: 56,
                               child: TextButton(
-                                onPressed: controller.sendAgainAction,
+                                onPressed: widget.controller.sendAgainAction,
                                 child: Row(
                                   children: <Widget>[
                                     Text(L10n.of(context)!.tryToSendAgain),
@@ -83,16 +105,19 @@ class ChatInputRow extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: 56,
-                      width: controller.inputText.isEmpty ? 56 : 0,
+                      width: widget.controller.inputText.isEmpty ? 56 : 0,
                       alignment: Alignment.center,
                       clipBehavior: Clip.hardEdge,
                       decoration: const BoxDecoration(),
-                      child: PopupMenuButton<String>(
+                      child:
+                          PopupMenuButton<String>(
                         icon: const Icon(Icons.add_outlined),
-                        onSelected: controller.onAddPopupMenuButtonSelected,
+                        onSelected: widget.controller.onAddPopupMenuButtonSelected,
                         itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<String>>[
+
+                        <PopupMenuEntry<String>>[
                           PopupMenuItem<String>(
+                            enabled: showFile,
                             value: 'file',
                             child: ListTile(
                               leading: const CircleAvatar(
@@ -105,6 +130,7 @@ class ChatInputRow extends StatelessWidget {
                             ),
                           ),
                           PopupMenuItem<String>(
+                            enabled: showImage,
                             value: 'image',
                             child: ListTile(
                               leading: const CircleAvatar(
@@ -142,7 +168,7 @@ class ChatInputRow extends StatelessWidget {
                                 contentPadding: const EdgeInsets.all(0),
                               ),
                             ),
-                          if (controller.room!
+                          if (widget.controller.room!
                               .getImagePacks(ImagePackUsage.sticker)
                               .isNotEmpty)
                             PopupMenuItem<String>(
@@ -178,7 +204,7 @@ class ChatInputRow extends StatelessWidget {
                       LogicalKeyboardKey.keyA
                     },
                     onKeysPressed: () =>
-                        controller.onAddPopupMenuButtonSelected('file'),
+                        widget.controller.onAddPopupMenuButtonSelected('file'),
                     helpLabel: L10n.of(context)!.sendFile,
                   ),
                   Container(
@@ -202,44 +228,44 @@ class ChatInputRow extends StatelessWidget {
                             );
                           },
                           child: Icon(
-                            controller.showEmojiPicker
+                            widget.controller.showEmojiPicker
                                 ? Icons.keyboard
                                 : Icons.emoji_emotions_outlined,
-                            key: ValueKey(controller.showEmojiPicker),
+                            key: ValueKey(widget.controller.showEmojiPicker),
                           ),
                         ),
-                        onPressed: controller.emojiPickerAction,
+                        onPressed: widget.controller.emojiPickerAction,
                       ),
                       keysToPress: {
                         LogicalKeyboardKey.altLeft,
                         LogicalKeyboardKey.keyE
                       },
-                      onKeysPressed: controller.emojiPickerAction,
+                      onKeysPressed: widget.controller.emojiPickerAction,
                       helpLabel: L10n.of(context)!.emojis,
                     ),
                   ),
-                  if (controller.matrix!.isMultiAccount &&
-                      controller.matrix!.hasComplexBundles &&
-                      controller.matrix!.currentBundle!.length > 1)
+                  if (widget.controller.matrix!.isMultiAccount &&
+                      widget.controller.matrix!.hasComplexBundles &&
+                      widget.controller.matrix!.currentBundle!.length > 1)
                     Container(
                       height: 56,
                       alignment: Alignment.center,
-                      child: _ChatAccountPicker(controller),
+                      child: _ChatAccountPicker(widget.controller),
                     ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: InputBar(
-                        room: controller.room!,
+                        room: widget.controller.room!,
                         minLines: 1,
                         maxLines: 8,
                         autofocus: !PlatformInfos.isMobile,
                         keyboardType: TextInputType.multiline,
                         textInputAction:
                             AppConfig.sendOnEnter ? TextInputAction.send : null,
-                        onSubmitted: controller.onInputBarSubmitted,
-                        focusNode: controller.inputFocus,
-                        controller: controller.sendController,
+                        onSubmitted: widget.controller.onInputBarSubmitted,
+                        focusNode: widget.controller.inputFocus,
+                        controller: widget.controller.sendController,
                         decoration: InputDecoration(
                           hintText: L10n.of(context)!.writeAMessage,
                           hintMaxLines: 1,
@@ -247,28 +273,28 @@ class ChatInputRow extends StatelessWidget {
                           enabledBorder: InputBorder.none,
                           filled: false,
                         ),
-                        onChanged: controller.onInputBarChanged,
+                        onChanged: widget.controller.onInputBarChanged,
                       ),
                     ),
                   ),
-                  if (PlatformInfos.isMobile && controller.inputText.isEmpty)
+                  if (PlatformInfos.isMobile && widget.controller.inputText.isEmpty)
                     Container(
                       height: 56,
                       alignment: Alignment.center,
                       child: IconButton(
                         tooltip: L10n.of(context)!.voiceMessage,
                         icon: const Icon(Icons.mic_none_outlined),
-                        onPressed: controller.voiceMessageAction,
+                        onPressed: widget.controller.voiceMessageAction,
                       ),
                     ),
                   if (!PlatformInfos.isMobile ||
-                      controller.inputText.isNotEmpty)
-                    controller.choreoController.isOpen
+                      widget.controller.inputText.isNotEmpty)
+                    widget.controller.choreoController.isOpen
                         ? Padding(
                             padding:
                                 const EdgeInsets.only(right: 10, bottom: 10),
                             child: ItSrcSendButton(
-                              controller: controller.choreoController,
+                              controller: widget.controller.choreoController,
                             ),
                           )
                         : Tooltip(
@@ -279,7 +305,7 @@ class ChatInputRow extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: IconButton(
                                   icon: const Icon(Icons.send_outlined),
-                                  onPressed: controller.choreoController.openIt,
+                                  onPressed: widget.controller.choreoController.openIt,
                                 ),
                               ),
                             ),

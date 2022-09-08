@@ -90,12 +90,28 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  void setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) {
+  Future<void> setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) async {
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
+    if(spaceId !=null){
+      setState(() => _activeSpacesEntry = spaceId);
+      getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
+    }else{
+      getxController.isPublic.value = true;
+      getxController.isOpenEnrollment.value = true;
+      getxController.isOpenExchange.value = true;
+      getxController.oneToOneChatClass.value = true;
+      getxController.isCreateRooms.value = true;
+      getxController.isCreateRoomsExchange.value = true;
+      getxController.isSharePhoto.value = true;
+      getxController.isShareLocation.value = true;
+      getxController.isShareVideo.value = true;
+      getxController.isShareFiles.value = true;
+      getxController.isCreateStories.value = true;
+      //getxController.oneToOneChatClass.value = true;
 
-    setState(() => _activeSpacesEntry = spaceId);
+    }
   }
 
   void editSpace(BuildContext context, String spaceId) async {
