@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/visibility.dart' as vis;
 
 import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -16,6 +17,7 @@ import 'package:pangeachat/pages/chat_list/spaces_bottom_bar.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
 import 'package:pangeachat/pages/chat_list/stories_header.dart';
 import 'package:vrouter/vrouter.dart';
+import '../../utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
 import '../../utils/stream_extension.dart';
 import '../../widgets/matrix.dart';
 
@@ -170,10 +172,16 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
       },
       child: SingleChildScrollView(
         child: Column(children: [
-          StoriesHeader(
-            controller: widget.controller,
-            spaceStories: rooms,
-          ),
+          widget.controller.activeSpacesEntry
+                  .getRooms(context)
+                  .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+                  .toList()
+                  .isNotEmpty
+              ? StoriesHeader(
+                  controller: widget.controller,
+                  spaceStories: rooms,
+                )
+              : Container(),
           ExpansionPanelList(
             elevation: 2,
             animationDuration: Duration(milliseconds: 400),
@@ -248,8 +256,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                             // Todo: Style needs to be updated
                           ),
                         ),
-                        Obx(()=>widget.controller.canCreateRoom()),
-
+                        Obx(() => widget.controller.canCreateRoom()),
                       ],
                     )),
                 body: ListView.builder(

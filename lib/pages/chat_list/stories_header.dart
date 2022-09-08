@@ -118,7 +118,7 @@ class StoriesHeader extends StatelessWidget {
 
             return controller!.activeSpacesEntry.getSpace(context) != null
                 ? SizedBox(
-                    height: 150,
+                    height: 105,
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       scrollDirection: Axis.horizontal,
@@ -133,11 +133,11 @@ class StoriesHeader extends StatelessWidget {
                               future: room.getCreatorProfile(),
                               builder: (context, snapshot) {
                                 final userId = room.creatorId;
-                                final displayname = room.displayname;
+                                final displayname = snapshot.data?.displayName;
                                 final avatarUrl = snapshot.data?.avatarUrl;
                                 return _StoryButton(
                                   profile: Profile(
-                                    displayName: room.displayname,
+                                    displayName: displayname,
                                     avatarUrl: avatarUrl,
                                     userId: userId ?? 'Unknown',
                                   ),
@@ -191,7 +191,7 @@ class _StoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 78,
+      width: 100,
       child: InkWell(
         borderRadius: BorderRadius.circular(7),
         onTap: onPressed,
@@ -264,13 +264,16 @@ class _StoryButton extends StatelessWidget {
                 ),
               ),
               Center(
-                child: Expanded(
-                  child: Text(
-                    profile.displayName ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: unread ? FontWeight.bold : null,
+                child: SizedBox(
+                  width: 100,
+                  child: Expanded(
+                    child: Text(
+                      profile.displayName ?? '',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: unread ? FontWeight.bold : null,
+                      ),
                     ),
                   ),
                 ),

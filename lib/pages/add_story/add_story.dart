@@ -160,8 +160,8 @@ class AddStoryController extends State<AddStoryPage> {
           contacts: result,
         ),
       );
-      // if (created != true) return;
-      // storiesRoom ??= await client.getStoriesRoom(context);
+      if (created != true) return;
+      storiesRoom ??= await client.getStoriesRoom(context, spaceId);
     } else {
       final created = await showDialog<bool>(
         context: context,
@@ -172,8 +172,8 @@ class AddStoryController extends State<AddStoryPage> {
           contacts: result,
         ),
       );
-      // if (created != true) return;
-      // storiesRoom ??= await client.getStoriesRoom(context);
+      if (created != true) return;
+      storiesRoom ??= await client.getStoriesRoom(context, spaceId);
     }
     // post story
     final postResult = await showFutureLoadingDialog(
