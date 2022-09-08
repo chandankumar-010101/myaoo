@@ -47,6 +47,7 @@ class AddStoryController extends State<AddStoryPage> {
   int alignmentX = 0;
   int alignmentY = 0;
 
+  String spaceId = "";
   void toggleBoxFit() {
     if (fit == BoxFit.contain) {
       setState(() {
@@ -112,15 +113,14 @@ class AddStoryController extends State<AddStoryPage> {
 
   void captureVideo() async {
     final picked = await ImagePicker().pickVideo(
-      source: ImageSource.camera,
+      source: ImageSource.gallery,
     );
     if (picked == null) return;
     final bytes = await picked.readAsBytes();
 
     setState(() {
       video = MatrixVideoFile(bytes: bytes, name: picked.name);
-      videoPlayerController = VideoPlayerController.file(File(picked.path))
-        ..setLooping(true);
+      videoPlayerController = VideoPlayerController.file(File(picked.path))..setLooping(true);
     });
   }
 
@@ -133,8 +133,7 @@ class AddStoryController extends State<AddStoryPage> {
   void postStory() async {
     if (video == null && image == null && controller.text.isEmpty) return;
     final client = Matrix.of(context).client;
-    var storiesRoom = await client.getStoriesRoom(context);
-
+    var storiesRoom = await client.createStoriesRoom([], spaceId);
     // Invite contacts if necessary
     final undecided = await showFutureLoadingDialog(
       context: context,
@@ -146,10 +145,10 @@ class AddStoryController extends State<AddStoryPage> {
       final created = await showDialog<bool>(
         context: context,
         useRootNavigator: false,
-        builder: (context) => InviteStoryPage(storiesRoom: storiesRoom),
+        builder: (context) => InviteStoryPage(storiesRoom: storiesRoom, spaceId: spaceId),
       );
       if (created != true) return;
-      storiesRoom ??= await client.getStoriesRoom(context);
+      storiesRoom ??= await client.createStoriesRoom([], spaceId);
     }
 
     // Post story
@@ -239,6 +238,9 @@ class AddStoryController extends State<AddStoryPage> {
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(Duration(seconds: 1)).whenComplete(() => spaceId = VRouter.of(context).queryParameters["spaceId"].toString());
+
     final rand = Random().nextInt(1000).toString();
     backgroundColor = rand.color;
     backgroundColorDark = rand.darkColor;

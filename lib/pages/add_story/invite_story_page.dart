@@ -12,8 +12,10 @@ import 'package:pangeachat/widgets/matrix.dart';
 
 class InviteStoryPage extends StatefulWidget {
   final Room? storiesRoom;
-  const InviteStoryPage({
+  String? spaceId;
+  InviteStoryPage({
     required this.storiesRoom,
+    this.spaceId,
     Key? key,
   }) : super(key: key);
 
@@ -40,7 +42,7 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
         var room = await client.getStoriesRoom(context);
         final inviteList = _invite.toList();
         if (room == null) {
-          room = await client.createStoriesRoom(inviteList.take(10).toList());
+          room = await client.createStoriesRoom(inviteList.take(10).toList(), widget.spaceId!);
           if (inviteList.length > 10) {
             inviteList.removeRange(0, 10);
           } else {
@@ -50,7 +52,6 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
         for (final userId in inviteList) {
           room.invite(userId);
         }
-
         _undecided.removeAll(_invite);
         _undecided.addAll(client.storiesBlockList);
         await client.setStoriesBlockList(_undecided.toList());
@@ -64,10 +65,7 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    loadContacts ??= Matrix.of(context)
-        .client
-        .getUndecidedContactsForStories(widget.storiesRoom)
-        .then((contacts) {
+    loadContacts ??= Matrix.of(context).client.getUndecidedContactsForStories(widget.storiesRoom).then((contacts) {
       return contacts;
     });
     return Scaffold(
@@ -98,20 +96,16 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
                   if (contacts == null) {
                     final error = snapshot.error;
                     if (error != null) {
-                      return Center(
-                          child: Text(error.toLocalizedString(context)));
+                      return Center(child: Text(error.toLocalizedString(context)));
                     }
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
+                    return const Center(child: CircularProgressIndicator.adaptive());
                   }
                   _undecided = contacts.map((u) => u.id).toSet();
                   return ListView.builder(
                     itemCount: contacts.length,
                     itemBuilder: (context, i) => SwitchListTile.adaptive(
                       value: _invite.contains(contacts[i].id),
-                      onChanged: (b) => setState(() => b
-                          ? _invite.add(contacts[i].id)
-                          : _invite.remove(contacts[i].id)),
+                      onChanged: (b) => setState(() => b ? _invite.add(contacts[i].id) : _invite.remove(contacts[i].id)),
                       secondary: Avatar(
                         mxContent: contacts[i].avatarUrl,
                         name: contacts[i].calcDisplayname(),

@@ -10,34 +10,20 @@ extension ClientStoriesExtension on Client {
   static const int lifeTimeInHours = 24;
   static const int maxPostsPerStory = 20;
 
-  List<User> get contacts => rooms
-      .where((room) => room.isDirectChat)
-      .map((room) =>
-          room.unsafeGetUserFromMemoryOrFallback(room.directChatMatrixID!))
-      .toList();
+  List<User> get contacts =>
+      rooms.where((room) => room.isDirectChat).map((room) => room.unsafeGetUserFromMemoryOrFallback(room.directChatMatrixID!)).toList();
 
-  List<Room> get storiesRooms => rooms
-      .where((room) =>
-          room
-              .getState(EventTypes.RoomCreate)
-              ?.content
-              .tryGet<String>('type') ==
-          storiesRoomType)
-      .toList();
+  List<Room> get storiesRooms =>
+      rooms.where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == storiesRoomType).toList();
 
   Future<List<User>> getUndecidedContactsForStories(Room? storiesRoom) async {
     if (storiesRoom == null) return contacts;
-    final invitedContacts =
-        (await storiesRoom.requestParticipants()).map((user) => user.id);
+    final invitedContacts = (await storiesRoom.requestParticipants()).map((user) => user.id);
     final decidedContacts = storiesBlockList.toSet()..addAll(invitedContacts);
-    return contacts
-        .where((contact) => !decidedContacts.contains(contact.id))
-        .toList();
+    return contacts.where((contact) => !decidedContacts.contains(contact.id)).toList();
   }
 
-  List<String> get storiesBlockList =>
-      accountData[storiesBlockListType]?.content.tryGetList<String>('users') ??
-      [];
+  List<String> get storiesBlockList => accountData[storiesBlockListType]?.content.tryGetList<String>('users') ?? [];
 
   Future<void> setStoriesBlockList(List<String> users) => setAccountData(
         userID!,
@@ -45,7 +31,7 @@ extension ClientStoriesExtension on Client {
         {'users': users},
       );
 
-  Future<Room> createStoriesRoom([List<String>? invite]) async {
+  Future<Room> createStoriesRoom(List<String>? invite, String spaceId) async {
     final roomId = await createRoom(
       creationContent: {"type": "msc3588.stories.stories-room"},
       preset: CreateRoomPreset.privateChat,
@@ -55,13 +41,6 @@ extension ClientStoriesExtension on Client {
           'This is a room for stories sharing, not unlike the similarly named features in other messaging networks. For best experience please use Pangea Chat or minesTrix. Feature development can be followed on: https://github.com/matrix-org/matrix-doc/pull/3588',
       initialState: [
         StateEvent(
-          type: EventTypes.Encryption,
-          stateKey: '',
-          content: {
-            'algorithm': 'm.megolm.v1.aes-sha2',
-          },
-        ),
-        StateEvent(
           type: 'm.room.retention',
           stateKey: '',
           content: {
@@ -69,22 +48,23 @@ extension ClientStoriesExtension on Client {
             'max_lifetime': 86400000,
           },
         ),
+        StateEvent(content: {
+          "via": ["matrix.staging.pangea.chat"],
+          "canonical": true
+        }, type: EventTypes.spaceParent, stateKey: spaceId),
       ],
       invite: invite,
     );
     if (getRoomById(roomId) == null) {
       // Wait for room actually appears in sync
-      await onSync.stream
-          .firstWhere((sync) => sync.rooms?.join?.containsKey(roomId) ?? false);
+      await onSync.stream.firstWhere((sync) => sync.rooms?.join?.containsKey(roomId) ?? false);
     }
     return getRoomById(roomId)!;
   }
 
   Future<Room?> getStoriesRoom(BuildContext context) async {
-    final candidates = rooms.where((room) =>
-        room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') ==
-            storiesRoomType &&
-        room.ownPowerLevel >= 100);
+    final candidates =
+        rooms.where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == storiesRoomType && room.ownPowerLevel >= 100);
     if (candidates.isEmpty) return null;
     if (candidates.length == 1) return candidates.single;
     return await showModalActionSheet<Room>(

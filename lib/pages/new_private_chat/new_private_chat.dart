@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     }
   }
 
-  Random random = new Random();
+  math.Random random = new math.Random();
   @override
   void initState() {
     super.initState();
@@ -100,27 +100,47 @@ class NewPrivateChatController extends State<NewPrivateChat> {
       "waitForSync": false
     }}");
 
+    matrix.client.getDisplayName(controller.text).then((value) => log("User Name: ${value.toString()}"));
+
+    matrix.client.getUserProfile(controller.text).then((value) => log("User Profile: ${value.toJson().toString()}"));
+
+    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
     final roomID = await showFutureLoadingDialog(
       context: context,
-
       future: () => matrix.client.createRoom(
         invite: [controller.text],
         preset: sdk.CreateRoomPreset.privateChat,
         isDirect: true,
         initialState: [
-          sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
+          sdk.StateEvent(
+            content: {
+              "guest_access": "can_join",
+            },
+            type: EventTypes.GuestAccess,
+            stateKey: "",
+          ),
           sdk.StateEvent(content: {
             "via": ["matrix.staging.pangea.chat"],
             "canonical": true
           }, type: EventTypes.spaceParent, stateKey: classId),
-          sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility)
+          sdk.StateEvent(
+            content: {"history_visibility": "invited"},
+            type: EventTypes.HistoryVisibility,
+          )
         ],
         // creationContent: {'type': RoomCreationTypes.mSpace},
         visibility: sdk.Visibility.private,
-        roomAliasName: controller.text.split(":").first.replaceAll("@", "") + "#" + random.nextInt(9999).toString(),
-        name: controller.text.split(":").first.replaceAll("@", "") + "#" + random.nextInt(9999).toString(),
+        roomAliasName: controller.text.split(":").first.replaceAll("@", "").substring(0, 6) +
+            "-" +
+            matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 6) +
+            "#" +
+            random.nextInt(9999).toString(),
+        name: controller.text.split(":").first.replaceAll("@", "").substring(0, 6) +
+            "-" +
+            matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 6) +
+            "#" +
+            random.nextInt(9999).toString(),
       ),
-
       // matrix.client.startDirectChat(controller.text,
       //     initialState: [
       //       sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),

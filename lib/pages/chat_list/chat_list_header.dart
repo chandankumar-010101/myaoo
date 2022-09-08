@@ -16,11 +16,10 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
 
   ChatListHeader({Key? key, required this.controller}) : super(key: key);
 
-
-  checkUser(BuildContext context){
+  checkUser(BuildContext context) {
     final box = GetStorage();
-    if(box.read("usertype") == 2){
-      return  [
+    if (box.read("usertype") == 2) {
+      return [
         PopupMenuItem(
           value: PopupMenuAction.setStatus,
           child: Row(
@@ -45,7 +44,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
         ),
 
         PopupMenuItem(
-          enabled: GetStorage().read("usertype")==2?true:false,
+          enabled: GetStorage().read("usertype") == 2 ? true : false,
           value: PopupMenuAction.newSpace,
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -102,8 +101,8 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ];
-    }else{
-      return  [
+    } else {
+      return [
         PopupMenuItem(
           value: PopupMenuAction.setStatus,
           child: Row(
@@ -181,9 +180,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: controller.scrolledToTop ? 0 : null,
       actionsIconTheme: IconThemeData(
-        color: controller.selectedRoomIds.isEmpty
-            ? null
-            : Theme.of(context).colorScheme.primary,
+        color: controller.selectedRoomIds.isEmpty ? null : Theme.of(context).colorScheme.primary,
       ),
       leading: Matrix.of(context).isMultiAccount
           ? ClientChooserButton(controller)
@@ -208,22 +205,16 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   IconButton(
                     tooltip: L10n.of(context)!.toggleUnread,
-                    icon: Icon(controller.anySelectedRoomNotMarkedUnread
-                        ? Icons.mark_chat_read_outlined
-                        : Icons.mark_chat_unread_outlined),
+                    icon: Icon(controller.anySelectedRoomNotMarkedUnread ? Icons.mark_chat_read_outlined : Icons.mark_chat_unread_outlined),
                     onPressed: controller.toggleUnread,
                   ),
                   IconButton(
                     tooltip: L10n.of(context)!.toggleFavorite,
-                    icon: Icon(controller.anySelectedRoomNotFavorite
-                        ? Icons.push_pin_outlined
-                        : Icons.push_pin),
+                    icon: Icon(controller.anySelectedRoomNotFavorite ? Icons.push_pin_outlined : Icons.push_pin),
                     onPressed: controller.toggleFavouriteRoom,
                   ),
                   IconButton(
-                    icon: Icon(controller.anySelectedRoomNotMuted
-                        ? Icons.notifications_off_outlined
-                        : Icons.notifications_outlined),
+                    icon: Icon(controller.anySelectedRoomNotMuted ? Icons.notifications_off_outlined : Icons.notifications_outlined),
                     tooltip: L10n.of(context)!.toggleMuted,
                     onPressed: controller.toggleMuted,
                   ),
@@ -235,10 +226,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                 ]
               : [
                   KeyBoardShortcuts(
-                    keysToPress: {
-                      LogicalKeyboardKey.controlLeft,
-                      LogicalKeyboardKey.keyF
-                    },
+                    keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyF},
                     onKeysPressed: () => VRouter.of(context).to('/search'),
                     helpLabel: L10n.of(context)!.search,
                     child: IconButton(
@@ -251,8 +239,10 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     IconButton(
                       icon: const Icon(Icons.camera_alt_outlined),
                       tooltip: L10n.of(context)!.addToStory,
-                      onPressed: () =>
-                          VRouter.of(context).to('/stories/create'),
+                      onPressed: () => VRouter.of(context).to(
+                        '/stories/create',
+                        queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
+                      ),
                     ),
                   PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,
@@ -291,10 +281,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                 : (() {
                     final name = controller.activeSpaceId == null
                         ? AppConfig.applicationName
-                        : Matrix.of(context)
-                            .client
-                            .getRoomById(controller.activeSpaceId!)!
-                            .displayname;
+                        : Matrix.of(context).client.getRoomById(controller.activeSpaceId!)!.displayname;
                     return Text(name, key: ValueKey(name));
                   })(),
       ),
