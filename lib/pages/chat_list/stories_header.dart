@@ -123,7 +123,7 @@ class StoriesHeader extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       scrollDirection: Axis.horizontal,
                       itemCount: controller!.activeSpacesEntry.getSpace(context) != null
-                          ? spaceStories!.where((room) => room.displayname.contains(sp!.displayname)).length
+                          ? spaceStories!.where((room) => room.displayname.contains("Stories from")).length
                           : 0,
                       itemBuilder: (context, i) {
                         final room = spaceStories![i];
