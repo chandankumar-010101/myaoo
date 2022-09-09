@@ -25,7 +25,7 @@ class LangController {
   }
 
   void setTrgLangByName(String name) {
-    _trgLang = _srcLang = choreoController.flagController!.byLangName(name);
+    _trgLang = choreoController.flagController!.byLangName(name);
     print('Trg lang' + _trgLang!.toJson().toString());
     _setState();
   }
