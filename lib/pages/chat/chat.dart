@@ -462,9 +462,6 @@ class ChatController extends State<Chat> {
     if (choreoController.isOpen) {
       return;
     }
-    if (choreoController.isOpen) {
-      return;
-    }
     if (showEmojiPicker) {
       inputFocus.requestFocus();
     } else {
@@ -850,9 +847,7 @@ class ChatController extends State<Chat> {
     if (choreoController.isOpen) {
       return;
     }
-    if (choreoController.isOpen) {
-      return;
-    }
+
     if (!event.redacted) {
       if (selectedEvents.contains(event)) {
         setState(

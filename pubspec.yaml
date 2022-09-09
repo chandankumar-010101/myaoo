@@ -58,7 +58,7 @@ dependencies:
   keyboard_shortcuts: any
   localstorage: ^4.0.0+1
   lottie: ^1.2.2
-  matrix: ^0.10.1
+  matrix: ^0.9.12
   matrix_homeserver_recommendations: ^0.2.0
   matrix_link_text: ^1.0.2
   native_imaging:
@@ -148,11 +148,13 @@ flutter:
       fonts:
         - asset: fonts/NotoEmoji/NotoColorEmoji.ttf
 
+
 dependency_overrides:
   # Necessary for webRTC on web.
   # Fix for stream fallback for unsupported browsers:
   # https://github.com/fluttercommunity/plus_plugins/pull/746
   # Upstream pull request: https://github.com/fluttercommunity/plus_plugins/pull/746
+  image_picker_android: 0.8.4+13
   connectivity_plus_web:
     git:
       url: https://github.com/TheOneWithTheBraid/plus_plugins.git
