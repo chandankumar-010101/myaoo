@@ -29,9 +29,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
       ),
       body: Center(
           child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.black26)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(color: Colors.black26)),
         width: 300,
         padding: EdgeInsets.all(10.0),
         child: Card(
@@ -60,9 +58,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                   controller: codeController,
                   autofocus: true,
                   onChanged: (String? value) {
-                    value?.length == 6
-                        ? setState(() => color = Color(0xFF352048))
-                        : setState(() => color = Colors.white);
+                    value?.length == 6 ? setState(() => color = Color(0xFF352048)) : setState(() => color = Colors.white);
                   },
                   decoration: InputDecoration(
                       //prefixIcon: const Icon(Icons.label),
@@ -76,10 +72,9 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
               InkWell(
                 onTap: () {
                   if (codeController.text.length == 6) {
-                    PangeaServices.joinClassWithCode(
-                        codeController.text, context);
+                    PangeaServices.joinClassWithCode(codeController.text, context);
                   } else {
-                    Fluttertoast.showToast(msg: "length is sort!!!!!!");
+                    Fluttertoast.showToast(msg: "length is short!!!!!!", webBgColor: Colors.red, backgroundColor: Colors.red);
                   }
                 },
                 child: Container(
@@ -92,8 +87,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                     color: color,
                   ),
                   child: Center(
-                    child: Text("Connect to your class",
-                        style: TextStyle(color: Colors.grey)),
+                    child: Text("Connect to your class", style: TextStyle(color: Colors.grey)),
                   ),
                 ),
               ),

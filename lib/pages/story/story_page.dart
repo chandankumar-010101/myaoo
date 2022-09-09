@@ -80,7 +80,8 @@ class StoryPageController extends State<StoryPage> {
     });
     try {
       final client = Matrix.of(context).client;
-      final roomId = await client.startDirectChat(currentEvent.senderId,enableEncryption: false);
+      final roomId = await client.startDirectChat(currentEvent.senderId,
+          enableEncryption: false);
       var replyText = L10n.of(context)!.storyFrom(
           currentEvent.originServerTs.localizedTime(context),
           currentEvent.content.tryGet<String>('body') ?? '');
@@ -90,12 +91,18 @@ class StoryPageController extends State<StoryPage> {
       replyController.clear();
       replyFocus.unfocus();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context)!.replyHasBeenSent)),
+        SnackBar(
+          content: Text(L10n.of(context)!.replyHasBeenSent),
+          backgroundColor: Colors.green,
+        ),
       );
     } catch (e, s) {
       Logs().w('Unable to reply to story', e, s);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toLocalizedString(context))),
+        SnackBar(
+          content: Text(e.toLocalizedString(context)),
+          backgroundColor: Colors.red,
+        ),
       );
     } finally {
       setState(() {
@@ -348,7 +355,10 @@ class StoryPageController extends State<StoryPage> {
     _modalOpened = false;
     if (result.error != null) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(L10n.of(context)!.contentHasBeenReported)),
+      SnackBar(
+        content: Text(L10n.of(context)!.contentHasBeenReported),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 
@@ -485,8 +495,8 @@ class StoryPageController extends State<StoryPage> {
       case PopupStoryAction.message:
         final roomIdResult = await showFutureLoadingDialog(
           context: context,
-          future: () =>
-              currentEvent!.senderFromMemoryOrFallback.startDirectChat(enableEncryption: false),
+          future: () => currentEvent!.senderFromMemoryOrFallback
+              .startDirectChat(enableEncryption: false),
         );
         if (roomIdResult.error != null) return;
         VRouter.of(context).toSegments(['rooms', roomIdResult.result!]);

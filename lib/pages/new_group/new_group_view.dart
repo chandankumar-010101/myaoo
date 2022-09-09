@@ -1,23 +1,38 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pangeachat/pages/chat_list/chat_list.dart';
 
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/widgets/layouts/max_width_body.dart';
-import 'package:vrouter/vrouter.dart';
 
-import '../../widgets/avatar.dart';
-
-class NewGroupView extends StatelessWidget {
+class NewGroupView extends StatefulWidget {
   final NewGroupController controller;
+  final String spaceId;
+  const NewGroupView(this.controller, this.spaceId, {Key? key})
+      : super(key: key);
 
-  const NewGroupView(this.controller, {Key? key}) : super(key: key);
+  @override
+  State<NewGroupView> createState() => _NewGroupViewState();
+}
+
+class _NewGroupViewState extends State<NewGroupView> {
+  ChatListController controllertest = ChatListController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.of(context)!.createNewGroup),
+        title: Text("Create a new Room"),
       ),
       body: MaxWidthBody(
         child: Column(
@@ -26,39 +41,23 @@ class NewGroupView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: TextField(
-                controller: controller.controller,
+                controller: widget.controller.controller,
                 autofocus: true,
                 autocorrect: false,
                 textInputAction: TextInputAction.go,
-                onSubmitted: controller.submitAction,
+                onSubmitted: widget.controller.submitAction,
                 decoration: InputDecoration(
-                    labelText: L10n.of(context)!.optionalGroupName,
+                    labelText:
+                        "Room name (don't use class name in your room name)",
                     prefixIcon: const Icon(Icons.people_outlined),
                     hintText: L10n.of(context)!.enterAGroupName),
               ),
             ),
             SwitchListTile.adaptive(
-              title: Text(L10n.of(context)!.groupIsPublic),
-              value: controller.publicGroup,
-              onChanged: controller.setPublicGroup,
+              title: Text("Room is public"),
+              value: widget.controller.publicGroup,
+              onChanged: widget.controller.setPublicGroup,
             ),
-
-            Expanded(
-                child: ListView.builder(
-              itemCount: controller.members.length,
-              itemBuilder: (BuildContext context, int i) {
-                return ListTile(
-                  title: Text(controller.members[i].displayName??""),
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                    radius: Avatar.defaultSize / 2,
-                    child: const Icon(Icons.add_outlined),
-                  ),
-                  onTap: () => VRouter.of(context).to('invite'),
-                );
-              },
-            )),
             Expanded(
               child: Image.asset('assets/private_chat_wallpaper.png'),
             ),
@@ -66,7 +65,7 @@ class NewGroupView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: controller.submitAction,
+        onPressed: widget.controller.submitAction,
         child: const Icon(Icons.arrow_forward_outlined),
       ),
     );

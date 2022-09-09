@@ -16,26 +16,23 @@ class ChatPermissionsSettings extends StatefulWidget {
   const ChatPermissionsSettings({Key? key}) : super(key: key);
 
   @override
-  ChatPermissionsSettingsController createState() =>
-      ChatPermissionsSettingsController();
+  ChatPermissionsSettingsController createState() => ChatPermissionsSettingsController();
 }
 
 class ChatPermissionsSettingsController extends State<ChatPermissionsSettings> {
   String? get roomId => VRouter.of(context).pathParameters['roomid'];
-  void editPowerLevel(BuildContext context, String key, int currentLevel,
-      {String? category}) async {
+  void editPowerLevel(BuildContext context, String key, int currentLevel, {String? category}) async {
     final room = Matrix.of(context).client.getRoomById(roomId!)!;
     if (!room.canSendEvent(EventTypes.RoomPowerLevels)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.noPermission)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(L10n.of(context)!.noPermission),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
-    final newLevel =
-        await PermissionSliderDialog(initialPermission: currentLevel)
-            .show(context);
+    final newLevel = await PermissionSliderDialog(initialPermission: currentLevel).show(context);
     if (newLevel == null) return;
-    final content = Map<String, dynamic>.from(
-        room.getState(EventTypes.RoomPowerLevels)!.content);
+    final content = Map<String, dynamic>.from(room.getState(EventTypes.RoomPowerLevels)!.content);
     if (category != null) {
       if (!content.containsKey(category)) {
         content[category] = <String, dynamic>{};
@@ -59,24 +56,18 @@ class ChatPermissionsSettingsController extends State<ChatPermissionsSettings> {
   Stream get onChanged => Matrix.of(context).client.onSync.stream.where(
         (e) =>
             (e.rooms?.join?.containsKey(roomId) ?? false) &&
-            (e.rooms!.join![roomId!]?.timeline?.events
-                    ?.any((s) => s.type == EventTypes.RoomPowerLevels) ??
-                false),
+            (e.rooms!.join![roomId!]?.timeline?.events?.any((s) => s.type == EventTypes.RoomPowerLevels) ?? false),
       );
 
   void updateRoomAction(Capabilities capabilities) async {
     final room = Matrix.of(context).client.getRoomById(roomId!)!;
-    final String roomVersion =
-        room.getState(EventTypes.RoomCreate)!.content['room_version'] ?? '1';
+    final String roomVersion = room.getState(EventTypes.RoomCreate)!.content['room_version'] ?? '1';
     final newVersion = await showConfirmationDialog<String>(
       context: context,
       title: L10n.of(context)!.replaceRoomWithNewerVersion,
       actions: capabilities.mRoomVersions!.available.entries
           .where((r) => r.key != roomVersion)
-          .map((version) => AlertDialogAction(
-              key: version.key,
-              label:
-                  '${version.key} (${version.value.toString().split('.').last})'))
+          .map((version) => AlertDialogAction(key: version.key, label: '${version.key} (${version.value.toString().split('.').last})'))
           .toList(),
     );
     if (newVersion == null ||

@@ -8,6 +8,7 @@ import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
+
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -45,8 +46,8 @@ class _InviteEmailState extends State<InviteEmail> {
         title: Text("Invitations",
             style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 17,
-                color: Colors.black)),
+                fontSize: 18,
+                color: Colors.white)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -190,27 +191,48 @@ class _InviteEmailState extends State<InviteEmail> {
                 width: 200,
                 margin: EdgeInsets.only(top: 20),
                 child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.onPrimary == Colors.white
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).colorScheme.onPrimary,
+                  )),
                   child: Text("Send Invitation"),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
                       print(name.length);
-                      List.generate(name.length, (index) => info.add(inviteEmail.Data(email: email[index].text,name: name[index].text,))
-                      );
-                      final roomId = VRouter.of(context).queryParameters['id']??"";
-                      if(roomId.isEmpty){
-                        Fluttertoast.showToast(msg: "Unable to find Room ID");
+                      List.generate(
+                          name.length,
+                          (index) => info.add(inviteEmail.Data(
+                                email: email[index].text,
+                                name: name[index].text,
+                              )));
+                      final roomId =
+                          VRouter.of(context).queryParameters['id'] ?? "";
+                      if (roomId.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Unable to find Room ID",
+                            webBgColor: Colors.red,
+                            backgroundColor: Colors.red);
                         return;
                       }
-                     String teacherName =Matrix.of(context).client.getRoomById(roomId)!.displayname??"";
-                      if(teacherName.isEmpty){
-
-                        Fluttertoast.showToast(msg: "Unable to find Room Name");
+                      String teacherName = Matrix.of(context)
+                              .client
+                              .getRoomById(roomId)!
+                              .displayname ??
+                          "";
+                      if (teacherName.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Unable to find Room Name",
+                            webBgColor: Colors.red,
+                            backgroundColor: Colors.red);
                         return;
                       }
 
-                      if(info.isNotEmpty){
-                        PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
+                      if (info.isNotEmpty) {
+                        PangeaServices.sendEmailToJoinClass(
+                            info, roomId, teacherName);
                       }
                     }
                   },

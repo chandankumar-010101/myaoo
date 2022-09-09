@@ -13,8 +13,11 @@ import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:provider/provider.dart';
 
 import 'package:record/record.dart';
@@ -30,6 +33,7 @@ import 'package:pangeachat/utils/matrix_sdk_extensions.dart/matrix_locals.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/voip/callkeep_manager.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+import '../../config/environment.dart';
 import '../../config/environment.dart';
 import '../../utils/account_bundles.dart';
 import '../../utils/localized_exception_extension.dart';
@@ -138,6 +142,7 @@ class ChatController extends State<Chat> {
       } catch (err) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
             content: Text(
               (err).toLocalizedString(context),
             ),
@@ -419,11 +424,14 @@ class ChatController extends State<Chat> {
 
   void voiceMessageAction() async {
     if (await Record().hasPermission() == false) return;
+    print("hello");
     final result = await showDialog<RecordingResult>(
       context: context,
       useRootNavigator: false,
       builder: (c) => const RecordingDialog(),
     );
+    print("allow to here");
+    print(result);
     if (result == null) return;
     final audioFile = File(result.path);
     final file = MatrixAudioFile(
@@ -451,6 +459,9 @@ class ChatController extends State<Chat> {
   }
 
   void emojiPickerAction() {
+    if (choreoController.isOpen) {
+      return;
+    }
     if (choreoController.isOpen) {
       return;
     }
@@ -547,8 +558,9 @@ class ChatController extends State<Chat> {
       showEmojiPicker = false;
       selectedEvents.clear();
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context)!.contentHasBeenReported)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(L10n.of(context)!.contentHasBeenReported)));
   }
 
   void redactEventsAction() async {
@@ -838,6 +850,9 @@ class ChatController extends State<Chat> {
     if (choreoController.isOpen) {
       return;
     }
+    if (choreoController.isOpen) {
+      return;
+    }
     if (!event.redacted) {
       if (selectedEvents.contains(event)) {
         setState(
@@ -877,6 +892,7 @@ class ChatController extends State<Chat> {
     FocusScope.of(context).requestFocus(inputFocus);
   }
 
+  PangeaControllers getxController = Get.put(PangeaControllers());
   void onAddPopupMenuButtonSelected(String choice) {
     if (choice == 'file') {
       sendFileAction();
@@ -1015,7 +1031,10 @@ class ChatController extends State<Chat> {
       final voipPlugin = Matrix.of(context).voipPlugin;
       await voipPlugin!.voip.inviteToCall(room!.id, callType).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text((e as Object).toLocalizedString(context))),
+          SnackBar(
+            content: Text((e as Object).toLocalizedString(context)),
+            backgroundColor: Colors.red,
+          ),
         );
       });
     } else {

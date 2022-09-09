@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -90,25 +91,43 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  void setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) {
-    if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition: 0) != kSpacesBottomBarHeight) {
+  Future<void> setActiveSpacesEntry(
+      BuildContext context, SpacesEntry? spaceId) async {
+    if ((snappingSheetController.isAttached
+            ? snappingSheetController.currentPosition
+            : 0) !=
+        kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
-    setState(() => _activeSpacesEntry = spaceId);
+    if (spaceId != null) {
+      setState(() => _activeSpacesEntry = spaceId);
+
+      getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
+    }
   }
-
-
-
 
   void editSpace(BuildContext context, String spaceId) async {
     await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
+    String box = GetStorage().read("access") ?? "";
+    try {
+      bool isExchange = await PangeaServices.isExchange(context, box, spaceId);
+      print(isExchange);
+      isExchange
+          ? VRouter.of(context)
+              .to('/exchange_profile', queryParameters: {"id": spaceId})
+          : VRouter.of(context)
+              .to('/classDetails', queryParameters: {"id": spaceId});
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Unable to find class Info");
+      //  VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
+    }
 
-    VRouter.of(context).to('/classDetails', queryParameters: { "id":spaceId });
-    //VRouter.of(context).toSegments(['classes', spaceId]);
+    ;
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
-  List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+  List<Room> get spaces =>
+      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
   // Note that this could change due to configuration, etc.
   // Also be aware that _activeSpacesEntry = null is the expected reset method.
@@ -241,7 +260,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         showChatBackupBanner = true;
       });
     }
-
   }
 
   @override
@@ -422,6 +440,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context)!.chatHasBeenRemovedFromThisSpace),
+            backgroundColor: Colors.green,
           ),
         );
       }
@@ -458,6 +477,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context)!.chatHasBeenAddedToThisSpace),
+            backgroundColor: Colors.green,
           ),
         );
       }
@@ -601,12 +621,64 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       });
     });
   }
+
   PangeaControllers getxController = Get.put(PangeaControllers());
+
+  canCreateRoom() {
+    if (activeSpacesEntry.getSpace(context) != null &&
+        getxController.classInfoModel.value != null) {
+      return getxController.classInfoModel.value!.permissions.isCreateRooms &&
+              activeSpacesEntry.getSpace(context) != null
+          ? IconButton(
+              onPressed: () {
+                activeSpacesEntry.getSpace(context) == null
+                    ? VRouter.of(context).to('/newgroup')
+                    : VRouter.of(context).to('/newgroup', queryParameters: {
+                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
+                      });
+              },
+              icon: const Icon(Icons.add))
+          : Container();
+    }
+    return IconButton(
+        onPressed: () {
+          VRouter.of(context).to('/newgroup');
+        },
+        icon: const Icon(Icons.add));
+  }
+
+  canAddPeople() {
+    if (activeSpacesEntry.getSpace(context) != null &&
+        getxController.classInfoModel.value != null) {
+      log("Space here");
+      return Obx(() =>
+          getxController.classInfoModel.value!.permissions.oneToOneChatClass &&
+                  activeSpacesEntry.getSpace(context) != null
+              ? IconButton(
+                  onPressed: () {
+                    activeSpacesEntry.getSpace(context) == null
+                        ? VRouter.of(context).to('/newprivatechat')
+                        : VRouter.of(context)
+                            .to('/newprivatechat', queryParameters: {
+                            "classId": activeSpacesEntry.getSpace(context)!.id,
+                          });
+                  },
+                  icon: const Icon(Icons.add))
+              : Container());
+    }
+    return IconButton(
+        onPressed: () {
+          VRouter.of(context).to('/newprivatechat');
+        },
+        icon: const Icon(Icons.add));
+  }
+
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
-
-    return Obx(()=>getxController.throughClassProfile.value?const Search():ChatListView(this));
+    return Obx(() => getxController.throughClassProfile.value
+        ? const Search()
+        : ChatListView(this));
   }
 
   void _hackyWebRTCFixForWeb() {
@@ -626,6 +698,19 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     snappingSheetController.snapToPosition(
       const SnappingPosition.factor(positionFactor: 0.5),
     );
+
+    // getxController.isPublic.value = true;
+    // getxController.isOpenEnrollment.value = true;
+    // getxController.isOpenExchange.value = true;
+    // getxController.oneToOneChatClass.value = true;
+    // getxController.isCreateRooms.value = true;
+    // getxController.isCreateRoomsExchange.value = true;
+    // getxController.isSharePhoto.value = true;
+    // getxController.isShareLocation.value = true;
+    // getxController.isShareVideo.value = true;
+    // getxController.isShareFiles.value = true;
+    // getxController.isCreateStories.value = true;
+    //getxController.oneToOneChatClass.value = true;
   }
 }
 

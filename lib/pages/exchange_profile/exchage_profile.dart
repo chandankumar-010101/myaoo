@@ -8,22 +8,19 @@ import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
-import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
 import '../../services/controllers.dart';
 import '../../services/services.dart';
-import '../chat_list/spaces_entry.dart';
-import 'class_profile_view.dart';
+import 'exchange_profile_view.dart';
 
-class RequestScreen extends StatefulWidget {
-  const RequestScreen({Key? key}) : super(key: key);
+class ExchangeProfile extends StatefulWidget {
+  const ExchangeProfile({Key? key}) : super(key: key);
 
   @override
-  State<RequestScreen> createState() => RequestScreenState();
+  State<ExchangeProfile> createState() => ExchangeProfileState();
 }
 
-class RequestScreenState extends State<RequestScreen> {
+class ExchangeProfileState extends State<ExchangeProfile> {
   final box = GetStorage();
 
   ///list of classes for current user
@@ -39,10 +36,10 @@ class RequestScreenState extends State<RequestScreen> {
       print(path);
       return path.isNotEmpty
           ? SizedBox(
-              width: 20,
-              height: 20,
-              child: Image.network(path),
-            )
+        width: 20,
+        height: 20,
+        child: Image.network(path),
+      )
           : Container();
     } catch (e) {
       return Container();
@@ -65,13 +62,13 @@ class RequestScreenState extends State<RequestScreen> {
         noOfStudents = space.length;
         space = space.where((i) => i.id == userId).toList();
       } catch (e) {
-        // Fluttertoast.showToast(msg: "Unable to fetch Class Info", webBgColor: Colors.red, backgroundColor: Colors.red);
+        Fluttertoast.showToast(msg: "Unable to fetch Class Info");
         if (kDebugMode) {
           print(e);
         }
       }
     } else {
-      // Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info", webBgColor: Colors.red, backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info");
     }
   }
 
@@ -91,9 +88,7 @@ class RequestScreenState extends State<RequestScreen> {
               await room.kick(element.id);
             }
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Students removed from the class"),
-              backgroundColor: Colors.green,
-            ));
+                content: Text("Students removed from the class")));
             final success = await showFutureLoadingDialog(
                 context: context, future: () => room.leave());
             if (success.error == null) {
@@ -102,41 +97,32 @@ class RequestScreenState extends State<RequestScreen> {
               result != null && result
                   ? VRouter.of(context).to('/rooms')
                   : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Unable to delete class records"),
-                      backgroundColor: Colors.red,
-                    ));
+                  content: Text("Unable to delete class records")));
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Unable to leave the class"),
-                backgroundColor: Colors.red,
-              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Unable to leave the class")));
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Unable to fetch current user information"),
-              backgroundColor: Colors.red,
-            ));
+                content: Text("Unable to fetch current user information")));
           }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("You don't have permissions!n"),
-            backgroundColor: Colors.red,
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("You don't have permissions!n")));
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Exception Accrued"),
-        backgroundColor: Colors.red,
-      ));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Exception Accrued")));
       print(e);
     }
+
   }
 
-  int noOfStudents = 0;
+  int noOfStudents =0;
 
   @override
   Widget build(BuildContext context) {
-    return RequestScreenView(this);
+    return ExchangeProfileView(this);
   }
 }

@@ -24,20 +24,19 @@ class MessageContent extends StatelessWidget {
   final Color textColor;
   final void Function(Event)? onInfoTab;
 
-  const MessageContent(this.event,
-      {this.onInfoTab, Key? key, required this.textColor})
-      : super(key: key);
+  const MessageContent(this.event, {this.onInfoTab, Key? key, required this.textColor}) : super(key: key);
 
   void _verifyOrRequestKey(BuildContext context) async {
     if (event.content['can_request_session'] != true) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green,
           content: Text(
-        event.type == EventTypes.Encrypted
-            ? L10n.of(context)!.needPantalaimonWarning
-            : event.calcLocalizedBodyFallback(
-                MatrixLocals(L10n.of(context)!),
-              ),
-      )));
+            event.type == EventTypes.Encrypted
+                ? L10n.of(context)!.needPantalaimonWarning
+                : event.calcLocalizedBodyFallback(
+                    MatrixLocals(L10n.of(context)!),
+                  ),
+          )));
       return;
     }
     final client = Matrix.of(context).client;
@@ -54,8 +53,8 @@ class MessageContent extends StatelessWidget {
         future: () => event.requestKey(),
       );
       if (success.error == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(L10n.of(context)!.requestToReadOlderMessages)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(backgroundColor: Colors.green, content: Text(L10n.of(context)!.requestToReadOlderMessages)));
       }
     }
   }
@@ -63,8 +62,7 @@ class MessageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontSize = AppConfig.messageFontSize * AppConfig.fontSizeFactor;
-    final buttonTextColor =
-        event.senderId == Matrix.of(context).client.userID ? textColor : null;
+    final buttonTextColor = event.senderId == Matrix.of(context).client.userID ? textColor : null;
     switch (event.type) {
       case EventTypes.Message:
       case EventTypes.Encrypted:
@@ -98,16 +96,12 @@ class MessageContent extends StatelessWidget {
           case MessageTypes.Text:
           case MessageTypes.Notice:
           case MessageTypes.Emote:
-            if (AppConfig.renderHtml &&
-                !event.redacted &&
-                event.isRichMessage) {
+            if (AppConfig.renderHtml && !event.redacted && event.isRichMessage) {
               var html = event.formattedText;
               if (event.messageType == MessageTypes.Emote) {
                 html = '* $html';
               }
-              final bigEmotes = event.onlyEmotes &&
-                  event.numberEmotes > 0 &&
-                  event.numberEmotes <= 10;
+              final bigEmotes = event.onlyEmotes && event.numberEmotes > 0 && event.numberEmotes <= 10;
               return HtmlMessage(
                 html: html,
                 defaultTextStyle: TextStyle(
@@ -134,18 +128,10 @@ class MessageContent extends StatelessWidget {
               label: L10n.of(context)!.encrypted,
             );
           case MessageTypes.Location:
-            final geoUri =
-                Uri.tryParse(event.content.tryGet<String>('geo_uri')!);
+            final geoUri = Uri.tryParse(event.content.tryGet<String>('geo_uri')!);
             if (geoUri != null && geoUri.scheme == 'geo') {
-              final latlong = geoUri.path
-                  .split(';')
-                  .first
-                  .split(',')
-                  .map((s) => double.tryParse(s))
-                  .toList();
-              if (latlong.length == 2 &&
-                  latlong.first != null &&
-                  latlong.last != null) {
+              final latlong = geoUri.path.split(';').first.split(',').map((s) => double.tryParse(s)).toList();
+              if (latlong.length == 2 && latlong.first != null && latlong.last != null) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -156,8 +142,7 @@ class MessageContent extends StatelessWidget {
                     const SizedBox(height: 6),
                     OutlinedButton.icon(
                       icon: Icon(Icons.location_on_outlined, color: textColor),
-                      onPressed:
-                          UrlLauncher(context, geoUri.toString()).launchUrl,
+                      onPressed: UrlLauncher(context, geoUri.toString()).launchUrl,
                       label: Text(
                         L10n.of(context)!.openInMaps,
                         style: TextStyle(color: textColor),
@@ -176,32 +161,24 @@ class MessageContent extends StatelessWidget {
                   future: event.fetchSenderUser(),
                   builder: (context, snapshot) {
                     return _ButtonContent(
-                      label: L10n.of(context)!.redactedAnEvent(snapshot.data
-                              ?.calcDisplayname() ??
-                          event.senderFromMemoryOrFallback.calcDisplayname()),
+                      label:
+                          L10n.of(context)!.redactedAnEvent(snapshot.data?.calcDisplayname() ?? event.senderFromMemoryOrFallback.calcDisplayname()),
                       icon: const Icon(Icons.delete_outlined),
                       textColor: buttonTextColor,
                       onPressed: () => onInfoTab!(event),
                     );
                   });
             }
-            final bigEmotes = event.onlyEmotes &&
-                event.numberEmotes > 0 &&
-                event.numberEmotes <= 10;
+            final bigEmotes = event.onlyEmotes && event.numberEmotes > 0 && event.numberEmotes <= 10;
             return FutureBuilder<String>(
-                future: event.calcLocalizedBody(MatrixLocals(L10n.of(context)!),
-                    hideReply: true),
+                future: event.calcLocalizedBody(MatrixLocals(L10n.of(context)!), hideReply: true),
                 builder: (context, snapshot) {
                   return LinkText(
-                    text: snapshot.data ??
-                        event.calcLocalizedBodyFallback(
-                            MatrixLocals(L10n.of(context)!),
-                            hideReply: true),
+                    text: snapshot.data ?? event.calcLocalizedBodyFallback(MatrixLocals(L10n.of(context)!), hideReply: true),
                     textStyle: TextStyle(
                       color: textColor,
                       fontSize: bigEmotes ? fontSize * 3 : fontSize,
-                      decoration:
-                          event.redacted ? TextDecoration.lineThrough : null,
+                      decoration: event.redacted ? TextDecoration.lineThrough : null,
                     ),
                     linkStyle: TextStyle(
                       color: textColor.withAlpha(150),
@@ -217,9 +194,7 @@ class MessageContent extends StatelessWidget {
             future: event.fetchSenderUser(),
             builder: (context, snapshot) {
               return _ButtonContent(
-                label: L10n.of(context)!.startedACall(
-                    snapshot.data?.calcDisplayname() ??
-                        event.senderFromMemoryOrFallback.calcDisplayname()),
+                label: L10n.of(context)!.startedACall(snapshot.data?.calcDisplayname() ?? event.senderFromMemoryOrFallback.calcDisplayname()),
                 icon: const Icon(Icons.phone_outlined),
                 textColor: buttonTextColor,
                 onPressed: () => onInfoTab!(event),
@@ -230,10 +205,8 @@ class MessageContent extends StatelessWidget {
             future: event.fetchSenderUser(),
             builder: (context, snapshot) {
               return _ButtonContent(
-                label: L10n.of(context)!.userSentUnknownEvent(
-                    snapshot.data?.calcDisplayname() ??
-                        event.senderFromMemoryOrFallback.calcDisplayname(),
-                    event.type),
+                label: L10n.of(context)!
+                    .userSentUnknownEvent(snapshot.data?.calcDisplayname() ?? event.senderFromMemoryOrFallback.calcDisplayname(), event.type),
                 icon: const Icon(Icons.info_outlined),
                 textColor: buttonTextColor,
                 onPressed: () => onInfoTab!(event),

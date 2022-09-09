@@ -44,19 +44,15 @@ class SettingsSecurityController extends State<SettingsSecurity> {
     if (input == null) return;
     final success = await showFutureLoadingDialog(
       context: context,
-      future: () => Matrix.of(context)
-          .client
-          .changePassword(input.last, oldPassword: input.first),
+      future: () => Matrix.of(context).client.changePassword(input.last, oldPassword: input.first),
     );
     if (success.error == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.passwordHasBeenChanged)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context)!.passwordHasBeenChanged), backgroundColor: Colors.green));
     }
   }
 
   void setAppLockAction() async {
-    final currentLock =
-        await const FlutterSecureStorage().read(key: SettingKeys.appLockKey);
+    final currentLock = await const FlutterSecureStorage().read(key: SettingKeys.appLockKey);
     if (currentLock?.isNotEmpty ?? false) {
       await AppLock.of(context)!.showLockScreen();
     }
@@ -69,8 +65,7 @@ class SettingsSecurityController extends State<SettingsSecurity> {
       textFields: [
         DialogTextField(
           validator: (text) {
-            if (text!.isEmpty ||
-                (text.length == 4 && int.tryParse(text)! >= 0)) {
+            if (text!.isEmpty || (text.length == 4 && int.tryParse(text)! >= 0)) {
               return null;
             }
             return L10n.of(context)!.pleaseEnter4Digits;
@@ -83,8 +78,7 @@ class SettingsSecurityController extends State<SettingsSecurity> {
       ],
     );
     if (newLock != null) {
-      await const FlutterSecureStorage()
-          .write(key: SettingKeys.appLockKey, value: newLock.single);
+      await const FlutterSecureStorage().write(key: SettingKeys.appLockKey, value: newLock.single);
       if (newLock.single.isEmpty) {
         AppLock.of(context)!.disable();
       } else {

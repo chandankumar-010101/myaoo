@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:wakelock/wakelock.dart';
@@ -37,9 +38,10 @@ class _RecordingDialogState extends State<RecordingDialog> {
 
   Future<void> startRecording() async {
     try {
-      final tempDir = await getTemporaryDirectory();
+    //  final tempDir = await getTemporaryDirectory();
+
       _recordedPath =
-          '${tempDir.path}/recording${DateTime.now().microsecondsSinceEpoch}.${RecordingDialog.recordingFileType}';
+          'example.${RecordingDialog.recordingFileType}';
 
       final result = await _audioRecorder.hasPermission();
       if (result != true) {
@@ -71,9 +73,30 @@ class _RecordingDialogState extends State<RecordingDialog> {
     }
   }
 
+
+  String audioPath = "recording_file.aac";
+ FlutterSoundRecorder? _audioRecord;
+
+ // final recorder = FlutterSoundRecorder();
+ //  Future _record() async{
+ //    await _audioRecord!.startRecorder(toFile: audioPath);
+ //
+ //  }
+
+  // Future _stopAndSendVoice() async{
+  //  await _audioRecord!.stopRecorder();
+  // }
+
+  // Future init()async{
+  //   _audioRecord = FlutterSoundRecorder();
+  //   await _audioRecord!.open
+  // }
+
   @override
   void initState() {
     super.initState();
+    // record
+    // _record();
     startRecording();
   }
 
@@ -89,6 +112,7 @@ class _RecordingDialogState extends State<RecordingDialog> {
     _recorderSubscription?.cancel();
     await _audioRecorder.stop();
     final path = _recordedPath;
+    print(path);
     if (path == null) throw ('Recording failed!');
     const waveCount = AudioPlayerWidget.wavesCount;
     final step = amplitudeTimeline.length < waveCount
@@ -110,10 +134,8 @@ class _RecordingDialogState extends State<RecordingDialog> {
   @override
   Widget build(BuildContext context) {
     const maxDecibalWidth = 64.0;
-    final time =
-        '${_duration.inMinutes.toString().padLeft(2, '0')}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}';
-    final content = error
-        ? Text(L10n.of(context)!.oopsSomethingWentWrong)
+    final time = '${_duration.inMinutes.toString().padLeft(2, '0')}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}';
+    final content = error ? Text(L10n.of(context)!.oopsSomethingWentWrong)
         : Row(
             children: [
               Container(

@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:math' as math;
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
@@ -19,12 +20,22 @@ import 'platform_infos.dart';
 
 import 'package:universal_html/html.dart' as html;
 
+import 'package:matrix/matrix.dart' as sdk;
+
 class UrlLauncher {
   final String? url;
   final BuildContext context;
   bool requestToEnroll;
+  bool requestExchange;
   final String? roomId;
-  UrlLauncher(this.context, this.url,{this.roomId="", this.requestToEnroll = false});
+  String rid;
+  String receivedroomID;
+  UrlLauncher(this.context, this.url,
+      {this.roomId = "",
+      this.requestToEnroll = false,
+      this.requestExchange = false,
+      this.receivedroomID = "",
+      this.rid = ""});
 
   void launchUrl() {
     if (url!.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
@@ -36,8 +47,13 @@ class UrlLauncher {
     final uri = Uri.tryParse(url!);
     if (uri == null) {
       // we can't open this thing
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.cantOpenUri(url!))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          L10n.of(context)!.cantOpenUri(url!),
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
     if (!{'https', 'http'}.contains(uri.scheme)) {
@@ -74,8 +90,13 @@ class UrlLauncher {
       return;
     }
     if (uri.host.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.cantOpenUri(url!))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          L10n.of(context)!.cantOpenUri(url!),
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
     // okay, we have either an http or an https URI.
@@ -144,8 +165,7 @@ class UrlLauncher {
           VRouter.of(context).toSegments(['rooms', room.id]);
         }
         return;
-      }
-      else {
+      } else {
         await showModalBottomSheet(
           context: context,
           builder: (c) => PublicRoomBottomSheet(
@@ -183,12 +203,169 @@ class UrlLauncher {
           }
         }
       }
-    }
-    else if (identityParts.primaryIdentifier.sigil == '@') {
-     // final roomIdOrAlias = identityParts.primaryIdentifier;
+    } else if (identityParts.primaryIdentifier.sigil == '@') {
+      if (requestExchange) {
+        final roomID = await showFutureLoadingDialog(
+          context: context,
+          future: () => matrix.client.createRoom(
+            invite: [rid],
+            preset: sdk.CreateRoomPreset.privateChat,
+            isDirect: true,
+            initialState: [
+              sdk.StateEvent(
+                content: {
+                  "guest_access": "can_join",
+                },
+                type: EventTypes.GuestAccess,
+                stateKey: "",
+              ),
+            ],
 
-      //await Matrix.of(context).client.getRoomById(roomID)!.sendTextEvent('Hello world');
-      if(!requestToEnroll){
+            // creationContent: {'type': RoomCreationTypes.mSpace},
+            visibility: sdk.Visibility.private,
+            roomAliasName:
+                rid.split(":").first.replaceAll("@", "").substring(0, 2) +
+                    "private" +
+                    "-" +
+                    matrix.client.userID
+                        .toString()
+                        .split(":")
+                        .first
+                        .replaceAll("@", "")
+                        .substring(0, 2) +
+                    "private" +
+                    "#" +
+                    random.nextInt(9999).toString(),
+            name: rid.split(":").first.replaceAll("@", "").substring(0, 6) +
+                "-" +
+                matrix.client.userID
+                    .toString()
+                    .split(":")
+                    .first
+                    .replaceAll("@", "")
+                    .substring(0, 2) +
+                "private" +
+                "#" +
+                random.nextInt(9999).toString(),
+          ),
+        );
+        if (roomID.result != null) {
+          String userId = Matrix.of(context).client.userID ?? "";
+          if (userId.isNotEmpty) {
+            final String initial_url =
+                kIsWeb ? html.window.origin! : Environment.frontendURL;
+
+            final client = Matrix.of(context).client;
+            await client
+                .getRoomById(roomID.result!)!
+                .sendTextEvent(initial_url +
+                    "/#" +
+                    "/request_to_exchange?id=$userId&room_id=$roomId&r_id=$rid&receviedroom_id=$receivedroomID")
+                .then((value) {
+              VRouter.of(context).to("/rooms");
+              Fluttertoast.showToast(
+                  msg: " Request Sent Successfully",
+                  webBgColor: Colors.green,
+                  backgroundColor: Colors.green);
+            }).catchError((e) {
+              if (kDebugMode) {
+                print(e);
+              }
+              Fluttertoast.showToast(
+                  msg: " Unable to Sent Message",
+                  webBgColor: Colors.red,
+                  backgroundColor: Colors.red);
+            });
+          }
+        } else {
+          Fluttertoast.showToast(msg: "Unable to find exchnage info");
+        }
+      } else if (requestToEnroll) {
+        final roomID = await showFutureLoadingDialog(
+          context: context,
+          future: () => matrix.client.createRoom(
+            invite: [identityParts.primaryIdentifier],
+            preset: sdk.CreateRoomPreset.privateChat,
+            isDirect: true,
+            initialState: [
+              sdk.StateEvent(
+                content: {
+                  "guest_access": "can_join",
+                },
+                type: EventTypes.GuestAccess,
+                stateKey: "",
+              ),
+            ],
+            // creationContent: {'type': RoomCreationTypes.mSpace},
+            visibility: sdk.Visibility.private,
+            roomAliasName: identityParts.primaryIdentifier
+                    .split(":")
+                    .first
+                    .replaceAll("@", "")
+                    .substring(0, 6) +
+                "-" +
+                matrix.client.userID
+                    .toString()
+                    .split(":")
+                    .first
+                    .replaceAll("@", "")
+                    .substring(0, 2) +
+                "private" +
+                "#" +
+                random.nextInt(9999).toString(),
+            name: identityParts.primaryIdentifier
+                    .split(":")
+                    .first
+                    .replaceAll("@", "")
+                    .substring(0, 2) +
+                "private" +
+                "-" +
+                matrix.client.userID
+                    .toString()
+                    .split(":")
+                    .first
+                    .replaceAll("@", "")
+                    .substring(0, 2) +
+                "private" +
+                "#" +
+                random.nextInt(9999).toString(),
+          ),
+        );
+        if (roomID.result != null) {
+          String userId = Matrix.of(context).client.userID ?? "";
+          if (userId.isNotEmpty) {
+            final String initial_url =
+                kIsWeb ? html.window.origin! : Environment.frontendURL;
+            final client = Matrix.of(context).client;
+            await client
+                .getRoomById(roomID.result!)!
+                .sendTextEvent(initial_url +
+                    "/#" +
+                    "/request_to_enroll?id=$userId&room_id=$roomId")
+                .then((value) {
+              VRouter.of(context).to("/rooms");
+              Fluttertoast.showToast(
+                  msg: " Request Sent Successfully",
+                  webBgColor: Colors.green,
+                  backgroundColor: Colors.green);
+              // VRouter.of(context).toSegments(['rooms', roomID.result!]);
+              // Navigator.of(context, rootNavigator: false).pop();
+            }).catchError((e) {
+              if (kDebugMode) {
+                print(e);
+              }
+              Fluttertoast.showToast(
+                  msg: " Unable to Sent Message",
+                  webBgColor: Colors.red,
+                  backgroundColor: Colors.red);
+            });
+            return;
+          } else {}
+        }
+        if (roomID == null) {
+          VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+        }
+      } else {
         await showModalBottomSheet(
           context: context,
           builder: (c) => ProfileBottomSheet(
@@ -197,38 +374,8 @@ class UrlLauncher {
           ),
         );
       }
-      else{
-        final client = Matrix.of(context).client;
-        final result = await showFutureLoadingDialog<String>(
-          context: context,
-          future: () => client.startDirectChat(identityParts.primaryIdentifier, enableEncryption: false),
-        );
-        if (result.error == null) {
-         String userId =  Matrix.of(context).client.userID??"";
-         if(userId.isNotEmpty){
-           //TODO Env update
-           final String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
-
-           await client.getRoomById(result.result!)!.sendTextEvent(initial_url+"/#"+"/request_to_enroll?id=$userId&room_id=$roomId").then((value){
-             VRouter.of(context).toSegments(['rooms', result.result!]);
-             Navigator.of(context, rootNavigator: false).pop();
-           }).catchError((e){
-             print("Error Accured");
-             print(e);
-           });
-           return;
-         }
-         else{
-
-           print("userid empty");
-           return;
-         }
-
-
-        }
-      }
-
-
     }
   }
+
+  math.Random random = math.Random();
 }

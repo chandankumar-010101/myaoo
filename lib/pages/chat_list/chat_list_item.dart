@@ -37,13 +37,18 @@ class ChatListItem extends StatelessWidget {
 
   dynamic clickAction(BuildContext context) async {
     if (onTap != null) return onTap!();
-    print("hii");
+
     if (!activeChat) {
-      if (room.membership == Membership.invite &&(await showFutureLoadingDialog( context: context,future: () async {
-                        final joinedFuture = room.client.onSync.stream.where((u) =>u.rooms?.join?.containsKey(room.id) ?? false).first;
+      if (room.membership == Membership.invite &&
+          (await showFutureLoadingDialog(
+                      context: context,
+                      future: () async {
+                        final joinedFuture = room.client.onSync.stream.where((u) => u.rooms?.join?.containsKey(room.id) ?? false).first;
                         await room.join();
                         await joinedFuture;
-                      })).error != null) {
+                      }))
+                  .error !=
+              null) {
         print("here");
         return;
       }
@@ -52,6 +57,7 @@ class ChatListItem extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context)!.youHaveBeenBannedFromThisChat),
+            backgroundColor: Colors.green,
           ),
         );
         return;
@@ -91,8 +97,7 @@ class ChatListItem extends StatelessWidget {
 
       if (room.membership == Membership.join) {
         if (Matrix.of(context).shareContent != null) {
-          if (Matrix.of(context).shareContent!['msgtype'] ==
-              'chat.fluffy.shared_file') {
+          if (Matrix.of(context).shareContent!['msgtype'] == 'chat.fluffy.shared_file') {
             await showDialog(
               context: context,
               useRootNavigator: false,
@@ -131,8 +136,7 @@ class ChatListItem extends StatelessWidget {
         cancelLabel: L10n.of(context)!.no,
       );
       if (confirmed == OkCancelResult.cancel) return;
-      await showFutureLoadingDialog(
-          context: context, future: () => room.leave());
+      await showFutureLoadingDialog(context: context, future: () => room.leave());
       return;
     }
   }
@@ -141,8 +145,7 @@ class ChatListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMuted = room.pushRuleState != PushRuleState.notify;
     final typingText = room.getLocalizedTypingText(context);
-    final ownMessage =
-        room.lastEvent?.senderId == Matrix.of(context).client.userID;
+    final ownMessage = room.lastEvent?.senderId == Matrix.of(context).client.userID;
     final unread = room.isUnread || room.membership == Membership.invite;
     final unreadBubbleSize = unread || room.hasNewMessages
         ? room.notificationCount > 0
@@ -183,9 +186,7 @@ class ChatListItem extends StatelessWidget {
                 softWrap: false,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: unread
-                      ? Theme.of(context).colorScheme.secondary
-                      : Theme.of(context).textTheme.bodyText1!.color,
+                  color: unread ? Theme.of(context).colorScheme.secondary : Theme.of(context).textTheme.bodyText1!.color,
                 ),
               ),
             ),
@@ -199,8 +200,7 @@ class ChatListItem extends StatelessWidget {
               ),
             if (room.isFavourite)
               Padding(
-                padding: EdgeInsets.only(
-                    right: room.notificationCount > 0 ? 4.0 : 0.0),
+                padding: EdgeInsets.only(right: room.notificationCount > 0 ? 4.0 : 0.0),
                 child: Icon(
                   Icons.push_pin_outlined,
                   size: 16,
@@ -213,9 +213,7 @@ class ChatListItem extends StatelessWidget {
                 room.timeCreated.localizedTimeShort(context),
                 style: TextStyle(
                   fontSize: 13,
-                  color: unread
-                      ? Theme.of(context).colorScheme.secondary
-                      : Theme.of(context).textTheme.bodyText2!.color,
+                  color: unread ? Theme.of(context).colorScheme.secondary : Theme.of(context).textTheme.bodyText2!.color,
                 ),
               ),
             ),
@@ -224,9 +222,7 @@ class ChatListItem extends StatelessWidget {
         subtitle: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            if (typingText.isEmpty &&
-                ownMessage &&
-                room.lastEvent!.status.isSending) ...[
+            if (typingText.isEmpty && ownMessage && room.lastEvent!.status.isSending) ...[
               const SizedBox(
                 width: 16,
                 height: 16,
@@ -263,9 +259,7 @@ class ChatListItem extends StatelessWidget {
                             hideEdit: true,
                             plaintextBody: true,
                             removeMarkdown: true,
-                            withSenderNamePrefix: !room.isDirectChat ||
-                                room.directChatMatrixID !=
-                                    room.lastEvent?.senderId,
+                            withSenderNamePrefix: !room.isDirectChat || room.directChatMatrixID != room.lastEvent?.senderId,
                           ) ??
                           Future.value(L10n.of(context)!.emptyChat),
                       builder: (context, snapshot) {
@@ -279,21 +273,15 @@ class ChatListItem extends StatelessWidget {
                                     hideEdit: true,
                                     plaintextBody: true,
                                     removeMarkdown: true,
-                                    withSenderNamePrefix: !room.isDirectChat ||
-                                        room.directChatMatrixID !=
-                                            room.lastEvent?.senderId,
+                                    withSenderNamePrefix: !room.isDirectChat || room.directChatMatrixID != room.lastEvent?.senderId,
                                   ) ??
                                   L10n.of(context)!.emptyChat,
                           softWrap: false,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: unread
-                                ? Theme.of(context).colorScheme.secondary
-                                : Theme.of(context).textTheme.bodyText2!.color,
-                            decoration: room.lastEvent?.redacted == true
-                                ? TextDecoration.lineThrough
-                                : null,
+                            color: unread ? Theme.of(context).colorScheme.secondary : Theme.of(context).textTheme.bodyText2!.color,
+                            decoration: room.lastEvent?.redacted == true ? TextDecoration.lineThrough : null,
                           ),
                         );
                       }),
@@ -304,12 +292,9 @@ class ChatListItem extends StatelessWidget {
               curve: Curves.bounceInOut,
               padding: const EdgeInsets.symmetric(horizontal: 7),
               height: unreadBubbleSize,
-              width:
-                  room.notificationCount == 0 && !unread && !room.hasNewMessages
-                      ? 0
-                      : (unreadBubbleSize - 9) *
-                              room.notificationCount.toString().length +
-                          9,
+              width: room.notificationCount == 0 && !unread && !room.hasNewMessages
+                  ? 0
+                  : (unreadBubbleSize - 9) * room.notificationCount.toString().length + 9,
               decoration: BoxDecoration(
                 color: room.highlightCount > 0
                     ? Colors.red

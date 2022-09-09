@@ -72,7 +72,8 @@ class ChatListView extends StatelessWidget {
                       : const SnappingPosition.factor(positionFactor: 0.0),
                   snappingPositions: showSpaces
                       ? const [
-                          SnappingPosition.pixels(positionPixels: kSpacesBottomBarHeight),
+                          SnappingPosition.pixels(
+                              positionPixels: kSpacesBottomBarHeight),
                           SnappingPosition.factor(positionFactor: 0.5),
                           SnappingPosition.factor(positionFactor: 0.9),
                         ]
@@ -88,33 +89,9 @@ class ChatListView extends StatelessWidget {
                 );
               },
             ),
-            floatingActionButton: selectMode == SelectMode.normal
-                ?controller.activeSpaceId !=null && controller.activeSpaceId!.isNotEmpty?Padding(
-
-              padding: showSpaces
-                  ? const EdgeInsets.only(bottom: 64.0)
-                  : const EdgeInsets.all(0),
-              child: KeyBoardShortcuts(
-                child: FloatingActionButton.extended(
-                  isExtended: controller.scrolledToTop,
-                  onPressed: () =>
-                      VRouter.of(context).to('/newprivatechat',queryParameters: {"class_id":controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
-                  icon: const Icon(CupertinoIcons.chat_bubble),
-                  label: Text(L10n.of(context)!.newChat),
-                ),
-                keysToPress: {
-                  LogicalKeyboardKey.controlLeft,
-                  LogicalKeyboardKey.keyN
-                },
-                onKeysPressed: () =>
-                    VRouter.of(context).to('/newprivatechat',queryParameters: {"class_id":controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
-                helpLabel: L10n.of(context)!.newChat,
-              ),
-            ):Container()
-                : Container(),
             bottomNavigationBar: const SafeArea(
               child: ConnectionStatusHeader(),
-           ),
+            ),
           ),
         );
       },

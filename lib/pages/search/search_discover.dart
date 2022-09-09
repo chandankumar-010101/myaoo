@@ -30,13 +30,17 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     if (dayId == null || monthId == null || yearId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Please select a vaild date"),
+        backgroundColor: Colors.red,
       ));
       return;
     }
     if (isAdult("$dayId-$monthId-$yearId")) {
       PangeaServices.updateUserAge(dayId!, monthId!, yearId!, context);
     } else {
-      Fluttertoast.showToast(msg: "Age is below 18 year's");
+      Fluttertoast.showToast(
+          msg: "Age is below 18 year's",
+          webBgColor: Colors.red,
+          backgroundColor: Colors.red);
     }
     if (!mounted) {
       setState(() {});

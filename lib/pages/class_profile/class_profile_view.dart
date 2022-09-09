@@ -260,7 +260,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.totalStudent.toString(),
+                                  widget.controller.noOfStudents.toString(),
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -328,7 +328,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  widget.controller.fetchFlag2(data, url)
+                                  widget.controller.fetchFlag(data, url)
                                 ]),
                                 const SizedBox(
                                   width: 5,
@@ -358,7 +358,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  widget.controller.fetchFlag(data, url),
+                                  widget.controller.fetchFlag2(data, url),
                                   const SizedBox(
                                     width: 5,
                                   ),
@@ -452,7 +452,17 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   ),
                                                 ),
                                                 onPressed: () {
+                                                  // PangeaServices
+                                                  //     .createExchangeValidateRequest(
+                                                  //   roomId:
+                                                  //       data.pangeaClassRoomId,
+                                                  //   teacherID:
+                                                  //       data.classAuthorId,
+                                                  //   context: context,
+                                                  // );
+
                                                   final box = GetStorage();
+
                                                   if (roomAlias.isNotEmpty) {
                                                     box.write(
                                                         "public",
@@ -466,6 +476,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                         "openExchange",
                                                         data.permissions
                                                             .isOpenExchange);
+                                                    box.write(
+                                                        "ExchangeClientID",
+                                                        data.classAuthorId);
                                                     context.vRouter.to(
                                                         "/classDetails/exchange_class",
                                                         queryParameters: {
@@ -586,10 +599,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   );
                                                   if (confirmed ==
                                                       OkCancelResult.ok) {
-                                                    print("confirm");
-                                                    print(data.classAuthor);
-
                                                     if (roomAlias.isNotEmpty) {
+                                                      print(data.classAuthorId);
                                                       UrlLauncher(
                                                               context,
                                                               requestToEnroll:
@@ -917,8 +928,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                         }
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                                content:
-                                                    Text("Error accrued: $e")));
+                                          content: Text("Error accrued: $e"),
+                                          backgroundColor: Colors.red,
+                                        ));
                                       }
                                       context.vRouter.to(
                                           "/classDetails/update_student_permissions",
