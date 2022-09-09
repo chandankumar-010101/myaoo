@@ -8,6 +8,7 @@ import '../pages/chat_list/spaces_entry.dart';
 
 class PangeaControllers extends GetxController {
   var throughClassProfile = false.obs;
+  Rx<bool> a = false.obs;
   // var isPublic  =true.obs;
   // var isOpenEnrollment=true.obs;
   // var isOpenExchange =true.obs;

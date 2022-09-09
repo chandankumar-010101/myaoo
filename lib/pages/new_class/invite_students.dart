@@ -1,8 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/src/room.dart';
+import 'package:pangea_choreographer/choreographer/widgets/it_shimmer.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
@@ -21,6 +27,7 @@ class InviteStudent extends StatefulWidget {
 }
 
 class _InviteStudentState extends State<InviteStudent> {
+  PangeaControllers getxController = Get.put(PangeaControllers());
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -212,6 +219,73 @@ class _InviteStudentState extends State<InviteStudent> {
                                 "Invite with email",
                                 style: TextStyle().copyWith(
                                     color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
+                            showDialog<void>(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return new WillPopScope(
+                                      onWillPop: () async => false,
+                                      child: Dialog(
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                        key: _keyLoader,
+                                        child: Center(
+                                          child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                CircularProgressIndicator(),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  "Please Wait Loading ClassRooms...",
+                                                  style: TextStyle(color: Colors.white, fontSize: 22),
+                                                )
+                                              ]),
+                                        ),
+                                      ));
+                                });
+                            Future.delayed(Duration(seconds: 4))
+                                .whenComplete(() => Navigator.of(_keyLoader.currentContext!, rootNavigator: true).pop())
+                                .whenComplete(
+                                  () => Fluttertoast.showToast(
+                                    msg: "Unable to fetch Goolge Classrooms",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    webBgColor: "linear-gradient(to right, #FF0000, #FF0000)",
+                                    textColor: Colors.white,
+                                  ),
+                                );
+                          },
+                          child: Container(
+                            width: 200,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).colorScheme.onPrimary,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                        ? Theme.of(context).primaryColorLight
+                                        : Theme.of(context).colorScheme.onPrimary)),
+                            child: Center(
+                              child: Text(
+                                "Google Classroom",
+                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
