@@ -21,39 +21,35 @@ class InviteStudent extends StatefulWidget {
 }
 
 class _InviteStudentState extends State<InviteStudent> {
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final String roomId = VRouter.of(context).queryParameters['id']??"";
-   // final room = Matrix.of(context).client.getRoomById(roomId);
+    final String roomId = VRouter.of(context).queryParameters['id'] ?? "";
+    // final room = Matrix.of(context).client.getRoomById(roomId);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Create a Class",
-            style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 14),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
           elevation: 10,
           automaticallyImplyLeading: false,
-
         ),
         body: SizedBox(
           width: size.width,
           height: size.height,
           child: SingleChildScrollView(
-            child:SizedBox(
+            child: SizedBox(
               width: size.width,
               height: size.height,
               child: FutureBuilder(
                 future: PangeaServices.fetchClassInfo(context, GetStorage().read("access"), roomId),
-                builder: (BuildContext context,  snapshot) {
-                  if(snapshot.hasData){
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
                     FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
 
                     return Column(
@@ -62,10 +58,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       children: [
                         Text(
                           "Invite students to enroll\nwith your class.",
-                          style: TextStyle().copyWith(
-                              color: Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,
                         ),
@@ -74,32 +67,28 @@ class _InviteStudentState extends State<InviteStudent> {
                         ),
                         InkWell(
                           onTap: () async {
-                            final String classCode = data.classCode??"";
-                            if(classCode.isNotEmpty){
-                              final String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
-                              FluffyShare.share(
-                                  initial_url+"/#/"+"join_with_link?code=$classCode",
-                                  context);
+                            final String classCode = data.classCode ?? "";
+                            if (classCode.isNotEmpty) {
+                              final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
+                              FluffyShare.share(initial_url + "/#/" + "join_with_link?code=$classCode", context);
                               // await Clipboard.setData(
                               //     ClipboardData(text: classCode));
                               // ScaffoldMessenger.of(context).showSnackBar(
                               //     const SnackBar(content: Text("Copied to clipboard")));
 
                             }
-                           //  Room? room = Matrix.of(context).client.getRoomById(roomId);
-                           //  if(room != null){
-                           // String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
-                           // // print(initial_url);
-                           // // print(Environment.frontendURL);
-                           //    FluffyShare.share(
-                           //        initial_url+"/#"+"join_with_link?code=$classCode",
-                           //        context);
-                           // }
-                            else{
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Unable to find class code")));
+                            //  Room? room = Matrix.of(context).client.getRoomById(roomId);
+                            //  if(room != null){
+                            // String  initial_url =  kIsWeb? html.window.origin!: Environment.frontendURL;
+                            // // print(initial_url);
+                            // // print(Environment.frontendURL);
+                            //    FluffyShare.share(
+                            //        initial_url+"/#"+"join_with_link?code=$classCode",
+                            //        context);
+                            // }
+                            else {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Unable to find class code")));
                             }
-
                           },
                           child: Container(
                             width: 200,
@@ -110,16 +99,14 @@ class _InviteStudentState extends State<InviteStudent> {
                                     : Theme.of(context).colorScheme.onPrimary,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: Theme.of(context).colorScheme.onPrimary ==
-                                        Colors.white
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                         ? Theme.of(context).primaryColorLight
                                         : Theme.of(context).colorScheme.onPrimary)),
                             child: Center(
                               child: Text(
                                 "Copy class link",
                                 style: TextStyle().copyWith(
-                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                    fontSize: 14),
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -131,17 +118,15 @@ class _InviteStudentState extends State<InviteStudent> {
                         ),
                         InkWell(
                           onTap: () async {
-                            final String classCode = data.classCode??"";
-                            if(classCode.isNotEmpty){
-                              await Clipboard.setData(
-                                  ClipboardData(text: classCode));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Copied to clipboard")));
-
-                            }
-                            else{
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Unable to find class Code")));
+                            final String classCode = data.classCode ?? "";
+                            if (classCode.isNotEmpty) {
+                              await Clipboard.setData(ClipboardData(text: classCode));
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Copied to clipboard")));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Unable to find class Code"),
+                                backgroundColor: Colors.red,
+                              ));
                             }
                           },
                           child: Container(
@@ -153,16 +138,14 @@ class _InviteStudentState extends State<InviteStudent> {
                                     : Theme.of(context).colorScheme.onPrimary,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: Theme.of(context).colorScheme.onPrimary ==
-                                        Colors.white
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                         ? Theme.of(context).primaryColorLight
                                         : Theme.of(context).colorScheme.onPrimary)),
                             child: Center(
                               child: Text(
                                 "Copy class code",
                                 style: TextStyle().copyWith(
-                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                    fontSize: 14),
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -206,9 +189,11 @@ class _InviteStudentState extends State<InviteStudent> {
                         // ),
                         InkWell(
                           onTap: () {
-                            VRouter.of(context).to("/invite_email",queryParameters: {"id":roomId});
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Functionality under progress")));
+                            VRouter.of(context).to("/invite_email", queryParameters: {"id": roomId});
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text("Functionality under progress"),
+                              backgroundColor: Colors.red,
+                            ));
                           },
                           child: Container(
                             width: 200,
@@ -219,16 +204,14 @@ class _InviteStudentState extends State<InviteStudent> {
                                     : Theme.of(context).colorScheme.onPrimary,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: Theme.of(context).colorScheme.onPrimary ==
-                                        Colors.white
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                         ? Theme.of(context).primaryColorLight
                                         : Theme.of(context).colorScheme.onPrimary)),
                             child: Center(
                               child: Text(
                                 "Invite with email",
                                 style: TextStyle().copyWith(
-                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                    fontSize: 14),
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -283,8 +266,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                     child: Text(
                                       "4/4",
                                       style: TextStyle().copyWith(
-                                          color: Theme.of(context).textTheme.bodyText1!.color,
-                                          fontSize: 14),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.center,
                                     ),
@@ -297,12 +279,11 @@ class _InviteStudentState extends State<InviteStudent> {
                         ),
                       ],
                     );
-                  }else{
-                   return Center(
+                  } else {
+                    return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-
                 },
               ),
             ),

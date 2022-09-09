@@ -137,6 +137,7 @@ class ChatController extends State<Chat> {
       } catch (err) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
             content: Text(
               (err).toLocalizedString(context),
             ),
@@ -533,7 +534,7 @@ class ChatController extends State<Chat> {
       showEmojiPicker = false;
       selectedEvents.clear();
     });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context)!.contentHasBeenReported)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red, content: Text(L10n.of(context)!.contentHasBeenReported)));
   }
 
   void redactEventsAction() async {
@@ -973,7 +974,10 @@ class ChatController extends State<Chat> {
       final voipPlugin = Matrix.of(context).voipPlugin;
       await voipPlugin!.voip.inviteToCall(room!.id, callType).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text((e as Object).toLocalizedString(context))),
+          SnackBar(
+            content: Text((e as Object).toLocalizedString(context)),
+            backgroundColor: Colors.red,
+          ),
         );
       });
     } else {

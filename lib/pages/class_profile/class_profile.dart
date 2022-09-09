@@ -65,13 +65,13 @@ class RequestScreenState extends State<RequestScreen> {
         noOfStudents = space.length;
         space = space.where((i) => i.id == userId).toList();
       } catch (e) {
-        Fluttertoast.showToast(msg: "Unable to fetch Class Info");
+        Fluttertoast.showToast(msg: "Unable to fetch Class Info", webBgColor: Colors.red, backgroundColor: Colors.red);
         if (kDebugMode) {
           print(e);
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info");
+      Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info", webBgColor: Colors.red, backgroundColor: Colors.red);
     }
   }
 
@@ -91,38 +91,47 @@ class RequestScreenState extends State<RequestScreen> {
               await room.kick(element.id);
             }
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Students removed from the class")));
-            final success = await showFutureLoadingDialog(
-                context: context, future: () => room.leave());
+              content: Text("Students removed from the class"),
+              backgroundColor: Colors.green,
+            ));
+            final success = await showFutureLoadingDialog(context: context, future: () => room.leave());
             if (success.error == null) {
-              final bool? result = await PangeaServices.deleteClass(
-                  roomId: room.id, context: context);
+              final bool? result = await PangeaServices.deleteClass(roomId: room.id, context: context);
               result != null && result
                   ? VRouter.of(context).to('/rooms')
                   : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Unable to delete class records")));
+                      content: Text("Unable to delete class records"),
+                      backgroundColor: Colors.red,
+                    ));
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Unable to leave the class")));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Unable to leave the class"),
+                backgroundColor: Colors.red,
+              ));
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Unable to fetch current user information")));
+              content: Text("Unable to fetch current user information"),
+              backgroundColor: Colors.red,
+            ));
           }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("You don't have permissions!n")));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("You don't have permissions!n"),
+            backgroundColor: Colors.red,
+          ));
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Exception Accrued")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Exception Accrued"),
+        backgroundColor: Colors.red,
+      ));
       print(e);
     }
-
   }
 
-  int noOfStudents =0;
+  int noOfStudents = 0;
 
   @override
   Widget build(BuildContext context) {

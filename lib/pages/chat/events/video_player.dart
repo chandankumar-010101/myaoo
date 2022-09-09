@@ -39,8 +39,7 @@ class _EventVideoPlayerState extends State<EventVideoPlayer> {
         _networkUri = html.Url.createObjectUrlFromBlob(blob);
       } else {
         final tempDir = await getTemporaryDirectory();
-        final fileName = Uri.encodeComponent(
-            widget.event.attachmentOrThumbnailMxcUrl()!.pathSegments.last);
+        final fileName = Uri.encodeComponent(widget.event.attachmentOrThumbnailMxcUrl()!.pathSegments.last);
         final file = File('${tempDir.path}/${fileName}_${videoFile.name}');
         if (await file.exists() == false) {
           await file.writeAsBytes(videoFile.bytes);
@@ -65,10 +64,12 @@ class _EventVideoPlayerState extends State<EventVideoPlayer> {
     } on MatrixConnectionException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toLocalizedString(context)),
+        backgroundColor: Colors.red,
       ));
     } catch (e, s) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toLocalizedString(context)),
+        backgroundColor: Colors.red,
       ));
       SentryController.captureException(e, s);
     } finally {
@@ -89,9 +90,7 @@ class _EventVideoPlayerState extends State<EventVideoPlayer> {
   @override
   Widget build(BuildContext context) {
     final hasThumbnail = widget.event.hasThumbnail;
-    final blurHash = (widget.event.infoMap as Map<String, dynamic>)
-            .tryGet<String>('xyz.amorgan.blurhash') ??
-        fallbackBlurHash;
+    final blurHash = (widget.event.infoMap as Map<String, dynamic>).tryGet<String>('xyz.amorgan.blurhash') ?? fallbackBlurHash;
 
     final chewieManager = _chewieManager;
     return Material(
@@ -120,15 +119,11 @@ class _EventVideoPlayerState extends State<EventVideoPlayer> {
                           ? const SizedBox(
                               width: 24,
                               height: 24,
-                              child: CircularProgressIndicator.adaptive(
-                                  strokeWidth: 2),
+                              child: CircularProgressIndicator.adaptive(strokeWidth: 2),
                             )
                           : const Icon(Icons.download_outlined),
                       label: Text(
-                        _isDownloading
-                            ? L10n.of(context)!.loadingPleaseWait
-                            : L10n.of(context)!.videoWithSize(
-                                widget.event.sizeString ?? '?MB'),
+                        _isDownloading ? L10n.of(context)!.loadingPleaseWait : L10n.of(context)!.videoWithSize(widget.event.sizeString ?? '?MB'),
                       ),
                       onPressed: _isDownloading ? null : _downloadAction,
                     ),

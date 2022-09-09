@@ -47,7 +47,10 @@ class _SendFileDialogState extends State<SendFileDialog> {
     )
         .catchError((e) {
       scaffoldMessenger.showSnackBar(
-        SnackBar(content: Text(e.toLocalizedString())),
+        SnackBar(
+          content: Text(e.toLocalizedString()),
+          backgroundColor: Colors.red,
+        ),
       );
     });
 
@@ -82,8 +85,7 @@ class _SendFileDialogState extends State<SendFileDialog> {
             ),
             InkWell(
               onTap: () => setState(() => origImage = !origImage),
-              child: Text(L10n.of(context)!.sendOriginal +
-                  ' (${widget.file.sizeString})'),
+              child: Text(L10n.of(context)!.sendOriginal + ' (${widget.file.sizeString})'),
             ),
           ],
         )

@@ -84,7 +84,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
 
     final matrix = Matrix.of(context);
     String className = classId.isNotEmpty ? matrix.client.getRoomById(classId)!.displayname : "";
-    Fluttertoast.showToast(msg: "Functionality under process");
+    Fluttertoast.showToast(msg: "Functionality under process", webBgColor: Colors.red, backgroundColor: Colors.red);
 
     matrix.client.getDisplayName(controller.text).then((value) => log("User Name: ${value.toString()}"));
 
@@ -133,7 +133,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
         print("Room id:" + roomID.result!);
       }
       VRouter.of(context).pop();
-      Fluttertoast.showToast(msg: "Created Successfully");
+      Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
     }
     if (roomID == null) {
       VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
@@ -179,6 +179,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
             content: Text(
               L10n.of(context)!.unsupportedAndroidVersionLong,
             ),
+            backgroundColor: Colors.red,
           ),
         );
         return;

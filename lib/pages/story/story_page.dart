@@ -45,10 +45,7 @@ class StoryPageController extends State<StoryPage> {
   Timeline? timeline;
 
   Event? get currentEvent => index < events.length ? events[index] : null;
-  StoryThemeData get storyThemeData =>
-      StoryThemeData.fromJson(currentEvent?.content
-              .tryGetMap<String, dynamic>(StoryThemeData.contentKey) ??
-          {});
+  StoryThemeData get storyThemeData => StoryThemeData.fromJson(currentEvent?.content.tryGetMap<String, dynamic>(StoryThemeData.contentKey) ?? {});
 
   bool replyLoading = false;
   bool _modalOpened = false;
@@ -80,22 +77,27 @@ class StoryPageController extends State<StoryPage> {
     });
     try {
       final client = Matrix.of(context).client;
-      final roomId = await client.startDirectChat(currentEvent.senderId,enableEncryption: false);
-      var replyText = L10n.of(context)!.storyFrom(
-          currentEvent.originServerTs.localizedTime(context),
-          currentEvent.content.tryGet<String>('body') ?? '');
+      final roomId = await client.startDirectChat(currentEvent.senderId, enableEncryption: false);
+      var replyText =
+          L10n.of(context)!.storyFrom(currentEvent.originServerTs.localizedTime(context), currentEvent.content.tryGet<String>('body') ?? '');
       replyText = replyText.split('\n').map((line) => '> $line').join('\n');
       message = '$replyText\n\n$message';
       await client.getRoomById(roomId)!.sendTextEvent(message);
       replyController.clear();
       replyFocus.unfocus();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context)!.replyHasBeenSent)),
+        SnackBar(
+          content: Text(L10n.of(context)!.replyHasBeenSent),
+          backgroundColor: Colors.green,
+        ),
       );
     } catch (e, s) {
       Logs().w('Unable to reply to story', e, s);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toLocalizedString(context))),
+        SnackBar(
+          content: Text(e.toLocalizedString(context)),
+          backgroundColor: Colors.red,
+        ),
       );
     } finally {
       setState(() {
@@ -208,13 +210,11 @@ class StoryPageController extends State<StoryPage> {
       final matrixFile = await event.downloadAndDecryptAttachment();
       if (!mounted) return null;
       final tmpDirectory = await getTemporaryDirectory();
-      final fileName =
-          event.content.tryGet<String>('filename') ?? 'unknown_story_video.mp4';
+      final fileName = event.content.tryGet<String>('filename') ?? 'unknown_story_video.mp4';
       final file = File(tmpDirectory.path + '/' + fileName);
       await file.writeAsBytes(matrixFile.bytes);
       if (!mounted) return null;
-      final videoPlayerController =
-          _videoPlayerController = VideoPlayerController.file(file);
+      final videoPlayerController = _videoPlayerController = VideoPlayerController.file(file);
       await videoPlayerController.initialize();
       await videoPlayerController.play();
       return videoPlayerController;
@@ -265,9 +265,7 @@ class StoryPageController extends State<StoryPage> {
 
   void unhold([_]) {
     isHold = false;
-    if (DateTime.now().millisecondsSinceEpoch -
-            _holdedAt.millisecondsSinceEpoch <
-        200) {
+    if (DateTime.now().millisecondsSinceEpoch - _holdedAt.millisecondsSinceEpoch < 200) {
       skip();
       return;
     }
@@ -348,14 +346,15 @@ class StoryPageController extends State<StoryPage> {
     _modalOpened = false;
     if (result.error != null) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(L10n.of(context)!.contentHasBeenReported)),
+      SnackBar(
+        content: Text(L10n.of(context)!.contentHasBeenReported),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 
-  Future<MatrixFile> downloadAndDecryptAttachment(
-      Event event, bool getThumbnail) async {
-    return _fileCache[event.eventId] ??=
-        event.downloadAndDecryptAttachment(getThumbnail: getThumbnail);
+  Future<MatrixFile> downloadAndDecryptAttachment(Event event, bool getThumbnail) async {
+    return _fileCache[event.eventId] ??= event.downloadAndDecryptAttachment(getThumbnail: getThumbnail);
   }
 
   void _setLoadingMode(bool mode) => loadingMode != mode
@@ -366,20 +365,10 @@ class StoryPageController extends State<StoryPage> {
         })
       : null;
 
-  Uri? get avatar => Matrix.of(context)
-      .client
-      .getRoomById(roomId)
-      ?.getState(EventTypes.RoomCreate)
-      ?.senderFromMemoryOrFallback
-      .avatarUrl;
+  Uri? get avatar => Matrix.of(context).client.getRoomById(roomId)?.getState(EventTypes.RoomCreate)?.senderFromMemoryOrFallback.avatarUrl;
 
   String get title =>
-      Matrix.of(context)
-          .client
-          .getRoomById(roomId)
-          ?.getState(EventTypes.RoomCreate)
-          ?.senderFromMemoryOrFallback
-          .calcDisplayname() ??
+      Matrix.of(context).client.getRoomById(roomId)?.getState(EventTypes.RoomCreate)?.senderFromMemoryOrFallback.calcDisplayname() ??
       'Story not found';
 
   Future<void>? loadStory;
@@ -392,34 +381,21 @@ class StoryPageController extends State<StoryPage> {
       final room = client.getRoomById(roomId);
       if (room == null) return;
       if (room.membership != Membership.join) {
-        final joinedFuture = room.client.onSync.stream
-            .where((u) => u.rooms?.join?.containsKey(room.id) ?? false)
-            .first;
+        final joinedFuture = room.client.onSync.stream.where((u) => u.rooms?.join?.containsKey(room.id) ?? false).first;
         await room.join();
         await joinedFuture;
       }
       final timeline = this.timeline = await room.getTimeline();
       timeline.requestKeys();
-      var events = timeline.events
-          .where((e) =>
-              e.type == EventTypes.Message &&
-              !e.redacted &&
-              e.status == EventStatus.synced)
-          .toList();
+      var events = timeline.events.where((e) => e.type == EventTypes.Message && !e.redacted && e.status == EventStatus.synced).toList();
 
       final hasOutdatedEvents = events.removeOutdatedEvents();
 
       // Request history if possible
-      if (!hasOutdatedEvents &&
-          timeline.events.first.type != EventTypes.RoomCreate &&
-          events.length < 30) {
+      if (!hasOutdatedEvents && timeline.events.first.type != EventTypes.RoomCreate && events.length < 30) {
         try {
-          await timeline
-              .requestHistory(historyCount: 100)
-              .timeout(const Duration(seconds: 5));
-          events = timeline.events
-              .where((e) => e.type == EventTypes.Message)
-              .toList();
+          await timeline.requestHistory(historyCount: 100).timeout(const Duration(seconds: 5));
+          events = timeline.events.where((e) => e.type == EventTypes.Message).toList();
           events.removeOutdatedEvents();
         } catch (e, s) {
           Logs().d('Unable to request history in stories', e, s);
@@ -433,12 +409,8 @@ class StoryPageController extends State<StoryPage> {
 
       // Preload images and videos
       events
-          .where((event) => {MessageTypes.Image, MessageTypes.Video}
-              .contains(event.messageType))
-          .forEach((event) => downloadAndDecryptAttachment(
-              event,
-              event.messageType == MessageTypes.Video &&
-                  PlatformInfos.isMobile));
+          .where((event) => {MessageTypes.Image, MessageTypes.Video}.contains(event.messageType))
+          .forEach((event) => downloadAndDecryptAttachment(event, event.messageType == MessageTypes.Video && PlatformInfos.isMobile));
 
       // Reverse list
       this.events.clear();
@@ -446,9 +418,7 @@ class StoryPageController extends State<StoryPage> {
 
       // Set start position
       if (this.events.isNotEmpty) {
-        final receiptId = room.roomAccountData['m.receipt']?.content
-            .tryGetMap<String, dynamic>(room.client.userID!)
-            ?.tryGet<String>('event_id');
+        final receiptId = room.roomAccountData['m.receipt']?.content.tryGetMap<String, dynamic>(room.client.userID!)?.tryGet<String>('event_id');
         index = this.events.indexWhere((event) => event.eventId == receiptId);
         index++;
         if (index >= this.events.length) index = 0;
@@ -485,8 +455,7 @@ class StoryPageController extends State<StoryPage> {
       case PopupStoryAction.message:
         final roomIdResult = await showFutureLoadingDialog(
           context: context,
-          future: () =>
-              currentEvent!.senderFromMemoryOrFallback.startDirectChat(enableEncryption: false),
+          future: () => currentEvent!.senderFromMemoryOrFallback.startDirectChat(enableEncryption: false),
         );
         if (roomIdResult.error != null) return;
         VRouter.of(context).toSegments(['rooms', roomIdResult.result!]);
@@ -503,9 +472,7 @@ class StoryPageController extends State<StoryPage> {
 
 extension on List<Event> {
   bool removeOutdatedEvents() {
-    final outdatedIndex = indexWhere((event) =>
-        DateTime.now().difference(event.originServerTs).inHours >
-        ClientStoriesExtension.lifeTimeInHours);
+    final outdatedIndex = indexWhere((event) => DateTime.now().difference(event.originServerTs).inHours > ClientStoriesExtension.lifeTimeInHours);
     if (outdatedIndex != -1) {
       removeRange(outdatedIndex, length);
       return true;

@@ -29,7 +29,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       });
     } else {
       print("unable to find classcode");
-      Fluttertoast.showToast(msg: "Unable to find class code");
+      Fluttertoast.showToast(msg: "Unable to find class code", webBgColor: Colors.red, backgroundColor: Colors.red);
     }
   }
 
@@ -83,8 +83,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                           height: 10,
                         ),
                         const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Text(
                             "By pressing Join you will be added to the class",
                             textAlign: TextAlign.center,
@@ -98,8 +97,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                           child: ElevatedButton(
                             child: const Text("Connect To Class"),
                             onPressed: () {
-                              PangeaServices.joinRoom(
-                                  context, data.pangeaClassRoomId!);
+                              PangeaServices.joinRoom(context, data.pangeaClassRoomId!);
                             },
                           ),
                         )

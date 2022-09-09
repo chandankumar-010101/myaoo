@@ -29,15 +29,14 @@ class UserBottomSheet extends StatefulWidget {
 class UserBottomSheetController extends State<UserBottomSheet> {
   void participantAction(String action) async {
     // ignore: prefer_function_declarations_over_variables
-    final Function _askConfirmation =
-        () async => (await showOkCancelAlertDialog(
-              useRootNavigator: false,
-              context: context,
-              title: L10n.of(context)!.areYouSure,
-              okLabel: L10n.of(context)!.yes,
-              cancelLabel: L10n.of(context)!.no,
-            ) ==
-            OkCancelResult.ok);
+    final Function _askConfirmation = () async => (await showOkCancelAlertDialog(
+          useRootNavigator: false,
+          context: context,
+          title: L10n.of(context)!.areYouSure,
+          okLabel: L10n.of(context)!.yes,
+          cancelLabel: L10n.of(context)!.no,
+        ) ==
+        OkCancelResult.ok);
     switch (action) {
       case 'report':
         final event = widget.user;
@@ -80,8 +79,10 @@ class UserBottomSheetController extends State<UserBottomSheet> {
               ),
         );
         if (result.error != null) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(L10n.of(context)!.contentHasBeenReported)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(L10n.of(context)!.contentHasBeenReported),
+          backgroundColor: Colors.red,
+        ));
         break;
       case 'mention':
         Navigator.of(context, rootNavigator: false).pop();
@@ -115,9 +116,7 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         }
         break;
       case 'permission':
-        final newPermission = await PermissionSliderDialog(
-                initialPermission: widget.user.powerLevel)
-            .show(context);
+        final newPermission = await PermissionSliderDialog(initialPermission: widget.user.powerLevel).show(context);
         if (newPermission != null) {
           if (newPermission == 100 && await _askConfirmation() == false) break;
           await showFutureLoadingDialog(
@@ -133,16 +132,12 @@ class UserBottomSheetController extends State<UserBottomSheet> {
           future: () => widget.user.startDirectChat(enableEncryption: false),
         );
         if (roomIdResult.error != null) return;
-        VRouter.of(widget.outerContext)
-            .toSegments(['rooms', roomIdResult.result!]);
+        VRouter.of(widget.outerContext).toSegments(['rooms', roomIdResult.result!]);
         Navigator.of(context, rootNavigator: false).pop();
         break;
       case 'ignore':
         if (await _askConfirmation()) {
-          await showFutureLoadingDialog(
-              context: context,
-              future: () =>
-                  Matrix.of(context).client.ignoreUser(widget.user.id));
+          await showFutureLoadingDialog(context: context, future: () => Matrix.of(context).client.ignoreUser(widget.user.id));
         }
     }
   }

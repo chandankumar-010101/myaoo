@@ -37,30 +37,26 @@ class SearchViewController extends GetxController {
         );
         if (value.statusCode == 200) {
           loading.value = false;
-         final  data = searchViewModelFromJson(value.body);
+          final data = searchViewModelFromJson(value.body);
           data.next != null ? next.value = true : next.value = false;
-          data.previous != null
-              ? previous.value = true
-              : previous.value = false;
-          classList.value =  data.results!;
+          data.previous != null ? previous.value = true : previous.value = false;
+          classList.value = data.results!;
         } else {
           loading.value = false;
           if (kDebugMode) {
             print(value.statusCode);
           }
           Fluttertoast.showToast(
-              msg:"Error ${value.statusCode}: Unable to fetch list of classes");
+              msg: "Error ${value.statusCode}: Unable to fetch list of classes", webBgColor: Colors.red, backgroundColor: Colors.red);
         }
       } catch (e) {
         if (kDebugMode) {
           print("Error accured while fetching class details");
           print(e);
         }
-
       }
-    }
-    else {
-      Fluttertoast.showToast(msg: "Error: Access token not available");
+    } else {
+      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: Colors.red, backgroundColor: Colors.red);
       if (kDebugMode) {
         print("access token not found");
       }

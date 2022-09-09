@@ -30,13 +30,14 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
     if (dayId == null || monthId == null || yearId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Please select a vaild date"),
+        backgroundColor: Colors.red,
       ));
       return;
     }
     if (isAdult("$dayId-$monthId-$yearId")) {
       PangeaServices.updateUserAge(dayId!, monthId!, yearId!, context);
     } else {
-      Fluttertoast.showToast(msg: "Age is below 18 year's");
+      Fluttertoast.showToast(msg: "Age is below 18 year's", webBgColor: Colors.red, backgroundColor: Colors.red);
     }
     if (!mounted) {
       setState(() {});
@@ -104,12 +105,7 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   "Please  verify that you are 18 years of age or older to enter",
-                                  style: TextStyle().copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 16),
+                                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),
@@ -127,18 +123,11 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                       child: DropdownButton<dynamic>(
                                         underline: Text(
                                           "",
-                                          style: TextStyle().copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .color,
-                                              fontSize: 16),
+                                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                         ),
                                         icon: Icon(
                                           Icons.keyboard_arrow_down,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          color: Theme.of(context).colorScheme.secondary,
                                           size: 30,
                                         ),
                                         isExpanded: true,
@@ -147,20 +136,14 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             "Select Day",
-                                            style: TextStyle().copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .color,
-                                                fontSize: 16),
+                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                           ),
                                         ),
                                         items: list.map((item) {
                                           return DropdownMenuItem(
                                             value: item,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Text(item.toString()),
                                             ),
                                           );
@@ -182,18 +165,11 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                       child: DropdownButton<dynamic>(
                                         underline: Text(
                                           "",
-                                          style: TextStyle().copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .color,
-                                              fontSize: 16),
+                                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                         ),
                                         icon: Icon(
                                           Icons.keyboard_arrow_down,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          color: Theme.of(context).colorScheme.secondary,
                                           size: 30,
                                         ),
                                         isExpanded: true,
@@ -202,20 +178,14 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             "Select Month",
-                                            style: TextStyle().copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .color,
-                                                fontSize: 16),
+                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                           ),
                                         ),
                                         items: month.map((item) {
                                           return DropdownMenuItem(
                                             value: item,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Text(item.toString()),
                                             ),
                                           );
@@ -237,18 +207,11 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                       child: DropdownButton<dynamic>(
                                         underline: Text(
                                           "",
-                                          style: TextStyle().copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .color,
-                                              fontSize: 16),
+                                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                         ),
                                         icon: Icon(
                                           Icons.keyboard_arrow_down,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          color: Theme.of(context).colorScheme.secondary,
                                           size: 30,
                                         ),
                                         isExpanded: true,
@@ -257,20 +220,14 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             "Select Year",
-                                            style: TextStyle().copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .color,
-                                                fontSize: 16),
+                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                           ),
                                         ),
                                         items: year.map((item) {
                                           return DropdownMenuItem(
                                             value: item,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Text(item.toString()),
                                             ),
                                           );
@@ -297,22 +254,14 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
                                 child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                                      color: Theme.of(context).colorScheme.onPrimary,
                                       border: Border.all(),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 42, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 6),
                                       child: Text(
                                         "Verify",
-                                        style: TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: 16),
+                                        style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
                                       ),
                                     )),
                               ),

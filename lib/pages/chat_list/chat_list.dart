@@ -411,6 +411,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context)!.chatHasBeenRemovedFromThisSpace),
+            backgroundColor: Colors.green,
           ),
         );
       }
@@ -447,6 +448,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context)!.chatHasBeenAddedToThisSpace),
+            backgroundColor: Colors.green,
           ),
         );
       }
