@@ -252,7 +252,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                                   height: 10,
                                                 ),
                                                 Text(
-                                                  "Please Wait Loading ClassRooms...",
+                                                  "Please Wait Loading Classrooms...",
                                                   style: TextStyle(color: Colors.white, fontSize: 22),
                                                 )
                                               ]),
@@ -285,7 +285,8 @@ class _InviteStudentState extends State<InviteStudent> {
                             child: Center(
                               child: Text(
                                 "Google Classroom",
-                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
