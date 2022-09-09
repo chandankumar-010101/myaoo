@@ -122,9 +122,7 @@ class StoriesHeader extends StatelessWidget {
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       scrollDirection: Axis.horizontal,
-                      itemCount: controller!.activeSpacesEntry.getSpace(context) != null
-                          ? spaceStories!.where((room) => room.displayname.contains(sp!.displayname)).length
-                          : 0,
+                      itemCount: spaceStories!.length,
                       itemBuilder: (context, i) {
                         final room = spaceStories![i];
                         return Opacity(
@@ -133,7 +131,7 @@ class StoriesHeader extends StatelessWidget {
                               future: room.getCreatorProfile(),
                               builder: (context, snapshot) {
                                 final userId = room.creatorId;
-                                final displayname = snapshot.data?.displayName;
+                                final displayname = room.displayname;
                                 final avatarUrl = snapshot.data?.avatarUrl;
                                 return _StoryButton(
                                   profile: Profile(
@@ -269,6 +267,8 @@ class _StoryButton extends StatelessWidget {
                   child: Expanded(
                     child: Text(
                       profile.displayName ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,

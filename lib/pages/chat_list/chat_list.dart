@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -103,9 +104,17 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   void editSpace(BuildContext context, String spaceId) async {
     await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
+    String box = GetStorage().read("access")??"";
+    try{
+     bool isExchange = await PangeaServices.isExchange(context, box, spaceId);
+     print(isExchange);
+     isExchange?VRouter.of(context).to('/exchange_profile', queryParameters: {"id": spaceId}):VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
+    }catch(e){
+      Fluttertoast.showToast(msg: "Unable to find class Info");
+    //  VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
+    }
 
-    VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
-    //VRouter.of(context).toSegments(['classes', spaceId]);
+    ;
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
@@ -566,11 +575,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   PangeaControllers getxController = Get.put(PangeaControllers());
 
   canCreateRoom() {
-    if (activeSpacesEntry.getSpace(context) == null) {
-      getxController.classInfoModel.value = null;
-    }
-    if (getxController.classInfoModel.value != null && _activeSpacesEntry != null) {
-      return getxController.classInfoModel.value!.permissions.isCreateRooms
+    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
+      return getxController.classInfoModel.value!.permissions.isCreateRooms && activeSpacesEntry.getSpace(context) != null
           ? IconButton(
               onPressed: () {
                 activeSpacesEntry.getSpace(context) == null
@@ -581,23 +587,18 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
               },
               icon: const Icon(Icons.add))
           : Container();
-    } else {
-      return IconButton(
-          onPressed: () {
-            VRouter.of(context).to('/newgroup');
-          },
-          icon: const Icon(Icons.add));
     }
+    return IconButton(
+        onPressed: () {
+          VRouter.of(context).to('/newgroup');
+        },
+        icon: const Icon(Icons.add));
   }
 
   canAddPeople() {
-    if (activeSpacesEntry.getSpace(context) == null) {
-      getxController.classInfoModel.value = null;
-    }
-
-    if (getxController.classInfoModel.value != null) {
+    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
       log("Space here");
-      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass
+      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass && activeSpacesEntry.getSpace(context) != null
           ? IconButton(
               onPressed: () {
                 activeSpacesEntry.getSpace(context) == null
@@ -608,15 +609,12 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
               },
               icon: const Icon(Icons.add))
           : Container());
-    } else {
-      log("No space");
-
-      return IconButton(
-          onPressed: () {
-            VRouter.of(context).to('/newprivatechat');
-          },
-          icon: const Icon(Icons.add));
     }
+    return IconButton(
+        onPressed: () {
+          VRouter.of(context).to('/newprivatechat');
+        },
+        icon: const Icon(Icons.add));
   }
 
   @override

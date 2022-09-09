@@ -68,7 +68,8 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     super.initState();
     textFieldFocus.addListener(setHideFab);
 
-    Future.delayed(Duration(seconds: 1)).whenComplete(() => classId = VRouter.of(context).queryParameters['classId'].toString());
+    Future.delayed(Duration(seconds: 1)).whenComplete(
+        () => VRouter.of(context).queryParameters['classId'] != null ? classId = VRouter.of(context).queryParameters['classId'].toString() : "");
   }
 
   @override
@@ -84,21 +85,6 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     final matrix = Matrix.of(context);
     String className = classId.isNotEmpty ? matrix.client.getRoomById(classId)!.displayname : "";
     Fluttertoast.showToast(msg: "Functionality under process");
-    print("CreatePrivateChat :  ${{
-      "mxid": controller.text,
-      "initialState": [
-        sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: "").toJson().toString(),
-        sdk.StateEvent(content: {
-          "via": ["matrix.staging.pangea.chat"],
-          "canonical": true
-        }, type: EventTypes.spaceParent, stateKey: classId)
-            .toJson()
-            .toString(),
-        sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility).toJson().toString()
-      ],
-      "enableEncryption": false,
-      "waitForSync": false
-    }}");
 
     matrix.client.getDisplayName(controller.text).then((value) => log("User Name: ${value.toString()}"));
 
@@ -141,26 +127,12 @@ class NewPrivateChatController extends State<NewPrivateChat> {
             "#" +
             random.nextInt(9999).toString(),
       ),
-      // matrix.client.startDirectChat(controller.text,
-      //     initialState: [
-      //       sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
-      //       sdk.StateEvent(
-      //         content: {
-      //           "via": ["matrix.staging.pangea.chat"],
-      //           "canonical": true
-      //         },
-      //         type: EventTypes.spaceParent,
-      //         stateKey: classId,
-      //       ),
-      //       sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility),
-      //     ],
-      //     enableEncryption: false,
-      //     waitForSync: false),
     );
     if (roomID.result != null) {
       if (kDebugMode) {
-        print(roomID.result);
+        print("Room id:" + roomID.result!);
       }
+      VRouter.of(context).pop();
       Fluttertoast.showToast(msg: "Created Successfully");
     }
     if (roomID == null) {

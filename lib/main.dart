@@ -32,12 +32,6 @@ import 'widgets/matrix.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
-GoogleSignIn googleSignIn = GoogleSignIn(
-  clientId: '89787311001-k1tnd3k6tfen88pmqpv4v4dgndepmgli.apps.googleusercontent.com',
-  scopes: <String>[
-    'email',
-  ],
-);
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);

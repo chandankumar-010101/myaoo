@@ -87,28 +87,7 @@ class ChatListView extends StatelessWidget {
                       : null,
                 );
               },
-            ),
-            // floatingActionButton: selectMode == SelectMode.normal
-            //     ? controller.activeSpaceId != null && controller.activeSpaceId!.isNotEmpty
-            //         ? Padding(
-            //             padding: showSpaces ? const EdgeInsets.only(bottom: 64.0) : const EdgeInsets.all(0),
-            //             child: KeyBoardShortcuts(
-            //               child: FloatingActionButton.extended(
-            //                 isExtended: controller.scrolledToTop,
-            //                 onPressed: () => VRouter.of(context)
-            //                     .to('/newprivatechat', queryParameters: {"class_id": controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
-            //                 icon: const Icon(CupertinoIcons.chat_bubble),
-            //                 label: Text(L10n.of(context)!.newChat),
-            //               ),
-            //               keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyN},
-            //               onKeysPressed: () => VRouter.of(context)
-            //                   .to('/newprivatechat', queryParameters: {"class_id": controller.activeSpacesEntry.getSpace(context)!.id.toString()}),
-            //               helpLabel: L10n.of(context)!.newChat,
-            //             ),
-            //           )
-            //         : Container()
-            //     : Container(),
-            bottomNavigationBar: const SafeArea(
+            ),    bottomNavigationBar: const SafeArea(
               child: ConnectionStatusHeader(),
             ),
           ),

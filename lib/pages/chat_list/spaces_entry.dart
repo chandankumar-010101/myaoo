@@ -71,7 +71,7 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#")).toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && !room.isSpace).toList();
   }
 
   @override

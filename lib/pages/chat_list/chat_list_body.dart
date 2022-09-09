@@ -179,7 +179,10 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                   .isNotEmpty
               ? StoriesHeader(
                   controller: widget.controller,
-                  spaceStories: rooms,
+                  spaceStories: widget.controller.activeSpacesEntry
+                      .getRooms(context)
+                      .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+                      .toList(),
                 )
               : Container(),
           ExpansionPanelList(
@@ -256,7 +259,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                             // Todo: Style needs to be updated
                           ),
                         ),
-                        Obx(() => widget.controller.canCreateRoom()),
+                        widget.controller.canCreateRoom(),
                       ],
                     )),
                 body: ListView.builder(

@@ -34,4 +34,7 @@ class ApiUrls {
   static String send_email_link = Environment.baseAPI+"/class/invite/email";
   static String exchangeAcceptRequest = Environment.baseAPI+"/class/exchange/accept";
   static String teacherAllClass = Environment.baseAPI+"/class/get_class_by_teacher";
+
+  static String isExchange = Environment.baseAPI+"/class/get_exchange?exchange_pangea_id=";
+
 }

@@ -273,35 +273,11 @@ class LoginController extends State<Login> {
   String _contactText = '';
 
 
-  Future<void> handleSignIn() async {
-    try {
-      var result =   await  googleSignIn.signIn();
-      var googleKey = await result!.authentication;
-      print(googleKey.idToken);
-      await showFutureLoadingDialog(
-        context: context,
-        future: () => Matrix.of(context).getLoginClient().login(
-          LoginType.mLoginToken,
-          token: googleKey.idToken,
-          initialDeviceDisplayName: PlatformInfos.clientName,
-        ),
-      );
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> handleSignOut() => googleSignIn.disconnect();
 
   @override
   void initState() {
     super.initState();
-    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      setState(() {
-        _currentUser = account;
-      });
-    });
-    googleSignIn.signInSilently();
+
   }
 
 
