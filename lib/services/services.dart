@@ -799,6 +799,36 @@ class PangeaServices {
     }
   }
 
+
+
+  static Future<bool> isExchange(
+      BuildContext context, String accessToken, String exchangeId) async {
+    try {
+      if (accessToken.isNotEmpty) {
+        final value = await http.get(
+          Uri.parse(ApiUrls.isExchange + exchangeId),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $accessToken",
+          },
+        );
+        if (value.statusCode == 200 || value.statusCode == 201) {
+          //print("Hello");
+         final data = jsonDecode(value.body);
+         return data["is_exchange"];
+        } else {
+          ApiException.exception(
+              statusCode: value.statusCode, body: value.body, context: context);
+          throw Exception("${value.statusCode}");
+        }
+      } else {
+        throw Exception("Access token or Room ID is empty".toString());
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   //------------------------------------user Account----------------------------------//
 
 
@@ -1026,4 +1056,8 @@ class PangeaServices {
       throw Exception(e.toString());
     }
   }
+
+
+
+
 }

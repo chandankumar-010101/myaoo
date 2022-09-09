@@ -11,6 +11,7 @@ import 'package:pangeachat/pages/class_join/join_with_link.dart';
 import 'package:pangeachat/pages/class_profile/class_profile.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
+import 'package:pangeachat/pages/exchange_profile/exchange_profile_view.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
 import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart';
 import 'package:pangeachat/pages/login/login.dart';
@@ -49,6 +50,7 @@ import 'package:vrouter/vrouter.dart';
 import '../home_page.dart';
 import '../pages/class_join/join_with_code.dart';
 import '../pages/class_profile/class_profile_view.dart';
+import '../pages/exchange_profile/exchage_profile.dart';
 import '../pages/language_selection_screen/language_selection.dart';
 import '../pages/new_class/invite_email_view.dart';
 import '../pages/new_class/new_class.dart';
@@ -250,6 +252,10 @@ class AppRoutes {
                     ),
                   ],
                 ),
+                VWidget(
+                  path: '/exchange_profile',
+                  widget: ExchangeProfile(),
+                ),
 
                 VWidget(path: '/newclass', widget: const NewClass(), buildTransition: _fadeTransition, stackedRoutes: [
                   VWidget(
@@ -281,6 +287,7 @@ class AppRoutes {
                   path: '/request_to_exchange',
                   widget: RequestToExchange(),
                 ),
+
                 VWidget(
                   path: '/class_analytics',
                   widget: ClassAnalyticsScreen(),

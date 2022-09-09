@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -103,9 +104,17 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   void editSpace(BuildContext context, String spaceId) async {
     await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
+    String box = GetStorage().read("access")??"";
+    try{
+     bool isExchange = await PangeaServices.isExchange(context, box, spaceId);
+     print(isExchange);
+     isExchange?VRouter.of(context).to('/exchange_profile', queryParameters: {"id": spaceId}):VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
+    }catch(e){
+      Fluttertoast.showToast(msg: "Unable to find class Info");
+    //  VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
+    }
 
-    VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
-    //VRouter.of(context).toSegments(['classes', spaceId]);
+    ;
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
