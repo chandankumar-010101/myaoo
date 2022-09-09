@@ -923,7 +923,10 @@ class PangeaServices {
 
 
   static ExchangeAcceptRequest(
-      String roomId, String teacherName) async {
+      String roomId,
+      String teacherName,
+      String exchangeId,
+      ) async {
     try {
 
       Map<String,dynamic>data={
@@ -931,6 +934,7 @@ class PangeaServices {
         "pangea_class_room_id": roomId,
         "teacher_id": box.read("clientID"),//teacherName,
         "is_accepted":true,
+        "exchange_pangea_id": exchangeId,
       };
       var result = await http.post(Uri.parse(ApiUrls.exchangeAcceptRequest),
           headers: {
@@ -941,6 +945,7 @@ class PangeaServices {
 
       if (result.statusCode == 200 || result.statusCode == 201) {
         print("confirm value ${result.body}");
+
       } else {
         if (kDebugMode) {
           print("Unable to fetch user age");
@@ -953,7 +958,7 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch user age");
+      Fluttertoast.showToast(msg: "Error: unable to confirm request");
       throw Exception("Error: unable to confirm request");
     }
   }

@@ -195,155 +195,163 @@ class UrlLauncher {
       }
     } else if (identityParts.primaryIdentifier.sigil == '@') {
       if (requestExchange) {
+        if(rid.isNotEmpty && roomId!=null && receivedroomID.isNotEmpty){
+          final roomID = await showFutureLoadingDialog(
+            context: context,
+            future: () => matrix.client.createRoom(
+              invite: [rid],
+              preset: sdk.CreateRoomPreset.privateChat,
+              isDirect: true,
+              initialState: [
+                sdk.StateEvent(
+                  content: {
+                    "guest_access": "can_join",
+                  },
+                  type: EventTypes.GuestAccess,
+                  stateKey: "",
+                ),
+              ],
 
-        final roomID = await showFutureLoadingDialog(
-          context: context,
-          future: () => matrix.client.createRoom(
-            invite: [rid],
-            preset: sdk.CreateRoomPreset.privateChat,
-            isDirect: true,
-            initialState: [
-              sdk.StateEvent(
-                content: {
-                  "guest_access": "can_join",
-                },
-                type: EventTypes.GuestAccess,
-                stateKey: "",
-              ),
-            ],
+              // creationContent: {'type': RoomCreationTypes.mSpace},
+              visibility: sdk.Visibility.private,
+              roomAliasName:
+              rid.split(":").first
+                  .replaceAll("@", "")
+                  .substring(0, 2)+"private"  +
+                  "-" +
+                  matrix.client.userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "")
+                      .substring(0, 2)+"private"  +
+                  "#" +
+                  random.nextInt(9999).toString(),
+              name: rid.split(":").first.replaceAll("@", "").substring(0, 6) +
+                  "-" +
+                  matrix.client.userID
+                      .toString()
+                      .split(":")
+                      .first
 
-            // creationContent: {'type': RoomCreationTypes.mSpace},
-            visibility: sdk.Visibility.private,
-            roomAliasName:
-                rid.split(":").first
-                    .replaceAll("@", "")
-                    .substring(0, 2)+"private"  +
-                    "-" +
-                    matrix.client.userID
-                        .toString()
-                        .split(":")
-                        .first
-                        .replaceAll("@", "")
-                        .substring(0, 2)+"private"  +
-                    "#" +
-                    random.nextInt(9999).toString(),
-            name: rid.split(":").first.replaceAll("@", "").substring(0, 6) +
-                "-" +
-                matrix.client.userID
-                    .toString()
-                    .split(":")
-                    .first
-
-                    .replaceAll("@", "")
-                    .substring(0, 2)+"private" +
-                "#" +
-                random.nextInt(9999).toString(),
-          ),
-        );
-        if (roomID.result != null) {
-          String userId = Matrix.of(context).client.userID ?? "";
-          if (userId.isNotEmpty) {
-            final String initial_url =
-            kIsWeb ? html.window.origin! : Environment.frontendURL;
+                      .replaceAll("@", "")
+                      .substring(0, 2)+"private" +
+                  "#" +
+                  random.nextInt(9999).toString(),
+            ),
+          );
+          if (roomID.result != null) {
+            String userId = Matrix.of(context).client.userID ?? "";
+            if (userId.isNotEmpty) {
+              final String initial_url =
+              kIsWeb ? html.window.origin! : Environment.frontendURL;
 
 
-            final client = Matrix.of(context).client;
-            await client.getRoomById(roomID.result!)!.sendTextEvent(initial_url+"/#"+"/request_to_exchange?id=$userId&room_id=$roomId&r_id=$rid&receviedroom_id=$receivedroomID").then((value){
-              VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(msg: " Request Sent Successfully");
-            }).catchError((e){
-              if (kDebugMode) {
-                print(e);
-              }
-              Fluttertoast.showToast(msg: " Unable to Sent Message");
-            });
+              final client = Matrix.of(context).client;
+              await client.getRoomById(roomID.result!)!.sendTextEvent(initial_url+"/#"+"/request_to_exchange?id=$userId&room_id=$roomId&r_id=$rid&receviedroom_id=$receivedroomID").then((value){
+                VRouter.of(context).to("/rooms");
+                Fluttertoast.showToast(msg: " Request Sent Successfully");
+              }).catchError((e){
+                if (kDebugMode) {
+                  print(e);
+                }
+                Fluttertoast.showToast(msg: " Unable to Sent Message");
+              });
 
-            return;
+              return;
+            }
+
           }
-
+          if (roomID == null) {
+            VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+          }
         }
-        if (roomID == null) {
-          VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+        else{
+          Fluttertoast.showToast(msg: "Unable to find exchnage info");
         }
       }
       else if (requestToEnroll) {
+        if(roomId !=null){
+          final roomID = await showFutureLoadingDialog(
+            context: context,
+            future: () => matrix.client.createRoom(
+              invite: [identityParts.primaryIdentifier],
+              preset: sdk.CreateRoomPreset.privateChat,
+              isDirect: true,
+              initialState: [
+                sdk.StateEvent(
+                  content: {
+                    "guest_access": "can_join",
+                  },
+                  type: EventTypes.GuestAccess,
+                  stateKey: "",
+                ),
+              ],
+              // creationContent: {'type': RoomCreationTypes.mSpace},
+              visibility: sdk.Visibility.private,
+              roomAliasName: identityParts.primaryIdentifier
+                  .split(":")
+                  .first
+                  .replaceAll("@", "")
+                  .substring(0, 6) +
+                  "-" +
+                  matrix.client.userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "")
+                      .substring(0, 2)+"private" +
+                  "#" +
+                  random.nextInt(9999).toString(),
+              name: identityParts.primaryIdentifier
+                  .split(":")
+                  .first
+                  .replaceAll("@", "")
+                  .substring(0, 2)+"private"  +
+                  "-" +
+                  matrix.client.userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "")
+                      .substring(0, 2)+"private"  +
+                  "#" +
+                  random.nextInt(9999).toString(),
+            ),
+          );
+          if (roomID.result != null) {
+            String userId = Matrix.of(context).client.userID ?? "";
+            if (userId.isNotEmpty) {
 
-        final roomID = await showFutureLoadingDialog(
-          context: context,
-          future: () => matrix.client.createRoom(
-            invite: [identityParts.primaryIdentifier],
-            preset: sdk.CreateRoomPreset.privateChat,
-            isDirect: true,
-            initialState: [
-              sdk.StateEvent(
-                content: {
-                  "guest_access": "can_join",
-                },
-                type: EventTypes.GuestAccess,
-                stateKey: "",
-              ),
-            ],
-            // creationContent: {'type': RoomCreationTypes.mSpace},
-            visibility: sdk.Visibility.private,
-            roomAliasName: identityParts.primaryIdentifier
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 6) +
-                "-" +
-                matrix.client.userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 2)+"private" +
-                "#" +
-                random.nextInt(9999).toString(),
-            name: identityParts.primaryIdentifier
-                    .split(":")
-                .first
-                .replaceAll("@", "")
-                .substring(0, 2)+"private"  +
-                "-" +
-                matrix.client.userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 2)+"private"  +
-                "#" +
-                random.nextInt(9999).toString(),
-          ),
-        );
-        if (roomID.result != null) {
-          String userId = Matrix.of(context).client.userID ?? "";
-          if (userId.isNotEmpty) {
+              final String initial_url =
+              kIsWeb ? html.window.origin! : Environment.frontendURL;
+              final client = Matrix.of(context).client;
+              await client.getRoomById(roomID.result!)!.sendTextEvent(initial_url +
+                  "/#" +
+                  "/request_to_enroll?id=$userId&room_id=$roomId")
+                  .then((value) {
+                VRouter.of(context).to("/rooms");
+                Fluttertoast.showToast(msg: " Request Sent Successfully");
+                // VRouter.of(context).toSegments(['rooms', roomID.result!]);
+                // Navigator.of(context, rootNavigator: false).pop();
+              }).catchError((e) {
+                if (kDebugMode) {
+                  print(e);
+                }
+                Fluttertoast.showToast(msg: " Unable to Sent Message");
+              });
+              return;
+            }
+            else{
 
-            final String initial_url =
-            kIsWeb ? html.window.origin! : Environment.frontendURL;
-            final client = Matrix.of(context).client;
-            await client.getRoomById(roomID.result!)!.sendTextEvent(initial_url +
-                "/#" +
-                "/request_to_enroll?id=$userId&room_id=$roomId")
-                .then((value) {
-              VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(msg: " Request Sent Successfully");
-              // VRouter.of(context).toSegments(['rooms', roomID.result!]);
-              // Navigator.of(context, rootNavigator: false).pop();
-            }).catchError((e) {
-              if (kDebugMode) {
-                print(e);
-              }
-              Fluttertoast.showToast(msg: " Unable to Sent Message");
-            });
-            return;
+            }
           }
-          else{
-
+          if (roomID == null) {
+            VRouter.of(context).toSegments(
+                ['rooms', roomID.result!, 'details']);
           }
-        }
-        if (roomID == null) {
-          VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+        }else{
+          Fluttertoast.showToast(msg: "Unable to find Class Id");
         }
       } else {
         await showModalBottomSheet(

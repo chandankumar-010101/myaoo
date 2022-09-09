@@ -13,7 +13,7 @@ import '../../config/app_config.dart';
 import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
 import 'package:matrix/matrix.dart' as sdk;
-var box = GetStorage();
+
 class RequestToExchange extends StatefulWidget {
   const RequestToExchange({Key? key}) : super(key: key);
 
@@ -22,7 +22,7 @@ class RequestToExchange extends StatefulWidget {
 }
 
 class _RequestToExchangeState extends State<RequestToExchange> {
-
+  var box = GetStorage();
   SpacesEntry? _activeSpacesEntry;
   SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
       ? DirectChatsSpacesEntry()
@@ -58,9 +58,6 @@ class _RequestToExchangeState extends State<RequestToExchange> {
       Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
 
 
-
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -77,7 +74,7 @@ class _RequestToExchangeState extends State<RequestToExchange> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("Reqest an Exchange"),
+        title: const Text("Request to Exchange"),
       ),
       body: FutureBuilder(
         future: _waitForFirstSync(),
@@ -114,7 +111,8 @@ class RequestToExchangePopUp extends StatefulWidget {
 }
 
 class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
-  List participantlist=[];
+  var box = GetStorage();
+  List<String> participantlist=[];
   submitAction() async {
     try {
       String className;
@@ -125,7 +123,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
       String disc;
       String targetLanguage;
       String sourceLanguage;
-      bool publicGroup=true;
+      bool publicGroup=false;
       bool openEnrollment;
       bool openToExchange;
 
@@ -154,7 +152,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
       final roomID = await showFutureLoadingDialog(
         context: context,
         future: () => matrix.client.createRoom(
-          invite: [widget.id.toString()],
+          invite: participantlist,
 
           preset: publicGroup
               ? sdk.CreateRoomPreset.publicChat
@@ -171,30 +169,10 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
         if (kDebugMode) {
           print(roomID.result);
         }
-        await PangeaServices.createClass(
-          context: context,
-          isPublic: true,
-          isSharePhoto: true,
-          isCreateRooms: true,
-          isShareFiles: true,
-          isShareVideo: true,
-          isCreateStories: true,
-          isShareLocation: true,
-          isOpenExchange: true,
-          oneToOneChatExchange: true,
-          isOpenEnrollment: true,
-          isCreateRoomsExchange: true,
-          oneToOneChatClass: true,
-          className: className.toString(),
-          languageLevel: languageLevel,
-          city: cityName.toString(),
-          roomId: roomID.result!,
-          desc: disc.toString(),
-          country: countryName,
-          dominantLanguage: sourceLanguage,
-          targetLanguage: targetLanguage,
-          schoolName: schoolName.toString(),
-        );
+
+        PangeaServices.ExchangeAcceptRequest(widget.receivedroomID,widget.r_id,roomID.result!.toString());
+
+
       }
       if (roomID == null) {
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
@@ -209,41 +187,75 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
 
     }
   }
+
   getparticitpants()async{
-    Room? room2=Matrix.of(context).client.getRoomById(widget.receivedroomID);
-    List<User> user=await room2!.requestParticipants();
-    user.where((element){
-      for(int i=0;i<room2!.summary!.mJoinedMemberCount!;i++){
-        element.displayName;
-        print("object");
-        print(element.displayName);
-        print("object");
+    print(widget.receivedroomID);
+    Room? room2=Matrix.of(context).client.getRoomById(widget.roomId);
+
+    final List<User> user=await room2!.requestParticipants();
+    int? count  =room2.summary.mJoinedMemberCount;
+    for(int i=0;i<count!;i++){
+      user[i].id;
+
+      if(participantlist.contains(user[i].id)){
+
+      }else{
+        participantlist.add(user[i].id);
       }
-      element.displayName;
-      return true;
-
-
-    });
-
-    for(int i=0;i<room2!.summary!.mJoinedMemberCount!;i++){
 
     }
+    Room? room3=Matrix.of(context).client.getRoomById(widget.receivedroomID);
+
+    List<User> user1=await room3!.requestParticipants();
+    int? count1  =room3.summary.mJoinedMemberCount;
+    for(int i=0;i<count1!;i++){
+      user1[i].id;
+      if(participantlist.contains(user1![i].id)){
+      }else{
+        participantlist.add(user1[i].id);
+      }
+    }
   }
+
+
+  ///load flag to the UI
+  fetchFlag(FetchClassInfoModel data, String url) {
+    try {
+      String path = url + data.flags[1].languageFlag.toString() ?? "";
+      print(path);
+      return path.isNotEmpty
+          ? SizedBox(
+        width: 20,
+        height: 20,
+        child: Image.network(path),
+      )
+          : Container();
+    } catch (e) {
+      return Container();
+    }
+  }
+
+  fetchFlag2(FetchClassInfoModel data, String url) {
+    String path = url + data.flags[0].languageFlag.toString();
+    print(path);
+    return SizedBox(width: 20, height: 20, child: Image.network(path));
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(box.read("access"));
     getparticitpants();
     Size size = MediaQuery.of(context).size;
     String basePath = Environment.baseAPI;
     var data = basePath.split("/api/v1");
     String url = data[0];
-
     List date1=widget.id.split(":");
     List date2=date1[0].split("@");
 
 
 
 
-    List<Room> space = widget.spaces.where((i) => i.id == widget.receivedroomID).toList();
+    List<Room> space = widget.spaces.where((i) => i.id == widget.roomId).toList();
     if (box.read("clientID")==widget.r_id) {
       return FutureBuilder(
         future: PangeaServices.fetchExchangeClassInfo(context, widget.receivedroomID),
@@ -252,14 +264,12 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
             return Center(child: Text(snapshot.error.toString()));
           } else if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data! as FetchClassInfoModel;
-
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Row(
                       mainAxisAlignment: size.width >= 1000
                           ? MainAxisAlignment.start
@@ -271,8 +281,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                               margin: const EdgeInsets.only(top: 10.0),
                               child: data.profilePic.isNotEmpty
                                   ? CachedNetworkImage(
-                                imageUrl:
-                                data.profilePic,
+                                imageUrl: data.profilePic.toString(),
                                 fit: BoxFit.cover,
                                 color: Theme.of(context)
                                     .colorScheme
@@ -282,8 +291,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                                     : Theme.of(context)
                                     .colorScheme
                                     .onPrimary,
-                                imageBuilder:
-                                    (context, imageProvider) {
+                                imageBuilder: (context, imageProvider) {
                                   return Container(
                                     height: 90,
                                     width: 90,
@@ -296,9 +304,8 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                               )
                                   : Icon(
                                 Icons.people,
-                                size: 40,
-                                color:
-                                Theme.of(context).primaryColor,
+                                size: 60,
+                                color: Theme.of(context).primaryColor,
                               ),
                               decoration: BoxDecoration(
                                   border: Border.all(
@@ -344,7 +351,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              data.className ?? "Class Name",
+                              data.className,
                               style: const TextStyle().copyWith(
                                   color: Theme.of(context)
                                       .textTheme
@@ -373,7 +380,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                                   size: 20.0,
                                 ),
                                 Text(
-                                  data.city ?? "Add City",
+                                  data.city,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -497,10 +504,8 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                           children: [
                             Row(
                                 mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Source Language",
@@ -542,22 +547,16 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Image.network(url +
-                                          data.flags[0].languageFlag
-                                              .toString())),
+                                  fetchFlag2(data, url)
                                 ]),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage ?? "Language",
+                                  data.dominantLanguage,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -581,17 +580,12 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Image.network(url +
-                                          data.flags[0].languageFlag
-                                              .toString())),
+                                  fetchFlag(data, url),
                                   const SizedBox(
                                     width: 5,
                                   ),
                                   Text(
-                                    data.targetLanguage ?? "Language",
+                                    data.targetLanguage,
                                     style: const TextStyle().copyWith(
                                         color: Theme.of(context)
                                             .textTheme
@@ -673,26 +667,18 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                             ),
                             onPressed: ()async {
                               final room = Matrix.of(context).client.getRoomById(widget.roomId);
-                              final members = Matrix.of(context).client.getRoomById(widget.roomId)?.requestParticipants(
-                            );
-                            print(members!);
+                              final members = Matrix.of(context).client.getRoomById(widget.roomId)?.requestParticipants();
                               int? count=room!.summary!.mJoinedMemberCount;
-
-                              for(int i=0;i<count!;i++) {
-                                print(members!.asStream().toList());
-                              }
-
-
-
-                              var className="7${room!.displayname} / ${data.className}";
-                              String cityName = "${room!.displayname}/${data.className}";
-                              String  countryName = "${room!.displayname}/${data.country}";
+                              getparticitpants();
+                              var className="${room.displayname}/1${data.className}";
+                              String cityName = "${room.displayname}/${data.className}";
+                              String  countryName = "${room.displayname}/${data.country}";
                               int  languageLevel = data.languageLevel;
-                              String   schoolName = "${room!.displayname}/${data.schoolName}";
-                              String  disc = "${room!.displayname}/${data.description}";
-                              String   targetLanguage = "${room!.displayname}/${data.targetLanguage}";
-                              String  sourceLanguage = "${room!.displayname}/${data.dominantLanguage}";
-                              const bool   publicGroup = true;
+                              String   schoolName = "${room.displayname}/${data.schoolName}";
+                              String  disc = "${room.displayname}/${data.description}";
+                              String   targetLanguage = "${room.displayname}/${data.targetLanguage}";
+                              String  sourceLanguage = "${room.displayname}/${data.dominantLanguage}";
+                              const bool   publicGroup = false;
                               const bool   openEnrollment = true;
                               const bool   openToExchange = true;
 
@@ -761,48 +747,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
                             ),
                           ),
                         ),
-                        // const SizedBox(
-                        //   width: 10,
-                        //   height: 10,
-                        // ),
-                        // SizedBox(
-                        //   width: 200,
-                        //   child: OutlinedButton(
-                        //     style: OutlinedButton.styleFrom(
-                        //       shape: RoundedRectangleBorder(
-                        //           borderRadius:
-                        //           BorderRadius.circular(
-                        //               25.0)),
-                        //       side: BorderSide(
-                        //         width: 2,
-                        //         color: Theme.of(context)
-                        //             .colorScheme
-                        //             .onPrimary ==
-                        //             Colors.white
-                        //             ? Theme.of(context)
-                        //             .primaryColor
-                        //             : Theme.of(context)
-                        //             .colorScheme
-                        //             .onPrimary,
-                        //       ),
-                        //     ),
-                        //     onPressed: () {
-                        //       UrlLauncher(context,
-                        //           'https://matrix.to/#/${id.toString()}')
-                        //           .openMatrixToUrl();
-                        //     },
-                        //     child: Text(
-                        //       "Message ${date2}",
-                        //       style: const TextStyle().copyWith(
-                        //           color: Theme.of(context)
-                        //               .textTheme
-                        //               .bodyText1!
-                        //               .color,
-                        //           fontWeight: FontWeight.w400,
-                        //           fontSize: 12),
-                        //     ),
-                        //   ),
-                        // ),
+
                       ],
                     ),
                   )
@@ -818,8 +763,7 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
           }
         },
       ); //;
-    }
-    else {
+    } else {
       return const Center(
         child: Text("You are not authorized for this page."),
       );
@@ -828,3 +772,5 @@ class _RequestToExchangePopUpState extends State<RequestToExchangePopUp> {
 
 
 }
+
+

@@ -21,6 +21,7 @@ import 'package:pangeachat/pages/new_class/language_selection.dart';
 import 'package:pangeachat/pages/new_class/student_permissions.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
+import 'package:pangeachat/pages/request_exchange/request_to_exchange.dart';
 import 'package:pangeachat/pages/request_to_enroll/request_to_enroll.dart';
 import 'package:pangeachat/pages/search/invite_screen.dart';
 import 'package:pangeachat/pages/search/search.dart';
@@ -275,6 +276,10 @@ class AppRoutes {
                 VWidget(
                   path: '/request_to_enroll',
                   widget: RequestToEnroll(),
+                ),
+                VWidget(
+                  path: '/request_to_exchange',
+                  widget: RequestToExchange(),
                 ),
                 VWidget(
                   path: '/class_analytics',
