@@ -8,7 +8,7 @@ class ChoreoState {
   bool isOpen = false;
   ChoreoState(this.controller);
   bool _isEditing = true;
-
+  String originalText = '';
   String? _roomId;
   String get userId => controller.myMatrixClient!.userId;
   List<int> payLoadIds = [];
@@ -29,6 +29,7 @@ class ChoreoState {
       isOpen = true;
       stopEditing();
     });
+    originalText = controller.textController!.value.text;
     controller.step1!.initialize();
   }
 
@@ -49,6 +50,7 @@ class ChoreoState {
     this.currentRoute = ChoreoRoute.INITAL_LOADING;
     payLoadIds = [];
     startEditing();
+    originalText = '';
     closeBar();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart' as sdk;
+import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/new_group/new_group_view.dart';
@@ -26,9 +27,18 @@ class NewGroupController extends State<NewGroup> {
       context: context,
       future: () async {
         final roomId = await client.createGroupChat(
-          preset: publicGroup
-              ? sdk.CreateRoomPreset.publicChat
-              : sdk.CreateRoomPreset.privateChat,
+          initialState: spaceId.isNotEmpty
+              ? [
+                  sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
+                  spaceId != ""
+                      ? sdk.StateEvent(content: {
+                          "via": ["matrix.staging.pangea.chat"],
+                          "canonical": true
+                        }, type: EventTypes.spaceParent, stateKey: spaceId)
+                      : sdk.StateEvent(content: {}, type: "", stateKey: ""),
+                ]
+              : [],
+          preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
           groupName: controller.text.isNotEmpty ? controller.text : null,
           enableEncryption: false,
         );
@@ -40,6 +50,16 @@ class NewGroupController extends State<NewGroup> {
     }
   }
 
+  String spaceId = "";
+
   @override
-  Widget build(BuildContext context) => NewGroupView(this);
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(Duration(seconds: 1)).whenComplete(() => spaceId = VRouter.of(context).queryParameters['spaceId'].toString());
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) => NewGroupView(this, spaceId);
 }

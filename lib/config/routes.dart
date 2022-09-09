@@ -7,8 +7,11 @@ import 'package:pangeachat/pages/chat_encryption_settings/chat_encryption_settin
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_permissions_settings/chat_permissions_settings.dart';
 import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
+import 'package:pangeachat/pages/class_join/join_with_link.dart';
+import 'package:pangeachat/pages/class_profile/class_profile.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/device_settings/device_settings.dart';
+import 'package:pangeachat/pages/exchange_profile/exchange_profile_view.dart';
 import 'package:pangeachat/pages/homeserver_picker/homeserver_picker.dart';
 import 'package:pangeachat/pages/invitation_selection/invitation_selection.dart';
 import 'package:pangeachat/pages/login/login.dart';
@@ -19,7 +22,7 @@ import 'package:pangeachat/pages/new_class/language_selection.dart';
 import 'package:pangeachat/pages/new_class/student_permissions.dart';
 import 'package:pangeachat/pages/new_group/new_group.dart';
 import 'package:pangeachat/pages/new_private_chat/new_private_chat.dart';
-import 'package:pangeachat/pages/request_screen/request_screen_view.dart';
+import 'package:pangeachat/pages/request_exchange/request_to_exchange.dart';
 import 'package:pangeachat/pages/request_to_enroll/request_to_enroll.dart';
 import 'package:pangeachat/pages/search/invite_screen.dart';
 import 'package:pangeachat/pages/search/search.dart';
@@ -45,7 +48,11 @@ import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../home_page.dart';
+import '../pages/class_join/join_with_code.dart';
+import '../pages/class_profile/class_profile_view.dart';
+import '../pages/exchange_profile/exchage_profile.dart';
 import '../pages/language_selection_screen/language_selection.dart';
+import '../pages/new_class/invite_email_view.dart';
 import '../pages/new_class/new_class.dart';
 
 class AppRoutes {
@@ -66,7 +73,7 @@ class AppRoutes {
           stackedRoutes: [
             VWidget(
               path: '/stories/create',
-              widget: const AddStoryPage(),
+              widget: AddStoryPage(),
             ),
             VWidget(
               path: '/stories/:roomid',
@@ -74,7 +81,7 @@ class AppRoutes {
               stackedRoutes: [
                 VWidget(
                   path: 'share',
-                  widget: const AddStoryPage(),
+                  widget: AddStoryPage(),
                 ),
               ],
             ),
@@ -119,26 +126,23 @@ class AppRoutes {
               path: '/newgroup',
               widget: const NewGroup(),
             ),
-            VWidget(
-                path: '/newclass',
-                widget: const NewClass(),
-                stackedRoutes: [
-                  VWidget(
-                    path: 'class_permissions',
-                    widget: const LogViewer(),
-                    buildTransition: _dynamicTransition,
-                  ),
-                  VWidget(
-                    path: 'language',
-                    widget: const ClassLanguage(),
-                    buildTransition: _dynamicTransition,
-                  ),
-                  VWidget(
-                    path: '/students_permissions',
-                    widget: const LogViewer(),
-                    buildTransition: _dynamicTransition,
-                  ),
-                ]),
+            VWidget(path: '/newclass', widget: const NewClass(), stackedRoutes: [
+              VWidget(
+                path: 'class_permissions',
+                widget: const LogViewer(),
+                buildTransition: _dynamicTransition,
+              ),
+              VWidget(
+                path: 'language',
+                widget: const ClassLanguage(),
+                buildTransition: _dynamicTransition,
+              ),
+              VWidget(
+                path: '/students_permissions',
+                widget: const LogViewer(),
+                buildTransition: _dynamicTransition,
+              ),
+            ]),
           ],
         ),
       ];
@@ -160,7 +164,7 @@ class AppRoutes {
                 VWidget(
                   path: '/stories/create',
                   buildTransition: _fadeTransition,
-                  widget: const AddStoryPage(),
+                  widget: AddStoryPage(),
                 ),
                 VWidget(
                   path: '/stories/:roomid',
@@ -169,7 +173,7 @@ class AppRoutes {
                   stackedRoutes: [
                     VWidget(
                       path: 'share',
-                      widget: const AddStoryPage(),
+                      widget: AddStoryPage(),
                     ),
                   ],
                 ),
@@ -223,7 +227,7 @@ class AppRoutes {
                 //Todo classDetails
                 VWidget(
                   path: '/classDetails',
-                  widget: RequestScreenView(),
+                  widget: RequestScreen(),
                   buildTransition: _dynamicTransition,
                   stackedRoutes: [
                     VWidget(
@@ -248,28 +252,28 @@ class AppRoutes {
                     ),
                   ],
                 ),
-
                 VWidget(
-                    path: '/newclass',
-                    widget: const NewClass(),
-                    buildTransition: _fadeTransition,
-                    stackedRoutes: [
-                      VWidget(
-                        path: 'language',
-                        widget: const ClassLanguage(),
-                        buildTransition: _dynamicTransition,
-                      ),
-                      VWidget(
-                        path: 'class_permissions',
-                        widget: const ClassPermissions(),
-                        buildTransition: _dynamicTransition,
-                      ),
-                      VWidget(
-                        path: 'student_permissions',
-                        widget: const StudentPermissions(),
-                        buildTransition: _dynamicTransition,
-                      ),
-                    ]),
+                  path: '/exchange_profile',
+                  widget: ExchangeProfile(),
+                ),
+
+                VWidget(path: '/newclass', widget: const NewClass(), buildTransition: _fadeTransition, stackedRoutes: [
+                  VWidget(
+                    path: 'language',
+                    widget: const ClassLanguage(),
+                    buildTransition: _dynamicTransition,
+                  ),
+                  VWidget(
+                    path: 'class_permissions',
+                    widget: const ClassPermissions(),
+                    buildTransition: _dynamicTransition,
+                  ),
+                  VWidget(
+                    path: 'student_permissions',
+                    widget: const StudentPermissions(),
+                    buildTransition: _dynamicTransition,
+                  ),
+                ]),
                 VWidget(
                   path: '/invite_students',
                   widget: const InviteStudent(),
@@ -280,9 +284,29 @@ class AppRoutes {
                   widget: RequestToEnroll(),
                 ),
                 VWidget(
+                  path: '/request_to_exchange',
+                  widget: RequestToExchange(),
+                ),
+
+                VWidget(
                   path: '/class_analytics',
-                  widget:  ClassAnalyticsScreen(),
+                  widget: ClassAnalyticsScreen(),
                   buildTransition: _fadeTransition,
+                ),
+                VWidget(
+                  path: '/invite_email',
+                  widget: InviteEmail(),
+                  buildTransition: _fadeTransition,
+                ),
+                VWidget(
+                  path: '/join_with_code',
+                  widget: JoinClassWithCode(),
+                  buildTransition: _fadeTransition,
+                ),
+                VWidget(
+                  path: '/join_with_link',
+                  widget: const JoinClassWithLink(),
+                  buildTransition: _dynamicTransition,
                 ),
               ],
             ),
@@ -330,23 +354,18 @@ class AppRoutes {
                       widget: SearchDiscoverView(),
                       buildTransition: _fadeTransition,
                     ),
-                    VWidget(
-                        path: 'connect',
-                        widget: const ConnectPage(),
+                    VWidget(path: 'connect', widget: const ConnectPage(), buildTransition: _fadeTransition, stackedRoutes: [
+                      VWidget(
+                        path: 'login',
+                        widget: const Login(),
                         buildTransition: _fadeTransition,
-                        stackedRoutes: [
-                          VWidget(
-                            path: 'login',
-                            widget: const Login(),
-                            buildTransition: _fadeTransition,
-                          ),
-                          VWidget(
-                            path: 'signup',
-                            widget: const SignupPage(),
-                            buildTransition: _fadeTransition,
-                          ),
-
-                        ]),
+                      ),
+                      VWidget(
+                        path: 'signup',
+                        widget: const SignupPage(),
+                        buildTransition: _fadeTransition,
+                      ),
+                    ]),
                   ],
                 ),
               ],
@@ -387,7 +406,6 @@ class AppRoutes {
             ),
           ],
         ),
-
       ];
 
   List<VRouteElement> get _homeRoutes => [
@@ -402,27 +420,23 @@ class AppRoutes {
               widget: const Login(),
               buildTransition: _fadeTransition,
             ),
-            VWidget(
-                path: 'connect',
-                widget: const ConnectPage(),
+            VWidget(path: 'connect', widget: const ConnectPage(), buildTransition: _fadeTransition, stackedRoutes: [
+              VWidget(
+                path: 'login',
+                widget: const Login(),
                 buildTransition: _fadeTransition,
-                stackedRoutes: [
-                  VWidget(
-                    path: 'login',
-                    widget: const Login(),
-                    buildTransition: _fadeTransition,
-                  ),
-                  VWidget(
-                    path: 'signup',
-                    widget: const SignupPage(),
-                    buildTransition: _fadeTransition,
-                  ),
-                  VWidget(
-                    path: 'lang',
-                    widget: LanguageSelection(),
-                    buildTransition: _fadeTransition,
-                  ),
-                ]),
+              ),
+              VWidget(
+                path: 'signup',
+                widget: const SignupPage(),
+                buildTransition: _fadeTransition,
+              ),
+              VWidget(
+                path: 'lang',
+                widget: LanguageSelection(),
+                buildTransition: _fadeTransition,
+              ),
+            ]),
             VWidget(
               path: 'logs',
               widget: const LogViewer(),
@@ -503,22 +517,18 @@ class AppRoutes {
                   widget: const Login(),
                   buildTransition: _fadeTransition,
                 ),
-                VWidget(
-                    path: 'connect',
-                    widget: const ConnectPage(),
+                VWidget(path: 'connect', widget: const ConnectPage(), buildTransition: _fadeTransition, stackedRoutes: [
+                  VWidget(
+                    path: 'login',
+                    widget: const Login(),
                     buildTransition: _fadeTransition,
-                    stackedRoutes: [
-                      VWidget(
-                        path: 'login',
-                        widget: const Login(),
-                        buildTransition: _fadeTransition,
-                      ),
-                      VWidget(
-                        path: 'signup',
-                        widget: const SignupPage(),
-                        buildTransition: _fadeTransition,
-                      ),
-                    ]),
+                  ),
+                  VWidget(
+                    path: 'signup',
+                    widget: const SignupPage(),
+                    buildTransition: _fadeTransition,
+                  ),
+                ]),
               ],
             ),
           ],
@@ -552,9 +562,7 @@ class AppRoutes {
         ),
       ];
 
-  FadeTransition Function(dynamic, dynamic, dynamic)? get _dynamicTransition =>
-      columnMode ? _fadeTransition : null;
+  FadeTransition Function(dynamic, dynamic, dynamic)? get _dynamicTransition => columnMode ? _fadeTransition : null;
 
-  FadeTransition _fadeTransition(animation1, _, child) =>
-      FadeTransition(opacity: animation1, child: child);
+  FadeTransition _fadeTransition(animation1, _, child) => FadeTransition(opacity: animation1, child: child);
 }

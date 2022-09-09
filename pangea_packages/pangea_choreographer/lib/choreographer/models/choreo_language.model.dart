@@ -10,4 +10,13 @@ class ChoreoLangModel {
     langCode = json['langCode'];
     country = json['country'];
   }
+
+  toJson() {
+    return {
+      'flag': flag,
+      'lang': lang,
+      'langCode': langCode,
+      'country': country
+    };
+  }
 }

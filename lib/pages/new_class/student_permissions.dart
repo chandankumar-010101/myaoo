@@ -28,13 +28,10 @@ class _StudentPermissionsState extends State<StudentPermissions> {
   bool shareLocation = false;
   final box = GetStorage();
 
-  void setOneToOneChatsWithinClass(bool b) =>
-      setState(() => oneToOneChatsWithinClass = b);
-  void setOneToOneChatWithinExchanges(bool b) =>
-      setState(() => oneToOneChatsWithinExchanges = b);
+  void setOneToOneChatsWithinClass(bool b) => setState(() => oneToOneChatsWithinClass = b);
+  void setOneToOneChatWithinExchanges(bool b) => setState(() => oneToOneChatsWithinExchanges = b);
   void setCreateRooms(bool b) => setState(() => createRooms = b);
-  void setCreateRoomsInExchange(bool b) =>
-      setState(() => createRoomsInExchanges = b);
+  void setCreateRoomsInExchange(bool b) => setState(() => createRoomsInExchanges = b);
   void setCreateStories(bool b) => setState(() => createStories = b);
   void setShareVideos(bool b) => setState(() => shareVideos = b);
   void setSharePhotos(bool b) => setState(() => sharePhotos = b);
@@ -72,22 +69,20 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           print("Unable to fetch Data from storage");
           print(e);
         }
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Unable to fetch Data from storage")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to fetch Data from storage"),
+          backgroundColor: Colors.red,
+        ));
         return;
       }
       final matrix = Matrix.of(context);
       final roomID = await showFutureLoadingDialog(
         context: context,
         future: () => matrix.client.createRoom(
-          preset: publicGroup
-              ? sdk.CreateRoomPreset.publicChat
-              : sdk.CreateRoomPreset.privateChat,
+          preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
           creationContent: {'type': RoomCreationTypes.mSpace},
           visibility: publicGroup ? sdk.Visibility.public : null,
-          roomAliasName: publicGroup && className.isNotEmpty
-              ? className.trim().toLowerCase().replaceAll(' ', '_')
-              : null,
+          roomAliasName: publicGroup && className.isNotEmpty ? className.trim().toLowerCase().replaceAll(' ', '_') : null,
           name: className.isNotEmpty ? className : null,
         ),
       );
@@ -127,43 +122,25 @@ class _StudentPermissionsState extends State<StudentPermissions> {
       if (kDebugMode) {
         print(e);
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Something went wrong")));
-
-
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Something went wrong"),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 
   @override
   void initState() {
     super.initState();
-    box.read("oneToOneClass") == null
-        ? oneToOneChatsWithinClass = false
-        : oneToOneChatsWithinClass = box.read("oneToOneClass");
-    box.read("oneToOneExchange") == null
-        ? oneToOneChatsWithinExchanges = false
-        : oneToOneChatsWithinExchanges = box.read("oneToOneExchange");
-    box.read("createRoom") == null
-        ? createRooms = false
-        : createRooms = box.read("createRoom");
-    box.read("createRoomExchange") == null
-        ? createRoomsInExchanges = false
-        : createRoomsInExchanges = box.read("createRoomExchange");
-    box.read("createStories") == null
-        ? createStories = false
-        : createStories = box.read("createStories");
-    box.read("shareVideo") == null
-        ? shareVideos = false
-        : shareVideos = box.read("shareVideo");
-    box.read("sharePhotos") == null
-        ? sharePhotos = false
-        : sharePhotos = box.read("sharePhotos");
-    box.read("shareFiles") == null
-        ? shareFiles = false
-        : shareFiles = box.read("shareFiles");
-    box.read("shareLocation") == null
-        ? shareLocation = false
-        : shareLocation = box.read("shareLocation");
+    box.read("oneToOneClass") == null ? oneToOneChatsWithinClass = false : oneToOneChatsWithinClass = box.read("oneToOneClass");
+    box.read("oneToOneExchange") == null ? oneToOneChatsWithinExchanges = false : oneToOneChatsWithinExchanges = box.read("oneToOneExchange");
+    box.read("createRoom") == null ? createRooms = false : createRooms = box.read("createRoom");
+    box.read("createRoomExchange") == null ? createRoomsInExchanges = false : createRoomsInExchanges = box.read("createRoomExchange");
+    box.read("createStories") == null ? createStories = false : createStories = box.read("createStories");
+    box.read("shareVideo") == null ? shareVideos = false : shareVideos = box.read("shareVideo");
+    box.read("sharePhotos") == null ? sharePhotos = false : sharePhotos = box.read("sharePhotos");
+    box.read("shareFiles") == null ? shareFiles = false : shareFiles = box.read("shareFiles");
+    box.read("shareLocation") == null ? shareLocation = false : shareLocation = box.read("shareLocation");
     box.remove("oneToOneClass");
     box.remove("oneToOneExchange");
     box.remove("createRoom");
@@ -185,9 +162,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                 backgroundColor: Theme.of(context).backgroundColor,
                 title: Text(
                   "Create a Class",
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
-                      fontSize: 14),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.left,
                 ),
@@ -215,17 +190,13 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                   height: size.height * 0.04,
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.1,
-                      vertical: size.height * 0.02),
+                  margin: EdgeInsets.symmetric(horizontal: size.width * 0.1, vertical: size.height * 0.02),
                   width: size.width,
                   height: 40,
                   child: Center(
                     child: Text(
                       "Student Permissions",
-                      style: TextStyle().copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 14,fontWeight: FontWeight.w700),
+                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.left,
                     ),
@@ -244,17 +215,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         SwitchListTile.adaptive(
                           title: Text(
                             "1-to-1 chats within class",
-                            style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                              fontWeight: FontWeight.w700
-
-                            ),
+                            style:
+                                TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                             overflow: TextOverflow.clip,
-
                           ),
                           value: oneToOneChatsWithinClass,
                           onChanged: setOneToOneChatsWithinClass,
@@ -269,12 +232,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "If you allow 1-to-1 chats, your students can send and receive individual chats with other students within your class. Otherwise, they can only chat in rooms.",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -287,15 +245,11 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "1-to-1 chats within exchanges",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
-
                           ),
                           value: oneToOneChatsWithinExchanges,
                           onChanged: setOneToOneChatWithinExchanges,
@@ -310,12 +264,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "If you allow 1-to-1 chats within exchanges, your students can send and receive individual chats with students in exchange-connected classes.",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -328,12 +277,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "Create rooms",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
                           ),
@@ -350,12 +296,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                     padding: EdgeInsets.only(right: 5),
                                     child: Text(
                                       "Toggle this on to allow students to create rooms within your class",
-                                      style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontSize: 14),
+                                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     )),
@@ -367,12 +308,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "Create rooms in exchanges",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
                           ),
@@ -389,12 +327,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Toggle this on to allow students to create rooms within exchanges.",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -407,12 +340,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "Create Stories",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
                           ),
@@ -429,12 +359,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Toggle this on to allow students to create stories.",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -447,12 +372,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "Share Video",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
                           ),
@@ -469,12 +391,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Toggle this on to allow students to share videos chats/rooms",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -486,14 +403,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         SwitchListTile.adaptive(
                           title: Text(
                             "Share Photos",
-                            style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700
-                            ),
+                            style:
+                                TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                             overflow: TextOverflow.clip,
                           ),
                           value: sharePhotos,
@@ -509,12 +420,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Toggle this on to allow students to share photos in chats/rooms.",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -527,12 +433,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "Share Files",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
                           ),
@@ -549,12 +452,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Toggle this on to allow students to share files in chats/rooms",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -567,12 +465,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           title: Text(
                             "Share Location",
                             style: TextStyle().copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                             overflow: TextOverflow.clip,
                           ),
@@ -589,12 +484,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Toggle this on to allow students to share their location in chats/rooms",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -623,12 +513,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Center(
                                   child: Text(
                                     "3/4",
-                                    style: TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 14),
+                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -642,25 +527,14 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   width: 50.0,
                                   height: 50.0,
                                   decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                          : Theme.of(context).colorScheme.onPrimary,
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context)
-                                                  .primaryColorLight
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary)),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                              ? Theme.of(context).primaryColorLight
+                                              : Theme.of(context).colorScheme.onPrimary)),
                                   child: const Icon(
                                     Icons.arrow_right_alt,
                                     color: Colors.white,
@@ -675,46 +549,25 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  VRouter.of(context).to('/classDetails',
-                                      queryParameters: {"id": id});
+                                  VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
                                 },
                                 child: Container(
                                   width: 200,
                                   height: 40,
                                   decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                          : Theme.of(context).colorScheme.onPrimary,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context)
-                                                  .primaryColorLight
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary)),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                              ? Theme.of(context).primaryColorLight
+                                              : Theme.of(context).colorScheme.onPrimary)),
                                   child: Center(
                                     child: Text(
                                       "Cancel",
                                       style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary ==
-                                              Colors.white
-                                              ? Theme.of(context)
-                                              .primaryColorLight
-                                              : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          fontSize: 14),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     ),
@@ -725,26 +578,23 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 onTap: () async {
                                   final result = await showFutureLoadingDialog(
                                     context: context,
-                                    future: () =>
-
-                                        PangeaServices.updateStudentPermission(
-
+                                    future: () => PangeaServices.updateStudentPermission(
                                       classId: id.toString(),
                                       sharePhotos: sharePhotos.toString(),
                                       oneToOneChatsWithinClass: oneToOneChatsWithinClass.toString(),
-                                      createRoomsInExchanges:createRoomsInExchanges.toString(),
+                                      createRoomsInExchanges: createRoomsInExchanges.toString(),
                                       createStories: createStories.toString(),
                                       shareFiles: shareFiles.toString(),
                                       oneToOneChatsWithinExchanges: oneToOneChatsWithinExchanges.toString(),
                                       createRooms: createRooms.toString(),
                                       shareVideos: shareVideos.toString(),
-                                      shareLocation: shareLocation.toString(), context: context,
+                                      shareLocation: shareLocation.toString(),
+                                      context: context,
                                     ),
                                   );
                                   if (result != null) {
                                     print("updated");
-                                    VRouter.of(context).to('/classDetails',
-                                        queryParameters: {"id": id});
+                                    VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
                                     // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                                   }
                                 },
@@ -752,39 +602,19 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                   width: 200,
                                   height: 40,
                                   decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                          : Theme.of(context).colorScheme.onPrimary,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
-                                          color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary ==
-                                                  Colors.white
-                                              ? Theme.of(context)
-                                                  .primaryColorLight
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary)),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                              ? Theme.of(context).primaryColorLight
+                                              : Theme.of(context).colorScheme.onPrimary)),
                                   child: Center(
                                     child: Text(
                                       "Save",
                                       style: TextStyle().copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary ==
-                                              Colors.white
-                                              ? Theme.of(context)
-                                              .primaryColorLight
-                                              : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          fontSize: 14),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     ),

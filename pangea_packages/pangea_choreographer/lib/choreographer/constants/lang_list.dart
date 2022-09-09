@@ -11,6 +11,16 @@ class LangList {
     return lang!;
   }
 
+  static ChoreoLangModel byLangName(String name) {
+    ChoreoLangModel? lang;
+    LangList.all.forEach((element) {
+      if (element.lang?.toLowerCase() == name.trim().toLowerCase()) {
+        lang = element;
+      }
+    });
+    return lang!;
+  }
+
   static List<ChoreoLangModel> get all {
     return [
       {'flag': 'ad', 'lang': 'Catalan', 'langCode': 'ca', 'country': 'Andorra'},

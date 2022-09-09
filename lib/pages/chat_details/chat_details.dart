@@ -28,8 +28,7 @@ class ChatDetailsController extends State<ChatDetails> {
   List<User>? members;
   bool displaySettings = false;
 
-  void toggleDisplaySettings() =>
-      setState(() => displaySettings = !displaySettings);
+  void toggleDisplaySettings() => setState(() => displaySettings = !displaySettings);
 
   String? get roomId => VRouter.of(context).pathParameters['roomid'];
 
@@ -57,8 +56,10 @@ class ChatDetailsController extends State<ChatDetails> {
       future: () => room.setName(input.single),
     );
     if (success.error == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.displaynameHasBeenChanged)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(L10n.of(context)!.displaynameHasBeenChanged),
+        backgroundColor: Colors.green,
+      ));
     }
   }
 
@@ -98,11 +99,8 @@ class ChatDetailsController extends State<ChatDetails> {
       context: context,
       title: L10n.of(context)!.editRoomAliases,
       actions: [
-        if (adminMode)
-          AlertDialogAction(label: L10n.of(context)!.create, key: 'new'),
-        ...aliases.result!
-            .map((alias) => AlertDialogAction(key: alias, label: alias))
-            .toList(),
+        if (adminMode) AlertDialogAction(label: L10n.of(context)!.create, key: 'new'),
+        ...aliases.result!.map((alias) => AlertDialogAction(key: alias, label: alias)).toList(),
       ],
     );
     if (select == null) return;
@@ -184,8 +182,7 @@ class ChatDetailsController extends State<ChatDetails> {
     if (input == null) return;
     await showFutureLoadingDialog(
       context: context,
-      future: () =>
-          room.client.setRoomAlias('#' + input.single + ':' + domain!, room.id),
+      future: () => room.client.setRoomAlias('#' + input.single + ':' + domain!, room.id),
     );
   }
 
@@ -213,33 +210,25 @@ class ChatDetailsController extends State<ChatDetails> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(L10n.of(context)!.groupDescriptionHasBeenChanged)));
+        content: Text(L10n.of(context)!.groupDescriptionHasBeenChanged),
+        backgroundColor: Colors.green,
+      ));
     }
   }
 
   void setGuestAccessAction(GuestAccess guestAccess) => showFutureLoadingDialog(
         context: context,
-        future: () => Matrix.of(context)
-            .client
-            .getRoomById(roomId!)!
-            .setGuestAccess(guestAccess),
+        future: () => Matrix.of(context).client.getRoomById(roomId!)!.setGuestAccess(guestAccess),
       );
 
-  void setHistoryVisibilityAction(HistoryVisibility historyVisibility) =>
-      showFutureLoadingDialog(
+  void setHistoryVisibilityAction(HistoryVisibility historyVisibility) => showFutureLoadingDialog(
         context: context,
-        future: () => Matrix.of(context)
-            .client
-            .getRoomById(roomId!)!
-            .setHistoryVisibility(historyVisibility),
+        future: () => Matrix.of(context).client.getRoomById(roomId!)!.setHistoryVisibility(historyVisibility),
       );
 
   void setJoinRulesAction(JoinRules joinRule) => showFutureLoadingDialog(
         context: context,
-        future: () => Matrix.of(context)
-            .client
-            .getRoomById(roomId!)!
-            .setJoinRules(joinRule),
+        future: () => Matrix.of(context).client.getRoomById(roomId!)!.setJoinRules(joinRule),
       );
 
   void goToEmoteSettings() async {
@@ -247,9 +236,7 @@ class ChatDetailsController extends State<ChatDetails> {
     // okay, we need to test if there are any emote state events other than the default one
     // if so, we need to be directed to a selection screen for which pack we want to look at
     // otherwise, we just open the normal one.
-    if ((room.states['im.ponies.room_emotes'] ?? <String, Event>{})
-        .keys
-        .any((String s) => s.isNotEmpty)) {
+    if ((room.states['im.ponies.room_emotes'] ?? <String, Event>{}).keys.any((String s) => s.isNotEmpty)) {
       VRouter.of(context).to('multiple_emotes');
     } else {
       VRouter.of(context).to('emotes');
@@ -297,9 +284,7 @@ class ChatDetailsController extends State<ChatDetails> {
     MatrixFile file;
     if (PlatformInfos.isMobile) {
       final result = await ImagePicker().pickImage(
-        source: action == AvatarAction.camera
-            ? ImageSource.camera
-            : ImageSource.gallery,
+        source: action == AvatarAction.camera ? ImageSource.camera : ImageSource.gallery,
         imageQuality: 50,
       );
       if (result == null) return;
@@ -308,8 +293,7 @@ class ChatDetailsController extends State<ChatDetails> {
         name: result.path,
       );
     } else {
-      final result =
-          await FilePickerCross.importFromStorage(type: FileTypeCross.image);
+      final result = await FilePickerCross.importFromStorage(type: FileTypeCross.image);
       if (result.fileName == null) return;
       file = MatrixFile(
         bytes: result.toUint8List(),
@@ -324,8 +308,7 @@ class ChatDetailsController extends State<ChatDetails> {
 
   void requestMoreMembersAction() async {
     final room = Matrix.of(context).client.getRoomById(roomId!);
-    final participants = await showFutureLoadingDialog(
-        context: context, future: () => room!.requestParticipants());
+    final participants = await showFutureLoadingDialog(context: context, future: () => room!.requestParticipants());
     if (participants.error == null) {
       setState(() => members = participants.result);
     }

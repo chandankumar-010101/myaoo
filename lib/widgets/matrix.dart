@@ -20,6 +20,7 @@ import 'package:matrix/encryption.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/services/api_exception.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/utils/client_manager.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
@@ -70,8 +71,7 @@ class Matrix extends StatefulWidget {
   MatrixState createState() => MatrixState();
 
   /// Returns the (nearest) Client instance of your application.
-  static MatrixState of(BuildContext context) =>
-      Provider.of<MatrixState>(context, listen: false);
+  static MatrixState of(BuildContext context) => Provider.of<MatrixState>(context, listen: false);
 }
 
 class MatrixState extends State<Matrix> with WidgetsBindingObserver {
@@ -99,18 +99,13 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     return widget.clients[_activeClient];
   }
 
-  bool get webrtcIsSupported =>
-      kIsWeb ||
-      PlatformInfos.isMobile ||
-      PlatformInfos.isWindows ||
-      PlatformInfos.isMacOS;
+  bool get webrtcIsSupported => kIsWeb || PlatformInfos.isMobile || PlatformInfos.isWindows || PlatformInfos.isMacOS;
 
   VoipPlugin? voipPlugin;
 
   bool get isMultiAccount => widget.clients.length > 1;
 
-  int getClientIndexByMatrixId(String matrixId) =>
-      widget.clients.indexWhere((client) => client.userID == matrixId);
+  int getClientIndexByMatrixId(String matrixId) => widget.clients.indexWhere((client) => client.userID == matrixId);
 
   late String currentClientSecret;
   RequestTokenResponse? currentThreepidCreds;
@@ -159,8 +154,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
               ? -1
               : a.bundle!.priority!.compareTo(b.bundle!.priority!));
     }
-    return resBundles
-        .map((k, v) => MapEntry(k, v.map((vv) => vv.client).toList()));
+    return resBundles.map((k, v) => MapEntry(k, v.map((vv) => vv.client).toList()));
   }
 
   bool get hasComplexBundles => accountBundles.values.any((v) => v.length > 1);
@@ -172,13 +166,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     if (widget.clients.isNotEmpty && !client.isLogged()) {
       return client;
     }
-    final candidate = _loginClientCandidate ??= ClientManager.createClient(
-        '${AppConfig.applicationName}-${DateTime.now().millisecondsSinceEpoch}')
-      ..onLoginStateChanged
-          .stream
-          .where((l) => l == LoginState.loggedIn)
-          .first
-          .then((_) {
+    final candidate = _loginClientCandidate ??= ClientManager.createClient('${AppConfig.applicationName}-${DateTime.now().millisecondsSinceEpoch}')
+      ..onLoginStateChanged.stream.where((l) => l == LoginState.loggedIn).first.then((_) {
         if (!widget.clients.contains(_loginClientCandidate)) {
           widget.clients.add(_loginClientCandidate!);
         }
@@ -199,8 +188,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     return candidate;
   }
 
-  Client? getClientByName(String name) =>
-      widget.clients.firstWhereOrNull((c) => c.clientName == name);
+  Client? getClientByName(String name) => widget.clients.firstWhereOrNull((c) => c.clientName == name);
 
   Map<String, dynamic>? get shareContent => _shareContent;
 
@@ -211,8 +199,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
   Map<String, dynamic>? _shareContent;
 
-  final StreamController<Map<String, dynamic>?> onShareContentChanged =
-      StreamController.broadcast();
+  final StreamController<Map<String, dynamic>?> onShareContentChanged = StreamController.broadcast();
 
   File? wallpaper;
 
@@ -265,11 +252,9 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
   bool webHasFocus = true;
 
-  String? get activeRoomId =>
-      VRouter.of(navigatorContext).pathParameters['roomid'];
+  String? get activeRoomId => VRouter.of(navigatorContext).pathParameters['roomid'];
 
-  final linuxNotifications =
-      PlatformInfos.isLinux ? NotificationsClient() : null;
+  final linuxNotifications = PlatformInfos.isLinux ? NotificationsClient() : null;
   final Map<String, int> linuxNotificationIds = {};
 
   @override
@@ -286,8 +271,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
   Future<void> initConfig() async {
     try {
-      final configJsonString =
-          utf8.decode((await http.get(Uri.parse('config.sample.json'))).bodyBytes);
+      final configJsonString = utf8.decode((await http.get(Uri.parse('config.sample.json'))).bodyBytes);
       final configJson = json.decode(configJsonString);
       AppConfig.loadFromJson(configJson);
     } on FormatException catch (_) {
@@ -297,8 +281,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     }
   }
 
-  void _reportSyncError(SyncStatusUpdate update) =>
-      SentryController.captureException(
+  void _reportSyncError(SyncStatusUpdate update) => SentryController.captureException(
         update.error!.exception,
         update.error!.stackTrace,
       );
@@ -306,28 +289,22 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   void _registerSubs(String name) {
     final c = getClientByName(name);
     if (c == null) {
-      Logs().w(
-          'Attempted to register subscriptions for non-existing client $name');
+      Logs().w('Attempted to register subscriptions for non-existing client $name');
       return;
     }
 
     c.onSyncStatus.stream.where((s) => s.status == SyncStatus.error).listen(_reportSyncError);
     onRoomKeyRequestSub[name] ??= c.onRoomKeyRequest.stream.listen((RoomKeyRequest request) async {
-      if (widget.clients.any(((cl) => cl.userID == request.requestingDevice.userId &&
-          cl.identityKey == request.requestingDevice.curve25519Key))) {
-        Logs().i(
-            '[Key Request] Request is from one of our own clients, forwarding the key...');
+      if (widget.clients.any(((cl) => cl.userID == request.requestingDevice.userId && cl.identityKey == request.requestingDevice.curve25519Key))) {
+        Logs().i('[Key Request] Request is from one of our own clients, forwarding the key...');
         await request.forwardKey();
       }
     });
 
-    onKeyVerificationRequestSub[name] ??= c.onKeyVerificationRequest.stream
-        .listen((KeyVerification request) async {
+    onKeyVerificationRequestSub[name] ??= c.onKeyVerificationRequest.stream.listen((KeyVerification request) async {
       var hidPopup = false;
       request.onUpdate = () {
-        if (!hidPopup &&
-            {KeyVerificationState.done, KeyVerificationState.error}
-                .contains(request.state)) {
+        if (!hidPopup && {KeyVerificationState.done, KeyVerificationState.error}.contains(request.state)) {
           Navigator.of(navigatorContext).pop('dialog');
         }
         hidPopup = true;
@@ -336,8 +313,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
       hidPopup = true;
       await KeyVerificationDialog(request: request).show(navigatorContext);
     });
-    onLoginStateChanged[name] ??=
-        c.onLoginStateChanged.stream.listen((state) async {
+    onLoginStateChanged[name] ??= c.onLoginStateChanged.stream.listen((state) async {
       final loggedInWithMultipleClients = widget.clients.length > 1;
       if (loggedInWithMultipleClients && state != LoginState.loggedIn) {
         _cancelSubs(c.clientName);
@@ -354,19 +330,24 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
             queryParameters: widget.router!.currentState!.queryParameters,
           );
         }
-      }
-      else if (state == LoginState.loggedIn) {
-
+      } else if (state == LoginState.loggedIn) {
         //matrix access token and client id
         if (client.accessToken.toString().isEmpty || client.userID.toString().isEmpty) {
           PangeaServices.logoutUser(context: context, client: client);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Unable to fetch userID and access token.")));
+            content: Text(
+              "Unable to fetch userID and access token.",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ));
           return;
         }
+
         PangeaServices.validateUser(client, context, widget);
-      }
-      else {
+      } else {
         widget.router!.currentState!.to(
           '/home',
           queryParameters: widget.router!.currentState!.queryParameters,
@@ -376,9 +357,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
     // Cache and resend status message
     onOwnPresence[name] ??= c.onPresenceChanged.stream.listen((presence) {
-      if (c.isLogged() &&
-          c.userID == presence.userid &&
-          presence.statusMsg != null) {
+      if (c.isLogged() && c.userID == presence.userid && presence.statusMsg != null) {
         Logs().v('Update status message: "${presence.statusMsg}"');
         store.setItem(SettingKeys.ownStatusMessage, presence.statusMsg);
       }
@@ -390,8 +369,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         onNotification[name] ??= c.onEvent.stream
             .where((e) =>
                 e.type == EventUpdateType.timeline &&
-                [EventTypes.Message, EventTypes.Sticker, EventTypes.Encrypted]
-                    .contains(e.content['type']) &&
+                [EventTypes.Message, EventTypes.Sticker, EventTypes.Encrypted].contains(e.content['type']) &&
                 e.content['sender'] != c.userID)
             .listen(showLocalNotification);
       });
@@ -416,10 +394,8 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     if (PlatformInfos.isMobile) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ([TargetPlatform.linux].contains(Theme.of(context).platform)
-                ? SharedPreferences.getInstance()
-                    .then((prefs) => prefs.getString(SettingKeys.appLockKey))
-                : const FlutterSecureStorage()
-                    .read(key: SettingKeys.appLockKey))
+                ? SharedPreferences.getInstance().then((prefs) => prefs.getString(SettingKeys.appLockKey))
+                : const FlutterSecureStorage().read(key: SettingKeys.appLockKey))
             .then((lock) {
           if (lock?.isNotEmpty ?? false) {
             AppLock.of(widget.context)!.enable();
@@ -472,8 +448,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
       voipPlugin = null;
       return;
     }
-    voipPlugin =
-        webrtcIsSupported ? VoipPlugin(client: client, context: context) : null;
+    voipPlugin = webrtcIsSupported ? VoipPlugin(client: client, context: context) : null;
   }
 
   bool _firstStartup = true;
@@ -481,8 +456,7 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     Logs().v('AppLifecycleState = $state');
-    final foreground = state != AppLifecycleState.detached &&
-        state != AppLifecycleState.paused;
+    final foreground = state != AppLifecycleState.detached && state != AppLifecycleState.paused;
     client.backgroundSync = foreground;
     client.syncPresence = foreground ? null : PresenceType.unavailable;
     client.requestHistoryOnLimitedTimeline = !foreground;
@@ -500,38 +474,20 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
         wallpaper = file;
       }
     });
-    store.getItem(SettingKeys.fontSizeFactor).then((value) =>
-        AppConfig.fontSizeFactor =
-            double.tryParse(value ?? '') ?? AppConfig.fontSizeFactor);
-    store.getItem(SettingKeys.bubbleSizeFactor).then((value) =>
-        AppConfig.bubbleSizeFactor =
-            double.tryParse(value ?? '') ?? AppConfig.bubbleSizeFactor);
+    store.getItem(SettingKeys.fontSizeFactor).then((value) => AppConfig.fontSizeFactor = double.tryParse(value ?? '') ?? AppConfig.fontSizeFactor);
     store
-        .getItemBool(SettingKeys.renderHtml, AppConfig.renderHtml)
-        .then((value) => AppConfig.renderHtml = value);
+        .getItem(SettingKeys.bubbleSizeFactor)
+        .then((value) => AppConfig.bubbleSizeFactor = double.tryParse(value ?? '') ?? AppConfig.bubbleSizeFactor);
+    store.getItemBool(SettingKeys.renderHtml, AppConfig.renderHtml).then((value) => AppConfig.renderHtml = value);
+    store.getItemBool(SettingKeys.hideRedactedEvents, AppConfig.hideRedactedEvents).then((value) => AppConfig.hideRedactedEvents = value);
+    store.getItemBool(SettingKeys.hideUnknownEvents, AppConfig.hideUnknownEvents).then((value) => AppConfig.hideUnknownEvents = value);
     store
-        .getItemBool(
-            SettingKeys.hideRedactedEvents, AppConfig.hideRedactedEvents)
-        .then((value) => AppConfig.hideRedactedEvents = value);
-    store
-        .getItemBool(SettingKeys.hideUnknownEvents, AppConfig.hideUnknownEvents)
-        .then((value) => AppConfig.hideUnknownEvents = value);
-    store
-        .getItemBool(SettingKeys.showDirectChatsInSpaces,
-            AppConfig.showDirectChatsInSpaces)
+        .getItemBool(SettingKeys.showDirectChatsInSpaces, AppConfig.showDirectChatsInSpaces)
         .then((value) => AppConfig.showDirectChatsInSpaces = value);
-    store
-        .getItemBool(SettingKeys.separateChatTypes, AppConfig.separateChatTypes)
-        .then((value) => AppConfig.separateChatTypes = value);
-    store
-        .getItemBool(SettingKeys.autoplayImages, AppConfig.autoplayImages)
-        .then((value) => AppConfig.autoplayImages = value);
-    store
-        .getItemBool(SettingKeys.sendOnEnter, AppConfig.sendOnEnter)
-        .then((value) => AppConfig.sendOnEnter = value);
-    store
-        .getItemBool(SettingKeys.experimentalVoip, AppConfig.experimentalVoip)
-        .then((value) => AppConfig.experimentalVoip = value);
+    store.getItemBool(SettingKeys.separateChatTypes, AppConfig.separateChatTypes).then((value) => AppConfig.separateChatTypes = value);
+    store.getItemBool(SettingKeys.autoplayImages, AppConfig.autoplayImages).then((value) => AppConfig.autoplayImages = value);
+    store.getItemBool(SettingKeys.sendOnEnter, AppConfig.sendOnEnter).then((value) => AppConfig.sendOnEnter = value);
+    store.getItemBool(SettingKeys.experimentalVoip, AppConfig.experimentalVoip).then((value) => AppConfig.experimentalVoip = value);
     store.getItem(SettingKeys.chatColor).then((value) {
       if (value != null && int.tryParse(value) != null) {
         AppConfig.colorSchemeSeed = Color(int.parse(value));

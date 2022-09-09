@@ -36,7 +36,7 @@ class ChoreoController {
     myMatrixClient = MyMatrixClient(this);
   }
 
-  String get originalText => textController!.value.text;
+  String get originalText => state!.originalText;
   setTextEditingController(TextEditingController textEditingController) {
     textController = textEditingController;
     _addClearOnEditListener();
@@ -90,6 +90,7 @@ class ChoreoController {
   void clearState() {
     state!.clearState();
     step2!.clearState();
+
     errorService!.clearState();
 
     setState();
@@ -103,6 +104,14 @@ class ChoreoController {
     } else {
       _firstProcess();
     }
+  }
+
+  setSrcLang(String name) {
+    lang?.setSrcLangByName(name);
+  }
+
+  setTrgLang(String name) {
+    lang?.setTrgLangByName(name);
   }
 
   void _firstProcess() async {}
@@ -125,11 +134,22 @@ class ChoreoController {
   }
 
   void _addClearOnEditListener() {
-    this.textController!.addListener(() {
+    if (!textController!.hasListeners) {
+      textController!.removeListener(_listernerFunction);
+    }
+    this.textController!.addListener(_listernerFunction);
+  }
+
+  _listernerFunction() {
+    if (this.textController!.value.text != originalText) {
+      print(originalText);
+      print(this.textController!.value.text);
       print('Text Event');
       if (!state!.isEditing) {
         clearState();
       }
-    });
+    } else {
+      print('There is no change in value');
+    }
   }
 }

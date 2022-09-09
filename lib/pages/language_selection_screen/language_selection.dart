@@ -14,7 +14,7 @@ import '../homeserver_picker/home_controller.dart';
 import 'language_selectionView.dart';
 
 class LanguageSelection extends StatefulWidget {
-  LanguageSelection({Key? key}) : super(key: key);
+  const LanguageSelection({Key? key}) : super(key: key);
 
   @override
   LanguageSelectionController createState() => LanguageSelectionController();
@@ -64,9 +64,7 @@ class LanguageSelectionController extends State<LanguageSelection> {
             "target_lang": target_language.toString()
           },
         ).then((value) async {
-
           if (value.statusCode == 201 || value.statusCode == 400) {
-
             await ApiFunctions().get(url).then((value) {
               if (value.statusCode == 200) {
                 UserInfo data = UserInfo.fromJson(value.body);
@@ -123,8 +121,6 @@ class LanguageSelectionController extends State<LanguageSelection> {
           print("Unable to fetch user name");
           print(e);
         }
-
-
       }
     } catch (e) {
       log(e.toString());
@@ -140,7 +136,6 @@ class LanguageSelectionController extends State<LanguageSelection> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getxController.role.value = "";
   }
