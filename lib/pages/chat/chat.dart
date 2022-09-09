@@ -406,11 +406,14 @@ class ChatController extends State<Chat> {
 
   void voiceMessageAction() async {
     if (await Record().hasPermission() == false) return;
+    print("hello");
     final result = await showDialog<RecordingResult>(
       context: context,
       useRootNavigator: false,
       builder: (c) => const RecordingDialog(),
     );
+    print("allow to here");
+    print(result);
     if (result == null) return;
     final audioFile = File(result.path);
     final file = MatrixAudioFile(

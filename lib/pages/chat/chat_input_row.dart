@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -159,6 +160,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                               contentPadding: const EdgeInsets.all(0),
                             ),
                           ),
+
                           if (PlatformInfos.isMobile)
                             PopupMenuItem<String>(
                               value: 'camera',
@@ -294,7 +296,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                       ),
                     ),
                   ),
-                  if (PlatformInfos.isMobile && widget.controller.inputText.isEmpty)
+                  if (kIsWeb && widget.controller.inputText.isEmpty)
                     Container(
                       height: 56,
                       alignment: Alignment.center,
