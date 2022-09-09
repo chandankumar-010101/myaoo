@@ -810,7 +810,6 @@ class PangeaServices {
   static Future<TeacherAllClassModel> fetchTeacherAllClassInfo(BuildContext context) async {
     try {
       final String accessToken = box.read("access") ?? "";
-      //final String roomID = VRouter.of(context).queryParameters["id"] ?? "";
       if (accessToken.isNotEmpty ) {
         final value = await http.get(
           Uri.parse(ApiUrls.teacherAllClass ),
@@ -838,8 +837,7 @@ class PangeaServices {
     }
   }
 
-  static createExchangeRequest({
-
+  static Future<bool> createExchangeRequest({
     required String roomId,
     required String teacherID,
     required String toClass,
@@ -861,61 +859,69 @@ class PangeaServices {
       );
 
       if (result.statusCode == 200 || result.statusCode == 201) {
+        return true;
+      }
+      if(result.statusCode ==400){
+        Fluttertoast.showToast(msg: "Exchange has been sent already");
+        return false;
+      }
+      else {
 
-        Fluttertoast.showToast(msg: "Mail Sent Successfully");
-      } else {
         if (kDebugMode) {
-          print("Unable to fetch user age");
           print(result.statusCode);
-          print(result.body);
-          print(roomId);
-          print(teacherID);
-          print(box.read("clientID"));
         }
+        print(result.body);
+        Fluttertoast.showToast(msg: "Unable to create exchange data");
+        return false;
+
       }
     } catch (e) {
+      Fluttertoast.showToast(msg: "Exception: Unable to create exchange");
       if (kDebugMode) {
         print(e);
       }
-      throw Exception("Error: unable to create request");
+      return false;
     }
   }
-  static createExchangeValidateRequest({
-    required String roomId,
-    required String teacherID,
-    required BuildContext context,
-  }) async {
-    try {
-      Map<String,dynamic>data={
-        "pangea_class_room_id": roomId,
-        "teacher_id": teacherID,
-      };
-      var result = await http.post(Uri.parse(ApiUrls.exchangeClassValidate),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer ${box.read("access")}",
-          },
-          body: jsonEncode(data)
-      );
-      if (result.statusCode == 200 || result.statusCode == 201) {
-        box.write("exchangevalidate",false);
-      } else if(result.statusCode ==400) {
-        box.write("exchangevalidate",true);
-        var body=jsonDecode(result.body);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("${body["error"]}")));
-      }else{
-        ApiException.exception(
-            statusCode: result.statusCode, body: result.body, context: context);
-        throw Exception("${result.statusCode}");
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      throw Exception("Error: unable to create request");
-    }
-  }
+  // static createExchangeValidateRequest({
+  //   required String roomId,
+  //   required String teacherID,
+  //   required BuildContext context,
+  // }) async {
+  //   try {
+  //     Map<String,dynamic>data={
+  //       "pangea_class_room_id": roomId,
+  //       "teacher_id": teacherID,
+  //     };
+  //     var result = await http.post(Uri.parse(ApiUrls.exchangeClassValidate),
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Authorization": "Bearer ${box.read("access")}",
+  //         },
+  //         body: jsonEncode(data)
+  //     );
+  //     if (result.statusCode == 200 || result.statusCode == 201) {
+  //       box.write("exchangevalidate",false);
+  //     } else if(result.statusCode ==400) {
+  //       box.write("exchangevalidate",true);
+  //       var body=jsonDecode(result.body);
+  //       ScaffoldMessenger.of(context)
+  //           .showSnackBar(SnackBar(content: Text("${body["error"]}")));
+  //     }else{
+  //       ApiException.exception(
+  //           statusCode: result.statusCode, body: result.body, context: context);
+  //       throw Exception("${result.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //     throw Exception("Error: unable to create request");
+  //   }
+  // }
+  //
+
+
   static ExchangeAcceptRequest(
       String roomId, String teacherName) async {
     try {

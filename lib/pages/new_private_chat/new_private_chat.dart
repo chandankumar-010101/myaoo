@@ -127,21 +127,6 @@ class NewPrivateChatController extends State<NewPrivateChat> {
             "#" +
             random.nextInt(9999).toString(),
       ),
-      // matrix.client.startDirectChat(controller.text,
-      //     initialState: [
-      //       sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
-      //       sdk.StateEvent(
-      //         content: {
-      //           "via": ["matrix.staging.pangea.chat"],
-      //           "canonical": true
-      //         },
-      //         type: EventTypes.spaceParent,
-      //         stateKey: classId,
-      //       ),
-      //       sdk.StateEvent(content: {"history_visibility": "invited"}, type: EventTypes.HistoryVisibility),
-      //     ],
-      //     enableEncryption: false,
-      //     waitForSync: false),
     );
     if (roomID.result != null) {
       if (kDebugMode) {

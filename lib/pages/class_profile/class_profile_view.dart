@@ -452,25 +452,20 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  PangeaServices
-                                                      .createExchangeValidateRequest(
-                                                    roomId:
-                                                        data.pangeaClassRoomId,
-                                                    teacherID:
-                                                        data.classAuthorId,
-                                                    context: context,
-                                                  );
+                                                  // PangeaServices
+                                                  //     .createExchangeValidateRequest(
+                                                  //   roomId:
+                                                  //       data.pangeaClassRoomId,
+                                                  //   teacherID:
+                                                  //       data.classAuthorId,
+                                                  //   context: context,
+                                                  // );
 
                                                   final box = GetStorage();
 
                                                   if (roomAlias.isNotEmpty) {
-                                                    box.write(
-                                                        "public",
-                                                        data.permissions
-                                                            .isPublic);
-                                                    box.write(
-                                                        "openEnrollment",
-                                                        data.permissions
+                                                    box.write( "public",  data.permissions.isPublic);
+                                                    box.write("openEnrollment", data.permissions
                                                             .isOpenEnrollment);
                                                     box.write(
                                                         "openExchange",
@@ -479,14 +474,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     box.write(
                                                         "ExchangeClientID",
                                                         data.classAuthorId);
-                                                    if (!box.read("exchangevalidate")) {
-                                                      context.vRouter.to(
-                                                          "/classDetails/exchange_class",
-                                                          queryParameters: {
-                                                            "class_id":
-                                                                roomAlias,
-                                                          });
-                                                    }
+                                                    context.vRouter.to(
+                                                        "/classDetails/exchange_class",
+                                                        queryParameters: {
+                                                          "class_id":
+                                                          roomAlias,
+                                                        });
                                                   }
                                                 },
                                                 child: Text(
@@ -603,6 +596,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   if (confirmed ==
                                                       OkCancelResult.ok) {
                                                     if (roomAlias.isNotEmpty) {
+                                                      print(data.classAuthorId);
                                                       UrlLauncher(
                                                               context,
                                                               requestToEnroll: true,
