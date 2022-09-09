@@ -566,11 +566,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   PangeaControllers getxController = Get.put(PangeaControllers());
 
   canCreateRoom() {
-    if (activeSpacesEntry.getSpace(context) == null) {
-      getxController.classInfoModel.value = null;
-    }
-    if (getxController.classInfoModel.value != null && _activeSpacesEntry != null) {
-      return getxController.classInfoModel.value!.permissions.isCreateRooms
+    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
+      return getxController.classInfoModel.value!.permissions.isCreateRooms && activeSpacesEntry.getSpace(context) != null
           ? IconButton(
               onPressed: () {
                 activeSpacesEntry.getSpace(context) == null
@@ -581,23 +578,18 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
               },
               icon: const Icon(Icons.add))
           : Container();
-    } else {
-      return IconButton(
-          onPressed: () {
-            VRouter.of(context).to('/newgroup');
-          },
-          icon: const Icon(Icons.add));
     }
+    return IconButton(
+        onPressed: () {
+          VRouter.of(context).to('/newgroup');
+        },
+        icon: const Icon(Icons.add));
   }
 
   canAddPeople() {
-    if (activeSpacesEntry.getSpace(context) == null) {
-      getxController.classInfoModel.value = null;
-    }
-
-    if (getxController.classInfoModel.value != null) {
+    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
       log("Space here");
-      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass
+      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass && activeSpacesEntry.getSpace(context) != null
           ? IconButton(
               onPressed: () {
                 activeSpacesEntry.getSpace(context) == null
@@ -608,15 +600,12 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
               },
               icon: const Icon(Icons.add))
           : Container());
-    } else {
-      log("No space");
-
-      return IconButton(
-          onPressed: () {
-            VRouter.of(context).to('/newprivatechat');
-          },
-          icon: const Icon(Icons.add));
     }
+    return IconButton(
+        onPressed: () {
+          VRouter.of(context).to('/newprivatechat');
+        },
+        icon: const Icon(Icons.add));
   }
 
   @override

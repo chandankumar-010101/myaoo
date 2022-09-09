@@ -78,15 +78,21 @@ class SpacesBottomBar extends StatelessWidget {
   }
 }
 
-class _SpacesBottomNavigation extends StatelessWidget {
+class _SpacesBottomNavigation extends StatefulWidget {
   final ChatListController controller;
 
   const _SpacesBottomNavigation({Key? key, required this.controller}) : super(key: key);
 
   @override
+  State<_SpacesBottomNavigation> createState() => _SpacesBottomNavigationState();
+}
+
+class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
+  @override
   Widget build(BuildContext context) {
-    final currentIndex = controller.spacesEntries.indexWhere(
-            (space) => controller.activeSpacesEntry.runtimeType == space.runtimeType && (controller.activeSpaceId == space.getSpace(context)?.id)) +
+    final currentIndex = widget.controller.spacesEntries.indexWhere((space) =>
+            widget.controller.activeSpacesEntry.runtimeType == space.runtimeType &&
+            (widget.controller.activeSpaceId == space.getSpace(context)?.id)) +
         1;
 
     return Container(
@@ -98,10 +104,10 @@ class _SpacesBottomNavigation extends StatelessWidget {
           itemPadding: const EdgeInsets.all(8),
           currentIndex: currentIndex,
           onTap: (i) => i == 0
-              ? controller.expandSpaces()
-              : controller.setActiveSpacesEntry(
+              ? widget.controller.expandSpaces()
+              : widget.controller.setActiveSpacesEntry(
                   context,
-                  controller.spacesEntries[i - 1],
+                  widget.controller.spacesEntries[i - 1],
                 ),
           selectedItemColor: Theme.of(context).colorScheme.primary,
           items: [
@@ -109,7 +115,7 @@ class _SpacesBottomNavigation extends StatelessWidget {
               icon: const Icon(Icons.keyboard_arrow_up),
               title: Text(L10n.of(context)!.showSpaces),
             ),
-            ...controller.spacesEntries.map((space) => _buildSpacesEntryUI(context, space)).toList(),
+            ...widget.controller.spacesEntries.map((space) => _buildSpacesEntryUI(context, space)).toList(),
           ],
         ),
       ),
@@ -123,12 +129,12 @@ class _SpacesBottomNavigation extends StatelessWidget {
         icon: InkWell(
           borderRadius: BorderRadius.circular(28),
           onTap: () {
-            controller.setActiveSpacesEntry(
+            widget.controller.setActiveSpacesEntry(
               context,
               entry,
             );
           },
-          onLongPress: () => controller.editSpace(context, space.id),
+          onLongPress: () => widget.controller.editSpace(context, space.id),
           child: Avatar(
             mxContent: space.avatar,
             name: space.displayname,

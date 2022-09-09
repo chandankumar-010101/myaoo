@@ -256,7 +256,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                             // Todo: Style needs to be updated
                           ),
                         ),
-                        Obx(() => widget.controller.canCreateRoom()),
+                        widget.controller.canCreateRoom(),
                       ],
                     )),
                 body: ListView.builder(
