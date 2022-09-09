@@ -567,10 +567,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                     child: Text(
                                       "Cancel",
                                       style: TextStyle().copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                              ? Theme.of(context).primaryColorLight
-                                              : Theme.of(context).colorScheme.onPrimary,
-                                          fontSize: 14),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     ),
@@ -617,10 +614,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                     child: Text(
                                       "Save",
                                       style: TextStyle().copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                              ? Theme.of(context).primaryColorLight
-                                              : Theme.of(context).colorScheme.onPrimary,
-                                          fontSize: 14),
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     ),

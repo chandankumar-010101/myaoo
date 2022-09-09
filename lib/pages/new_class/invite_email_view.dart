@@ -43,7 +43,7 @@ class _InviteEmailState extends State<InviteEmail> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Invitations", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17, color: Colors.black)),
+        title: Text("Invitations", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -168,6 +168,12 @@ class _InviteEmailState extends State<InviteEmail> {
                 width: 200,
                 margin: EdgeInsets.only(top: 20),
                 child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.onPrimary == Colors.white
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).colorScheme.onPrimary,
+                  )),
                   child: Text("Send Invitation"),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

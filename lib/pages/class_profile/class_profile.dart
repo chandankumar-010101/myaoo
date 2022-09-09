@@ -65,13 +65,13 @@ class RequestScreenState extends State<RequestScreen> {
         noOfStudents = space.length;
         space = space.where((i) => i.id == userId).toList();
       } catch (e) {
-        Fluttertoast.showToast(msg: "Unable to fetch Class Info", webBgColor: Colors.red, backgroundColor: Colors.red);
+        // Fluttertoast.showToast(msg: "Unable to fetch Class Info", webBgColor: Colors.red, backgroundColor: Colors.red);
         if (kDebugMode) {
           print(e);
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info", webBgColor: Colors.red, backgroundColor: Colors.red);
+      // Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info", webBgColor: Colors.red, backgroundColor: Colors.red);
     }
   }
 

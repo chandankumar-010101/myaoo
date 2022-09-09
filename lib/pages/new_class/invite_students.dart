@@ -35,10 +35,11 @@ class _InviteStudentState extends State<InviteStudent> {
     // final room = Matrix.of(context).client.getRoomById(roomId);
     return Scaffold(
         appBar: AppBar(
+          leading: BackButton(),
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Create a Class",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+            "Invite Students",
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -197,10 +198,6 @@ class _InviteStudentState extends State<InviteStudent> {
                         InkWell(
                           onTap: () {
                             VRouter.of(context).to("/invite_email", queryParameters: {"id": roomId});
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                              content: Text("Functionality under progress"),
-                              backgroundColor: Colors.red,
-                            ));
                           },
                           child: Container(
                             width: 200,
@@ -253,7 +250,9 @@ class _InviteStudentState extends State<InviteStudent> {
                                                 ),
                                                 Text(
                                                   "Please Wait Loading Classrooms...",
-                                                  style: TextStyle(color: Colors.white, fontSize: 22),
+                                                  style: TextStyle().copyWith(
+                                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.black : Colors.white,
+                                                      fontSize: 22),
                                                 )
                                               ]),
                                         ),
