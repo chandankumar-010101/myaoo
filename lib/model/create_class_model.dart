@@ -9,6 +9,7 @@ class CreateClassToJson {
     required this.languageLevel,
     required this.pangeaClassRoomId,
     required this.schoolName,
+    required this.isExchange,
   });
   late final String className;
   late final String city;
@@ -19,6 +20,7 @@ class CreateClassToJson {
   late final String languageLevel;
   late final String pangeaClassRoomId;
   late final String schoolName;
+  late final bool isExchange;
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
@@ -31,6 +33,7 @@ class CreateClassToJson {
     _data['language_level'] = languageLevel;
     _data['pangea_class_room_id'] = pangeaClassRoomId;
     _data['school_name'] = schoolName;
+    _data["is_exchange"] = isExchange;
     return _data;
   }
 }
@@ -56,6 +59,7 @@ class CreateClassFromJson {
     required this.rating,
     required this.profilePic,
     required this.totalStudent,
+    required this.isExchange,
   });
   late final int id;
   late final String className;
@@ -75,6 +79,7 @@ class CreateClassFromJson {
   late final int rating;
   late final String profilePic;
   late final int totalStudent;
+  late final bool isExchange;
 
   CreateClassFromJson.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -95,6 +100,7 @@ class CreateClassFromJson {
     rating = json['rating'];
     profilePic = json["profile_pic"]??"";
     totalStudent = json['total_student'];
+    isExchange = json['is_exchange']??false;
   }
 
 }

@@ -12,7 +12,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangea_choreographer/pangea_choreographer.dart';
 import 'package:pangeachat/services/services.dart';
 
 import 'package:universal_html/html.dart' as html;
@@ -32,18 +31,11 @@ import 'widgets/lock_screen.dart';
 import 'widgets/matrix.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-GoogleSignIn googleSignIn = GoogleSignIn(
-  clientId:
-      '89787311001-k1tnd3k6tfen88pmqpv4v4dgndepmgli.apps.googleusercontent.com',
-  scopes: <String>[
-    'email',
-  ],
-);
+
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
-  await ChoreoController.initialize(
-      flagBaseUrl: Environment.baseAPI, choreoBaseUrl: Environment.choreo_api);
+
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -80,7 +72,8 @@ void main() async {
     SentryController.captureException,
   );
 
-  await PangeaServices.accessToken();
+  await PangeaServices.fetchAccessToken();
+
 }
 
 class FluffyChatApp extends StatefulWidget {
