@@ -103,18 +103,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   void editSpace(BuildContext context, String spaceId) async {
-    await Matrix.of(context).client.getRoomById(spaceId)!.postLoad();
-    String box = GetStorage().read("access")??"";
-    try{
-     bool isExchange = await PangeaServices.isExchange(context, box, spaceId);
-     print(isExchange);
-     isExchange?VRouter.of(context).to('/exchange_profile', queryParameters: {"id": spaceId}):VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
-    }catch(e){
-      Fluttertoast.showToast(msg: "Unable to find class Info");
-    //  VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
-    }
-
-    ;
+    VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.

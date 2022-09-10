@@ -28,10 +28,10 @@ class UrlLauncher {
   bool requestToEnroll;
   bool requestExchange;
   final String? roomId;
-  String rid;
-  String receivedroomID;
+  String userIdOfRequestedClass;
+  String requestToclass;
   UrlLauncher(this.context, this.url,
-      {this.roomId = "", this.requestToEnroll = false, this.requestExchange = false, this.receivedroomID = "", this.rid = ""});
+      {this.roomId = "", this.requestToEnroll = false, this.requestExchange = false, this.requestToclass = "", this.userIdOfRequestedClass = ""});
 
   void launchUrl() {
     if (url!.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
@@ -184,7 +184,7 @@ class UrlLauncher {
         final roomID = await showFutureLoadingDialog(
           context: context,
           future: () => matrix.client.createRoom(
-            invite: [rid],
+            invite: [userIdOfRequestedClass],
             preset: sdk.CreateRoomPreset.privateChat,
             isDirect: true,
             initialState: [
@@ -199,14 +199,14 @@ class UrlLauncher {
 
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: rid.split(":").first.replaceAll("@", "").substring(0, 2) +
+            roomAliasName: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
                 "-" +
                 matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
                 "#" +
                 random.nextInt(9999).toString(),
-            name: rid.split(":").first.replaceAll("@", "").substring(0, 6) +
+            name: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 6) +
                 "-" +
                 matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
@@ -222,10 +222,15 @@ class UrlLauncher {
             final client = Matrix.of(context).client;
             await client
                 .getRoomById(roomID.result!)!
-                .sendTextEvent(initial_url + "/#" + "/request_to_exchange?id=$userId&room_id=$roomId&r_id=$rid&receviedroom_id=$receivedroomID")
+                .sendTextEvent(initial_url + "/#/" + "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
                 .then((value) {
               VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(" Request Sent Successfully",style: TextStyle(color: Colors.white),),
+                backgroundColor: Colors.green,
+
+              ));
+             // Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);

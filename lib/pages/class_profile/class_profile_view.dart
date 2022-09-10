@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/config/environment.dart';
@@ -13,6 +14,22 @@ import 'package:pangeachat/widgets/star_rating.dart';
 
 import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
+
+
+
+import 'package:flutter/material.dart';
+
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:matrix/matrix.dart';
+import 'package:pangeachat/pages/chat_list/chat_list.dart';
+import 'package:vrouter/vrouter.dart';
+
+import 'package:pangeachat/utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
+import 'package:pangeachat/widgets/avatar.dart';
+import 'package:pangeachat/widgets/matrix.dart';
 
 class RequestScreenView extends StatefulWidget {
   final RequestScreenState controller;
@@ -31,6 +48,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.fetchSpaceInfo(roomAlias);
+
 
     //fetchParti(roomAlias);
     return Scaffold(
@@ -341,15 +359,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  // PangeaServices
-                                                  //     .createExchangeValidateRequest(
-                                                  //   roomId:
-                                                  //       data.pangeaClassRoomId,
-                                                  //   teacherID:
-                                                  //       data.classAuthorId,
-                                                  //   context: context,
-                                                  // );
-
                                                   final box = GetStorage();
 
                                                   if (roomAlias.isNotEmpty) {
@@ -357,7 +366,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                     box.write("openEnrollment", data.permissions.isOpenEnrollment);
                                                     box.write("openExchange", data.permissions.isOpenExchange);
                                                     box.write("ExchangeClientID", data.classAuthorId);
-                                                    context.vRouter.to("/classDetails/exchange_class", queryParameters: {
+                                                    context.vRouter.to("/classDetails/request_exchange", queryParameters: {"user_id":data.classAuthorId,
                                                       "class_id": roomAlias,
                                                     });
                                                   }
@@ -433,7 +442,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                   );
                                                   if (confirmed == OkCancelResult.ok) {
                                                     if (roomAlias.isNotEmpty) {
-                                                      print(data.classAuthorId);
+
                                                       UrlLauncher(
                                                               context,
                                                               requestToEnroll: true,

@@ -72,7 +72,7 @@ void main() async {
     SentryController.captureException,
   );
 
-  await PangeaServices.accessToken();
+  await PangeaServices.fetchAccessToken();
 
 }
 
