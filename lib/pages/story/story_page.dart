@@ -77,9 +77,11 @@ class StoryPageController extends State<StoryPage> {
     });
     try {
       final client = Matrix.of(context).client;
+
       final roomId = await client.startDirectChat(currentEvent.senderId, enableEncryption: false);
       var replyText =
           L10n.of(context)!.storyFrom(currentEvent.originServerTs.localizedTime(context), currentEvent.content.tryGet<String>('body') ?? '');
+
       replyText = replyText.split('\n').map((line) => '> $line').join('\n');
       message = '$replyText\n\n$message';
       await client.getRoomById(roomId)!.sendTextEvent(message);
@@ -455,7 +457,9 @@ class StoryPageController extends State<StoryPage> {
       case PopupStoryAction.message:
         final roomIdResult = await showFutureLoadingDialog(
           context: context,
+
           future: () => currentEvent!.senderFromMemoryOrFallback.startDirectChat(enableEncryption: false),
+
         );
         if (roomIdResult.error != null) return;
         VRouter.of(context).toSegments(['rooms', roomIdResult.result!]);

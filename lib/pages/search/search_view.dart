@@ -663,6 +663,7 @@ class _SearchViewState extends State<SearchView> {
                             future: () async {
                               final client = Matrix.of(context).client;
                               final roomId = await client.startDirectChat(foundProfile.userId, enableEncryption: false);
+
                               return roomId;
                             },
                           );
