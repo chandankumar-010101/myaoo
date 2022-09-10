@@ -12,6 +12,7 @@ import 'package:pangeachat/pages/class_profile/class_profile.dart';
 import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 
+import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
 
@@ -31,6 +32,8 @@ import 'package:pangeachat/utils/matrix_sdk_extensions.dart/client_stories_exten
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
+import '../chat_list/spaces_entry.dart';
+
 class RequestScreenView extends StatefulWidget {
   final RequestScreenState controller;
   const RequestScreenView(this.controller, {Key? key}) : super(key: key);
@@ -40,6 +43,67 @@ class RequestScreenView extends StatefulWidget {
 }
 
 class _RequestScreenViewState extends State<RequestScreenView> {
+  final box = GetStorage();
+
+  SpacesEntry? _activeSpacesEntry;
+  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
+      ? DirectChatsSpacesEntry()
+      : AllRoomsSpacesEntry();
+
+  SpacesEntry get activeSpacesEntry {
+    final id = _activeSpacesEntry;
+    return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
+  }
+
+  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
+  Future<void> _waitForFirstSync() async {
+    final client = Matrix.of(context).client;
+    await client.roomsLoading;
+    await client.accountDataLoading;
+    if (client.prevBatch?.isEmpty ?? true) {
+      await client.onFirstSync.stream.first;
+    }
+    // Load space members to display DM rooms
+    final spaceId = activeSpaceId;
+    if (spaceId != null) {
+      final space = client.getRoomById(spaceId)!;
+      final localMembers = space.getParticipants().length;
+      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
+          (space.summary.mJoinedMemberCount ?? 0);
+      if (localMembers < actualMembersCount) {
+        await space.requestParticipants();
+      }
+    }
+  }
+
+  List<Room> get spaces =>
+      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+
+
+  fetchFlag(FetchClassInfoModel data,String url){
+    try{
+      return SizedBox(
+        width: 20,
+        height: 20,
+        child: Image.network(url + data.flags[1].languageName.toString()),
+      );
+    }catch(e){
+      return Container();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _waitForFirstSync();
+  }
+
+  fetchParti(String roomAlias)async{
+   // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
+   //  log(members.toList().toString());
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -48,6 +112,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.fetchSpaceInfo(roomAlias);
+
 
 
     //fetchParti(roomAlias);
@@ -295,6 +360,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   widget.controller.fetchFlag2(data, url),
 
                                   const SizedBox(
+
                                     width: 5,
                                   ),
                                   Text(
