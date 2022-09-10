@@ -12,7 +12,9 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+
 import 'package:get/get.dart';
+
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
@@ -185,6 +187,10 @@ class ChatController extends State<Chat> {
       choreoController.setSendCallback(send);
       choreoController.setMatrixClient(room!.client);
       final box = GetStorage();
+
+      choreoController.setSrcLang(box.read('sourcelanguage'));
+      choreoController.setSrcLang(box.read('targetlanguage'));
+
       choreoController.stateListener.stream.listen((event) {
         setState(() {});
       });

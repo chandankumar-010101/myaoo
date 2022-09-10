@@ -54,6 +54,7 @@ class Requests {
     if (response.statusCode != 200 && response.statusCode != 201) {
       print(response.body);
     }
+
     return response;
   }
 
@@ -73,6 +74,7 @@ class Requests {
     if (response.statusCode != 200 && response.statusCode != 201) {
       print(response.body);
     }
+
     return response;
   }
 
