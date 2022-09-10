@@ -23,4 +23,6 @@ class ChoreoLangModel {
       'networkFlag': networkFlag
     };
   }
+
+
 }
