@@ -8,7 +8,6 @@ import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -179,6 +178,7 @@ class _InviteEmailState extends State<InviteEmail> {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
                       print(name.length);
+
                       List.generate(
                           name.length,
                           (index) => info.add(inviteEmail.Data(
@@ -188,6 +188,7 @@ class _InviteEmailState extends State<InviteEmail> {
                       final roomId = VRouter.of(context).queryParameters['id'] ?? "";
                       if (roomId.isEmpty) {
                         Fluttertoast.showToast(msg: "Unable to find Room ID", webBgColor: Colors.red, backgroundColor: Colors.red);
+
                         return;
                       }
                       String teacherName = Matrix.of(context).client.getRoomById(roomId)!.displayname ?? "";
@@ -197,6 +198,7 @@ class _InviteEmailState extends State<InviteEmail> {
                       }
 
                       if (info.isNotEmpty) {
+
                         PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
                       }
                     }

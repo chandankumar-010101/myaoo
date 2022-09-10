@@ -17,6 +17,7 @@ import '../model/create_class_model.dart';
 import '../model/flag_model.dart';
 import '../model/invite_email_model.dart';
 import '../model/invite_email_model.dart' as inviteModel;
+
 import '../model/teacher_all_class_model.dart';
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
@@ -104,15 +105,17 @@ class PangeaServices {
 
   static sendEmailToJoinClass(
       List<inviteModel.Data> data, String roomId, String teacherName) async {
+
     try {
       var result = await http.post(Uri.parse(ApiUrls.send_email_link),
           headers: {
             "Authorization": "Bearer ${box.read("access")}",
             "Content-Type": "application/json",
           },
+
           body: jsonEncode(InviteEmail(
             pangeaClassRoomId: roomId,
-            data: data,
+            data:data,
             teacherName: teacherName,
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
@@ -146,6 +149,7 @@ class PangeaServices {
 
   static Future<ClassCodeModel?> fetchClassWithCode(
       String classCode, BuildContext context) async {
+
     final String accessToken = box.read("access") ?? "";
     if (accessToken.isEmpty) {
       Fluttertoast.showToast(msg: "Access token not found");
@@ -293,7 +297,9 @@ class PangeaServices {
   static validateUser(
       Client client, BuildContext context, Matrix widget) async {
     final bool signUp = box.read("sign_up") ?? false;
+
     final String classCode = GetStorage().read("classCode") ?? "";
+
     final String userID = client.userID ?? "";
     final String accessToken = client.accessToken ?? "";
     if (userID.isNotEmpty && accessToken.isNotEmpty) {
@@ -310,6 +316,7 @@ class PangeaServices {
               queryParameters: widget.router!.currentState!.queryParameters,
             );
           } else {
+
             await userDetails(
                 clientID: client.userID.toString(),
                 accessToken: client.accessToken.toString());
@@ -321,11 +328,13 @@ class PangeaServices {
                     queryParameters: {"code": classCode});
               });
             } else {
+
               widget.router!.currentState!.to(
                 '/rooms',
                 queryParameters: widget.router!.currentState!.queryParameters,
               );
             }
+
           }
         } else {
           ApiException.exception(
