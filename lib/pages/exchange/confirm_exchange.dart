@@ -31,8 +31,23 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
           await PangeaServices.fetchParticipants(receiverClassId);
       final FetchClassParticipants data2 =
       await PangeaServices.fetchParticipants(senderClassId);
-      listOfParticipants.addAll(data.roomMembers!.members!);
-      listOfParticipants.addAll(data2.roomMembers!.members!);
+      for (final element in data.roomMembers!.members!) {
+        if(listOfParticipants.contains(element)){
+          continue;
+        }else{
+          listOfParticipants.add(element);
+        }
+      }
+      for (final element in data2.roomMembers!.members!) {
+        if(listOfParticipants.contains(element)){
+          continue;
+        }else{
+          listOfParticipants.add(element);
+        }
+      }
+
+      // listOfParticipants.addAll(data.roomMembers!.members!);
+      // listOfParticipants.addAll(data2.roomMembers!.members!);
       final FetchClassInfoModel senderClassInfo = await PangeaServices.fetchClassInfo(
           context, GetStorage().read("access"), senderClassId);
       final FetchClassInfoModel receiverClassInfo =
@@ -52,7 +67,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         context: context,
         future: () => matrix.client.createRoom(
          preset: sdk.CreateRoomPreset.privateChat,
-          invite: [senderId],
+          invite: listOfParticipants,
           creationContent: {'type': RoomCreationTypes.mSpace},
           visibility: null,
           roomAliasName: className.trim().toLowerCase().replaceAll(' ', '_'),
