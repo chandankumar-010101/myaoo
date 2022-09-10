@@ -8,6 +8,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/src/room.dart';
 import 'package:pangea_choreographer/choreographer/widgets/it_shimmer.dart';
+import 'package:pangeachat/pages/google_classroom/google_classroom.dart';
 import 'package:pangeachat/services/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
@@ -227,47 +228,18 @@ class _InviteStudentState extends State<InviteStudent> {
                         ),
                         InkWell(
                           onTap: () {
-                            final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-
                             showDialog<void>(
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return new WillPopScope(
-                                      onWillPop: () async => false,
-                                      child: Dialog(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                        key: _keyLoader,
-                                        child: Center(
-                                          child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                CircularProgressIndicator(),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  "Please Wait Loading Classrooms...",
-                                                  style: TextStyle().copyWith(
-                                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.black : Colors.white,
-                                                      fontSize: 22),
-                                                )
-                                              ]),
-                                        ),
-                                      ));
+                                    onWillPop: () async => false,
+                                    child: Dialog(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      child: Container(width: double.infinity, height: double.infinity, child: GoogleClassroom()),
+                                    ),
+                                  );
                                 });
-                            Future.delayed(Duration(seconds: 4))
-                                .whenComplete(() => Navigator.of(_keyLoader.currentContext!, rootNavigator: true).pop())
-                                .whenComplete(
-                                  () => Fluttertoast.showToast(
-                                    msg: "Unable to fetch Goolge Classrooms",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    webBgColor: "linear-gradient(to right, #FF0000, #FF0000)",
-                                    textColor: Colors.white,
-                                  ),
-                                );
                           },
                           child: Container(
                             width: 200,
