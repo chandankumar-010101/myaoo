@@ -8,7 +8,6 @@ import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -43,11 +42,7 @@ class _InviteEmailState extends State<InviteEmail> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Invitations",
-            style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-                color: Colors.white)),
+        title: Text("Invitations", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -72,11 +67,7 @@ class _InviteEmailState extends State<InviteEmail> {
                           children: [
                             const Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Text("Name",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                      color: Colors.black)),
+                              child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black)),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 10, right: 10),
@@ -87,9 +78,7 @@ class _InviteEmailState extends State<InviteEmail> {
                                 child: TextFormField(
                                   controller: name[index],
                                   keyboardType: TextInputType.text,
-                                  validator: (value) => value!.isEmpty
-                                      ? "Please type user name"
-                                      : null,
+                                  validator: (value) => value!.isEmpty ? "Please type user name" : null,
                                   keyboardAppearance: Brightness.light,
                                   textAlignVertical: TextAlignVertical.center,
                                   textInputAction: TextInputAction.next,
@@ -97,9 +86,7 @@ class _InviteEmailState extends State<InviteEmail> {
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(12),
                                     hintText: "Enter Name",
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                                   ),
                                 ),
                               ),
@@ -112,24 +99,16 @@ class _InviteEmailState extends State<InviteEmail> {
                           children: [
                             const Padding(
                               padding: EdgeInsets.all(10.0),
-                              child: Text("Recipient Email id",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                      color: Colors.black)),
+                              child: Text("Recipient Email id", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black)),
                             ),
                             Container(
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              margin: const EdgeInsets.only(left: 10, right: 10),
                               //height: 45,
                               width: size.width / 3,
                               child: Expanded(
                                 flex: 2,
                                 child: TextFormField(
-                                  validator: (value) =>
-                                      EmailValidator.validate(value!)
-                                          ? null
-                                          : 'Please enter a valid email',
+                                  validator: (value) => EmailValidator.validate(value!) ? null : 'Please enter a valid email',
                                   controller: email[index],
                                   keyboardType: TextInputType.emailAddress,
                                   keyboardAppearance: Brightness.light,
@@ -178,10 +157,7 @@ class _InviteEmailState extends State<InviteEmail> {
                   },
                   child: const Text(
                     "Add Recipient",
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black),
                   ),
                 )
               ],
@@ -202,37 +178,28 @@ class _InviteEmailState extends State<InviteEmail> {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
                       print(name.length);
+
                       List.generate(
                           name.length,
                           (index) => info.add(inviteEmail.Data(
                                 email: email[index].text,
                                 name: name[index].text,
                               )));
-                      final roomId =
-                          VRouter.of(context).queryParameters['id'] ?? "";
+                      final roomId = VRouter.of(context).queryParameters['id'] ?? "";
                       if (roomId.isEmpty) {
-                        Fluttertoast.showToast(
-                            msg: "Unable to find Room ID",
-                            webBgColor: Colors.red,
-                            backgroundColor: Colors.red);
+                        Fluttertoast.showToast(msg: "Unable to find Room ID", webBgColor: Colors.red, backgroundColor: Colors.red);
+
                         return;
                       }
-                      String teacherName = Matrix.of(context)
-                              .client
-                              .getRoomById(roomId)!
-                              .displayname ??
-                          "";
+                      String teacherName = Matrix.of(context).client.getRoomById(roomId)!.displayname ?? "";
                       if (teacherName.isEmpty) {
-                        Fluttertoast.showToast(
-                            msg: "Unable to find Room Name",
-                            webBgColor: Colors.red,
-                            backgroundColor: Colors.red);
+                        Fluttertoast.showToast(msg: "Unable to find Room Name", webBgColor: Colors.red, backgroundColor: Colors.red);
                         return;
                       }
 
                       if (info.isNotEmpty) {
-                        PangeaServices.sendEmailToJoinClass(
-                            info, roomId, teacherName);
+
+                        PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
                       }
                     }
                   },

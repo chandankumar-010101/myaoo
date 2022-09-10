@@ -29,21 +29,14 @@ class NewGroupController extends State<NewGroup> {
         final roomId = await client.createGroupChat(
           initialState: spaceId.isNotEmpty
               ? [
-                  sdk.StateEvent(
-                      content: {"guest_access": "can_join"},
-                      type: EventTypes.GuestAccess,
-                      stateKey: ""),
-                  spaceId != ""
-                      ? sdk.StateEvent(content: {
-                          "via": ["matrix.staging.pangea.chat"],
-                          "canonical": true
-                        }, type: EventTypes.spaceParent, stateKey: spaceId)
-                      : sdk.StateEvent(content: {}, type: "", stateKey: ""),
-                ]
+            sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
+            sdk.StateEvent(content: {
+              "via": ["matrix.staging.pangea.chat"],
+              "canonical": true
+            }, type: EventTypes.spaceParent, stateKey: spaceId),
+          ]
               : [],
-          preset: publicGroup
-              ? sdk.CreateRoomPreset.publicChat
-              : sdk.CreateRoomPreset.privateChat,
+          preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
           groupName: controller.text.isNotEmpty ? controller.text : null,
           enableEncryption: false,
         );
@@ -60,8 +53,7 @@ class NewGroupController extends State<NewGroup> {
   @override
   void initState() {
     // TODO: implement initState
-    Future.delayed(Duration(seconds: 1)).whenComplete(() =>
-        spaceId = VRouter.of(context).queryParameters['spaceId'].toString());
+    Future.delayed(Duration(seconds: 1)).whenComplete(() => spaceId = VRouter.of(context).queryParameters['spaceId'].toString());
 
     super.initState();
   }

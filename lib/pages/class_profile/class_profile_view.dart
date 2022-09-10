@@ -271,6 +271,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [widget.controller.fetchFlag(data, url)]),
+
                                 const SizedBox(
                                   width: 5,
                                 ),
@@ -292,6 +293,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
                                 Row(children: [
                                   widget.controller.fetchFlag2(data, url),
+
                                   const SizedBox(
                                     width: 5,
                                   ),

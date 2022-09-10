@@ -72,8 +72,7 @@ class ChatListView extends StatelessWidget {
                       : const SnappingPosition.factor(positionFactor: 0.0),
                   snappingPositions: showSpaces
                       ? const [
-                          SnappingPosition.pixels(
-                              positionPixels: kSpacesBottomBarHeight),
+                          SnappingPosition.pixels(positionPixels: kSpacesBottomBarHeight),
                           SnappingPosition.factor(positionFactor: 0.5),
                           SnappingPosition.factor(positionFactor: 0.9),
                         ]
@@ -88,8 +87,8 @@ class ChatListView extends StatelessWidget {
                       : null,
                 );
               },
-            ),
-            bottomNavigationBar: const SafeArea(
+            ),    bottomNavigationBar: const SafeArea(
+
               child: ConnectionStatusHeader(),
             ),
           ),

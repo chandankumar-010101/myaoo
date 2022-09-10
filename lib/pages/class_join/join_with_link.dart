@@ -19,6 +19,7 @@ class JoinClassWithLink extends StatefulWidget {
 class _JoinClassWithLinkState extends State<JoinClassWithLink> {
   String classCode = "";
 
+
   storeData() {
     if (classCode.isNotEmpty) {
       final box = GetStorage();
@@ -29,16 +30,15 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       });
     } else {
       print("unable to find classcode");
-      Fluttertoast.showToast(
-          msg: "Unable to find class code",
-          webBgColor: Colors.red,
-          backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Unable to find class code", webBgColor: Colors.red, backgroundColor: Colors.red);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     classCode = VRouter.of(context).queryParameters['code'] ?? "";
+
     if (Matrix.of(context).client.loginState == LoginState.loggedOut) {
       storeData();
       return Scaffold(
@@ -46,12 +46,15 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       );
     } else {
       if (classCode.isEmpty) {
+
         return const Scaffold(
           body: Center(
             child: Text("Unable to find the Code"),
           ),
         );
+
       } else {
+
         return Scaffold(
           appBar: AppBar(
             leading: InkWell(
@@ -65,61 +68,65 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
           ),
           body: Center(
               child: FutureBuilder(
-            future: PangeaServices.fetchClassWithCode(classCode, context),
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.hasData) {
-                ClassCodeModel data = snapshot.data as ClassCodeModel;
-                //print(data.pangeaClassRoomId);
-                return Container(
-                  width: 300,
-                  padding: EdgeInsets.all(10.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    elevation: 10,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 10,
+
+                future: PangeaServices.fetchClassWithCode(classCode, context),
+                builder: (BuildContext context, snapshot) {
+                  if(snapshot.hasData){
+                    ClassCodeModel data = snapshot.data as ClassCodeModel;
+                    //print(data.pangeaClassRoomId);
+                    return Container(
+                      width: 300,
+                      padding: EdgeInsets.all(10.0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
-                        const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          child: Text(
-                            "By pressing Join you will be added to the class",
-                            textAlign: TextAlign.center,
-                          ),
+                        elevation: 10,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              child: Text(
+                                "By pressing Join you will be added to the class",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+
+                            SizedBox(height: 10,),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: ElevatedButton(
+                                child: const Text("Connect To Class"),
+                                onPressed: () {
+                                  PangeaServices.joinRoom(context, data.pangeaClassRoomId!);
+                                },
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: ElevatedButton(
-                            child: const Text("Connect To Class"),
-                            onPressed: () {
-                              PangeaServices.joinRoom(
-                                  context, data.pangeaClassRoomId!);
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                print(snapshot.error);
-                return CircularProgressIndicator();
-              } else {
-                return CircularProgressIndicator();
-              }
-            },
-          )),
+                      ),
+                    );
+
+                  }else if(snapshot.hasError){
+                    print(snapshot.error);
+                    return CircularProgressIndicator();
+
+                  }
+                  else{
+                    return CircularProgressIndicator();
+                  }
+                },
+
+              )
+          ),
         );
       }
     }
+
   }
 }

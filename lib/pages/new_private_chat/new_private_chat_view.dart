@@ -40,27 +40,21 @@ class NewPrivateChatView extends StatelessWidget {
   //   return;
   // }
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
         title: Text(L10n.of(context)!.newChat),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // actions: [
-        // TextButton(
-        //   onPressed: () => VRouter.of(context).to('/newgroup'),
-        //   child: Text(
-        //     L10n.of(context)!.createNewGroup,
-        //     style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-        //   ),
-        // )
-        // ],
       ),
       body: MaxWidthBody(
         withScrolling: true,
         child: Column(
           children: [
+
             Container(
               margin: const EdgeInsets.all(_qrCodePadding),
               alignment: Alignment.center,
@@ -89,6 +83,7 @@ class NewPrivateChatView extends StatelessWidget {
                 ),
               ),
             ),
+
             ListTile(
               subtitle: Text(
                 L10n.of(context)!.createNewChatExplaination,
@@ -144,6 +139,7 @@ class NewPrivateChatView extends StatelessWidget {
                         child: Text("Invite"))
                     : Container()
                 : Container(),
+
           ],
         ),
       ),

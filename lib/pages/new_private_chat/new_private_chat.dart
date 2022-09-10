@@ -81,6 +81,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     super.dispose();
   }
 
+
   void submitAction([_]) async {
     controller.text = controller.text.trim();
     if (!formKey.currentState!.validate()) return;
@@ -172,6 +173,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
       VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
     }
 
+
     //  UrlLauncher(context, '$prefix${controller.text}').openMatrixToUrl();
   }
 
@@ -194,12 +196,14 @@ class NewPrivateChatController extends State<NewPrivateChat> {
         context,
       );
 
+
   void requestMoreMembersAction(String classId) async {
     final room = Matrix.of(context).client.getRoomById(classId);
     final participants = await showFutureLoadingDialog(
         context: context, future: () => room!.requestParticipants());
     if (participants.error == null) {
       setState(() => members = participants.result);
+
     }
   }
 
@@ -252,6 +256,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
 
   @override
   Widget build(BuildContext context) {
+
     return NewPrivateChatView(this);
   }
 }
