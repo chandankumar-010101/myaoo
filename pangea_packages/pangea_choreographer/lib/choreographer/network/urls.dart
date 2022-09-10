@@ -1,9 +1,16 @@
 class Urls {
   static String apiVersion = '';
-  static String baseUrl = 'https://api.pangea.chat/' + Urls.apiVersion;
+  static String flagsBaseUrl = '';
 
-  static String firstStep = 'it_initialstep';
-  static String subseqStep = 'it_step';
-  static String choreo = 'choreo';
-  static String messageService = 'message_service';
+  static String baseUrl = '';
+
+  static String firstStep = Urls.choreo + '/it_initialstep';
+  static String subseqStep = Urls.choreo + '/it_step';
+  static String choreo = '/choreo';
+  static String messageService = Urls.choreo + '/message_service';
+
+  static String flags = '/language/list';
+
+  static String langList = 'language/list';
+
 }

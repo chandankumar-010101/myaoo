@@ -2,14 +2,20 @@ import 'dart:async';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
+import '../../config/app_config.dart';
+import '../../main.dart';
 import '../../utils/platform_infos.dart';
 import 'login_view.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -66,9 +72,7 @@ class LoginController extends State<Login> {
           identifier: identifier,
           // To stay compatible with older server versions
           // ignore: deprecated_member_use
-          user: identifier.type == AuthenticationIdentifierTypes.userId
-              ? username
-              : null,
+          user: identifier.type == AuthenticationIdentifierTypes.userId ? username : null,
           password: passwordController.text,
           initialDeviceDisplayName: PlatformInfos.clientName);
     } on MatrixException catch (exception) {
@@ -101,8 +105,7 @@ class LoginController extends State<Login> {
       Matrix.of(context).getLoginClient().homeserver = newDomain;
       DiscoveryInformation? wellKnownInformation;
       try {
-        wellKnownInformation =
-            await Matrix.of(context).getLoginClient().getWellknown();
+        wellKnownInformation = await Matrix.of(context).getLoginClient().getWellknown();
         if (wellKnownInformation.mHomeserver.baseUrl.toString().isNotEmpty) {
           newDomain = wellKnownInformation.mHomeserver.baseUrl;
         }
@@ -113,21 +116,16 @@ class LoginController extends State<Login> {
         await showFutureLoadingDialog(
           context: context,
           // do nothing if we error, we'll handle it below
-          future: () => Matrix.of(context)
-              .getLoginClient()
-              .checkHomeserver(newDomain)
-              .catchError((e) {}),
+          future: () => Matrix.of(context).getLoginClient().checkHomeserver(newDomain).catchError((e) {}),
         );
         if (Matrix.of(context).getLoginClient().homeserver == null) {
           Matrix.of(context).getLoginClient().homeserver = oldHomeserver;
           // okay, the server we checked does not appear to be a matrix server
-          Logs().v(
-              '$newDomain is not running a homeserver, asking to use $oldHomeserver');
+          Logs().v('$newDomain is not running a homeserver, asking to use $oldHomeserver');
           final dialogResult = await showOkCancelAlertDialog(
             context: context,
             useRootNavigator: false,
-            message:
-                L10n.of(context)!.noMatrixServer(newDomain, oldHomeserver!),
+            message: L10n.of(context)!.noMatrixServer(newDomain, oldHomeserver!),
             okLabel: L10n.of(context)!.ok,
             cancelLabel: L10n.of(context)!.cancel,
           );
@@ -140,8 +138,7 @@ class LoginController extends State<Login> {
         }
         setState(() => usernameError = null);
       } else {
-        setState(() =>
-            Matrix.of(context).getLoginClient().homeserver = oldHomeserver);
+        setState(() => Matrix.of(context).getLoginClient().homeserver = oldHomeserver);
       }
     } catch (e) {
       setState(() => usernameError = e.toString());
@@ -159,8 +156,7 @@ class LoginController extends State<Login> {
       fullyCapitalizedForMaterial: false,
       textFields: [
         DialogTextField(
-          initialText:
-              usernameController.text.isEmail ? usernameController.text : '',
+          initialText: usernameController.text.isEmail ? usernameController.text : '',
           hintText: L10n.of(context)!.enterAnEmailAddress,
           keyboardType: TextInputType.emailAddress,
         ),
@@ -170,12 +166,11 @@ class LoginController extends State<Login> {
     final clientSecret = DateTime.now().millisecondsSinceEpoch.toString();
     final response = await showFutureLoadingDialog(
       context: context,
-      future: () =>
-          Matrix.of(context).getLoginClient().requestTokenToResetPasswordEmail(
-                clientSecret,
-                input.single,
-                sendAttempt++,
-              ),
+      future: () => Matrix.of(context).getLoginClient().requestTokenToResetPasswordEmail(
+            clientSecret,
+            input.single,
+            sendAttempt++,
+          ),
     );
     if (response.error != null) return;
     final password = await showTextInputDialog(
@@ -225,8 +220,10 @@ class LoginController extends State<Login> {
           ),
     );
     if (success.error == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.passwordHasBeenChanged)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(L10n.of(context)!.passwordHasBeenChanged),
+        backgroundColor: Colors.green,
+      ));
       usernameController.text = input.single;
       passwordController.text = password.single;
       login();
@@ -234,15 +231,47 @@ class LoginController extends State<Login> {
   }
 
   static int sendAttempt = 0;
+  void ssoLoginAction(String id) async {
+    final redirectUrl = kIsWeb ? html.window.origin! + '/auth.html' : AppConfig.appOpenUrlScheme.toLowerCase() + '://login';
+    final url =
+        '${Matrix.of(context).getLoginClient().homeserver?.toString()}/_matrix/client/r0/login/sso/redirect/${Uri.encodeComponent(id)}?redirectUrl=${Uri.encodeQueryComponent(redirectUrl)}';
+    final urlScheme = Uri.parse(redirectUrl).scheme;
+    print("here ${url}");
+    print("here1 ${urlScheme}");
+    final result = await FlutterWebAuth.authenticate(
+      url: url,
+      callbackUrlScheme: urlScheme,
+    );
+    print("here2 ${result}");
+    final token = Uri.parse(result).queryParameters['loginToken'];
+
+    print("here3 ${token}");
+    if (token?.isEmpty ?? false) return;
+    print(token);
+    await showFutureLoadingDialog(
+      context: context,
+      future: () => Matrix.of(context).getLoginClient().login(
+            LoginType.mLoginToken,
+            token: token,
+            initialDeviceDisplayName: PlatformInfos.clientName,
+          ),
+    );
+  }
+
+  GoogleSignInAccount? _currentUser;
+  String _contactText = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => LoginView(this);
-
 }
 
 extension on String {
-  static final RegExp _phoneRegex =
-      RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+  static final RegExp _phoneRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   bool get isEmail => EmailValidator.validate(this);
   bool get isPhoneNumber => _phoneRegex.hasMatch(this);
 }

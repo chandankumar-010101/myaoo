@@ -49,6 +49,7 @@ dependencies:
   flutter_webrtc: ^0.8.7
   future_loading_dialog: ^0.2.3
   geolocator: ^7.6.2
+  google_sign_in: ^5.4.1
   hive_flutter: ^1.1.0
   image: ^3.1.1
   image_picker: ^0.8.4+8
@@ -98,6 +99,7 @@ dependencies:
   jwt_decoder: ^2.0.1
 
 
+
   # Pangeachat custom packages
   pangea_choreographer:
     path: pangea_packages/pangea_choreographer
@@ -145,11 +147,13 @@ flutter:
       fonts:
         - asset: fonts/NotoEmoji/NotoColorEmoji.ttf
 
+
 dependency_overrides:
   # Necessary for webRTC on web.
   # Fix for stream fallback for unsupported browsers:
   # https://github.com/fluttercommunity/plus_plugins/pull/746
   # Upstream pull request: https://github.com/fluttercommunity/plus_plugins/pull/746
+  image_picker_android: 0.8.4+13
   connectivity_plus_web:
     git:
       url: https://github.com/TheOneWithTheBraid/plus_plugins.git

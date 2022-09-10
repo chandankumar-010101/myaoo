@@ -74,8 +74,7 @@ class AddWidgetTileState extends State<AddWidgetTile> {
       widget.room.addWidget(matrixWidget);
       Navigator.of(context).pop();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context)!.errorAddingWidget)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red, content: Text(L10n.of(context)!.errorAddingWidget)));
     }
   }
 

@@ -1,10 +1,23 @@
+import '../../extensions/myList_extionsion.dart';
+
 class ReceiveTextModel {
+  bool isShuffled = false;
   String? translation;
   List<Continuances>? continuances;
   bool isFinal = false;
   String? translationId;
   int? payload_id;
   ReceiveTextModel({this.translation, this.continuances, this.translationId});
+  List<Continuances> get shuffled {
+    if (isShuffled) {
+      return continuances!;
+    }
+    isShuffled = true;
+
+    continuances = continuances!.shuffleReturn();
+    return continuances!;
+  }
+
   List<Continuances>? get uniqueContinuances {
     // List<Continuances> uniqueOptions = [];
     // Map<String, Continuances> hashMap = {};
@@ -14,7 +27,7 @@ class ReceiveTextModel {
     //     hashMap[element.text!] = element;
     //   }
     // });
-    return continuances;
+    return shuffled;
   }
 
   fromJson(Map<String, dynamic> json) {

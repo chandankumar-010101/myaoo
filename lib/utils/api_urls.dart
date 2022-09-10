@@ -30,5 +30,16 @@ class ApiUrls {
  // static String enrollClassValidate = Environment.baseAPI+"/class/validate_enroll";
   static String enrollClass = Environment.baseAPI+"/class/class_enroll";
 
+  static String join_code = Environment.baseAPI + "/class/class_by_code?class_code=";
+  static String send_email_link = Environment.baseAPI+"/class/invite/email";
+  static String exchangeAcceptRequest = Environment.baseAPI+"/class/exchange/accept";
+  static String teacherAllClass = Environment.baseAPI+"/class/get_class_by_teacher";
+
+
+  ///   ---------------------- Exchange --------------------------------------
+  static String isExchange = Environment.baseAPI+"/class/get_exchange?exchange_pangea_id=";
+  static String classParticipants = Environment.baseAPI+"/class/get_room_members?pangea_class_id=";
+  static String exchangeParticipantsStore = Environment.baseAPI+"/class/exchange/participant";
+  static String exchangeInfoStore = Environment.baseAPI+"/class/exchange/create";
 
 }

@@ -52,6 +52,7 @@ extension UiaRequestManager on MatrixState {
               UiaException(L10n.of(widget.context)!.serverRequiresEmail),
             );
           }
+          print("I am here");
           final auth = AuthenticationThreePidCreds(
             session: uiaRequest.session,
             type: AuthenticationTypes.emailIdentity,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,13 +22,15 @@ abstract class SpacesEntry {
   // Gets the (translated) name of this entry.
   String getName(BuildContext context);
   // Gets an icon for this entry (avoided if a space is given)
-  Icon getIcon(bool active) => active
-      ? const Icon(CupertinoIcons.chat_bubble_2_fill)
-      : const Icon(CupertinoIcons.chat_bubble_2);
+  Icon getIcon(bool active) => active ? const Icon(CupertinoIcons.chat_bubble_2_fill) : const Icon(CupertinoIcons.chat_bubble_2);
   // If this is a specific Room, returns the space Room for various purposes.
   Room? getSpace(BuildContext context) => null;
   // Gets a list of rooms - this is done as part of _ChatListViewBodyState to get the full list of rooms visible from this SpacesEntry.
-  List<Room> getRooms(BuildContext context);
+  List<Room> getRooms(
+    BuildContext context,
+  );
+
+  List<Room> getPeopleRooms(BuildContext context);
   // Checks that this entry is still valid.
   bool stillValid(BuildContext context) => true;
   // Returns true if the Stories header should be shown.
@@ -38,8 +42,7 @@ bool _roomCheckCommon(Room room, BuildContext context) {
   if (room.isSpace && room.membership == Membership.join && !room.isUnread) {
     return false;
   }
-  if (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') ==
-      ClientStoriesExtension.storiesRoomType) {
+  if (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType) {
     return false;
   }
   return true;
@@ -68,11 +71,12 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) => _roomCheckCommon(room, context))
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && !room.isSpace).toList();
+  }
+
+  @override
+  List<Room> getPeopleRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && _roomCheckCommon(room, context)).toList();
   }
 
   @override
@@ -100,11 +104,12 @@ class DirectChatsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) => room.isDirectChat && _roomCheckCommon(room, context))
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat).toList();
+  }
+
+  @override
+  List<Room> getPeopleRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
   }
 
   @override
@@ -131,20 +136,19 @@ class GroupsSpacesEntry extends SpacesEntry {
   String getName(BuildContext context) => L10n.of(context)!.groups;
 
   @override
-  Icon getIcon(bool active) =>
-      active ? const Icon(Icons.group) : const Icon(Icons.group_outlined);
+  Icon getIcon(bool active) => active ? const Icon(Icons.group) : const Icon(Icons.group_outlined);
 
   @override
   List<Room> getRooms(BuildContext context) {
     final rooms = Matrix.of(context).client.rooms;
     // Needs to match ChatList's definition of a space.
     final spaces = rooms.where((room) => room.isSpace).toList();
-    return rooms
-        .where((room) =>
-            (!room.isDirectChat) &&
-            _roomCheckCommon(room, context) &&
-            separatedGroup(room, spaces))
-        .toList();
+    return rooms.where((room) => (!room.isDirectChat) && _roomCheckCommon(room, context) && separatedGroup(room, spaces)).toList();
+  }
+
+  @override
+  List<Room> getPeopleRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
   }
 
   bool separatedGroup(Room room, List<Room> spaces) {
@@ -173,11 +177,12 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) => roomCheck(room, context))
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && _roomInsideSpace(room, space)).toList();
+  }
+
+  @override
+  List<Room> getPeopleRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && roomCheck(room, context)).toList();
   }
 
   bool roomCheck(Room room, BuildContext context) {
@@ -187,6 +192,7 @@ class SpaceSpacesEntry extends SpacesEntry {
     if (_roomInsideSpace(room, space)) {
       return true;
     }
+
     if (AppConfig.showDirectChatsInSpaces) {
       if (room.isDirectChat &&
           room.summary.mHeroes != null &&
@@ -200,9 +206,19 @@ class SpaceSpacesEntry extends SpacesEntry {
     return false;
   }
 
+  bool roomCheckSpace(Room room, BuildContext context) {
+    if (!_roomCheckCommon(room, context)) {
+      return false;
+    }
+    if (_roomInsideSpace(room, space)) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
-  bool stillValid(BuildContext context) =>
-      Matrix.of(context).client.getRoomById(space.id) != null;
+  bool stillValid(BuildContext context) => Matrix.of(context).client.getRoomById(space.id) != null;
 
   @override
   bool operator ==(Object other) {

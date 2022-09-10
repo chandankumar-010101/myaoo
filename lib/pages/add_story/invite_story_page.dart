@@ -12,8 +12,12 @@ import 'package:pangeachat/widgets/matrix.dart';
 
 class InviteStoryPage extends StatefulWidget {
   final Room? storiesRoom;
-  const InviteStoryPage({
+  String? spaceId;
+  List<User>? contacts;
+  InviteStoryPage({
     required this.storiesRoom,
+    this.spaceId,
+    this.contacts,
     Key? key,
   }) : super(key: key);
 
@@ -37,10 +41,10 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
       context: context,
       future: () async {
         final client = Matrix.of(context).client;
-        var room = await client.getStoriesRoom(context);
+        var room = await client.getStoriesRoom(context, widget.spaceId!);
         final inviteList = _invite.toList();
         if (room == null) {
-          room = await client.createStoriesRoom(inviteList.take(10).toList());
+          room = await client.createStoriesRoom(context, inviteList.take(10).toList(), widget.spaceId!);
           if (inviteList.length > 10) {
             inviteList.removeRange(0, 10);
           } else {
@@ -50,7 +54,6 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
         for (final userId in inviteList) {
           room.invite(userId);
         }
-
         _undecided.removeAll(_invite);
         _undecided.addAll(client.storiesBlockList);
         await client.setStoriesBlockList(_undecided.toList());
@@ -60,16 +63,13 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
     Navigator.of(context).pop<bool>(true);
   }
 
-  Future<List<User>>? loadContacts;
+  //Future<List<User>>? loadContacts;
 
   @override
   Widget build(BuildContext context) {
-    loadContacts ??= Matrix.of(context)
-        .client
-        .getUndecidedContactsForStories(widget.storiesRoom)
-        .then((contacts) {
-      return contacts;
-    });
+    // loadContacts ??= Matrix.of(context).client.getUndecidedContactsForStories(widget.storiesRoom).then((contacts) {
+    //   return contacts;
+    // });
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -91,36 +91,18 @@ class _InviteStoryPageState extends State<InviteStoryPage> {
           ),
           const Divider(height: 1),
           Expanded(
-            child: FutureBuilder<List<User>>(
-                future: loadContacts,
-                builder: (context, snapshot) {
-                  final contacts = snapshot.data;
-                  if (contacts == null) {
-                    final error = snapshot.error;
-                    if (error != null) {
-                      return Center(
-                          child: Text(error.toLocalizedString(context)));
-                    }
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  }
-                  _undecided = contacts.map((u) => u.id).toSet();
-                  return ListView.builder(
-                    itemCount: contacts.length,
-                    itemBuilder: (context, i) => SwitchListTile.adaptive(
-                      value: _invite.contains(contacts[i].id),
-                      onChanged: (b) => setState(() => b
-                          ? _invite.add(contacts[i].id)
-                          : _invite.remove(contacts[i].id)),
-                      secondary: Avatar(
-                        mxContent: contacts[i].avatarUrl,
-                        name: contacts[i].calcDisplayname(),
-                      ),
-                      title: Text(contacts[i].calcDisplayname()),
-                    ),
-                  );
-                }),
-          ),
+              child: ListView.builder(
+            itemCount: widget.contacts!.length,
+            itemBuilder: (context, i) => SwitchListTile.adaptive(
+              value: _invite.contains(widget.contacts![i].id),
+              onChanged: (b) => setState(() => b ? _invite.add(widget.contacts![i].id) : _invite.remove(widget.contacts![i].id)),
+              secondary: Avatar(
+                mxContent: widget.contacts![i].avatarUrl,
+                name: widget.contacts![i].calcDisplayname(),
+              ),
+              title: Text(widget.contacts![i].calcDisplayname()),
+            ),
+          )),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(

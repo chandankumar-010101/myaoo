@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/user_info.dart';
+import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../utils/api_helper.dart';
@@ -13,8 +15,10 @@ import '../../widgets/matrix.dart';
 import '../homeserver_picker/home_controller.dart';
 import 'language_selectionView.dart';
 
+import 'package:http/http.dart' as http;
+
 class LanguageSelection extends StatefulWidget {
-  LanguageSelection({Key? key}) : super(key: key);
+  const LanguageSelection({Key? key}) : super(key: key);
 
   @override
   LanguageSelectionController createState() => LanguageSelectionController();
@@ -52,79 +56,54 @@ class LanguageSelectionController extends State<LanguageSelection> {
         var temp1 = client.userID!.substring(0, client.userID!.indexOf(":"));
         var temp2 = temp1.replaceAll("@", "");
         var full_name = temp2;
-        String url = ApiUrls.user_details + client.userID.toString();
 
-        await ApiFunctions().post(
-          ApiUrls.create_user,
-          {
+        final value = await http.post(Uri.parse(ApiUrls.create_user,),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({
             "full_name": full_name,
             "user_type": user_type,
             "pangea_user_id": client.userID,
             "source_lang": source_language.toString(),
             "target_lang": target_language.toString()
-          },
-        ).then((value) async {
-
-          if (value.statusCode == 201 || value.statusCode == 400) {
-
-            await ApiFunctions().get(url).then((value) {
-              if (value.statusCode == 200) {
-                UserInfo data = UserInfo.fromJson(value.body);
-                //backend access and refresh token
-                box.write("access", data.access ?? "empty");
-                box.write("refresh", data.refresh ?? "empty");
-                box.write("sourcelanguage", source_language);
-                box.write("targetlanguage", target_language);
-                box.write("usertype", user_type);
-                box.write("accessToken", client.accessToken.toString());
-                box.write("clientID", client.userID.toString());
-                box.write("sign_up", false);
-                context.vRouter.to('/rooms');
-                getxController.selectedLanguageOne.value = "";
-                getxController.selectedLanguageTwo.value = "";
-              } else {
-                setState(() {
-                  loading = false;
-                });
-                log(value.statusCode.toString());
-                Get.rawSnackbar(
-                    message: "Something went wrong",
-                    snackPosition: SnackPosition.BOTTOM,
-                    margin: EdgeInsets.zero,
-                    snackStyle: SnackStyle.GROUNDED,
-                    backgroundColor: Colors.red);
-              }
-            }).catchError((error) {
-              setState(() {
-                loading = false;
-              });
-              log(error.toString());
-            });
-          } else {
-            setState(() {
-              loading = false;
-            });
-            log(value.statusCode.toString());
-            Get.rawSnackbar(
-                message: "Something went wrong",
-                snackPosition: SnackPosition.BOTTOM,
-                margin: EdgeInsets.zero,
-                snackStyle: SnackStyle.GROUNDED,
-                backgroundColor: Colors.red);
+          }),
+        );
+        if (value.statusCode == 201 || value.statusCode == 200) {
+          getxController.selectedLanguageOne.value = "";
+          getxController.selectedLanguageTwo.value = "";
+          if(Matrix.of(context).client.accessToken !=null){
+            PangeaServices.userDetails(clientID: client.userID.toString(),accessToken: Matrix.of(context).client.accessToken!);
+            Matrix.of(context).widget.router!.currentState!.to(
+              '/rooms',
+              queryParameters:Matrix.of(context).widget.router!.currentState!.queryParameters,
+            );
+          }else{
+            print("Access Token not foun");
           }
-        }).catchError((error) {
+
+        }
+        else {
           setState(() {
             loading = false;
           });
-          log(error);
-        });
+          log(value.statusCode.toString());
+          Get.rawSnackbar(
+              message: "Something went wrong",
+              snackPosition: SnackPosition.BOTTOM,
+              margin: EdgeInsets.zero,
+              snackStyle: SnackStyle.GROUNDED,
+              backgroundColor: Colors.red);
+        }
+
       } catch (e) {
+        setState(() {
+          loading = false;
+        });
         if (kDebugMode) {
           print("Unable to fetch user name");
           print(e);
         }
-
-
       }
     } catch (e) {
       log(e.toString());
@@ -140,7 +119,6 @@ class LanguageSelectionController extends State<LanguageSelection> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getxController.role.value = "";
   }

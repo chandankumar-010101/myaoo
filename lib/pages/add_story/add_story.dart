@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
 
@@ -47,6 +48,7 @@ class AddStoryController extends State<AddStoryPage> {
   int alignmentX = 0;
   int alignmentY = 0;
 
+  String spaceId = "";
   void toggleBoxFit() {
     if (fit == BoxFit.contain) {
       setState(() {
@@ -112,15 +114,14 @@ class AddStoryController extends State<AddStoryPage> {
 
   void captureVideo() async {
     final picked = await ImagePicker().pickVideo(
-      source: ImageSource.camera,
+      source: ImageSource.gallery,
     );
     if (picked == null) return;
     final bytes = await picked.readAsBytes();
 
     setState(() {
       video = MatrixVideoFile(bytes: bytes, name: picked.name);
-      videoPlayerController = VideoPlayerController.file(File(picked.path))
-        ..setLooping(true);
+      videoPlayerController = VideoPlayerController.file(File(picked.path))..setLooping(true);
     });
   }
 
@@ -133,30 +134,53 @@ class AddStoryController extends State<AddStoryPage> {
   void postStory() async {
     if (video == null && image == null && controller.text.isEmpty) return;
     final client = Matrix.of(context).client;
-    var storiesRoom = await client.getStoriesRoom(context);
 
-    // Invite contacts if necessary
+    var storiesRoom = await client.getStoriesRoom(context, spaceId);
+
     final undecided = await showFutureLoadingDialog(
       context: context,
       future: () => client.getUndecidedContactsForStories(storiesRoom),
     );
-    final result = undecided.result;
-    if (result == null) return;
-    if (result.isNotEmpty) {
+    var result = undecided.result;
+
+    if (result!.isEmpty) {
+      final activespace = await client.getRoomById(spaceId);
+
+      List<User> contact = await activespace!.requestParticipants();
+
+      result = contact.where((element) => element.id != client.userID).toList();
+
+      dev.log(result.toList().toString());
       final created = await showDialog<bool>(
         context: context,
         useRootNavigator: false,
-        builder: (context) => InviteStoryPage(storiesRoom: storiesRoom),
+        builder: (context) => InviteStoryPage(
+          storiesRoom: storiesRoom,
+          spaceId: spaceId,
+          contacts: result,
+        ),
       );
       if (created != true) return;
-      storiesRoom ??= await client.getStoriesRoom(context);
+      storiesRoom ??= await client.getStoriesRoom(context, spaceId);
+    } else {
+      final created = await showDialog<bool>(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) => InviteStoryPage(
+          storiesRoom: storiesRoom,
+          spaceId: spaceId,
+          contacts: result,
+        ),
+      );
+      if (created != true) return;
+      storiesRoom ??= await client.getStoriesRoom(context, spaceId);
     }
-
-    // Post story
+    // post story
     final postResult = await showFutureLoadingDialog(
       context: context,
       future: () async {
         if (storiesRoom == null) throw ('Stories room is null');
+
         var video = this.video?.detectFileType;
         if (video != null) {
           video = await video.resizeVideo();
@@ -203,8 +227,14 @@ class AddStoryController extends State<AddStoryPage> {
         });
       },
     );
+
     if (postResult.error == null) {
       VRouter.of(context).pop();
+    }
+
+    if (postResult.error == null) {
+      VRouter.of(context).pop();
+      // }
     }
   }
 
@@ -239,6 +269,9 @@ class AddStoryController extends State<AddStoryPage> {
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(Duration(seconds: 1)).whenComplete(() => spaceId = VRouter.of(context).queryParameters["spaceId"].toString());
+
     final rand = Random().nextInt(1000).toString();
     backgroundColor = rand.color;
     backgroundColorDark = rand.darkColor;

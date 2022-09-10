@@ -13,6 +13,8 @@ dependencies:
   flutter_svg: ^0.22.0
   http: ^0.13.4
   matrix: ^0.9.12
+  shared_preferences: ^2.0.15
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,9 +27,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
-
-
-
     - assets/newAssets/
     - assets/countryFlags/
     - assets/newAssets/countryFlagsPngs/
@@ -56,3 +55,9 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+dependency_overrides:
+  cached_network_image:
+    git:
+      url: https://github.com/XuannThucc/flutter_cached_network_image.git
+      path: cached_network_image
+      ref: ff72f00f142f13d889d7549e013af91cb0b523ab

@@ -60,6 +60,7 @@ class Result {
       this.rating,
       this.profilePic,
       this.total_student,
+        this.schoolName,
       this.pangea_class_room_id});
 
   int? id;
@@ -69,6 +70,7 @@ class Result {
   String? dominantLanguage;
   String? targetLanguage;
   String? description;
+  String? schoolName;
   int? languageLevel;
   DateTime? createdAt;
   String? pangeaClassRoomId;
@@ -81,6 +83,7 @@ class Result {
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
       id: json["id"] == null ? null : json["id"],
+      schoolName: json["school_name"] !=null?json["school_name"]:null,
       className: json["class_name"] == null ? null : json["class_name"],
       city: json["city"] == null ? null : json["city"],
       country: json["country"] == null ? null : json["country"],

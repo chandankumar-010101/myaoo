@@ -3,7 +3,7 @@ import '../constants/lang_list.dart';
 import '../models/choreo_language.model.dart';
 
 class LangController {
-  List<ChoreoLangModel> langList = LangList.all;
+  //List<ChoreoLangModel> langList = LangList.all;
   ChoreoController choreoController;
   LangController(this.choreoController);
   ChoreoLangModel? _srcLang;
@@ -16,6 +16,18 @@ class LangController {
 
   void setFeedBackLang(ChoreoLangModel lang) {
     _feedBackLang = lang;
+  }
+
+  void setSrcLangByName(String name) {
+    _srcLang = choreoController.flagController!.byLangName(name);
+    print('Src lang ' + _srcLang!.toJson().toString());
+    _setState();
+  }
+
+  void setTrgLangByName(String name) {
+    _trgLang = choreoController.flagController!.byLangName(name);
+    print('Trg lang' + _trgLang!.toJson().toString());
+    _setState();
   }
 
   void changeSrcLang(ChoreoLangModel lang) {
@@ -33,12 +45,18 @@ class LangController {
   }
 
   ChoreoLangModel? get srcLang {
-    _srcLang ??= LangList.byLangCode('en');
+    if (_srcLang != null) {
+      return _srcLang;
+    }
+    _srcLang ??= choreoController.flagController!.byLangCode('en');
     return _srcLang;
   }
 
   ChoreoLangModel? get trgLang {
-    _trgLang ??= LangList.byLangCode('es');
+    if (_trgLang != null) {
+      return _trgLang;
+    }
+    _trgLang ??= choreoController.flagController!.byLangCode('es');
     return _trgLang;
   }
 }

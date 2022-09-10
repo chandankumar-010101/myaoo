@@ -7,8 +7,8 @@ import 'package:pangeachat/widgets/layouts/max_width_body.dart';
 
 class NewGroupView extends StatelessWidget {
   final NewGroupController controller;
-
-  const NewGroupView(this.controller, {Key? key}) : super(key: key);
+  final String spaceId;
+  const NewGroupView(this.controller, this.spaceId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

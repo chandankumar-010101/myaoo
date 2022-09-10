@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
@@ -18,13 +19,15 @@ enum ContextualRoomAction {
 }
 
 class StoriesHeader extends StatelessWidget {
-  const StoriesHeader({Key? key}) : super(key: key);
+  ChatListController? controller;
+  List<Room>? spaceStories;
+  StoriesHeader({this.controller, this.spaceStories, Key? key}) : super(key: key);
 
-  void _addToStoryAction(BuildContext context) =>
-      VRouter.of(context).to('/stories/create');
+  void _addToStoryAction(BuildContext context) => VRouter.of(context).to('/stories/create');
 
   void _goToStoryAction(BuildContext context, String roomId) async {
     final room = Matrix.of(context).client.getRoomById(roomId);
+
     if (room == null) return;
     if (room.membership != Membership.join) {
       final result = await showFutureLoadingDialog(
@@ -90,8 +93,7 @@ class StoriesHeader extends StatelessWidget {
     return StreamBuilder(
       stream: Matrix.of(context).onShareContentChanged.stream,
       builder: (context, _) => StreamBuilder<Object>(
-          stream: client.onSync.stream
-              .where((syncUpdate) => syncUpdate.hasRoomUpdate),
+          stream: client.onSync.stream.where((syncUpdate) => syncUpdate.hasRoomUpdate),
           builder: (context, snapshot) {
             if (Matrix.of(context).shareContent != null) {
               return ListTile(
@@ -108,64 +110,62 @@ class StoriesHeader extends StatelessWidget {
             if (client.storiesRooms.isEmpty) {
               return Container();
             }
-            final ownStoryRoom = client.storiesRooms
-                .firstWhereOrNull((r) => r.creatorId == client.userID);
+            final ownStoryRoom = client.storiesRooms.firstWhereOrNull((r) => r.creatorId == client.userID);
+
             final stories = [
               if (ownStoryRoom != null) ownStoryRoom,
               ...client.storiesRooms..remove(ownStoryRoom),
             ];
-            return SizedBox(
-              height: 106,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                scrollDirection: Axis.horizontal,
-                itemCount: stories.length,
-                itemBuilder: (context, i) {
-                  final room = stories[i];
-                  return Opacity(
-                    opacity: room.hasPosts ? 1 : 0.75,
-                    child: FutureBuilder<Profile>(
-                        future: room.getCreatorProfile(),
-                        builder: (context, snapshot) {
-                          final userId = room.creatorId;
-                          final displayname = snapshot.data?.displayName ??
-                              userId?.localpart ??
-                              'Unknown';
-                          final avatarUrl = snapshot.data?.avatarUrl;
-                          return _StoryButton(
-                            profile: Profile(
-                              displayName: displayname,
-                              avatarUrl: avatarUrl,
-                              userId: userId ?? 'Unknown',
-                            ),
-                            showEditFab: userId == client.userID,
-                            unread: room.membership == Membership.invite ||
-                                room.hasNewMessages,
-                            onPressed: () => _goToStoryAction(context, room.id),
-                            onLongPressed: () =>
-                                _contextualActions(context, room),
-                          );
-                        }),
-                  );
-                },
-              ),
-            );
+            final sp = controller!.activeSpacesEntry.getSpace(context);
+
+            return controller!.activeSpacesEntry.getSpace(context) != null
+                ? SizedBox(
+                    height: 105,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: spaceStories!.length,
+                      itemBuilder: (context, i) {
+                        final room = spaceStories![i];
+                        return Opacity(
+                          opacity: room.hasPosts ? 1 : 0.75,
+                          child: FutureBuilder<Profile>(
+                              future: room.getCreatorProfile(),
+                              builder: (context, snapshot) {
+                                final userId = room.creatorId;
+                                final displayname = room.displayname;
+                                final avatarUrl = snapshot.data?.avatarUrl;
+                                return _StoryButton(
+                                  profile: Profile(
+                                    displayName: displayname,
+                                    avatarUrl: avatarUrl,
+                                    userId: userId ?? 'Unknown',
+                                  ),
+                                  showEditFab: userId == client.userID,
+                                  unread: room.membership == Membership.invite || room.hasNewMessages,
+                                  onPressed: () => _goToStoryAction(context, room.id),
+                                  onLongPressed: () => _contextualActions(context, room),
+                                );
+                              }),
+                        );
+                      },
+                    ),
+                  )
+                : Container();
           }),
     );
   }
 }
 
 extension on Room {
-  Future<Profile> getCreatorProfile() =>
-      client.getProfileFromUserId(getState(EventTypes.RoomCreate)!.senderId);
+  Future<Profile> getCreatorProfile() => client.getProfileFromUserId(getState(EventTypes.RoomCreate)!.senderId);
 
   bool get hasPosts {
     if (membership == Membership.invite) return true;
     final lastEvent = this.lastEvent;
     if (lastEvent == null) return false;
     if (lastEvent.type != EventTypes.Message) return false;
-    if (DateTime.now().difference(lastEvent.originServerTs).inHours >
-        ClientStoriesExtension.lifeTimeInHours) {
+    if (DateTime.now().difference(lastEvent.originServerTs).inHours > ClientStoriesExtension.lifeTimeInHours) {
       return false;
     }
     return true;
@@ -191,7 +191,7 @@ class _StoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 78,
+      width: 100,
       child: InkWell(
         borderRadius: BorderRadius.circular(7),
         onTap: onPressed,
@@ -231,10 +231,8 @@ class _StoryButton extends StatelessWidget {
                           padding: const EdgeInsets.all(2.0),
                           child: CircleAvatar(
                             radius: 30,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                            foregroundColor:
-                                Theme.of(context).textTheme.bodyText1?.color,
+                            backgroundColor: Theme.of(context).colorScheme.surface,
+                            foregroundColor: Theme.of(context).textTheme.bodyText1?.color,
                             child: Avatar(
                               mxContent: profile.avatarUrl,
                               name: profile.displayName,
@@ -244,36 +242,41 @@ class _StoryButton extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (showEditFab)
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: FloatingActionButton.small(
-                              heroTag: null,
-                              onPressed: () =>
-                                  VRouter.of(context).to('/stories/create'),
-                              child: const Icon(
-                                Icons.add_outlined,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
+                      // if (showEditFab)
+                      //   Positioned(
+                      //     right: 0,
+                      //     bottom: 0,
+                      //     child: SizedBox(
+                      //       width: 24,
+                      //       height: 24,
+                      //       child: FloatingActionButton.small(
+                      //         heroTag: null,
+                      //         onPressed: () => VRouter.of(context).to('/stories/create'),
+                      //         child: const Icon(
+                      //           Icons.add_outlined,
+                      //           size: 16,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
               ),
               Center(
-                child: Text(
-                  profile.displayName ?? '',
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: unread ? FontWeight.bold : null,
+                child: SizedBox(
+                  width: 100,
+                  child: Expanded(
+                    child: Text(
+                      profile.displayName ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: unread ? FontWeight.bold : null,
+                      ),
+                    ),
                   ),
                 ),
               ),

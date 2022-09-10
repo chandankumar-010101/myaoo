@@ -1,10 +1,20 @@
 import '../models/choreo_language.model.dart';
 
-class LangList {
+class _LangList {
   static ChoreoLangModel byLangCode(String langCode) {
     ChoreoLangModel? lang;
-    LangList.all.forEach((element) {
+    _LangList.all.forEach((element) {
       if (element.langCode?.toLowerCase() == langCode.trim().toLowerCase()) {
+        lang = element;
+      }
+    });
+    return lang!;
+  }
+
+  static ChoreoLangModel byLangName(String name) {
+    ChoreoLangModel? lang;
+    _LangList.all.forEach((element) {
+      if (element.lang?.toLowerCase() == name.trim().toLowerCase()) {
         lang = element;
       }
     });

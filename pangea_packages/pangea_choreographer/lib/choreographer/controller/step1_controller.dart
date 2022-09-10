@@ -31,8 +31,8 @@ class Step1Controller extends LoaderState {
       if (_choreoResponse!.route == ChoreoRoute.SEND) {
         controller.send();
       } else {
-        controller.lang!.setFeedBackLang(
-            LangList.byLangCode(_choreoResponse!.detectedLang!));
+        controller.lang!.setFeedBackLang(controller.flagController!
+            .byLangCode(_choreoResponse!.detectedLang!));
         controller.state!.changeRoute(ChoreoRoute.STEP1);
       }
     } catch (err) {
@@ -67,10 +67,16 @@ class Step1Controller extends LoaderState {
     return 'Help me rewrite ';
   }
 
+  String? get orignalText {
+    return _choreoResponse!.grammarData!.text;
+  }
+
   List<Tokens>? get tokens {
+    return [];
     if (_choreoResponse!.grammarData == null) {
       return [Tokens()..token = ''];
     }
+    return _choreoResponse!.grammarData!.tokens;
     if (_choreoResponse!.grammarData!.tokens!.length < 6) {
       return _choreoResponse!.grammarData!.tokens;
     }
