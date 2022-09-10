@@ -329,8 +329,8 @@ class ConnectPageView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  ]),
-
+                                   ],
+                                  ),
                                 ],
                               ),
                             ),
