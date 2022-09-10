@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/config/themes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'login.dart';
 
@@ -278,8 +280,10 @@ class LoginView extends StatelessWidget {
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           ),
+
                                         ],
                                       ),
+
                                       Row(
                                         children: [
                                           const Expanded(
@@ -318,8 +322,24 @@ class LoginView extends StatelessWidget {
                                         ),
                                       ),
                                       const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Wrap(alignment: WrapAlignment.center, children: [
+                                        TextButton(
+                                          onPressed: () => launch(AppConfig.privacyUrl),
+                                          child: Text(
+                                            L10n.of(context)!.privacy,
+                                            style: const TextStyle(
+                                              decoration: TextDecoration.underline,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                      const SizedBox(
                                         height: 30.0,
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),

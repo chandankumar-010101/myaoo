@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/pages/connect/connect_page.dart';
 import 'package:pangeachat/pages/connect/sso_button.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ConnectPageView extends StatelessWidget {
   final ConnectPageController controller;
@@ -237,7 +239,7 @@ class ConnectPageView extends StatelessWidget {
                                     ),
 
                                     SizedBox(
-                                      height: 40,
+                                      height: 20,
                                     )
                                   ],
 
@@ -311,6 +313,23 @@ class ConnectPageView extends StatelessWidget {
                                                     ].toList(),
                                                   ),
                                           ),
+
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Wrap(alignment: WrapAlignment.center, children: [
+                                    TextButton(
+                                      onPressed: () => launch(AppConfig.privacyUrl),
+                                      child: Text(
+                                        L10n.of(context)!.privacy,
+                                        style: const TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
 
                                 ],
                               ),
