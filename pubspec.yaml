@@ -97,6 +97,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   fluttertoast: ^8.0.9
   jwt_decoder: ^2.0.1
+  flutter_sound: ^9.2.13
 
   flutter_sound: ^8.1.9
 

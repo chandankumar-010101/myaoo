@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
@@ -36,7 +37,9 @@ import '../chat_list/spaces_entry.dart';
 
 class RequestScreenView extends StatefulWidget {
   final RequestScreenState controller;
+
   const RequestScreenView(this.controller, {Key? key}) : super(key: key);
+
 
   @override
   State<RequestScreenView> createState() => _RequestScreenViewState();
@@ -44,41 +47,6 @@ class RequestScreenView extends StatefulWidget {
 
 class _RequestScreenViewState extends State<RequestScreenView> {
   final box = GetStorage();
-
-  SpacesEntry? _activeSpacesEntry;
-  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
-      ? DirectChatsSpacesEntry()
-      : AllRoomsSpacesEntry();
-
-  SpacesEntry get activeSpacesEntry {
-    final id = _activeSpacesEntry;
-    return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
-  }
-
-  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
-  Future<void> _waitForFirstSync() async {
-    final client = Matrix.of(context).client;
-    await client.roomsLoading;
-    await client.accountDataLoading;
-    if (client.prevBatch?.isEmpty ?? true) {
-      await client.onFirstSync.stream.first;
-    }
-    // Load space members to display DM rooms
-    final spaceId = activeSpaceId;
-    if (spaceId != null) {
-      final space = client.getRoomById(spaceId)!;
-      final localMembers = space.getParticipants().length;
-      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
-          (space.summary.mJoinedMemberCount ?? 0);
-      if (localMembers < actualMembersCount) {
-        await space.requestParticipants();
-      }
-    }
-  }
-
-  List<Room> get spaces =>
-      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
-
 
   fetchFlag(FetchClassInfoModel data,String url){
     try{
@@ -93,25 +61,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _waitForFirstSync();
-  }
 
-  fetchParti(String roomAlias)async{
-   // final members =   await  Matrix.of(context).client.getRoomById(roomAlias)!.requestParticipants();
-   //  log(members.toList().toString());
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final String basePath = Environment.baseAPI;
     final List<String> data = basePath.split("/api/v1");
     final String url = data[0];
+
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.fetchSpaceInfo(roomAlias);
+
 
 
 
@@ -429,6 +388,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                 onPressed: () {
                                                   final box = GetStorage();
 
+
                                                   if (roomAlias.isNotEmpty) {
                                                     box.write("public", data.permissions.isPublic);
                                                     box.write("openEnrollment", data.permissions.isOpenEnrollment);
@@ -559,7 +519,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
 
+
                   widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
+
 
                       ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -780,6 +742,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                       : Container(),
                   widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
                       ? Container(
+
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           padding: EdgeInsets.only(top: 10),
                           child: Flex(
@@ -818,6 +781,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
                               ),
                             ],
+
                           ),
                         )
                       : Container(),
@@ -827,8 +791,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                 ],
               ),
             );
+
           } else {
             if (snapshot.hasError) {
+
               if (kDebugMode) {
                 print("Unable to fetch data: ${snapshot.error}");
               }
