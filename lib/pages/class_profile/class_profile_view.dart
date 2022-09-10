@@ -558,7 +558,199 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ],
                               ),
                             ),
+<<<<<<< HEAD
                   widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
+=======
+                            onPressed: () {
+
+                              final box = GetStorage();
+                              if (roomAlias.isNotEmpty) {
+                                box.write("public",
+                                    data.permissions.isPublic);
+                                box.write(
+                                    "openEnrollment",
+                                    data.permissions
+                                        .isOpenEnrollment);
+                                box.write("openExchange",
+                                    data.permissions.isOpenExchange);
+                                context.vRouter.to(
+                                    "/classDetails/exchange_class",
+                                    queryParameters: {
+                                      "class_id": roomAlias,
+                                    });
+                              }
+                            },
+                            child: Text(
+                              "Request an Exchange",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ):Container(),
+                        const SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              UrlLauncher(context,
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  .openMatrixToUrl();
+                            },
+                            child: Text(
+                              "Message ${data.classAuthor}",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : box.read("clientID") == data.classAuthorId
+                      ? Container()
+                      : Container(
+                    margin:
+                    const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: [
+                        space.isNotEmpty?(data.permissions.isOpenEnrollment?SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () async {
+                              final confirmed =
+                              await showOkCancelAlertDialog(
+                                useRootNavigator: false,
+                                context: context,
+                                title: L10n.of(context)!.areYouSure,
+                                okLabel: L10n.of(context)!.ok,
+                                cancelLabel: L10n.of(context)!.cancel,
+                              );
+                              if (confirmed == OkCancelResult.ok) {
+                                print("confirm");
+                                print(data.classAuthor);
+
+                                if(roomAlias.isNotEmpty){
+
+                                  UrlLauncher(context,requestToEnroll: true,
+                                      roomId:  roomAlias,
+                                      'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                      .openMatrixToUrl();
+                                }
+
+                              }
+                            },
+                            child: Text(
+                              "Request an Enroll",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ):Container()):Container(),
+
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary ==
+                                    Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary,
+                              ),
+                            ),
+                            onPressed: () {
+                              UrlLauncher(context,
+                                  'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                  .openMatrixToUrl();
+                            },
+                            child: Text(
+                              "Message ${data.classAuthor}",
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  box.read("usertype") == 2 &&
+                      box.read("clientID") == data.classAuthorId
+>>>>>>> 1287ccf (encription disabled)
                       ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           padding: EdgeInsets.only(top: 10),
