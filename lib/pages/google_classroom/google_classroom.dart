@@ -17,7 +17,8 @@ import 'package:pangeachat/pages/google_classroom/google_http_client.dart';
 import '../../model/course/courses_failure.dart';
 
 class GoogleClassroom extends StatefulWidget {
-  const GoogleClassroom({Key? key}) : super(key: key);
+  String? roomId;
+  GoogleClassroom({this.roomId, Key? key}) : super(key: key);
 
   @override
   State<GoogleClassroom> createState() => GoogleClassroomController();
@@ -29,6 +30,7 @@ class GoogleClassroomController extends State<GoogleClassroom> {
   bool isLoading = false;
   bool isLoggedIn = false;
   List<CourseModel>? coursesList = [];
+  String roomId = "";
   authifNotGoogleUser() async {
     setState(() {
       isLoading = true;
@@ -102,6 +104,7 @@ class GoogleClassroomController extends State<GoogleClassroom> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    roomId = widget.roomId!;
   }
 
   @override

@@ -236,7 +236,12 @@ class _InviteStudentState extends State<InviteStudent> {
                                     onWillPop: () async => false,
                                     child: Dialog(
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                      child: Container(width: double.infinity, height: double.infinity, child: GoogleClassroom()),
+                                      child: Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          child: GoogleClassroom(
+                                            roomId: roomId,
+                                          )),
                                     ),
                                   );
                                 });

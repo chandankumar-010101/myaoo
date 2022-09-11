@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,10 @@ import 'package:googleapis/bigtableadmin/v2.dart';
 import 'package:googleapis/chat/v1.dart' as googleapi;
 import 'package:pangeachat/main.dart';
 import 'package:pangeachat/model/course/course_model.dart';
+import 'package:pangeachat/model/invite_email_model.dart';
 import 'package:pangeachat/pages/google_classroom/google_classroom.dart';
+
+import '../../services/services.dart';
 
 class GoogleClassroomView extends StatefulWidget {
   GoogleClassroomController? controller;
@@ -193,7 +197,7 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
               children: <Widget>[
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -222,20 +226,68 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Theme.of(context).primaryColorDark.withOpacity(0.8),
                       ),
                       child: selectedCourse != null && selectedCourse!.students != null && selectedCourse!.students!.isNotEmpty
-                          ? ListView.builder(
-                              itemCount: selectedCourse!.students!.length,
-                              itemBuilder: (_, i) => ListTile(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                title: Text(selectedCourse!.students![i].profile!.name!.fullName!),
-                                subtitle: Text(selectedCourse!.students![i].profile!.emailAddress!),
-                              ),
+                          ? Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: selectedCourse!.students!.length,
+                                    itemBuilder: (_, i) => ListTile(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      title: Text(selectedCourse!.students![i].profile!.name!.fullName!),
+                                      subtitle: Text(selectedCourse!.students![i].profile!.emailAddress!),
+                                      trailing: TextButton(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.email,
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text("Invite")
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          PangeaServices.sendEmailToJoinClass(
+                                            [
+                                              Data(
+                                                  name: selectedCourse!.students![i].profile!.name!.fullName!,
+                                                  email: selectedCourse!.students![i].profile!.emailAddress!),
+                                            ],
+                                            widget.controller!.roomId,
+                                            selectedCourse!.teachers!.first.profile!.name!.fullName!,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      List<Data> info = [];
+                                      info = List.generate(
+                                          selectedCourse!.students!.length,
+                                          (index) => Data(
+                                              name: selectedCourse!.students![index].profile!.name!.fullName!,
+                                              email: selectedCourse!.students![index].profile!.emailAddress!));
+
+                                      PangeaServices.sendEmailToJoinClass(
+                                        info,
+                                        widget.controller!.roomId,
+                                        selectedCourse!.teachers!.first.profile!.name!.fullName!,
+                                      );
+                                      log(info.toList().map((e) => e.name).toList().toString());
+                                    },
+                                    child: Text("Invite All"))
+                              ],
                             )
                           : Center(
                               child: Text("No Students found"),
