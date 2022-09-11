@@ -8,5 +8,9 @@ class Urls {
   static String subseqStep = Urls.choreo + '/it_step';
   static String choreo = '/choreo';
   static String messageService = Urls.choreo + '/message_service';
+
   static String flags = '/language/list';
+
+  static String langList = 'language/list';
+
 }

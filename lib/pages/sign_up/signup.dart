@@ -112,6 +112,7 @@ class SignupPageController extends State<SignupPage> {
           auth: auth,
         ),
       );
+
       // Set displayname
       if (displayname != localPart) {
         await client.setDisplayName(

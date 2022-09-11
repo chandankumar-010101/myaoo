@@ -19,6 +19,7 @@ class JoinClassWithLink extends StatefulWidget {
 class _JoinClassWithLinkState extends State<JoinClassWithLink> {
   String classCode = "";
 
+
   storeData() {
     if (classCode.isNotEmpty) {
       final box = GetStorage();
@@ -29,16 +30,17 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       });
     } else {
       print("unable to find classcode");
-      Fluttertoast.showToast(
-          msg: "Unable to find class code",
-          webBgColor: Colors.red,
-          backgroundColor: Colors.red);
+
+      Fluttertoast.showToast(msg: "Unable to find class code", webBgColor: Colors.red, backgroundColor: Colors.red);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     classCode = VRouter.of(context).queryParameters['code'] ?? "";
+
+
     if (Matrix.of(context).client.loginState == LoginState.loggedOut) {
       storeData();
       return Scaffold(
@@ -46,12 +48,17 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       );
     } else {
       if (classCode.isEmpty) {
+
         return const Scaffold(
           body: Center(
             child: Text("Unable to find the Code"),
           ),
         );
+
+
       } else {
+
+
         return Scaffold(
           appBar: AppBar(
             leading: InkWell(
@@ -65,6 +72,8 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
           ),
           body: Center(
               child: FutureBuilder(
+
+
             future: PangeaServices.fetchClassWithCode(classCode, context),
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
@@ -83,7 +92,6 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         const SizedBox(
-                          height: 10,
                         ),
                         const Padding(
                           padding:
@@ -121,5 +129,6 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
         );
       }
     }
+
   }
 }

@@ -27,6 +27,7 @@ class StoriesHeader extends StatelessWidget {
 
   void _goToStoryAction(BuildContext context, String roomId) async {
     final room = Matrix.of(context).client.getRoomById(roomId);
+
     if (room == null) return;
     if (room.membership != Membership.join) {
       final result = await showFutureLoadingDialog(
@@ -110,6 +111,7 @@ class StoriesHeader extends StatelessWidget {
               return Container();
             }
             final ownStoryRoom = client.storiesRooms.firstWhereOrNull((r) => r.creatorId == client.userID);
+
             final stories = [
               if (ownStoryRoom != null) ownStoryRoom,
               ...client.storiesRooms..remove(ownStoryRoom),

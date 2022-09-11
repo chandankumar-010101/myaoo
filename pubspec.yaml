@@ -98,7 +98,6 @@ dependencies:
   fluttertoast: ^8.0.9
   jwt_decoder: ^2.0.1
 
-  flutter_sound: ^8.1.9
 
 
   # Pangeachat custom packages

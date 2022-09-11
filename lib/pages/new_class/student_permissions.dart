@@ -91,6 +91,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           print(roomID.result);
         }
         await PangeaServices.createClass(
+          isExchange: false,
           context: context,
           isPublic: publicGroup,
           isSharePhoto: sharePhotos,

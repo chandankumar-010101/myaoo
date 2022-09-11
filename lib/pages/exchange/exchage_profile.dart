@@ -125,4 +125,5 @@ class ExchangeProfileState extends State<ExchangeProfile> {
   Widget build(BuildContext context) {
     return ExchangeProfileView(this);
   }
+
 }

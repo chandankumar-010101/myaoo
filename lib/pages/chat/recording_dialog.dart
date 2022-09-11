@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:wakelock/wakelock.dart';
@@ -74,8 +73,6 @@ class _RecordingDialogState extends State<RecordingDialog> {
   }
 
 
-  String audioPath = "recording_file.aac";
- FlutterSoundRecorder? _audioRecord;
 
  // final recorder = FlutterSoundRecorder();
  //  Future _record() async{

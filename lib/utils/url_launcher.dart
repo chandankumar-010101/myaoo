@@ -28,14 +28,10 @@ class UrlLauncher {
   bool requestToEnroll;
   bool requestExchange;
   final String? roomId;
-  String rid;
-  String receivedroomID;
+  String userIdOfRequestedClass;
+  String requestToclass;
   UrlLauncher(this.context, this.url,
-      {this.roomId = "",
-      this.requestToEnroll = false,
-      this.requestExchange = false,
-      this.receivedroomID = "",
-      this.rid = ""});
+      {this.roomId = "", this.requestToEnroll = false, this.requestExchange = false, this.requestToclass = "", this.userIdOfRequestedClass = ""});
 
   void launchUrl() {
     if (url!.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
@@ -60,17 +56,9 @@ class UrlLauncher {
       // just launch non-https / non-http uris directly
 
       // we need to transmute geo URIs on desktop and on iOS
-      if ((!PlatformInfos.isMobile || PlatformInfos.isIOS) &&
-          uri.scheme == 'geo') {
-        final latlong = uri.path
-            .split(';')
-            .first
-            .split(',')
-            .map((s) => double.tryParse(s))
-            .toList();
-        if (latlong.length == 2 &&
-            latlong.first != null &&
-            latlong.last != null) {
+      if ((!PlatformInfos.isMobile || PlatformInfos.isIOS) && uri.scheme == 'geo') {
+        final latlong = uri.path.split(';').first.split(',').map((s) => double.tryParse(s)).toList();
+        if (latlong.length == 2 && latlong.first != null && latlong.last != null) {
           if (PlatformInfos.isIOS) {
             // iOS is great at not following standards, so we need to transmute the geo URI
             // to an apple maps thingy
@@ -80,8 +68,7 @@ class UrlLauncher {
           } else {
             // transmute geo URIs on desktop to openstreetmap links, as those usually can't handle
             // geo URIs
-            launch(
-                'https://www.openstreetmap.org/?mlat=${latlong.first}&mlon=${latlong.last}#map=16/${latlong.first}/${latlong.last}');
+            launch('https://www.openstreetmap.org/?mlat=${latlong.first}&mlon=${latlong.last}#map=16/${latlong.first}/${latlong.last}');
           }
           return;
         }
@@ -105,9 +92,7 @@ class UrlLauncher {
     final newHost = uri.host.split('.').map((hostPartEncoded) {
       final hostPart = Uri.decodeComponent(hostPartEncoded);
       final hostPartPunycode = punycodeEncode(hostPart);
-      return hostPartPunycode != hostPart + '-'
-          ? 'xn--$hostPartPunycode'
-          : hostPart;
+      return hostPartPunycode != hostPart + '-' ? 'xn--$hostPartPunycode' : hostPart;
     }).join('.');
     launch(uri.replace(host: newHost).toString());
   }
@@ -124,20 +109,15 @@ class UrlLauncher {
     // All this needs parsing.
     final identityParts = url.parseIdentifierIntoParts() ??
         Uri.tryParse(url)?.host.parseIdentifierIntoParts() ??
-        Uri.tryParse(url)
-            ?.pathSegments
-            .lastWhereOrNull((_) => true)
-            ?.parseIdentifierIntoParts();
+        Uri.tryParse(url)?.pathSegments.lastWhereOrNull((_) => true)?.parseIdentifierIntoParts();
     if (identityParts == null) {
       return; // no match, nothing to do
     }
-    if (identityParts.primaryIdentifier.sigil == '#' ||
-        identityParts.primaryIdentifier.sigil == '!') {
+    if (identityParts.primaryIdentifier.sigil == '#' || identityParts.primaryIdentifier.sigil == '!') {
       // we got a room! Let's open that one
       final roomIdOrAlias = identityParts.primaryIdentifier;
       final event = identityParts.secondaryIdentifier;
-      var room = matrix.client.getRoomByAlias(roomIdOrAlias) ??
-          matrix.client.getRoomById(roomIdOrAlias);
+      var room = matrix.client.getRoomByAlias(roomIdOrAlias) ?? matrix.client.getRoomById(roomIdOrAlias);
       var roomId = room?.id;
       // we make the servers a set and later on convert to a list, so that we can easily
       // deduplicate servers added via alias lookup and query parameter
@@ -159,8 +139,7 @@ class UrlLauncher {
       if (room != null) {
         // we have the room, so....just open it
         if (event != null) {
-          VRouter.of(context).toSegments(['rooms', room.id],
-              queryParameters: {'event': event});
+          VRouter.of(context).toSegments(['rooms', room.id], queryParameters: {'event': event});
         } else {
           VRouter.of(context).toSegments(['rooms', room.id]);
         }
@@ -192,12 +171,9 @@ class UrlLauncher {
           );
           if (response.error != null) return;
           // wait for two seconds so that it probably came down /sync
-          await showFutureLoadingDialog(
-              context: context,
-              future: () => Future.delayed(const Duration(seconds: 2)));
+          await showFutureLoadingDialog(context: context, future: () => Future.delayed(const Duration(seconds: 2)));
           if (event != null) {
-            VRouter.of(context).toSegments(['rooms', response.result!],
-                queryParameters: {'event': event});
+            VRouter.of(context).toSegments(['rooms', response.result!], queryParameters: {'event': event});
           } else {
             VRouter.of(context).toSegments(['rooms', response.result!]);
           }
@@ -208,7 +184,7 @@ class UrlLauncher {
         final roomID = await showFutureLoadingDialog(
           context: context,
           future: () => matrix.client.createRoom(
-            invite: [rid],
+            invite: [userIdOfRequestedClass],
             preset: sdk.CreateRoomPreset.privateChat,
             isDirect: true,
             initialState: [
@@ -223,27 +199,16 @@ class UrlLauncher {
 
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName:
-                rid.split(":").first.replaceAll("@", "").substring(0, 2) +
-                    "private" +
-                    "-" +
-                    matrix.client.userID
-                        .toString()
-                        .split(":")
-                        .first
-                        .replaceAll("@", "")
-                        .substring(0, 2) +
-                    "private" +
-                    "#" +
-                    random.nextInt(9999).toString(),
-            name: rid.split(":").first.replaceAll("@", "").substring(0, 6) +
+            roomAliasName: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 2) +
+                "private" +
                 "-" +
-                matrix.client.userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 2) +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
+                "private" +
+                "#" +
+                random.nextInt(9999).toString(),
+            name: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 6) +
+                "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
                 "#" +
                 random.nextInt(9999).toString(),
@@ -252,29 +217,25 @@ class UrlLauncher {
         if (roomID.result != null) {
           String userId = Matrix.of(context).client.userID ?? "";
           if (userId.isNotEmpty) {
-            final String initial_url =
-                kIsWeb ? html.window.origin! : Environment.frontendURL;
+            final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
 
             final client = Matrix.of(context).client;
             await client
                 .getRoomById(roomID.result!)!
-                .sendTextEvent(initial_url +
-                    "/#" +
-                    "/request_to_exchange?id=$userId&room_id=$roomId&r_id=$rid&receviedroom_id=$receivedroomID")
+                .sendTextEvent(initial_url + "/#/" + "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
                 .then((value) {
               VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(
-                  msg: " Request Sent Successfully",
-                  webBgColor: Colors.green,
-                  backgroundColor: Colors.green);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(" Request Sent Successfully",style: TextStyle(color: Colors.white),),
+                backgroundColor: Colors.green,
+
+              ));
+             // Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);
               }
-              Fluttertoast.showToast(
-                  msg: " Unable to Sent Message",
-                  webBgColor: Colors.red,
-                  backgroundColor: Colors.red);
+              Fluttertoast.showToast(msg: " Unable to Sent Message", webBgColor: Colors.red, backgroundColor: Colors.red);
             });
           }
         } else {
@@ -298,34 +259,16 @@ class UrlLauncher {
             ],
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: identityParts.primaryIdentifier
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 6) +
+            roomAliasName: identityParts.primaryIdentifier.split(":").first.replaceAll("@", "").substring(0, 6) +
                 "-" +
-                matrix.client.userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 2) +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
                 "#" +
                 random.nextInt(9999).toString(),
-            name: identityParts.primaryIdentifier
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 2) +
+            name: identityParts.primaryIdentifier.split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
                 "-" +
-                matrix.client.userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "")
-                    .substring(0, 2) +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
                 "private" +
                 "#" +
                 random.nextInt(9999).toString(),
@@ -334,30 +277,21 @@ class UrlLauncher {
         if (roomID.result != null) {
           String userId = Matrix.of(context).client.userID ?? "";
           if (userId.isNotEmpty) {
-            final String initial_url =
-                kIsWeb ? html.window.origin! : Environment.frontendURL;
+            final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
             final client = Matrix.of(context).client;
             await client
                 .getRoomById(roomID.result!)!
-                .sendTextEvent(initial_url +
-                    "/#" +
-                    "/request_to_enroll?id=$userId&room_id=$roomId")
+                .sendTextEvent(initial_url + "/#" + "/request_to_enroll?id=$userId&room_id=$roomId")
                 .then((value) {
               VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(
-                  msg: " Request Sent Successfully",
-                  webBgColor: Colors.green,
-                  backgroundColor: Colors.green);
+              Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
               // VRouter.of(context).toSegments(['rooms', roomID.result!]);
               // Navigator.of(context, rootNavigator: false).pop();
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);
               }
-              Fluttertoast.showToast(
-                  msg: " Unable to Sent Message",
-                  webBgColor: Colors.red,
-                  backgroundColor: Colors.red);
+              Fluttertoast.showToast(msg: " Unable to Sent Message", webBgColor: Colors.red, backgroundColor: Colors.red);
             });
             return;
           } else {}
