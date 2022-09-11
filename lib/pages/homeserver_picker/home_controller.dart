@@ -233,7 +233,8 @@ class HomeController extends GetxController {
         log("Flag Response is $temp");
       }
 
-      countriesList.value = temp.map((value) => LanguageFlag.fromJson(value)).toList();
+      countriesList.value =
+          temp.map((value) => LanguageFlag.fromJson(value)).toList();
       countriesList.forEach((element) {
         if (element.languageType == 1) {
           countriesList1.add(element);
@@ -242,7 +243,10 @@ class HomeController extends GetxController {
         }
       });
     } else {
-      Fluttertoast.showToast(msg: "API Error: ${response.statusCode}", webBgColor: Colors.red, backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "API Error: ${response.statusCode}",
+          webBgColor: Colors.red,
+          backgroundColor: Colors.red);
       loading.value = false;
     }
   }

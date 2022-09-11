@@ -72,7 +72,8 @@ class NewPrivateChatView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       QrImage(
-                        data: 'https://matrix.to/#/${Matrix.of(context).client.userID}',
+                        data:
+                            'https://matrix.to/#/${Matrix.of(context).client.userID}',
                         version: QrVersions.auto,
                         size: min(MediaQuery.of(context).size.width - 16, 200),
                       ),
@@ -132,7 +133,8 @@ class NewPrivateChatView extends StatelessWidget {
                 ? controller.classId.isNotEmpty
                     ? ElevatedButton(
                         onPressed: () {
-                          controller.requestMoreMembersAction(controller.classId);
+                          controller
+                              .requestMoreMembersAction(controller.classId);
                         },
                         child: Text("Invite"))
                     : Container()

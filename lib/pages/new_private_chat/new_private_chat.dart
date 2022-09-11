@@ -68,8 +68,11 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     super.initState();
     textFieldFocus.addListener(setHideFab);
 
-    Future.delayed(Duration(seconds: 1)).whenComplete(
-        () => VRouter.of(context).queryParameters['classId'] != null ? classId = VRouter.of(context).queryParameters['classId'].toString() : "");
+    Future.delayed(Duration(seconds: 1)).whenComplete(() =>
+        VRouter.of(context).queryParameters['classId'] != null
+            ? classId =
+                VRouter.of(context).queryParameters['classId'].toString()
+            : "");
   }
 
   @override
@@ -84,12 +87,21 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     if (!formKey.currentState!.validate()) return;
 
     final matrix = Matrix.of(context);
-    String className = classId.isNotEmpty ? matrix.client.getRoomById(classId)!.displayname : "";
-    Fluttertoast.showToast(msg: "Functionality under process", webBgColor: Colors.red, backgroundColor: Colors.red);
+    String className = classId.isNotEmpty
+        ? matrix.client.getRoomById(classId)!.displayname
+        : "";
+    Fluttertoast.showToast(
+        msg: "Functionality under process",
+        webBgColor: Colors.red,
+        backgroundColor: Colors.red);
 
-    matrix.client.getDisplayName(controller.text).then((value) => log("User Name: ${value.toString()}"));
+    matrix.client
+        .getDisplayName(controller.text)
+        .then((value) => log("User Name: ${value.toString()}"));
 
-    matrix.client.getUserProfile(controller.text).then((value) => log("User Profile: ${value.toJson().toString()}"));
+    matrix.client
+        .getUserProfile(controller.text)
+        .then((value) => log("User Profile: ${value.toJson().toString()}"));
 
     //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
     final roomID = await showFutureLoadingDialog(
@@ -117,14 +129,32 @@ class NewPrivateChatController extends State<NewPrivateChat> {
         ],
         // creationContent: {'type': RoomCreationTypes.mSpace},
         visibility: sdk.Visibility.private,
-        roomAliasName: controller.text.split(":").first.replaceAll("@", "").substring(0, 6) +
+        roomAliasName: controller.text
+                .split(":")
+                .first
+                .replaceAll("@", "")
+                .substring(0, 6) +
             "-" +
-            matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 6) +
+            matrix.client.userID
+                .toString()
+                .split(":")
+                .first
+                .replaceAll("@", "")
+                .substring(0, 6) +
             "#" +
             random.nextInt(9999).toString(),
-        name: controller.text.split(":").first.replaceAll("@", "").substring(0, 6) +
+        name: controller.text
+                .split(":")
+                .first
+                .replaceAll("@", "")
+                .substring(0, 6) +
             "-" +
-            matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 6) +
+            matrix.client.userID
+                .toString()
+                .split(":")
+                .first
+                .replaceAll("@", "")
+                .substring(0, 6) +
             "#" +
             random.nextInt(9999).toString(),
       ),
@@ -134,7 +164,10 @@ class NewPrivateChatController extends State<NewPrivateChat> {
         print("Room id:" + roomID.result!);
       }
       VRouter.of(context).pop();
-      Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+      Fluttertoast.showToast(
+          msg: "Created Successfully",
+          webBgColor: Colors.green,
+          backgroundColor: Colors.green);
     }
     if (roomID == null) {
       VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
@@ -148,7 +181,8 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     if (value!.isEmpty) {
       return L10n.of(context)!.pleaseEnterAMatrixIdentifier;
     }
-    if (!controller.text.isValidMatrixId || !supportedSigils.contains(controller.text.sigil)) {
+    if (!controller.text.isValidMatrixId ||
+        !supportedSigils.contains(controller.text.sigil)) {
       return L10n.of(context)!.makeSureTheIdentifierIsValid;
     }
     if (controller.text == Matrix.of(context).client.userID) {
@@ -165,7 +199,8 @@ class NewPrivateChatController extends State<NewPrivateChat> {
 
   void requestMoreMembersAction(String classId) async {
     final room = Matrix.of(context).client.getRoomById(classId);
-    final participants = await showFutureLoadingDialog(context: context, future: () => room!.requestParticipants());
+    final participants = await showFutureLoadingDialog(
+        context: context, future: () => room!.requestParticipants());
     if (participants.error == null) {
       setState(() => members = participants.result);
 
@@ -205,10 +240,16 @@ class NewPrivateChatController extends State<NewPrivateChat> {
   fetchClassInfo(String roomId) async {
     String accessToken = box.read("access") ?? "g";
     if (accessToken.isNotEmpty) {
-      FetchClassInfoModel data = await PangeaServices.fetchClassInfo(context, accessToken, roomId);
-      if (data.permissions != null && data.permissions.oneToOneChatClass != null) {
-        data.permissions.oneToOneChatClass ? setState(() => oneToOneChat = true) : setState(() => oneToOneChat = false);
-        data.permissions.isCreateRooms ? setState(() => createRoom = true) : setState(() => createRoom = false);
+      FetchClassInfoModel data =
+          await PangeaServices.fetchClassInfo(context, accessToken, roomId);
+      if (data.permissions != null &&
+          data.permissions.oneToOneChatClass != null) {
+        data.permissions.oneToOneChatClass
+            ? setState(() => oneToOneChat = true)
+            : setState(() => oneToOneChat = false);
+        data.permissions.isCreateRooms
+            ? setState(() => createRoom = true)
+            : setState(() => createRoom = false);
       }
     }
   }

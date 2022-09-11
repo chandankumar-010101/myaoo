@@ -27,7 +27,8 @@ class PangeaControllers extends GetxController {
   fetchClassInfo(BuildContext context, String spaceId) async {
     try {
       String acessToken = GetStorage().read("access");
-      classInfoModel.value = await PangeaServices.fetchClassInfo(context, acessToken, spaceId);
+      classInfoModel.value =
+          await PangeaServices.fetchClassInfo(context, acessToken, spaceId);
       // print(data.permissions.toJson().toString());
       //  data.permissions.isCreateRooms !=null?isCreateRooms.value = data.permissions.isCreateRooms: isCreateRooms.value = false;
       //  data.permissions.oneToOneChatClass !=null?oneToOneChatClass.value = data.permissions.oneToOneChatClass: oneToOneChatClass.value = false;

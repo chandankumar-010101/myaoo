@@ -101,9 +101,11 @@ class RequestScreenState extends State<RequestScreen> {
               content: Text("Students removed from the class"),
               backgroundColor: Colors.green,
             ));
-            final success = await showFutureLoadingDialog(context: context, future: () => room.leave());
+            final success = await showFutureLoadingDialog(
+                context: context, future: () => room.leave());
             if (success.error == null) {
-              final bool? result = await PangeaServices.deleteClass(roomId: room.id, context: context);
+              final bool? result = await PangeaServices.deleteClass(
+                  roomId: room.id, context: context);
               result != null && result
                   ? VRouter.of(context).to('/rooms')
                   : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

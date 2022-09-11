@@ -65,7 +65,7 @@ class FlagController {
     if (dateString == null) {
       return true;
     }
-    return true;
+   // return true;
     int lastFetched = DateTime.parse(dateString).millisecondsSinceEpoch;
     int now = DateTime.now().millisecondsSinceEpoch;
     const int fetchIntervalInMilliseconds = 86534601;
