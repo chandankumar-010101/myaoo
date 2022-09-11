@@ -25,8 +25,14 @@ class ConfirmExchange extends StatefulWidget {
 
 class _ConfirmExchangeState extends State<ConfirmExchange> {
   createExchange(String receiverClassId, String senderClassId, String senderId,String receiverId) async {
-       final List<String> listOfParticipants = [];
+       List<String> listOfParticipants = [];
+
     try {
+      final userID = Matrix.of(context).client.userID;
+      print(senderId);
+      if(senderId == userID){
+        Fluttertoast.showToast(msg: "You don't have permission for this action.");
+        return;}
       final FetchClassParticipants data =
           await PangeaServices.fetchParticipants(receiverClassId);
       final FetchClassParticipants data2 =
@@ -46,6 +52,11 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         }
       }
 
+      // print(userID);
+      // print(listOfParticipants);
+      listOfParticipants = listOfParticipants.where((element) => element != userID).toList();
+     // print(listOfParticipants);
+
       // listOfParticipants.addAll(data.roomMembers!.members!);
       // listOfParticipants.addAll(data2.roomMembers!.members!);
       final FetchClassInfoModel senderClassInfo = await PangeaServices.fetchClassInfo(
@@ -63,6 +74,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
           receiverClassInfo.schoolName + "-" + senderClassInfo.schoolName;
 
       final matrix = Matrix.of(context);
+
       final roomID = await showFutureLoadingDialog(
         context: context,
         future: () => matrix.client.createRoom(
