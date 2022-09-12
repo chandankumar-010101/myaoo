@@ -195,7 +195,6 @@ class _InviteEmailState extends State<InviteEmail> {
                       }
 
                       if (info.isNotEmpty) {
-
                         PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
                       }
                     }

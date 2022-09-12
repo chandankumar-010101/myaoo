@@ -49,11 +49,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.fetchSpaceInfo(roomAlias);
-
-
-
-
-    //fetchParti(roomAlias);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -130,7 +125,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              data.className,
+                              data.className.toString(),
                               style: const TextStyle()
                                   .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -186,7 +181,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               children: [
                                 StarRating(
                                   color: const Color(0xffFFC403),
-                                  rating: data.rating != null ? data.rating.toDouble() : 0.0,
+                                  rating: data.rating.toDouble() ?? 0.0,
                                   starCount: 5,
                                 ),
                                 const SizedBox(
@@ -224,7 +219,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.totalStudent.toString(),
+                                  data.totalStudent.toString() ??"",
                                   style: const TextStyle()
                                       .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
                                 )
@@ -279,7 +274,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage,
+                                  data.dominantLanguage ?? "",
                                   style: const TextStyle()
                                       .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
                                 ),
@@ -302,7 +297,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     width: 5,
                                   ),
                                   Text(
-                                    data.targetLanguage,
+                                    data.targetLanguage??"",
                                     style: const TextStyle()
                                         .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
                                   ),
@@ -772,7 +767,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               ),
             );
 
-          } else {
+          }
+          else {
             if (snapshot.hasError) {
 
               if (kDebugMode) {
@@ -798,7 +794,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  permissions.isSharePhoto != null && permissions.isSharePhoto
+                  permissions.isSharePhoto
                       // permissions?.isSharePhoto && permissions.isSharePhoto!
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -810,7 +806,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareVideo != null && permissions.isShareVideo
+                  permissions.isShareVideo
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -821,7 +817,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.oneToOneChatClass != null && permissions.oneToOneChatClass
+                  permissions.oneToOneChatClass
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -832,7 +828,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.oneToOneChatExchange != null && permissions.oneToOneChatExchange
+                  permissions.oneToOneChatExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -843,7 +839,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareFiles != null && permissions.isShareFiles
+                  permissions.isShareFiles
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -854,7 +850,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isShareLocation != null && permissions.isShareLocation
+                  permissions.isShareLocation
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -873,7 +869,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  permissions.isCreateRooms != null && permissions.isCreateRooms
+                  permissions.isCreateRooms
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -884,7 +880,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isCreateRoomsExchange != null && permissions.isCreateRoomsExchange
+                  permissions.isCreateRoomsExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -895,7 +891,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isCreateStories != null && permissions.isCreateStories
+                  permissions.isCreateStories
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -906,7 +902,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isOpenEnrollment != null && permissions.isOpenEnrollment
+                  permissions.isOpenEnrollment
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -917,7 +913,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isOpenExchange != null && permissions.isOpenExchange
+                  permissions.isOpenExchange
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
@@ -928,7 +924,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ],
                         )
                       : Container(),
-                  permissions.isPublic != null && permissions.isPublic!
+                  permissions.isPublic!
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const <Widget>[
