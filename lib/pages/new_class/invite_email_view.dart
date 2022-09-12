@@ -138,9 +138,9 @@ class _InviteEmailState extends State<InviteEmail> {
                   height: 20,
                   width: 17,
                 ),
-                const Icon(
+                 Icon(
                   Icons.add_circle_outline_sharp,
-                  color: Colors.black,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                 ),
                 const SizedBox(
                   width: 12,
@@ -153,11 +153,11 @@ class _InviteEmailState extends State<InviteEmail> {
                       email.add(TextEditingController());
                     }
                   },
-                  child: const Text(
+                  child: Text(
                     "Add Recipient",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
                   ),
-                )
+                ),
               ],
             ),
             Center(

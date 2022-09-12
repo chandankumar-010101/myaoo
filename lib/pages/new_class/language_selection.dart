@@ -5,7 +5,6 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:vrouter/vrouter.dart';
-
 import '../../model/flag_model.dart';
 import '../../services/services.dart';
 
@@ -46,19 +45,19 @@ class _ClassLanguageState extends State<ClassLanguage> {
       Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return false;
     }
-    if (classNameController.text.length >= 20) {
+    if (classNameController.text.length >= 50) {
       Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return false;
     }
-    if (cityController.text.length >= 20) {
+    if (cityController.text.length >= 50) {
       Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return false;
     }
-    if (schoolController.text.length >= 20) {
+    if (schoolController.text.length >= 50) {
       Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return false;
     }
-    if (countryController.text.length >= 12) {
+    if (countryController.text.length >= 50) {
       Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return false;
     }
@@ -110,19 +109,19 @@ class _ClassLanguageState extends State<ClassLanguage> {
       Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return;
     }
-    if (classNameController.text.length >= 20) {
+    if (classNameController.text.length >= 50) {
       Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return;
     }
-    if (cityController.text.length >= 20) {
+    if (cityController.text.length >= 50) {
       Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return;
     }
-    if (schoolController.text.length >= 20) {
+    if (schoolController.text.length >= 50) {
       Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return;
     }
-    if (countryController.text.length >= 12) {
+    if (countryController.text.length >= 50) {
       Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
       return;
     }
@@ -242,9 +241,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 controller: classNameController,
                 autofocus: true,
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z ""]")),
                 ],
-                maxLength: 20,
+                maxLength: 50,
                 autocorrect: false,
                 decoration: InputDecoration(
                   hintText: "Name of Your Class",
@@ -275,7 +274,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     child: TextField(
                       controller: cityController,
                       autofocus: true,
-                      maxLength: 20,
+                      maxLength: 50,
                       autocorrect: false,
                       decoration: InputDecoration(
                         hintText: "Optional: City",
@@ -307,9 +306,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
                   Expanded(
                     child: TextField(
                       controller: countryController,
+                      maxLength: 50,
                       autofocus: true,
                       autocorrect: false,
-                      maxLength: 20,
                       decoration: InputDecoration(
                         hintText: "Optional: Country",
                         hintStyle: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
@@ -605,7 +604,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                           ),
                                           Text(
                                             targetLanguage!.languageName.toString().capitalizeFirst ?? "",
-                                            style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 15.0, color: Colors.black),
+                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+
                                           )
                                         ],
                                       ),
@@ -735,15 +735,15 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                 Fluttertoast.showToast(msg: "Class Description is required!", fontSize: 16.0);
                                 return;
                               }
-                              if (cityController.text.length >= 20) {
+                              if (cityController.text.length >= 50) {
                                 Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0);
                                 return;
                               }
-                              if (schoolController.text.length >= 20) {
+                              if (schoolController.text.length >= 50) {
                                 Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0);
                                 return;
                               }
-                              if (countryController.text.length >= 12) {
+                              if (countryController.text.length >= 50) {
                                 Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0);
                                 return;
                               }
