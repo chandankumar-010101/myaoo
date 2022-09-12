@@ -35,8 +35,8 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 class PangeaServices {
   static GetStorage box = GetStorage();
-  static final SearchViewController _searchController = Get.put(SearchViewController());
 
+  static final SearchViewController _searchController = Get.put(SearchViewController());
   static joinRoom(BuildContext context, String roomAlias) async {
     final client = Matrix.of(context).client;
     final result = await showFutureLoadingDialog<String>(
@@ -386,8 +386,11 @@ class PangeaServices {
     }
   }
 
+  PangeaServices._init(){
+    fetchAccessToken();
+  }
   static fetchAccessToken() async {
-    final String access = box.read("access") ?? "";
+    String access = GetStorage().read("access");
     if (access.isEmpty) {
       final String clientID = box.read("clientID") ?? "";
       final String accessToken = box.read("accessToken") ?? "";

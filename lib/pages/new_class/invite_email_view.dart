@@ -175,7 +175,6 @@ class _InviteEmailState extends State<InviteEmail> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
-                      print(name.length);
 
                       List.generate(
                           name.length,
