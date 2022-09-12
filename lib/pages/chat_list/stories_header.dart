@@ -266,16 +266,14 @@ class _StoryButton extends StatelessWidget {
               Center(
                 child: SizedBox(
                   width: 100,
-                  child: Expanded(
-                    child: Text(
-                      profile.displayName ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: unread ? FontWeight.bold : null,
-                      ),
+                  child: Text(
+                    profile.displayName ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: unread ? FontWeight.bold : null,
                     ),
                   ),
                 ),
