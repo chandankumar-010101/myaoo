@@ -65,9 +65,9 @@ class _InviteEmailState extends State<InviteEmail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Padding(
+                             Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black)),
+                              child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13,  color: Theme.of(context).textTheme.bodyText1!.color,)),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 10, right: 10),
@@ -97,9 +97,9 @@ class _InviteEmailState extends State<InviteEmail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text("Recipient Email id", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black)),
+                             Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text("Recipient Email id", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Theme.of(context).textTheme.bodyText1!.color,)),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10, right: 10),
@@ -170,7 +170,7 @@ class _InviteEmailState extends State<InviteEmail> {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
+                        ? Colors.white//Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   )),
                   child: Text("Send Invitation"),
