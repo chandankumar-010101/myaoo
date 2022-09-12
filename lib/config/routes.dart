@@ -282,6 +282,7 @@ class AppRoutes {
                   widget: RequestToEnroll(),
                 ),
 
+
                 VWidget(
                   path: '/class_analytics',
                   widget: ClassAnalyticsScreen(),
@@ -387,6 +388,11 @@ class AppRoutes {
                   widget: InviteScreen(),
                   buildTransition: _dynamicTransition,
                   stackedRoutes: _settingsRoutes,
+                ),
+                VWidget(
+                  path: 'allclassDetails',
+                  widget: RequestScreen(),//RequestScreenView(),
+                  buildTransition: _dynamicTransition,
                 ),
               ],
             ),

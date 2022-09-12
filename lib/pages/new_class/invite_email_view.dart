@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
+
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -65,9 +63,9 @@ class _InviteEmailState extends State<InviteEmail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Padding(
+                             Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black)),
+                              child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13,  color: Theme.of(context).textTheme.bodyText1!.color,)),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 10, right: 10),
@@ -97,9 +95,9 @@ class _InviteEmailState extends State<InviteEmail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text("Recipient Email id", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black)),
+                             Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text("Recipient Email id", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Theme.of(context).textTheme.bodyText1!.color,)),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10, right: 10),
@@ -140,9 +138,9 @@ class _InviteEmailState extends State<InviteEmail> {
                   height: 20,
                   width: 17,
                 ),
-                const Icon(
+                 Icon(
                   Icons.add_circle_outline_sharp,
-                  color: Colors.black,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                 ),
                 const SizedBox(
                   width: 12,
@@ -155,11 +153,11 @@ class _InviteEmailState extends State<InviteEmail> {
                       email.add(TextEditingController());
                     }
                   },
-                  child: const Text(
+                  child: Text(
                     "Add Recipient",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
                   ),
-                )
+                ),
               ],
             ),
             Center(
@@ -170,7 +168,7 @@ class _InviteEmailState extends State<InviteEmail> {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
+                        ? Colors.white//Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   )),
                   child: Text("Send Invitation"),

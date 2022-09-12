@@ -35,7 +35,7 @@ class _SearchViewState extends State<SearchView> {
 
   var box = GetStorage();
   String id = "";
-
+  Rx<bool> firstTime=true.obs;
   void addAgesAction() => VRouter.of(context).to('/user');
 
   void createInviteAction() => VRouter.of(context).to('/inviteScreen');
@@ -419,7 +419,20 @@ class _SearchViewState extends State<SearchView> {
                                             child: InkWell(
                                               onTap: () async {
                                                 id = searchController.classList[i].pangea_class_room_id.toString();
-                                                VRouter.of(context).to("/classDetails", queryParameters: {"id": id});
+                                                firstTime==true?VRouter.of(context).to(
+                                                    'allclassDetails',
+                                                    queryParameters: {
+                                                      "id": id
+                                                    }):VRouter.of(context).to(
+                                                    '',
+                                                    queryParameters: {
+                                                      "id": id
+                                                    });
+                                                firstTime.value=false;
+                                                print("value of 2 ${firstTime}");
+
+
+                                               // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
                                               },
                                               borderRadius: BorderRadius.circular(16),
                                               child: Container(
@@ -551,7 +564,7 @@ class _SearchViewState extends State<SearchView> {
                                                           ),
                                                           Expanded(
                                                             child: Text(
-                                                                searchController.classList[i].total_student.toString() != Null
+                                                                searchController.classList[i].total_student.toString() != 0
                                                                     ? "${searchController.classList[i].total_student.toString()} Students"
                                                                     : "Na",
                                                                 style: TextStyle().copyWith(

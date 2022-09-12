@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -24,7 +22,6 @@ import 'package:provider/provider.dart';
 import 'package:record/record.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:vrouter/vrouter.dart';
-
 import 'package:pangeachat/pages/chat/chat_view.dart';
 import 'package:pangeachat/pages/chat/event_info_dialog.dart';
 import 'package:pangeachat/pages/chat/recording_dialog.dart';

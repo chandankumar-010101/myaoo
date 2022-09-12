@@ -50,6 +50,9 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                 child: Text(
                   "Connect to your class with the 6-digit class code from your teacher.\n \n If you don't know it, ask your teacher and enter it below.",
                   textAlign: TextAlign.center,
+                    style: TextStyle().copyWith(
+                        color: Colors.black,
+                        fontSize: 14),
                 ),
               ),
               Padding(
@@ -57,12 +60,21 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                 child: TextField(
                   controller: codeController,
                   autofocus: true,
+                  maxLength: 6,
+                  style: TextStyle().copyWith(
+                      color: Colors.black,
+                      fontSize: 14),
                   onChanged: (String? value) {
                     value?.length == 6 ? setState(() => color = Color(0xFF352048)) : setState(() => color = Colors.white);
                   },
-                  decoration: InputDecoration(
+                  decoration:  InputDecoration(
                       //prefixIcon: const Icon(Icons.label),
-                      hintText: "Class code"),
+                      hintText: "Class code",
+                      helperStyle: TextStyle().copyWith(
+                      color: Colors.black,
+                      fontSize: 14),
+                  ),
+
                 ),
               ),
               SizedBox(
@@ -90,6 +102,9 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                     child: Text("Connect to your class", style: TextStyle(color: Colors.grey)),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               // Padding(
               //     padding: EdgeInsets.all(20),

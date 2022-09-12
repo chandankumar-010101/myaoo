@@ -33,7 +33,7 @@ extension RoomStatusExtension on Room {
       return L10n.of(context)!.lastSeenLongTimeAgo;
     }
     return L10n.of(context)!
-        .countParticipants(summary.mJoinedMemberCount.toString());
+        .countParticipants(summary.mJoinedMemberCount.toString()+"value is zero");
   }
 
   String getLocalizedTypingText(BuildContext context) {
