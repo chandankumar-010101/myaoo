@@ -133,7 +133,7 @@ class StoriesHeader extends StatelessWidget {
                               future: room.getCreatorProfile(),
                               builder: (context, snapshot) {
                                 final userId = room.creatorId;
-                                final displayname = room.displayname;
+                                final displayname = snapshot.data?.displayName;
                                 final avatarUrl = snapshot.data?.avatarUrl;
                                 return _StoryButton(
                                   profile: Profile(
