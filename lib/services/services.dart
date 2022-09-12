@@ -19,6 +19,7 @@ import '../model/flag_model.dart';
 import '../model/invite_email_model.dart';
 import '../model/invite_email_model.dart' as inviteModel;
 
+import '../model/report_user_model.dart';
 import '../model/teacher_all_class_model.dart';
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
@@ -1199,6 +1200,47 @@ class PangeaServices {
     } catch (e) {
       print(e);
       throw Exception("${"Error accured..."}");
+    }
+  }
+
+
+
+  ///-----------------------------------------------Harsh Code --------------------------------------
+  static requestEmail(String? classRoomNamedata, String? classTeacherNamedata, String? reportedUserdata,
+      String? classTeacherEmaildata, String? offensivedata, String? reasondata, ) async {
+    try {
+      var result = await http.post(Uri.parse(ApiUrls.request_email),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(ReportUser(
+            classRoomName :classRoomNamedata,
+            classTeacherName :classTeacherNamedata,
+            reportedUser:reportedUserdata,
+            classTeacherEmail:classTeacherEmaildata,
+            offensive:reasondata,
+            reason:reasondata,
+          ).toJson()));
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        Fluttertoast.showToast(msg: "report user Sent Successfully");
+      } else {
+        if (kDebugMode) {
+          print("Unable to fetch report user");
+          print(result.statusCode);
+          print(result.body);
+        }
+        Fluttertoast.showToast(
+            msg: "Api Error ${result.statusCode}: Unable to report user");
+        throw Exception(
+            "Api Error ${result.statusCode}: Unable to report user");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch report user");
+      throw Exception("Error: Unable to fetch report user");
     }
   }
 
