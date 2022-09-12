@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:pangeachat/config/app_config.dart';
 
 import 'package:pangeachat/config/themes.dart';
 import 'package:pangeachat/widgets/layouts/login_scaffold.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'signup.dart';
 
 class SignupPageView extends StatelessWidget {
@@ -57,6 +59,7 @@ class SignupPageView extends StatelessWidget {
                 ),
               ),
             ),
+
             if (controller.displaySecondPasswordField)
               Padding(
                 padding: const EdgeInsets.all(16.0),
