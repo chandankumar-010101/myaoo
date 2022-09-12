@@ -85,7 +85,7 @@ void main() async {
     SentryController.captureException,
   );
 
-  await PangeaServices.fetchAccessToken();
+  await PangeaServices.accessTokenStatus();
 }
 
 class FluffyChatApp extends StatefulWidget {

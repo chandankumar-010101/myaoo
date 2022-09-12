@@ -39,7 +39,7 @@ class RequestScreenState extends State<RequestScreen> {
   ///load flag to the UI
   fetchFlag(FetchClassInfoModel data, String url) {
     try {
-      String path = url + data.flags[1].languageFlag.toString() ?? "";
+      String path = url + data.flags[1].languageFlag ?? "";
       print(path);
       return path.isNotEmpty
           ? SizedBox(
