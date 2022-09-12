@@ -34,7 +34,7 @@ class ApiUrls {
   static String join_code = Environment.baseAPI + "/class/class_by_code?class_code=";
   static String send_email_link = Environment.baseAPI+"/class/invite/email";
   static String exchangeAcceptRequest = Environment.baseAPI+"/class/exchange/accept";
-  static String teacherAllClass = Environment.baseAPI+"/class/get_class_by_teacher";
+
 
 
   ///   ---------------------- Exchange --------------------------------------
