@@ -17,15 +17,16 @@ dependencies:
   collection: ^1.15.0-nullsafety.4
   connectivity_plus: any
   cupertino_icons: any
+  dartz: ^0.10.1
   desktop_drop: ^0.3.2
   desktop_lifecycle: ^0.1.0
   desktop_notifications: ^0.6.3
   device_info_plus: ^3.2.1
+  dropdown_button2: ^1.6.3
   dynamic_color: ^1.2.2
   email_validator: ^2.0.1
   emoji_picker_flutter: ^1.1.2
   encrypt: ^5.0.1
-  #fcm_shared_isolate: ^0.1.0
   file_picker_cross: ^4.6.0
   flutter:
     sdk: flutter
@@ -33,6 +34,7 @@ dependencies:
   flutter_app_lock: ^2.0.0
   flutter_blurhash: ^0.6.4
   flutter_cache_manager: ^3.3.0
+  flutter_dotenv: ^5.0.2
   flutter_local_notifications: ^9.4.0
   flutter_localizations:
     sdk: flutter
@@ -43,18 +45,24 @@ dependencies:
   flutter_ringtone_player: ^3.1.1
   flutter_secure_storage: ^5.0.2
   flutter_slidable: ^1.2.0
+  flutter_sound: ^8.1.9
   flutter_svg: ^0.22.0
   flutter_typeahead: ^3.2.5
   flutter_web_auth: ^0.4.0
   flutter_webrtc: ^0.8.7
+  fluttertoast: ^8.0.9
   future_loading_dialog: ^0.2.3
   geolocator: ^7.6.2
+  get: ^4.6.5
+  get_storage: ^2.0.3
   google_sign_in: ^5.4.1
+  googleapis: ^9.1.0
   hive_flutter: ^1.1.0
   image: ^3.1.1
   image_picker: ^0.8.4+8
   intl: any
   just_audio: ^0.9.20
+  jwt_decoder: ^2.0.1
   keyboard_shortcuts: any
   localstorage: ^4.0.0+1
   lottie: ^1.2.2
@@ -64,6 +72,8 @@ dependencies:
   native_imaging:
     git: https://gitlab.com/famedly/company/frontend/libraries/native_imaging.git
   package_info_plus: ^1.3.0
+  pangea_choreographer:
+    path: pangea_packages/pangea_choreographer
   path_provider: ^2.0.9
   permission_handler: ^9.2.0
   pin_code_text_field: ^1.8.0
@@ -81,6 +91,9 @@ dependencies:
   slugify: ^2.0.0
   snapping_sheet: ^3.1.0
   swipe_to_action: ^0.2.0
+  tuple: any
+  lazy_sign_in_extension: ^1.0.0
+  lazy_sign_in_google: ^1.0.0
   uni_links: ^0.5.1
   unifiedpush: ^4.0.0
   universal_html: ^2.0.8
@@ -89,20 +102,17 @@ dependencies:
   video_player: ^2.2.18
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
-
-  tuple: any
-  get_storage: ^2.0.3
-  get: ^4.6.5
-  dropdown_button2: ^1.6.3
-  flutter_dotenv: ^5.0.2
-  fluttertoast: ^8.0.9
-  jwt_decoder: ^2.0.1
-
-
+  # tuple: any
+  # get_storage: ^2.0.3
+  # get: ^4.6.5
+  # dropdown_button2: ^1.6.3
+  # flutter_dotenv: ^5.0.2
+  # fluttertoast: ^8.0.9
+  # jwt_decoder: ^2.0.1
 
   # Pangeachat custom packages
-  pangea_choreographer:
-    path: pangea_packages/pangea_choreographer
+pangea_choreographer:
+  path: pangea_packages/pangea_choreographer
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1
@@ -110,6 +120,7 @@ dev_dependencies:
   flutter_native_splash: ^2.0.3+1
   flutter_test:
     sdk: flutter
+  freezed: any
   http: ^0.13.4
   import_sorter: ^4.6.0
   integration_test:
@@ -134,7 +145,6 @@ flutter:
     - assets/icons/
     - js/
 
-
   fonts:
     - family: Roboto
       fonts:
@@ -146,7 +156,6 @@ flutter:
     - family: NotoEmoji
       fonts:
         - asset: fonts/NotoEmoji/NotoColorEmoji.ttf
-
 
 dependency_overrides:
   # Necessary for webRTC on web.

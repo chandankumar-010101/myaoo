@@ -8,6 +8,7 @@
             "name": "pangeachat -v0",
             "request": "launch",
             "type": "dart",
+            "args": [ "-d","Chrome", "--web-port=8080", " --tls"]
         },
         {
             "name": "pangeachat -v0 (profile mode)",
