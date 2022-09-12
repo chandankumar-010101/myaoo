@@ -770,6 +770,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       cancelLabel: L10n.of(context)!.cancel,
                                     );
                                     if (confirmed == OkCancelResult.ok) {
+                                      data.isExchange?widget.controller.removeExchangeClass():
                                       widget.controller.kickAndRemoveClass(roomAlias);
                                     }
                                   },

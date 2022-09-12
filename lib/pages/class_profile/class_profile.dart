@@ -84,7 +84,9 @@ class RequestScreenState extends State<RequestScreen> {
 
   ///kick the students and leave the class
   kickAndRemoveClass(String roomAlias) async {
+
     try {
+
       final room = Matrix.of(context).client.getRoomById(roomAlias);
       if (room != null) {
         if (room.canKick) {
@@ -138,6 +140,10 @@ class RequestScreenState extends State<RequestScreen> {
       ));
       print(e);
     }
+  }
+
+  removeExchangeClass() async{
+print("Hello World");
   }
 
   int noOfStudents = 0;

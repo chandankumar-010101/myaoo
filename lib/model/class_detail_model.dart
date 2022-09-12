@@ -21,6 +21,8 @@ class FetchClassInfoModel {
     required this.rating,
     required this.profilePic,
     required this.totalStudent,
+    required this.isExchange,
+
   });
   late final int id;
   late final String className;
@@ -42,6 +44,7 @@ class FetchClassInfoModel {
   late final int rating;
   late final String profilePic;
   late final int totalStudent;
+  late final bool isExchange;
 
   FetchClassInfoModel.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -64,6 +67,7 @@ class FetchClassInfoModel {
     rating = json['rating'];
     profilePic = json["profile_pic"]??"";
     totalStudent = json['total_student'];
+    isExchange = json['is_exchange']??false;
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +92,7 @@ class FetchClassInfoModel {
     _data['rating'] = rating;
     _data['profile_pic'] = profilePic;
     _data['total_student'] = totalStudent;
+
     return _data;
   }
 }
