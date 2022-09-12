@@ -241,7 +241,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     String accessToken = box.read("access") ?? "g";
     if (accessToken.isNotEmpty) {
       FetchClassInfoModel data =
-          await PangeaServices.fetchClassInfo(context, accessToken, roomId);
+          await PangeaServices.fetchClassInfo(context, roomId);
       if (data.permissions != null &&
           data.permissions.oneToOneChatClass != null) {
         data.permissions.oneToOneChatClass

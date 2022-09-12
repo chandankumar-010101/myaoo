@@ -14,6 +14,7 @@ import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
 import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
+import '../model/exchange_classInfo.dart';
 import '../model/flag_model.dart';
 import '../model/invite_email_model.dart';
 import '../model/invite_email_model.dart' as inviteModel;
@@ -842,25 +843,26 @@ class PangeaServices {
     }
   }
 
-  static Future<FetchClassInfoModel> fetchClassInfo(BuildContext context, String accessToken, String roomID) async {
+  static Future<FetchClassInfoModel> fetchClassInfo(BuildContext context, String roomID) async {
     try {
-      if (accessToken.isNotEmpty && roomID.isNotEmpty) {
+      if ( roomID.isNotEmpty) {
         final value = await http.get(
           Uri.parse(ApiUrls.getClassDetails + roomID),
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer $accessToken",
+            "Authorization": "Bearer ${GetStorage().read("access")}",
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
           //print("Hello");
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
-        } else {
+        }
+        else {
           ApiException.exception(statusCode: value.statusCode, body: value.body, context: context);
           throw Exception("${value.statusCode}");
         }
       } else {
-        throw Exception("Access token or Room ID is empty".toString());
+        throw Exception("Room ID is empty".toString());
       }
     } catch (e) {
       throw Exception(e.toString());
@@ -1067,33 +1069,35 @@ class PangeaServices {
     }
   }
 
-  static Future<FetchClassInfoModel> fetchExchangeClassInfo(BuildContext context, roomID) async {
-    try {
-      final String accessToken = box.read("access") ?? "";
-      //final String roomID = VRouter.of(context).queryParameters["id"] ?? "";
-      if (accessToken.isNotEmpty && roomID.isNotEmpty) {
-        final value = await http.get(
-          Uri.parse(ApiUrls.getClassDetails + roomID),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $accessToken",
-          },
-        );
-        if (value.statusCode == 200 || value.statusCode == 201) {
-          return FetchClassInfoModel.fromJson(jsonDecode(value.body));
-        } else {
-          ApiException.exception(statusCode: value.statusCode, body: value.body, context: context);
-          throw Exception("${value.statusCode}");
-        }
-      } else {
-        throw Exception("Access token or Room ID is empty");
-      }
-    } catch (e) {
-      print("eero");
-      print(e);
-      throw Exception(e.toString());
-    }
-  }
+
+
+  // static Future<FetchClassInfoModel> fetchExchangeClassInfo(BuildContext context, roomID) async {
+  //   try {
+  //     final String accessToken = box.read("access") ?? "";
+  //     //final String roomID = VRouter.of(context).queryParameters["id"] ?? "";
+  //     if (accessToken.isNotEmpty && roomID.isNotEmpty) {
+  //       final value = await http.get(
+  //         Uri.parse(ApiUrls.getClassDetails + roomID),
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Authorization": "Bearer $accessToken",
+  //         },
+  //       );
+  //       if (value.statusCode == 200 || value.statusCode == 201) {
+  //         return FetchClassInfoModel.fromJson(jsonDecode(value.body));
+  //       } else {
+  //         ApiException.exception(statusCode: value.statusCode, body: value.body, context: context);
+  //         throw Exception("${value.statusCode}");
+  //       }
+  //     } else {
+  //       throw Exception("Access token or Room ID is empty");
+  //     }
+  //   } catch (e) {
+  //     print("eero");
+  //     print(e);
+  //     throw Exception(e.toString());
+  //   }
+  // }
 
   ///-----------------------Exchange flow ---------------------------------------////
 
@@ -1119,33 +1123,33 @@ class PangeaServices {
     }
   }
 
-  ///save the list of Participants when we create exchange
-  static saveExchangeParticipantsInfo(String requestTeacher, String exchangePangeaId, bool isInvited, List<String> participants) async {
-    try {
-      var result = await http.post(
-        Uri.parse(ApiUrls.exchangeParticipantsStore),
-        headers: {
-          "Authorization": "Bearer ${box.read("access")}",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
-          "request_teacher": requestTeacher,
-          "exchange_pangea_id": exchangePangeaId,
-          "is_invited": false,
-          "participant_list": participants,
-        }),
-      );
-      if (result.statusCode == 201 || result.statusCode == 200) {
-        return true;
-      } else {
-        print("Api error: ${result.statusCode}");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // ///save the list of Participants when we create exchange
+  // static saveExchangeParticipantsInfo(String requestTeacher, String exchangePangeaId, bool isInvited, List<String> participants) async {
+  //   try {
+  //     var result = await http.post(
+  //       Uri.parse(ApiUrls.exchangeParticipantsStore),
+  //       headers: {
+  //         "Authorization": "Bearer ${box.read("access")}",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: jsonEncode({
+  //         "request_teacher": requestTeacher,
+  //         "exchange_pangea_id": exchangePangeaId,
+  //         "is_invited": false,
+  //         "participant_list": participants,
+  //       }),
+  //     );
+  //     if (result.statusCode == 201 || result.statusCode == 200) {
+  //       return true;
+  //     } else {
+  //       print("Api error: ${result.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-  ///save the two classes info to create an exchange
+  ///save Exchange Class Info
   static Future saveExchangeRecord(
       String requestFromClass, String requestToClass, String requestTeacher, String requestToClassAuthor, String exchangePangeaId) async {
     try {
@@ -1175,5 +1179,27 @@ class PangeaServices {
     }
   }
 
+  ///fetch exchange class information
+  static Future<ExchangeClassInfo> fetchExchangeClassInfo(
+      String exchangePangeaId) async {
+    try {
+      final result = await http.get(
+        Uri.parse(ApiUrls.fetchExchangeInfo+exchangePangeaId),
+        headers: {
+          "Authorization": "Bearer ${box.read("access")}",
+          "Content-Type": "application/json",
+        },
+      );
+      if (result.statusCode == 201 || result.statusCode == 200) {
+        return ExchangeClassInfo.fromJson(jsonDecode(result.body));
+
+      } else {
+        throw  Exception("${result.statusCode}: ${result.body}");
+      }
+    } catch (e) {
+      print(e);
+      throw Exception("${"Error accured..."}");
+    }
+  }
 
 }
