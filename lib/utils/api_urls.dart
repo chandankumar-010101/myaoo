@@ -41,5 +41,5 @@ class ApiUrls {
   static String classParticipants = Environment.baseAPI+"/class/get_room_members?pangea_class_id=";
   static String exchangeParticipantsStore = Environment.baseAPI+"/class/exchange/participant";
   static String exchangeInfoStore = Environment.baseAPI+"/class/exchange/create";
-
+  static String fetchExchangeInfo = Environment.baseAPI+"/class/exchange/data?exchange_pangea_id=";
 }

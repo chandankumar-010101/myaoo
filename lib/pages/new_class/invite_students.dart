@@ -56,7 +56,7 @@ class _InviteStudentState extends State<InviteStudent> {
               width: size.width,
               height: size.height,
               child: FutureBuilder(
-                future: PangeaServices.fetchClassInfo(context, GetStorage().read("access"), roomId),
+                future: PangeaServices.fetchClassInfo(context,  roomId),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.hasData) {
                     FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;

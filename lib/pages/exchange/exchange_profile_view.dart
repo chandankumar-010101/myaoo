@@ -41,7 +41,7 @@ class _ExchangeProfileViewState extends State<ExchangeProfileView> {
       ),
       body: FutureBuilder(
         future: PangeaServices.fetchClassInfo(
-            context, widget.controller.box.read("access") ?? "", roomAlias),
+            context, roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data =

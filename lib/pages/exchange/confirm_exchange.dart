@@ -52,18 +52,13 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         }
       }
 
-      // print(userID);
-      // print(listOfParticipants);
-      listOfParticipants = listOfParticipants.where((element) => element != userID).toList();
-     // print(listOfParticipants);
 
-      // listOfParticipants.addAll(data.roomMembers!.members!);
-      // listOfParticipants.addAll(data2.roomMembers!.members!);
+      listOfParticipants = listOfParticipants.where((element) => element != userID).toList();
       final FetchClassInfoModel senderClassInfo = await PangeaServices.fetchClassInfo(
-          context, GetStorage().read("access"), senderClassId);
+          context, senderClassId);
       final FetchClassInfoModel receiverClassInfo =
           await PangeaServices.fetchClassInfo(
-              context, GetStorage().read("access"), receiverClassId);
+              context, receiverClassId);
 
       final String className =
           receiverClassInfo.className  +"-exchange-"+ senderClassInfo.className;
@@ -87,42 +82,41 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         ),
       );
       if (roomID.result != null) {
-        if (kDebugMode) {
-          await PangeaServices.saveExchangeRecord(senderClassId,
-              receiverClassId, senderId, receiverId, roomID.result!);
-          await PangeaServices.createClass(
-            context: context,
-            roomId: roomID.result!,
-            className: className,
-            city: city,
-            country: country,
-            dominantLanguage: receiverClassInfo.dominantLanguage,
-            targetLanguage: receiverClassInfo.targetLanguage,
-            desc: "Exchange",
-            languageLevel: 1,
-            isPublic: false,
-            isShareFiles: false,
-            isShareLocation: false,
-            isSharePhoto: false,
-            isOpenExchange: false,
-            isOpenEnrollment: false,
-            isCreateStories: false,
-            isCreateRoomsExchange: false,
-            isCreateRooms: false,
-            isShareVideo: false,
-            oneToOneChatClass: false,
-            oneToOneChatExchange: false,
-            schoolName: school,
-            isExchange: true,
-          );
-          Fluttertoast.showToast(msg: "Exchange Created Successfully");
-        }
+        await PangeaServices.saveExchangeRecord(senderClassId,
+            receiverClassId, senderId, receiverId, roomID.result!);
+        await PangeaServices.createClass(
+          context: context,
+          roomId: roomID.result!,
+          className: className,
+          city: city,
+          country: country,
+          dominantLanguage: receiverClassInfo.dominantLanguage,
+          targetLanguage: receiverClassInfo.targetLanguage,
+          desc: "Exchange",
+          languageLevel: 1,
+          isPublic: false,
+          isShareFiles: false,
+          isShareLocation: false,
+          isSharePhoto: false,
+          isOpenExchange: false,
+          isOpenEnrollment: false,
+          isCreateStories: false,
+          isCreateRoomsExchange: false,
+          isCreateRooms: false,
+          isShareVideo: false,
+          oneToOneChatClass: false,
+          oneToOneChatExchange: false,
+          schoolName: school,
+          isExchange: true,
+        );
+        Fluttertoast.showToast(msg: "Exchange Created Successfully");
       }
       if (roomID == null) {
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
       }
     } catch (e) {
       print(e);
+      Fluttertoast.showToast(msg: "Error: Unable to Confirm the exchange");
     }
   }
 
@@ -167,7 +161,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         title: const Text("Request to Exchange"),
       ),
       body: GetStorage().read("clientID") == receiverId?FutureBuilder(
-        future: PangeaServices.fetchExchangeClassInfo(
+        future: PangeaServices.fetchClassInfo(
             context, receiverClassId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {

@@ -12,6 +12,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
+import '../../model/exchange_classInfo.dart';
 import '../../services/controllers.dart';
 import '../../services/services.dart';
 
@@ -133,7 +134,56 @@ class RequestScreenState extends State<RequestScreen> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Exception Accrued"),
+        content: Text("Error Accrued"),
+        backgroundColor: Colors.red,
+      ));
+      print(e);
+    }
+  }
+
+  removeExchangeClass(String roomAlias) async{
+    try{
+      ExchangeClassInfo data =  await PangeaServices.fetchExchangeClassInfo(roomAlias);
+      if (kDebugMode) {
+        print(data.requestTeaacher);
+        print(data.requestToClassAuthor);
+      }
+
+      final room = Matrix.of(context).client.getRoomById(roomAlias);
+      if (room != null) {
+        if (room.canKick) {
+          final List<User> rooms = await room.requestParticipants();
+          final String? userId = Matrix.of(context).client.userID;
+          if (userId != null) {
+            for (final element in rooms) {
+              if (data.requestToClassAuthor == element.id || data.requestTeaacher == element.id) {
+                continue;
+              }
+              await room.kick(element.id);
+            }
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Students removed from the class"),
+              backgroundColor: Colors.green,
+            ));
+            VRouter.of(context).to('/rooms');
+
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Unable to fetch current user information"),
+              backgroundColor: Colors.red,
+            ));
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("You don't have permissions!n"),
+            backgroundColor: Colors.red,
+          ));
+        }
+      }
+
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Error Accrued"),
         backgroundColor: Colors.red,
       ));
       print(e);
