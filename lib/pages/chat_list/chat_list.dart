@@ -611,7 +611,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
-   Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget):null;
+  // Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget):null;
 
     return Obx(() => getxController.throughClassProfile.value ? const Search() : ChatListView(this));
   }
