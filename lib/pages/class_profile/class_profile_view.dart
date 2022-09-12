@@ -81,7 +81,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         title: const Text("Class Profile"),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, widget.controller.box.read("access") ?? "", roomAlias),
+        future: PangeaServices.fetchClassInfo(context, roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
@@ -770,6 +770,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       cancelLabel: L10n.of(context)!.cancel,
                                     );
                                     if (confirmed == OkCancelResult.ok) {
+                                      data.isExchange?widget.controller.removeExchangeClass(roomAlias):
                                       widget.controller.kickAndRemoveClass(roomAlias);
                                     }
                                   },

@@ -79,10 +79,10 @@ class _StudentPermissionsState extends State<StudentPermissions> {
       final roomID = await showFutureLoadingDialog(
         context: context,
         future: () => matrix.client.createRoom(
-          preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
+          preset: sdk.CreateRoomPreset.publicChat,
           creationContent: {'type': RoomCreationTypes.mSpace},
-          visibility: publicGroup ? sdk.Visibility.public : null,
-          roomAliasName: publicGroup && className.isNotEmpty ? className.trim().toLowerCase().replaceAll(' ', '_') : null,
+          visibility: sdk.Visibility.public,
+          roomAliasName: className.isNotEmpty ? className.trim().toLowerCase().replaceAll(' ', '_') : null,
           name: className.isNotEmpty ? className : null,
         ),
       );
