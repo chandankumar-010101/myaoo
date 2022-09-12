@@ -7,6 +7,7 @@ import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
+import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import 'user_bottom_sheet_view.dart';
 
@@ -78,11 +79,22 @@ class UserBottomSheetController extends State<UserBottomSheet> {
                 score: score,
               ),
         );
-        if (result.error != null) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(L10n.of(context)!.contentHasBeenReported),
-          backgroundColor: Colors.red,
-        ));
+        if (result.error != null){
+          PangeaServices.requestEmail(
+            "harsh",
+            "mailto:harsh@gmail.com",
+            "no",
+            "mailto:harsh@123gmail.com",
+            "inoffensive",
+            reason.single,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(L10n.of(context)!.contentHasBeenReported),
+            backgroundColor: Colors.red,
+          ));
+        }
+
+
         break;
       case 'mention':
         Navigator.of(context, rootNavigator: false).pop();
@@ -141,6 +153,7 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         }
     }
   }
+
 
   @override
   Widget build(BuildContext context) => UserBottomSheetView(this);
