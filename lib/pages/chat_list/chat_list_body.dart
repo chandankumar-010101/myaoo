@@ -264,8 +264,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                             }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
                                           ],
                                           // creationContent: {'type': RoomCreationTypes.mSpace},
-                                          roomAliasName: peoplerooms[i].displayName! +
-                                              "-" +
+                                          roomAliasName: peoplerooms[i].displayName! +   "-" +
                                               matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                               "#" +
                                               random.nextInt(9999).toString(),

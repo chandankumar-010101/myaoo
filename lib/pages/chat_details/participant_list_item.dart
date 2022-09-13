@@ -19,9 +19,7 @@ class ParticipantListItem extends StatelessWidget {
       Membership.invite: L10n.of(context)!.invited,
       Membership.leave: L10n.of(context)!.leftTheChat,
     };
-    final permissionBatch = user.powerLevel == 100
-        ? L10n.of(context)!.admin
-        : user.powerLevel >= 50
+    final permissionBatch = user.powerLevel == 100 ? L10n.of(context)!.admin : user.powerLevel >= 50
             ? L10n.of(context)!.moderator
             : '';
 
