@@ -16,6 +16,7 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:pangeachat/widgets/profile_bottom_sheet.dart';
 import 'package:pangeachat/widgets/public_room_bottom_sheet.dart';
+import '../services/services.dart';
 import 'platform_infos.dart';
 
 import 'package:universal_html/html.dart' as html;
@@ -181,6 +182,16 @@ class UrlLauncher {
       }
     } else if (identityParts.primaryIdentifier.sigil == '@') {
       if (requestExchange) {
+
+        final bool isExchangeExist = await PangeaServices.validateExchange(
+            requestFromClass: roomId!,
+            requestToClass: requestToclass,
+            context: context);
+        if(isExchangeExist){
+          Fluttertoast.showToast(
+              msg: "Exchange already exist with this class",webBgColor: "#ff0000",backgroundColor: Colors.red);
+          return;
+        }
         final roomID = await showFutureLoadingDialog(
           context: context,
           future: () => matrix.client.createRoom(
@@ -242,6 +253,7 @@ class UrlLauncher {
           Fluttertoast.showToast(msg: "Unable to find exchnage info");
         }
       } else if (requestToEnroll) {
+
         final roomID = await showFutureLoadingDialog(
           context: context,
           future: () => matrix.client.createRoom(

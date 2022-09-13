@@ -129,15 +129,14 @@ class _ClassLanguageState extends State<ClassLanguage> {
       Fluttertoast.showToast(msg: "Description length should below  2000", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return;
     }
-
     box.write("className", classNameController.text);
     box.write("cityName", cityController.text);
     box.write("countryName", countryController.text);
     box.write("languageLevel", languageLevel);
     box.write("scoolName", schoolController.text);
     box.write("disc", discriptionController.text);
-    box.write("targetLanguage", targetLanguage!.languageName);
-    box.write("sourceLanage", sourceLanguage!.languageName);
+    box.write("targetLanguage", sourceLanguage!.languageName);
+    box.write("sourceLanage", targetLanguage!.languageName);
     context.vRouter.to("/newclass/class_permissions");
   }
 
@@ -438,23 +437,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 maxLines: 3,
               ),
             ),
-            // Container(
-            //   constraints: BoxConstraints(minWidth: 100, maxWidth: 450),
-            //   padding: EdgeInsets.all(size.height * 0.01),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       Text(
-            //         "2000",
-            //         style: TextStyle().copyWith(
-            //             color: Theme.of(context).textTheme.bodyText1!.color,
-            //             fontSize: 14),
-            //         overflow: TextOverflow.clip,
-            //         textAlign: TextAlign.center,
-            //       )
-            //     ],
-            //   ),
-            // ),
+
             Container(
               constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
               padding: EdgeInsets.all(size.height * 0.01),
@@ -468,89 +451,91 @@ class _ClassLanguageState extends State<ClassLanguage> {
               ),
             ),
             Container(
-                constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
-                padding: EdgeInsets.all(size.height * 0.01),
-                child: languageFlagList.isNotEmpty
-                    ? Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).primaryColorLight),
+              constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
+              padding: EdgeInsets.all(size.height * 0.01),
+              child: languageFlag2List.isNotEmpty
+                  ? Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).primaryColorLight),
+                ),
+                child: id.isEmpty
+                    ? DropdownButton(
+                  underline: const SizedBox(),
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  hint: targetLanguage == null
+                      ? Center(
+                    child: Text(
+                      "Select Language",
+                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                      : Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          targetLanguage!.languageFlag!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 50,
                         ),
-                        child: id.isEmpty
-                            ? DropdownButton(
-                                // Initial Value
-                                hint: sourceLanguage == null
-                                    ? Center(
-                                        child: Text(
-                                          "Select Language",
-                                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                          overflow: TextOverflow.clip,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    : Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Image.network(
-                                            sourceLanguage!.languageFlag!,
-                                            fit: BoxFit.cover,
-                                            width: 40,
-                                            height: 40,
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            sourceLanguage!.languageName.toString().capitalizeFirst ?? "",
-                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                            overflow: TextOverflow.clip,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ],
-                                      ),
-                                isExpanded: true,
-                                // Down Arrow Icon
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                underline: Container(),
-                                // Array list of items
-                                items: languageFlagList.map((languageFlag) {
-                                  // print(items.languageFlag);
-                                  return DropdownMenuItem(
-                                      value: languageFlag,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Image.network(
-                                            languageFlag.languageFlag!,
-                                            fit: BoxFit.cover,
-                                            width: 40,
-                                            height: 40,
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
-                                            languageFlag.languageName.toString().capitalizeFirst ?? "",
-                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                            overflow: TextOverflow.clip,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ],
-                                      ));
-                                }).toList(),
-                                onChanged: (LanguageFlag? newValue) {
-                                  setState(() {
-                                    sourceLanguage = newValue!;
-                                  });
-                                },
-                              )
-                            : Container(
-                                width: size.width,
+                        const SizedBox(
+                          width: 15.0,
+                        ),
+                        Text(
+                          targetLanguage!.languageName.toString().capitalizeFirst ?? "",
+                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+
+                        )
+                      ],
+                    ),
+                  ),
+                  isExpanded: true,
+                  items: languageFlag2List.map(
+                        (val) {
+                      return DropdownMenuItem(
+                          value: val,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                val.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
                                 height: 40,
-                                child: Center(
-                                  child: Text(box.read("source_lang").toString()),
-                                ),
                               ),
-                      )
-                    : Container()),
+                              SizedBox(width: 10),
+                              Text(
+                                val.languageName.toString().capitalizeFirst ?? "",
+                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ));
+                    },
+                  ).toList(),
+                  onChanged: (LanguageFlag? newValue) {
+                    setState(() {
+                      targetLanguage = newValue!;
+                    });
+                  },
+                )
+                    : Container(
+                  width: size.width,
+                  height: 40,
+                  child: Center(
+                    child: Text(box.read("target_lang").toString()),
+                  ),
+                ),
+              )
+                  : Container(),
+            ),
             SizedBox(
               height: size.height * 0.03,
             ),
@@ -567,91 +552,90 @@ class _ClassLanguageState extends State<ClassLanguage> {
               ),
             ),
             Container(
-              constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
-              padding: EdgeInsets.all(size.height * 0.01),
-              child: languageFlag2List.isNotEmpty
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Theme.of(context).primaryColorLight),
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
+                padding: EdgeInsets.all(size.height * 0.01),
+                child: languageFlagList.isNotEmpty
+                    ? Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Theme.of(context).primaryColorLight),
+                  ),
+                  child: id.isEmpty
+                      ? DropdownButton(
+                    // Initial Value
+                    hint: sourceLanguage == null
+                        ? Center(
+                      child: Text(
+                        "Select Language",
+                        style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.center,
                       ),
-                      child: id.isEmpty
-                          ? DropdownButton(
-                              underline: const SizedBox(),
-                              icon: Icon(Icons.keyboard_arrow_down),
-                              hint: targetLanguage == null
-                                  ? Center(
-                                      child: Text(
-                                        "Select Language",
-                                        style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                        overflow: TextOverflow.clip,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Image.network(
-                                            targetLanguage!.languageFlag!,
-                                            fit: BoxFit.cover,
-                                            width: 40,
-                                            height: 50,
-                                          ),
-                                          const SizedBox(
-                                            width: 15.0,
-                                          ),
-                                          Text(
-                                            targetLanguage!.languageName.toString().capitalizeFirst ?? "",
-                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                              isExpanded: true,
-                              items: languageFlag2List.map(
-                                (val) {
-                                  return DropdownMenuItem(
-                                      value: val,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Image.network(
-                                            val.languageFlag!,
-                                            fit: BoxFit.cover,
-                                            width: 40,
-                                            height: 40,
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            val.languageName.toString().capitalizeFirst ?? "",
-                                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                            overflow: TextOverflow.clip,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ],
-                                      ));
-                                },
-                              ).toList(),
-                              onChanged: (LanguageFlag? newValue) {
-                                setState(() {
-                                  targetLanguage = newValue!;
-                                });
-                              },
-                            )
-                          : Container(
-                              width: size.width,
-                              height: 40,
-                              child: Center(
-                                child: Text(box.read("target_lang").toString()),
-                              ),
-                            ),
                     )
-                  : Container(),
-            ),
+                        : Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          sourceLanguage!.languageFlag!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          sourceLanguage!.languageName.toString().capitalizeFirst ?? "",
+                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                    isExpanded: true,
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    underline: Container(),
+                    // Array list of items
+                    items: languageFlagList.map((languageFlag) {
+                      // print(items.languageFlag);
+                      return DropdownMenuItem(
+                          value: languageFlag,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                languageFlag.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
+                                languageFlag.languageName.toString().capitalizeFirst ?? "",
+                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ));
+                    }).toList(),
+                    onChanged: (LanguageFlag? newValue) {
+                      setState(() {
+                        sourceLanguage = newValue!;
+                      });
+                    },
+                  )
+                      : Container(
+                    width: size.width,
+                    height: 40,
+                    child: Center(
+                      child: Text(box.read("source_lang").toString()),
+                    ),
+                  ),
+                )
+                    : Container()),
+
             SizedBox(
               height: size.height * 0.03,
             ),
