@@ -102,7 +102,6 @@ class HomeserverPickerView extends StatelessWidget {
                                     constraints: BoxConstraints(maxHeight: 80),
                                     child: SvgPicture.asset(
                                       "assets/newAssets/pangea-bare.svg",
-
                                     ),),
                               ),
                               Column(
