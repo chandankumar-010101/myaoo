@@ -8,6 +8,7 @@ import 'package:matrix/matrix.dart';
 
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
+import '../../utils/matrix_sdk_extensions.dart/matrix_locals.dart';
 import '../../widgets/matrix.dart';
 
 // This is not necessarily a Space, but an abstract categorization of a room.
@@ -72,12 +73,7 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) =>
-            !room.isSpace && !(room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType))
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.isSpace).toList();
   }
 
   @override

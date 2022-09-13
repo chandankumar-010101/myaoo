@@ -99,42 +99,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       snapBackSpacesSheet();
     }
 
-    participants.clear();
-    //
-    List<dynamic> alreadyExists = [];
-    List<User> finalUsers = [];
-
-    final rooms = Matrix.of(context).client.rooms;
-
-    for (var room in rooms) {
-      participantsList.addAll(await room.requestParticipants());
-
-      for (var user in participantsList) {
-        if (!participantsList.contains(user.stateKey) && user.stateKey != null && !alreadyExists.contains(user.stateKey)) {
-          Map<String, dynamic> ele = {};
-          ele.addAll(user.toJson());
-          finalUsers.add(user);
-          alreadyExists.add(user.stateKey);
-        }
-      }
-    }
-    finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
-
-    participants = finalUsers;
-    permissions = Permissions(
-        pangeaClass: 0,
-        isPublic: true,
-        isOpenEnrollment: true,
-        isOpenExchange: true,
-        oneToOneChatClass: true,
-        oneToOneChatExchange: true,
-        isCreateRooms: true,
-        isCreateRoomsExchange: true,
-        isShareVideo: true,
-        isSharePhoto: true,
-        isShareFiles: true,
-        isShareLocation: true,
-        isCreateStories: true);
     if (spaceId != null) {
       setState(() => _activeSpacesEntry = spaceId);
       log(_activeSpacesEntry!.getSpace(context)!.id);
@@ -143,6 +107,41 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
       getClassPermissions();
       participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+    } else {
+      participants.clear();
+      //
+      List<dynamic> alreadyExists = [];
+      List<User> finalUsers = [];
+
+      for (var room in rooms) {
+        participantsList.addAll(await room.requestParticipants());
+
+        for (var user in participantsList) {
+          if (!participantsList.contains(user.stateKey) && user.stateKey != null && !alreadyExists.contains(user.stateKey)) {
+            Map<String, dynamic> ele = {};
+            ele.addAll(user.toJson());
+            finalUsers.add(user);
+            alreadyExists.add(user.stateKey);
+          }
+        }
+      }
+      finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+
+      participants = finalUsers;
+      permissions = Permissions(
+          pangeaClass: 0,
+          isPublic: true,
+          isOpenEnrollment: true,
+          isOpenExchange: true,
+          oneToOneChatClass: true,
+          oneToOneChatExchange: true,
+          isCreateRooms: true,
+          isCreateRoomsExchange: true,
+          isShareVideo: true,
+          isSharePhoto: true,
+          isShareFiles: true,
+          isShareLocation: true,
+          isCreateStories: true);
     }
   }
 
@@ -152,6 +151,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
   List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+  List<Room> get rooms => Matrix.of(context).client.rooms.toList();
 
   // Note that this could change due to configuration, etc.
   // Also be aware that _activeSpacesEntry = null is the expected reset method.

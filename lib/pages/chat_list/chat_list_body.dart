@@ -241,7 +241,6 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
                               onTap: widget.controller.userType == 2 || permission != null && permission!.oneToOneChatClass
                                   ? () async {
-                                      Fluttertoast.showToast(msg: "${peoplerooms[i].displayName}");
                                       final matrix = Matrix.of(context);
                                       final space = widget.controller.activeSpacesEntry.getSpace(context);
                                       //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
@@ -279,6 +278,11 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                       );
                                       if (roomID.result != null) {
                                         print("Room id:" + roomID.result!);
+                                        Fluttertoast.showToast(
+                                            msg: "Successfully created Private Chat",
+                                            webBgColor: "#00ff00",
+                                            textColor: Colors.white,
+                                            toastLength: Toast.LENGTH_LONG);
 
                                         VRouter.of(context).pop();
                                         Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
@@ -289,7 +293,10 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                     }
                                   : () {
                                       Fluttertoast.showToast(
-                                          msg: "Not allowed to create private rooms", webBgColor: "#ff0000", textColor: Colors.white);
+                                          msg: "Not allowed to create private rooms",
+                                          webBgColor: "#ff0000",
+                                          textColor: Colors.white,
+                                          toastLength: Toast.LENGTH_LONG);
                                     });
                         },
                       ),
