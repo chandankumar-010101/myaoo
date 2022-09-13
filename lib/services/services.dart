@@ -47,6 +47,9 @@ class PangeaServices {
     }
     accessTokenStatus();
   }
+
+
+
   static accessTokenStatus() async {
     try{
       if (token.isEmpty) {
@@ -60,7 +63,7 @@ class PangeaServices {
       }
     }catch(e){
       print(e);
-    }
+   }
 
   }
 
@@ -375,7 +378,14 @@ class PangeaServices {
         if (value.statusCode == 200) {
           final data = jsonDecode(value.body);
           box.write("age", data["age"]);
-        }  else {
+        }
+        else if (value.statusCode == 401) {
+          PangeaServices._init();
+          fetchUserAge();
+          //final data = jsonDecode(value.body);
+          //box.write("age", data["age"]);
+        }
+        else {
           ApiException.exception(statusCode: value.statusCode, body: value.body);
         }
       } catch (e) {
