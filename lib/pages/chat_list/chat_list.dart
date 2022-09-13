@@ -82,6 +82,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Stream<Client> get clientStream => _clientStream.stream;
 
+  List<User> participantsList = [];
   List<User> participants = [];
   void _onScroll() {
     final newScrolledToTop = scrollController.position.pixels <= 0;
@@ -96,17 +97,29 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
-    participants.clear();
-    final rooms = await Matrix.of(context).client.rooms.where((element) => element.isSpace);
-    for (var room in rooms) {
-      final a = await room.requestParticipants();
 
-      for (var user in a) {
-        participants.add(user);
-        participants.removeWhere((user) => user.id == Matrix.of(context).client.userID);
+    participants.clear();
+    //
+    List<dynamic> alreadyExists = [];
+    List<User> finalUsers = [];
+
+    final rooms = Matrix.of(context).client.rooms;
+
+    for (var room in rooms) {
+      participantsList.addAll(await room.requestParticipants());
+
+      for (var user in participantsList) {
+        if (!participantsList.contains(user.stateKey) && user.stateKey != null && !alreadyExists.contains(user.stateKey)) {
+          Map<String, dynamic> ele = {};
+          ele.addAll(user.toJson());
+          finalUsers.add(user);
+          alreadyExists.add(user.stateKey);
+        }
       }
     }
-    print(participants.map((e) => e.toJson()).toString());
+    finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+
+    participants = finalUsers;
 
     if (spaceId != null) {
       setState(() => _activeSpacesEntry = spaceId);
@@ -220,7 +233,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    getpeople();
     _initReceiveSharingIntent();
 
     scrollController.addListener(_onScroll);
@@ -228,23 +240,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     _hackyWebRTCFixForWeb();
 
     super.initState();
-   }
-
-  getpeople() async {
-    participants.clear();
-    final rooms = Matrix.of(context).client.rooms.where((element) => element.isSpace);
-    for (var room in rooms) {
-      final a = await room.requestParticipants();
-
-      for (var user in a) {
-        if (participants.contains(user.roomId)) {
-          continue;
-        } else {
-          participants.add(user);
-        }
-      }
-    }
-    print(participants.map((e) => e.toJson()).toString());
   }
 
   void checkBootstrap() async {
@@ -646,8 +641,10 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
-  // Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget):null;
-    Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget,rooms: true):null;
+    // Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget):null;
+    Matrix.of(context).client.userID != null
+        ? PangeaServices.validateUser(Matrix.of(context).client, context, Matrix.of(context).widget, rooms: true)
+        : null;
 
     return Obx(() => getxController.throughClassProfile.value ? const Search() : ChatListView(this));
   }
