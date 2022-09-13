@@ -37,7 +37,7 @@ class PeopleListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? Theme.of(context).primaryColor.withAlpha(100) : Theme.of(context).primaryColor,
+      color: selected ? Theme.of(context).primaryColor.withAlpha(100) : Colors.transparent,
       child: ListTile(
         selected: selected,
         leading: Avatar(
