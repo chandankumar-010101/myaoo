@@ -67,6 +67,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
   }
 
+  int userType = GetStorage().read("usertype") ?? 0;
   BoxConstraints? snappingSheetContainerSize;
 
   String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
@@ -94,6 +95,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   Future<void> setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) async {
+    getxController.fetchClassInfo(context, spaceId!.getSpace(context)!.id);
+
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
@@ -124,11 +127,11 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (spaceId != null) {
       setState(() => _activeSpacesEntry = spaceId);
       log(_activeSpacesEntry!.getSpace(context)!.id);
-      getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
       participants.clear();
       participants = await spaceId.getSpace(context)!.requestParticipants();
       participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
     }
+    setState(() {});
   }
 
   void editSpace(BuildContext context, String spaceId) async {
@@ -596,44 +599,34 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   PangeaControllers getxController = Get.put(PangeaControllers());
 
   canCreateRoom() {
-    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
-      return getxController.classInfoModel.value!.permissions.isCreateRooms && activeSpacesEntry.getSpace(context) != null
-          ? IconButton(
-              onPressed: () {
-                activeSpacesEntry.getSpace(context) == null
-                    ? VRouter.of(context).to('/newgroup')
-                    : VRouter.of(context).to('/newgroup', queryParameters: {
-                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
-                      });
-              },
-              icon: const Icon(Icons.add))
-          : Container();
+    if (userType == 2) {
+      return IconButton(
+          onPressed: () {
+            activeSpacesEntry.getSpace(context) == null
+                ? VRouter.of(context).to('/newgroup')
+                : VRouter.of(context).to('/newgroup', queryParameters: {
+                    "spaceId": activeSpacesEntry.getSpace(context)!.id,
+                  });
+          },
+          icon: const Icon(Icons.add));
+    } else {
+      if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
+        return getxController.classInfoModel.value!.permissions.isCreateRooms && activeSpacesEntry.getSpace(context) != null
+            ? IconButton(
+                onPressed: () {
+                  activeSpacesEntry.getSpace(context) == null
+                      ? VRouter.of(context).to('/newgroup')
+                      : VRouter.of(context).to('/newgroup', queryParameters: {
+                          "spaceId": activeSpacesEntry.getSpace(context)!.id,
+                        });
+                },
+                icon: const Icon(Icons.add))
+            : Container();
+      }
     }
     return IconButton(
         onPressed: () {
           VRouter.of(context).to('/newgroup');
-        },
-        icon: const Icon(Icons.add));
-  }
-
-  canAddPeople() {
-    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
-      log("Space here");
-      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass && activeSpacesEntry.getSpace(context) != null
-          ? IconButton(
-              onPressed: () {
-                activeSpacesEntry.getSpace(context) == null
-                    ? VRouter.of(context).to('/newprivatechat')
-                    : VRouter.of(context).to('/newprivatechat', queryParameters: {
-                        "classId": activeSpacesEntry.getSpace(context)!.id,
-                      });
-              },
-              icon: const Icon(Icons.add))
-          : Container());
-    }
-    return IconButton(
-        onPressed: () {
-          VRouter.of(context).to('/newprivatechat');
         },
         icon: const Icon(Icons.add));
   }

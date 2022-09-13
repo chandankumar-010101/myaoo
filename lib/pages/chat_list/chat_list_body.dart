@@ -248,53 +248,57 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           return PeopleListItem(
                             peoplerooms[i],
                             selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
-                            onTap: () async {
-                              Fluttertoast.showToast(msg: "${peoplerooms[i].displayName}");
-                              final matrix = Matrix.of(context);
-                              final space = widget.controller.activeSpacesEntry.getSpace(context);
-                              //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
-                              final roomID = await showFutureLoadingDialog(
-                                context: context,
-                                future: () => matrix.client.createRoom(
-                                  invite: [peoplerooms[i].id],
-                                  preset: CreateRoomPreset.privateChat,
-                                  isDirect: true,
-                                  initialState: [
-                                    StateEvent(
-                                      content: {
-                                        "guest_access": "can_join",
-                                      },
-                                      type: EventTypes.GuestAccess,
-                                      stateKey: "",
-                                    ),
-                                    StateEvent(content: {
-                                      "via": ["matrix.staging.pangea.chat"],
-                                      "canonical": true
-                                    }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
-                                  ],
-                                  // creationContent: {'type': RoomCreationTypes.mSpace},
-                                  roomAliasName: peoplerooms[i].displayName! +
-                                      "-" +
-                                      matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
-                                      "#" +
-                                      random.nextInt(9999).toString(),
-                                  name: peoplerooms[i].displayName! +
-                                      "-" +
-                                      matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
-                                      "#" +
-                                      random.nextInt(9999).toString(),
-                                ),
-                              );
-                              if (roomID.result != null) {
-                                print("Room id:" + roomID.result!);
+                            onTap: widget.controller.userType == 2 ||
+                                    (widget.controller.getxController.classInfoModel.value!.permissions.oneToOneChatClass &&
+                                        widget.controller.activeSpacesEntry.getSpace(context) != null)
+                                ? () async {
+                                    Fluttertoast.showToast(msg: "${peoplerooms[i].displayName}");
+                                    final matrix = Matrix.of(context);
+                                    final space = widget.controller.activeSpacesEntry.getSpace(context);
+                                    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+                                    final roomID = await showFutureLoadingDialog(
+                                      context: context,
+                                      future: () => matrix.client.createRoom(
+                                        invite: [peoplerooms[i].id],
+                                        preset: CreateRoomPreset.privateChat,
+                                        isDirect: true,
+                                        initialState: [
+                                          StateEvent(
+                                            content: {
+                                              "guest_access": "can_join",
+                                            },
+                                            type: EventTypes.GuestAccess,
+                                            stateKey: "",
+                                          ),
+                                          StateEvent(content: {
+                                            "via": ["matrix.staging.pangea.chat"],
+                                            "canonical": true
+                                          }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
+                                        ],
+                                        // creationContent: {'type': RoomCreationTypes.mSpace},
+                                        roomAliasName: peoplerooms[i].displayName! +
+                                            "-" +
+                                            matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                            "#" +
+                                            random.nextInt(9999).toString(),
+                                        name: peoplerooms[i].displayName! +
+                                            "-" +
+                                            matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                            "#" +
+                                            random.nextInt(9999).toString(),
+                                      ),
+                                    );
+                                    if (roomID.result != null) {
+                                      print("Room id:" + roomID.result!);
 
-                                VRouter.of(context).pop();
-                                Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
-                              }
-                              if (roomID == null) {
-                                VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-                              }
-                            },
+                                      VRouter.of(context).pop();
+                                      Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                    }
+                                    if (roomID == null) {
+                                      VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+                                    }
+                                  }
+                                : () {},
                           );
                         },
                       ),
