@@ -11,6 +11,7 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/utils/matrix_sdk_extensions.dart/matrix_locals.dart';
 import 'package:pangeachat/utils/room_status_extension.dart';
 import '../../utils/date_time_extension.dart';
+import '../../utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/matrix.dart';
 import '../chat/send_file_dialog.dart';
@@ -180,12 +181,16 @@ class ChatListItem extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                room
-                    .getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
-                    .split("#")
-                    .first
-                    .replaceAll("${Matrix.of(context).client.userID!.split(":").first.replaceAll("@", "")}", "")
-                    .replaceAll("-", ""),
+                (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+                    ? room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
+                    : room
+                        .getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
+                        .toString()
+                        .toLowerCase()
+                        .split("#")
+                        .first
+                        .replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "")
+                        .replaceAll("-", ""),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,

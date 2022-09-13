@@ -46,8 +46,9 @@ class LoginView extends StatelessWidget {
                         children: [
                           ConstrainedBox(
                               constraints: BoxConstraints(maxHeight: 100),
-                              child: Image.asset(
-                                  "assets/newAssets/pangea-bare.png")),
+                              child: SvgPicture.asset(
+                                "assets/newAssets/pangea-bare.svg",
+                              ),),
                           const SizedBox(
                             width: 10.0,
                           ),
