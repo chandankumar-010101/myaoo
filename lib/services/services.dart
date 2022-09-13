@@ -72,7 +72,8 @@ class PangeaServices {
         await client.onSync.stream.firstWhere(
             (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
       }
-      VRouter.of(context).toSegments(['rooms', result.result!]);
+     // Fluttertoast.showToast(msg: "Class Joined Successfully", webBgColor: "#00ff00",backgroundColor: Colors.red);
+      // VRouter.of(context).toSegments(['rooms', result.result!]);
       Navigator.of(context, rootNavigator: false).pop();
       return;
     }
@@ -97,6 +98,8 @@ class PangeaServices {
         ClassCodeModel data = ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
           joinRoom(context, data.pangeaClassRoomId!);
+          Fluttertoast.showToast(msg: "Class Joined Successfully", webBgColor: "#00ff00",backgroundColor: Colors.greenAccent);
+
         } else {
           Fluttertoast.showToast(
               msg: "Unable to find User Information",
