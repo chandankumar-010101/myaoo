@@ -184,13 +184,13 @@ class _InviteEmailState extends State<InviteEmail> {
                               )));
                       final roomId = VRouter.of(context).queryParameters['id'] ?? "";
                       if (roomId.isEmpty) {
-                        Fluttertoast.showToast(msg: "Unable to find Room ID", webBgColor: Colors.red, backgroundColor: Colors.red);
+                        Fluttertoast.showToast(msg: "Unable to find Room ID", webBgColor: "#ff0000", backgroundColor: Colors.red);
 
                         return;
                       }
                       String teacherName = Matrix.of(context).client.getRoomById(roomId)!.displayname ?? "";
                       if (teacherName.isEmpty) {
-                        Fluttertoast.showToast(msg: "Unable to find Room Name", webBgColor: Colors.red, backgroundColor: Colors.red);
+                        Fluttertoast.showToast(msg: "Unable to find Room Name", webBgColor: "#ff0000", backgroundColor: Colors.red);
                         return;
                       }
 

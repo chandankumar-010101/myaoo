@@ -92,7 +92,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
         : "";
     Fluttertoast.showToast(
         msg: "Functionality under process",
-        webBgColor: Colors.red,
+        webBgColor: "#ff0000",
         backgroundColor: Colors.red);
 
     matrix.client
@@ -166,7 +166,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
       VRouter.of(context).pop();
       Fluttertoast.showToast(
           msg: "Created Successfully",
-          webBgColor: Colors.green,
+          webBgColor: "#00ff00",
           backgroundColor: Colors.green);
     }
     if (roomID == null) {

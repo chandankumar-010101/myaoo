@@ -38,9 +38,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
       PangeaServices.updateUserAge(dayId!, monthId!, yearId!, context);
     } else {
       Fluttertoast.showToast(
-          msg: "Age is below 18 year's",
-          webBgColor: Colors.red,
-          backgroundColor: Colors.red);
+          msg: "Age is below 18 year's", webBgColor: "#ff0000",backgroundColor: Colors.red
+          );
     }
     if (!mounted) {
       setState(() {});

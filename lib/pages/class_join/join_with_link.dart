@@ -31,7 +31,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
     } else {
       print("unable to find classcode");
 
-      Fluttertoast.showToast(msg: "Unable to find class code", webBgColor: Colors.red, backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Unable to find class code",webBgColor: "#ff0000", backgroundColor: Colors.red);
     }
   }
 
