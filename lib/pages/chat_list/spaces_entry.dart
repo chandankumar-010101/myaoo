@@ -31,6 +31,7 @@ abstract class SpacesEntry {
   );
 
   List<Room> getPeopleRooms(BuildContext context);
+  List<Room> getStories(BuildContext context);
   // Checks that this entry is still valid.
   bool stillValid(BuildContext context) => true;
   // Returns true if the Stories header should be shown.
@@ -71,12 +72,20 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && !room.isSpace).toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.isSpace).toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
     return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && _roomCheckCommon(room, context)).toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+        .toList();
   }
 
   @override
@@ -110,6 +119,14 @@ class DirectChatsSpacesEntry extends SpacesEntry {
   @override
   List<Room> getPeopleRooms(BuildContext context) {
     return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+        .toList();
   }
 
   @override
@@ -151,6 +168,14 @@ class GroupsSpacesEntry extends SpacesEntry {
     return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
   }
 
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+        .toList();
+  }
+
   bool separatedGroup(Room room, List<Room> spaces) {
     return !spaces.any((space) => _roomInsideSpace(room, space));
   }
@@ -177,7 +202,21 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && _roomInsideSpace(room, space)).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            !(room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType) &&
+            _roomInsideSpace(room, space))
+        .toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+        .toList();
   }
 
   @override
