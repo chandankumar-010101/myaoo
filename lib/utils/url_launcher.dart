@@ -210,17 +210,12 @@ class UrlLauncher {
 
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
-                "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+            roomAliasName: userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "")  +   "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-            name: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 6) +
-                "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+            name:userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "")  +   "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
           ),
@@ -228,12 +223,12 @@ class UrlLauncher {
         if (roomID.result != null) {
           String userId = Matrix.of(context).client.userID ?? "";
           if (userId.isNotEmpty) {
-            final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
+            final String initialUrl = kIsWeb ? html.window.origin! : Environment.frontendURL;
 
             final client = Matrix.of(context).client;
             await client
                 .getRoomById(roomID.result!)!
-                .sendTextEvent(initial_url + "/#/" + "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
+                .sendTextEvent(initialUrl + "/#/" + "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
                 .then((value) {
               VRouter.of(context).to("/rooms");
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -271,19 +266,15 @@ class UrlLauncher {
             ],
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: identityParts.primaryIdentifier.split(":").first.replaceAll("@", "").substring(0, 6) +
-                "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+            roomAliasName: identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "")  +   "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-            name: identityParts.primaryIdentifier.split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
-                "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+            name:identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "")  +   "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
+
           ),
         );
         if (roomID.result != null) {

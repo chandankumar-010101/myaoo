@@ -34,7 +34,6 @@ class _ChatInputRowState extends State<ChatInputRow> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       if(widget.controller.getxController.classInfoModel.value !=null){
@@ -134,19 +133,19 @@ class _ChatInputRowState extends State<ChatInputRow> {
                               contentPadding: const EdgeInsets.all(0),
                             ),
                           ),
-                          PopupMenuItem<String>(
-                            enabled: showLocation,
-                            value: 'location',
-                            child: ListTile(
-                              leading: const CircleAvatar(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                child: Icon(Icons.location_pin),
-                              ),
-                              title: Text("Send Location"),
-                              contentPadding: const EdgeInsets.all(0),
-                            ),
-                          ),
+                          // PopupMenuItem<String>(
+                          //   enabled: showLocation,
+                          //   value: 'location',
+                          //   child: ListTile(
+                          //     leading: const CircleAvatar(
+                          //       backgroundColor: Colors.green,
+                          //       foregroundColor: Colors.white,
+                          //       child: Icon(Icons.location_pin),
+                          //     ),
+                          //     title: Text("Send Location"),
+                          //     contentPadding: const EdgeInsets.all(0),
+                          //   ),
+                          // ),
                           PopupMenuItem<String>(
                             enabled: showImage,
                             value: 'image',
