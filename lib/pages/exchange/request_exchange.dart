@@ -446,10 +446,6 @@ class _RequestExchangeState extends State<RequestExchange> {
                                        'https://matrix.to/#/${userIdOfRequestedClass}')
                                        .openMatrixToUrl();
                                  }
-
-                                
-
-
                                 }else{
                                   Fluttertoast.showToast(
                                       msg: "Exchange Class Info not found",webBgColor: "#ff0000",backgroundColor: Colors.red);
@@ -461,28 +457,7 @@ class _RequestExchangeState extends State<RequestExchange> {
 
                               final String clientid =
                                   box.read("ExchangeClientID") ?? "";
-                              // if(clientid.isNotEmpty){
-                              //   final bool value = await PangeaServices.createExchangeRequest(roomId: sourceLanguage.toString(), context: context, teacherID: clientid, toClass: roomId,);
-                              //   if(sourceLanguage !=null){
-                              //     value?
-                              //     UrlLauncher(
-                              //         context,
-                              //         requestExchange:true,
-                              //         roomId: roomId.toString(),
-                              //         rid: clientid.toString(),
-                              //         receivedroomID: sourceLanguage.toString(),
-                              //         'https://matrix.to/#/${clientid.toString()}')
-                              //         .openMatrixToUrl():null;
-                              //
-                              //   }
-                              //   else{
-                              //     ScaffoldMessenger.of(context)
-                              //         .showSnackBar(SnackBar(content: Text("Select Class with whom you to merge classes")));
-                              //   }
-                              // }
-                              // else{
-                              //   print("No exchange client id");
-                              // }
+
                             },
                             child: Container(
                               width: 200,
