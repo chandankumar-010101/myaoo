@@ -12,6 +12,7 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/model/class_detail_model.dart';
 
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_item.dart';
@@ -45,6 +46,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
   bool isRoomExpanded = false;
   bool isPeopleExpanded = false;
   bool isAllChatExpanded = false;
+  Permissions? permission;
   @override
   void initState() {
     _subscription =
@@ -53,23 +55,13 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     super.initState();
   }
 
-  bool _roomInsideSpace(Room room, Room space) {
-    if (space.spaceChildren.any((child) => child.roomId == room.id)) {
-      print("k");
-      return true;
-    }
-    if (room.spaceParents.any((parent) => parent.roomId == space.id)) {
-      print("j");
-      return true;
-    }
-    return true;
-  }
-
   math.Random random = new math.Random();
   @override
   Widget build(BuildContext context) {
     final reversed = !_animationReversed();
-    Widget child;
+
+    permission = widget.controller.permissions;
+
     List<User> peoplerooms = widget.controller.participants;
 
     final rooms = widget.controller.activeSpacesEntry.getRooms(context);
@@ -245,61 +237,60 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           if (i >= peoplerooms.length) {
                             return Container();
                           }
-                          return PeopleListItem(
-                            peoplerooms[i],
-                            selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
-                            onTap: widget.controller.userType == 2 ||
-                                    (widget.controller.getxController.classInfoModel.value!.permissions.oneToOneChatClass &&
-                                        widget.controller.activeSpacesEntry.getSpace(context) != null)
-                                ? () async {
-                                    Fluttertoast.showToast(msg: "${peoplerooms[i].displayName}");
-                                    final matrix = Matrix.of(context);
-                                    final space = widget.controller.activeSpacesEntry.getSpace(context);
-                                    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
-                                    final roomID = await showFutureLoadingDialog(
-                                      context: context,
-                                      future: () => matrix.client.createRoom(
-                                        invite: [peoplerooms[i].id],
-                                        preset: CreateRoomPreset.privateChat,
-                                        isDirect: true,
-                                        initialState: [
-                                          StateEvent(
-                                            content: {
-                                              "guest_access": "can_join",
-                                            },
-                                            type: EventTypes.GuestAccess,
-                                            stateKey: "",
-                                          ),
-                                          StateEvent(content: {
-                                            "via": ["matrix.staging.pangea.chat"],
-                                            "canonical": true
-                                          }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
-                                        ],
-                                        // creationContent: {'type': RoomCreationTypes.mSpace},
-                                        roomAliasName: peoplerooms[i].displayName! +
-                                            "-" +
-                                            matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
-                                            "#" +
-                                            random.nextInt(9999).toString(),
-                                        name: peoplerooms[i].displayName! +
-                                            "-" +
-                                            matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
-                                            "#" +
-                                            random.nextInt(9999).toString(),
-                                      ),
-                                    );
-                                    if (roomID.result != null) {
-                                      print("Room id:" + roomID.result!);
+                          return PeopleListItem(peoplerooms[i],
+                              selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
+                              onTap: widget.controller.userType == 2 || permission != null && permission!.oneToOneChatClass
+                                  ? () async {
+                                      Fluttertoast.showToast(msg: "${peoplerooms[i].displayName}");
+                                      final matrix = Matrix.of(context);
+                                      final space = widget.controller.activeSpacesEntry.getSpace(context);
+                                      //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+                                      final roomID = await showFutureLoadingDialog(
+                                        context: context,
+                                        future: () => matrix.client.createRoom(
+                                          invite: [peoplerooms[i].id],
+                                          preset: CreateRoomPreset.privateChat,
+                                          isDirect: true,
+                                          initialState: [
+                                            StateEvent(
+                                              content: {
+                                                "guest_access": "can_join",
+                                              },
+                                              type: EventTypes.GuestAccess,
+                                              stateKey: "",
+                                            ),
+                                            StateEvent(content: {
+                                              "via": ["matrix.staging.pangea.chat"],
+                                              "canonical": true
+                                            }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
+                                          ],
+                                          // creationContent: {'type': RoomCreationTypes.mSpace},
+                                          roomAliasName: peoplerooms[i].displayName! +
+                                              "-" +
+                                              matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                              "#" +
+                                              random.nextInt(9999).toString(),
+                                          name: peoplerooms[i].displayName! +
+                                              "-" +
+                                              matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                              "#" +
+                                              random.nextInt(9999).toString(),
+                                        ),
+                                      );
+                                      if (roomID.result != null) {
+                                        print("Room id:" + roomID.result!);
 
-                                      VRouter.of(context).pop();
-                                      Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                        VRouter.of(context).pop();
+                                        Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                      }
+                                      if (roomID == null) {
+                                        VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+                                      }
                                     }
-                                    if (roomID == null) {
-                                      VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-                                    }
-                                  }
-                                : () {},
-                          );
+                                  : () {
+                                      Fluttertoast.showToast(
+                                          msg: "Not allowed to create private rooms", webBgColor: "#ff0000", textColor: Colors.white);
+                                    });
                         },
                       ),
               ),
@@ -317,7 +308,27 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                             // Todo: Style needs to be updated
                           ),
                         ),
-                        widget.controller.canCreateRoom(),
+                        widget.controller.userType == 2
+                            ? IconButton(
+                                onPressed: () {
+                                  widget.controller.activeSpacesEntry.getSpace(context) == null
+                                      ? VRouter.of(context).to('/newgroup')
+                                      : VRouter.of(context).to('/newgroup', queryParameters: {
+                                          "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                        });
+                                },
+                                icon: const Icon(Icons.add))
+                            : permission != null && permission!.isCreateRooms
+                                ? IconButton(
+                                    onPressed: () {
+                                      widget.controller.activeSpacesEntry.getSpace(context) == null
+                                          ? VRouter.of(context).to('/newgroup')
+                                          : VRouter.of(context).to('/newgroup', queryParameters: {
+                                              "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                            });
+                                    },
+                                    icon: const Icon(Icons.add))
+                                : Container(),
                       ],
                     )),
                 body: rooms.length == 0
@@ -327,7 +338,6 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                       )
                     : ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
-
                         shrinkWrap: true,
                         key: ValueKey(Matrix.of(context).client.userID.toString() +
                             widget.controller.activeSpaceId.toString() +

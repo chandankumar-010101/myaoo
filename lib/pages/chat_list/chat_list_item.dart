@@ -182,9 +182,11 @@ class ChatListItem extends StatelessWidget {
               child: Text(
                 room
                     .getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
+                    .toString()
+                    .toLowerCase()
                     .split("#")
                     .first
-                    .replaceAll("${Matrix.of(context).client.userID!.split(":").first.replaceAll("@", "")}", "")
+                    .replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "")
                     .replaceAll("-", ""),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
