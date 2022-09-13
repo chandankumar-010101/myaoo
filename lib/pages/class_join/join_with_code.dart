@@ -86,7 +86,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                   if (codeController.text.length == 6) {
                     PangeaServices.joinClassWithCode(codeController.text, context);
                   } else {
-                    Fluttertoast.showToast(msg: "length is short!!!!!!", webBgColor: Colors.red, backgroundColor: Colors.red);
+                    Fluttertoast.showToast(msg: "length is short!!!!!!", webBgColor: "#ff0000", backgroundColor: Colors.red);
                   }
                 },
                 child: Container(

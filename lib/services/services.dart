@@ -47,9 +47,6 @@ class PangeaServices {
     }
     accessTokenStatus();
   }
-
-
-
   static accessTokenStatus() async {
     try{
       if (token.isEmpty) {
@@ -63,7 +60,7 @@ class PangeaServices {
       }
     }catch(e){
       print(e);
-   }
+    }
 
   }
 
@@ -88,7 +85,7 @@ class PangeaServices {
     PangeaServices._init();
     if (token.isEmpty) {
       Fluttertoast.showToast(
-          msg: "Access token not found", backgroundColor: Colors.red);
+          msg: "Access token not found", backgroundColor: Colors.red,webBgColor: "#ff0000");
       return;
     }
     try {
@@ -106,6 +103,7 @@ class PangeaServices {
         } else {
           Fluttertoast.showToast(
               msg: "Unable to find User Information",
+              webBgColor: "#ff0000",
               backgroundColor: Colors.red);
         }
       } else {
@@ -115,7 +113,7 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red,webBgColor: "#ff0000",);
     }
   }
 
@@ -135,7 +133,7 @@ class PangeaServices {
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(
-            msg: "Mail Sent Successfully", backgroundColor: Colors.green);
+            msg: "Mail Sent Successfully", backgroundColor: Colors.green,webBgColor: "#00ff00");
       }  else {
         ApiException.exception(statusCode: result.statusCode, body: result.body);
         throw Exception("Api Error ${result.statusCode}: Unable to send email");
@@ -146,7 +144,7 @@ class PangeaServices {
       }
       Fluttertoast.showToast(
           msg: "Error: Unable to send email",
-          webBgColor: "linear-gradient(to right, #FF0000, #FF0000)",
+          webBgColor: "#ff0000",
           backgroundColor: Colors.red);
       throw Exception("Error: Unable to email");
     }
@@ -156,7 +154,7 @@ class PangeaServices {
       String classCode, BuildContext context) async {
     PangeaServices._init();
     if (token.isEmpty) {
-      Fluttertoast.showToast(msg: "Access token not found");
+      Fluttertoast.showToast(msg: "Access token not found",webBgColor: "#ff0000",backgroundColor: Colors.red);
       throw Exception("Access Token not found");
     }
     try {
@@ -178,7 +176,7 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red,webBgColor: "#ff0000");
       throw Exception("Error: $e");
     }
   }
@@ -223,7 +221,9 @@ class PangeaServices {
       Fluttertoast.showToast(
           msg: "Something went wrong",
           fontSize: 16.0,
-          backgroundColor: Colors.red);
+          backgroundColor: Colors.red,
+          webBgColor: "#ff0000",
+      );
     }
     return countryFlag;
   }
@@ -245,6 +245,7 @@ class PangeaServices {
     } else {
       Fluttertoast.showToast(
           msg: "Something went wrong",
+          webBgColor: "#ff0000",
           fontSize: 16.0,
           backgroundColor: Colors.red);
     }
@@ -282,8 +283,7 @@ class PangeaServices {
   }
 
   //--------------------------------------User Info --------------------------------------//
-  static validateUser(
-      Client client, BuildContext context, Matrix widget) async {
+  static validateUser(Client client, BuildContext context, Matrix widget,{bool rooms = false}) async {
 
     final bool signUp = box.read("sign_up") ?? false;
     final String classCode = GetStorage().read("classCode") ?? "";
@@ -299,22 +299,35 @@ class PangeaServices {
             '/home/connect/lang',
             queryParameters: widget.router!.currentState!.queryParameters,
           );
-        } else {
-          await fetchUserTokenAndInfo(client.userID.toString(), client.accessToken.toString());
-          await fetchUserAge();
-          if (classCode.isNotEmpty) {
-            GetStorage().remove("classCode");
-            Future.delayed(const Duration(seconds: 2), () {
-              print("data removed from box");
-              VRouter.of(context).to('/join_with_link',
-                  queryParameters: {"code": classCode});
+        }
+        else {
+          await fetchUserTokenAndInfo(client.userID.toString(), client.accessToken.toString()).whenComplete(() async {
+
+             print("hello World");
+
+            await PangeaServices.fetchUserAge().whenComplete(() {
+
+              if (classCode.isNotEmpty) {
+                GetStorage().remove("classCode");
+                Future.delayed(const Duration(seconds: 2), () {
+                  VRouter.of(context).to('/join_with_link',
+                      queryParameters: {"code": classCode});
+                });
+              }
+              else {
+                if(!rooms){
+                  widget.router!.currentState!.to(
+                    '/rooms',
+                    queryParameters: widget.router!.currentState!.queryParameters,
+                  );
+                }
+
+              }
             });
-          } else {
-            widget.router!.currentState!.to(
-              '/rooms',
-              queryParameters: widget.router!.currentState!.queryParameters,
-            );
-          }
+
+
+          });
+
         }
       }
       else {
@@ -344,8 +357,8 @@ class PangeaServices {
         box.write("sign_up", false);
         box.write("access", data.access);
         box.write("refresh", data.refresh);
-        GetStorage().write("clientID",userId);
-        GetStorage().write("accessToken", matrixToken);
+        box.write("clientID",userId);
+        box.write("accessToken", matrixToken);
         box.write("sourcelanguage", data.profile!.sourceLanguage);
         box.write("targetlanguage", data.profile!.targetLanguage);
         box.write("usertype", data.profile!.userType);
@@ -359,48 +372,33 @@ class PangeaServices {
       }
       Fluttertoast.showToast(
           msg: "Error while fetching user details",
+          webBgColor: "#ff0000",
           backgroundColor: Colors.red);
     }
   }
 
-  static fetchUserAge() async {
-  PangeaServices._init();
-
-    if (userId.isNotEmpty && token.isNotEmpty) {
-      try {
-        final value = await http.get(
-          Uri.parse(ApiUrls.user_ages + userId),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        );
-        if (value.statusCode == 200) {
-          final data = jsonDecode(value.body);
-          box.write("age", data["age"]);
-        }
-        else if (value.statusCode == 401) {
-          PangeaServices._init();
-          fetchUserAge();
-          //final data = jsonDecode(value.body);
-          //box.write("age", data["age"]);
-        }
-        else {
-          ApiException.exception(statusCode: value.statusCode, body: value.body);
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          print(e);
-        }
-        Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red);
+  static Future fetchUserAge() async {
+    try {
+      PangeaServices._init();
+      final value = await http.get(
+        Uri.parse(ApiUrls.user_ages + userId),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (value.statusCode == 200) {
+        final data = jsonDecode(value.body);
+        box.write("age", data["age"]);
       }
-    } else {
+      else {
+        ApiException.exception(statusCode: value.statusCode, body: value.body);
+      }
+    } catch (e) {
       if (kDebugMode) {
-        print("Client Id or access token is Empty.");
+        print(e);
       }
-      Fluttertoast.showToast(
-          msg: "Error: Unable to fetch Admin Information",
-          backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red,webBgColor: "#ff0000",);
     }
   }
 
@@ -423,16 +421,15 @@ class PangeaServices {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         box.write("age", data["age"]);
-
         _searchController.age.value = data["age"];
         _searchController.loading.value = false;
         Fluttertoast.showToast(
-            msg: "User Age Updated", backgroundColor: Colors.green);
+            msg: "User Age Updated", backgroundColor: Colors.green,webBgColor: "#00ff00");
       }
       else if (response.statusCode == 400) {
         box.write("age", 0);
         Fluttertoast.showToast(
-            msg: "Unable to update user age", backgroundColor: Colors.red);
+            msg: "Unable to update user age", backgroundColor: Colors.red,webBgColor: "#ff0000");
         _searchController.age.value = 0;
         _searchController.loading.value = false;
         log("400" + response.body);
@@ -914,7 +911,7 @@ class PangeaServices {
       }
       if (result.statusCode == 400) {
         Fluttertoast.showToast(
-            msg: "Exchange has been sent already", backgroundColor: Colors.red);
+            msg: "Exchange has been sent already", backgroundColor: Colors.red,webBgColor: "#ff0000");
         return false;
       } else {
         ApiException.exception(statusCode: result.statusCode, body: result.body);
@@ -923,6 +920,7 @@ class PangeaServices {
     } catch (e) {
       Fluttertoast.showToast(
           msg: "Exception: Unable to create exchange",
+          webBgColor: "#ff0000",
           backgroundColor: Colors.red);
       if (kDebugMode) {
         print(e);
@@ -1016,7 +1014,7 @@ class PangeaServices {
       if (result.statusCode == 200 || result.statusCode == 201) {
 
         Fluttertoast.showToast(
-            msg: "Mail Sent Successfully", backgroundColor: Colors.green);
+            msg: "Mail Sent Successfully", backgroundColor: Colors.green,webBgColor: "#00ff00");
       } else {
         ApiException.exception(statusCode: result.statusCode, body: result.body);
       }
@@ -1025,7 +1023,7 @@ class PangeaServices {
         print(e);
       }
       Fluttertoast.showToast(
-          msg: "Error: unable to reject request", backgroundColor: Colors.red);
+          msg: "Error: unable to reject request", backgroundColor: Colors.red,webBgColor: "#ff0000");
       throw Exception("Error: unable to reject request");
     }
   }
@@ -1193,7 +1191,7 @@ class PangeaServices {
             reason: reasondata,
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
-        Fluttertoast.showToast(msg: "report user Sent Successfully");
+        Fluttertoast.showToast(msg: "report user Sent Successfully",webBgColor: "#ff0000",backgroundColor: Colors.red);
       } else {
         ApiException.exception(statusCode:result.statusCode, body: result.body);
         throw Exception(
@@ -1203,7 +1201,7 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      Fluttertoast.showToast(msg: "Error: Unable to fetch report user");
+      Fluttertoast.showToast(msg: "Error: Unable to fetch report user",webBgColor: "#ff0000",backgroundColor: Colors.red);
       throw Exception("Error: Unable to fetch report user");
     }
   }

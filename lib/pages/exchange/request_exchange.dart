@@ -433,7 +433,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                                       context: context);
                                  if(isExchangeExist){
                                    Fluttertoast.showToast(
-                                       msg: "Exchange already exist with this class");
+                                       msg: "Exchange already exist with this class",webBgColor: "#ff0000",backgroundColor: Colors.red);
                                    return;
                                  }
                                  if(userIdOfRequestedClass.isNotEmpty){
@@ -452,11 +452,11 @@ class _RequestExchangeState extends State<RequestExchange> {
 
                                 }else{
                                   Fluttertoast.showToast(
-                                      msg: "Exchange Class Info not found");
+                                      msg: "Exchange Class Info not found",webBgColor: "#ff0000",backgroundColor: Colors.red);
                                 }
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: "Select your Class");
+                                    msg: "Select your Class",webBgColor: "#ff0000",backgroundColor: Colors.red);
                               }
 
                               final String clientid =

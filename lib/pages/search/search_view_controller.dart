@@ -47,7 +47,7 @@ class SearchViewController extends GetxController {
             print(value.statusCode);
           }
           Fluttertoast.showToast(
-              msg: "Error ${value.statusCode}: Unable to fetch list of classes", webBgColor: Colors.red, backgroundColor: Colors.red);
+              msg: "Error ${value.statusCode}: Unable to fetch list of classes", webBgColor: "#ff0000", backgroundColor: Colors.red);
         }
       } catch (e) {
         if (kDebugMode) {
@@ -56,7 +56,7 @@ class SearchViewController extends GetxController {
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: Colors.red, backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: "#ff0000", backgroundColor: Colors.red);
       if (kDebugMode) {
         print("access token not found");
       }
