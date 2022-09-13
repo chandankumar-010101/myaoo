@@ -45,7 +45,6 @@ import 'package:pangeachat/widgets/layouts/side_view_layout.dart';
 import 'package:pangeachat/widgets/layouts/two_column_layout.dart';
 import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
-
 import '../home_page.dart';
 import '../pages/class_join/join_with_code.dart';
 import '../pages/exchange/exchage_profile.dart';
