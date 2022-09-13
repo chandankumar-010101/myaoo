@@ -31,8 +31,7 @@ class _InviteEmailState extends State<InviteEmail> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    name.add(TextEditingController());
-    email.add(TextEditingController());
+
   }
 
   @override
@@ -56,13 +55,15 @@ class _InviteEmailState extends State<InviteEmail> {
                   shrinkWrap: true,
                   itemCount: value,
                   itemBuilder: (context, index) {
-                    return Row(
+                    name.add(TextEditingController());
+                    email.add(TextEditingController());
+                  return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
                              Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13,  color: Theme.of(context).textTheme.bodyText1!.color,)),
