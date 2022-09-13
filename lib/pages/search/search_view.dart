@@ -618,11 +618,7 @@ class _SearchViewState extends State<SearchView> {
                                                       Row(
                                                         children: [
                                                           const Spacer(),
-                                                          Avatar(
-                                                            mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
-                                                            name: "publicRoomsResponse.chunk[i].name",
-                                                            size: 15,
-                                                          ),
+                                                          fetchFlag(url, i),
                                                           const SizedBox(
                                                             width: 5.0,
                                                           ),
@@ -630,7 +626,11 @@ class _SearchViewState extends State<SearchView> {
                                                           const SizedBox(
                                                             width: 5.0,
                                                           ),
-                                                          fetchFlag(url, i),
+                                                          Avatar(
+                                                            mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
+                                                            name: "publicRoomsResponse.chunk[i].name",
+                                                            size: 15,
+                                                          ),
                                                           const Spacer(),
                                                           Text("free",
                                                               style: TextStyle().copyWith(
