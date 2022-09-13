@@ -45,9 +45,7 @@ import 'package:pangeachat/widgets/layouts/side_view_layout.dart';
 import 'package:pangeachat/widgets/layouts/two_column_layout.dart';
 import 'package:pangeachat/widgets/log_view.dart';
 import 'package:vrouter/vrouter.dart';
-import '../home_page.dart';
 import '../pages/class_join/join_with_code.dart';
-import '../pages/exchange/exchage_profile.dart';
 import '../pages/language_selection_screen/language_selection.dart';
 import '../pages/new_class/invite_email_view.dart';
 import '../pages/new_class/new_class.dart';
@@ -389,7 +387,7 @@ class AppRoutes {
                   stackedRoutes: _settingsRoutes,
                 ),
                 VWidget(
-                  path: 'allclassDetails',
+                  path: '/classProfile',
                   widget: RequestScreen(),//RequestScreenView(),
                   buildTransition: _dynamicTransition,
                 ),

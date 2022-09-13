@@ -42,7 +42,7 @@ class _SearchViewState extends State<SearchView> {
 
   void createNewClassAction() => VRouter.of(context).to('/addClass');
 
-  void createClassDetailsAction() => VRouter.of(context).to('/allclassDetails', queryParameters: {
+  void classProfile(String id) => VRouter.of(context).to('/classProfile', queryParameters: {
         "id": id,
       });
 
@@ -419,11 +419,7 @@ class _SearchViewState extends State<SearchView> {
                                             child: InkWell(
                                               onTap: () async {
                                                 id = searchController.classList[i].pangea_class_room_id.toString();
-                                                firstTime==true?VRouter.of(context).to(
-                                                    'allclassDetails',
-                                                    queryParameters: {
-                                                      "id": id
-                                                    }):VRouter.of(context).to(
+                                                firstTime.value?classProfile(id):VRouter.of(context).to(
                                                     '',
                                                     queryParameters: {
                                                       "id": id
