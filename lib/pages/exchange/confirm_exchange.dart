@@ -31,7 +31,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
       final userID = Matrix.of(context).client.userID;
       print(senderId);
       if(senderId == userID){
-        Fluttertoast.showToast(msg: "You don't have permission for this action.");
+        Fluttertoast.showToast(msg: "You don't have permission for this action.",webBgColor: "#ff0000",backgroundColor: Colors.red);
         return;}
       final FetchClassParticipants data =
           await PangeaServices.fetchParticipants(receiverClassId);
@@ -109,14 +109,14 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
           schoolName: school,
           isExchange: true,
         );
-        Fluttertoast.showToast(msg: "Exchange Created Successfully");
+        Fluttertoast.showToast(msg: "Exchange Created Successfully",webBgColor: "#ff0000",backgroundColor: Colors.red);
       }
       if (roomID == null) {
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: "Error: Unable to Confirm the exchange");
+      Fluttertoast.showToast(msg: "Error: Unable to Confirm the exchange",webBgColor: "#ff0000",backgroundColor: Colors.red);
     }
   }
 

@@ -133,7 +133,7 @@ class StoriesHeader extends StatelessWidget {
                               future: room.getCreatorProfile(),
                               builder: (context, snapshot) {
                                 final userId = room.creatorId;
-                                final displayname = room.displayname;
+                                final displayname = snapshot.data?.displayName;
                                 final avatarUrl = snapshot.data?.avatarUrl;
                                 return _StoryButton(
                                   profile: Profile(
@@ -266,16 +266,14 @@ class _StoryButton extends StatelessWidget {
               Center(
                 child: SizedBox(
                   width: 100,
-                  child: Expanded(
-                    child: Text(
-                      profile.displayName ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: unread ? FontWeight.bold : null,
-                      ),
+                  child: Text(
+                    profile.displayName ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: unread ? FontWeight.bold : null,
                     ),
                   ),
                 ),

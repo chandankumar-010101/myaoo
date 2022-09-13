@@ -100,8 +100,10 @@ class HomeserverPickerView extends StatelessWidget {
                                 padding: const EdgeInsets.only(right: 5.0),
                                 child: ConstrainedBox(
                                     constraints: BoxConstraints(maxHeight: 80),
-                                    child: Image.asset(
-                                        "assets/newAssets/pangea-bare.png")),
+                                    child: SvgPicture.asset(
+                                      "assets/newAssets/pangea-bare.svg",
+
+                                    ),),
                               ),
                               Column(
                                 children: [

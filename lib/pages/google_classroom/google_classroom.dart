@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart' as dartz;
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -95,7 +96,7 @@ class GoogleClassroomController extends State<GoogleClassroom> {
         isLoggedIn = true;
       });
     } else {
-      Fluttertoast.showToast(msg: "Cannot find any classrooms with the specific id");
+      Fluttertoast.showToast(msg: "Cannot find any classrooms with the specific id",webBgColor: "#ff0000",backgroundColor: Colors.red);
     }
     return courses;
   }

@@ -62,13 +62,13 @@ class ExchangeProfileState extends State<ExchangeProfile> {
         noOfStudents = space.length;
         space = space.where((i) => i.id == userId).toList();
       } catch (e) {
-        Fluttertoast.showToast(msg: "Unable to fetch Class Info");
+        Fluttertoast.showToast(msg: "Unable to fetch Class Info",webBgColor: "#ff0000",backgroundColor: Colors.red);
         if (kDebugMode) {
           print(e);
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info");
+      Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info",webBgColor: "#ff0000",backgroundColor: Colors.red);
     }
   }
 

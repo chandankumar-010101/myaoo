@@ -245,7 +245,7 @@ class HomeController extends GetxController {
     } else {
       Fluttertoast.showToast(
           msg: "API Error: ${response.statusCode}",
-          webBgColor: Colors.red,
+          webBgColor: "#ff0000",
           backgroundColor: Colors.red);
       loading.value = false;
     }

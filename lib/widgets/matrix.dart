@@ -351,7 +351,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           ));
           return;
         }
-
         PangeaServices.validateUser(client, context, widget);
       } else {
         widget.router!.currentState!.to(

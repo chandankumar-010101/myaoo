@@ -72,14 +72,13 @@ class LanguageSelectionController extends State<LanguageSelection> {
         if (value.statusCode == 201 || value.statusCode == 200) {
           getxController.selectedLanguageOne.value = "";
           getxController.selectedLanguageTwo.value = "";
-          if(Matrix.of(context).client.accessToken !=null){
-            PangeaServices.userDetails(clientID: client.userID.toString(),accessToken: Matrix.of(context).client.accessToken!);
-            Matrix.of(context).widget.router!.currentState!.to(
-              '/rooms',
-              queryParameters:Matrix.of(context).widget.router!.currentState!.queryParameters,
-            );
-          }else{
-            print("Access Token not foun");
+          if(client.accessToken !=null && client.userID !=null){
+           await PangeaServices.fetchUserTokenAndInfo(client.userID.toString(), client.accessToken.toString()).whenComplete(() {
+             Matrix.of(context).widget.router!.currentState!.to(
+               '/rooms',
+               queryParameters:Matrix.of(context).widget.router!.currentState!.queryParameters,
+             );
+           });
           }
 
         }
