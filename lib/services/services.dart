@@ -364,7 +364,7 @@ class PangeaServices {
   }
 
   static fetchUserAge() async {
-    PangeaServices._init();
+  PangeaServices._init();
 
     if (userId.isNotEmpty && token.isNotEmpty) {
       try {
