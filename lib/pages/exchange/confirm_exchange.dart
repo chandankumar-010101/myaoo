@@ -82,6 +82,20 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         ),
       );
       if (roomID.result != null) {
+       Room? room =  Matrix.of(context).client.getRoomById(roomID.result!);
+
+      List<User> users = await room!.requestParticipants();
+      for (var element in users) {
+        if(element.id == senderId){
+          element.setPower(100);
+        }
+      }
+      //User user =   Matrix.of(context).client.getRoomById(senderId).setPower(power);
+
+      //   await showFutureLoadingDialog(
+      //     context: context,
+      //     future: () => widget.user.setPower(newPermission),
+      //   );
         await PangeaServices.saveExchangeRecord(senderClassId,
             receiverClassId, senderId, receiverId, roomID.result!);
         await PangeaServices.createClass(

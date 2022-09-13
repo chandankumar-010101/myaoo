@@ -268,7 +268,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(children: [widget.controller.fetchFlag(data, url)]),
+                                Row(children: [
+                                  widget.controller.fetchFlag(data, url)]),
 
                                 const SizedBox(
                                   width: 5,
@@ -326,6 +327,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
                     ),
                   ),
+
+
                   Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20.0),
                       padding: EdgeInsets.only(top: 10),
@@ -335,6 +338,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w700, fontSize: 14),
                       )),
                   fetchPermissions(data.permissions),
+
+
+
                   widget.controller.box.read("usertype") == 2
                       ? widget.controller.box.read("clientID") == data.classAuthorId
                           ? Container()
@@ -345,9 +351,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
                                 mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                 children: [
-                                  widget.controller.space.isEmpty
-                                      ? data.permissions.isOpenExchange
-                                          ? SizedBox(
+                                  widget.controller.space.isEmpty  ? data.permissions.isOpenExchange ? SizedBox(
                                               width: 200,
                                               child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(
@@ -379,8 +383,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                       color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
                                                 ),
                                               ),
-                                            )
-                                          : Container()
+                                            ) : Container()
                                       : Container(),
                                   const SizedBox(
                                     width: 10,
@@ -493,9 +496,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               ),
                             ),
 
-
                   widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
-
 
                       ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -749,7 +750,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     }
                                   },
                                   child: Text(
-                                    "Delete Class",
+                                    data.isExchange?"End Exchange": "Delete Class",
                                     style: const TextStyle()
                                         .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
                                   ),
