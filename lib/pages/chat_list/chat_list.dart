@@ -117,11 +117,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         }
       }
     }
+    finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
 
     participants = finalUsers;
-    print("Rooms: ${rooms.toList().toString()}");
-    print("Already Exists: ${alreadyExists.toList().toString()}");
-    print("finalUsers: ${finalUsers.toList().toString()}");
 
     if (spaceId != null) {
       setState(() => _activeSpacesEntry = spaceId);
@@ -242,23 +240,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     _hackyWebRTCFixForWeb();
 
     super.initState();
-  }
-
-  getpeople() async {
-    participants.clear();
-    final rooms = Matrix.of(context).client.rooms.where((element) => element.isSpace);
-    for (var room in rooms) {
-      final a = await room.requestParticipants();
-
-      for (var user in a) {
-        if (participants.contains(user.roomId)) {
-          continue;
-        } else {
-          participants.add(user);
-        }
-      }
-    }
-    print(participants.map((e) => e.toJson()).toString());
   }
 
   void checkBootstrap() async {
