@@ -302,29 +302,22 @@ class PangeaServices {
         }
         else {
           await fetchUserTokenAndInfo(client.userID.toString(), client.accessToken.toString()).whenComplete(() async {
+             if (classCode.isNotEmpty) {
+               GetStorage().remove("classCode");
+               Future.delayed(const Duration(seconds: 2), () {
+                 VRouter.of(context).to('/join_with_link',
+                     queryParameters: {"code": classCode});
+               });
+             }
+             else {
+               if(!rooms){
+                 widget.router!.currentState!.to(
+                   '/rooms',
+                   queryParameters: widget.router!.currentState!.queryParameters,
+                 );
+               }
 
-             print("hello World");
-
-            await PangeaServices.fetchUserAge().whenComplete(() {
-
-              if (classCode.isNotEmpty) {
-                GetStorage().remove("classCode");
-                Future.delayed(const Duration(seconds: 2), () {
-                  VRouter.of(context).to('/join_with_link',
-                      queryParameters: {"code": classCode});
-                });
-              }
-              else {
-                if(!rooms){
-                  widget.router!.currentState!.to(
-                    '/rooms',
-                    queryParameters: widget.router!.currentState!.queryParameters,
-                  );
-                }
-
-              }
-            });
-
+             }
 
           });
 
@@ -362,6 +355,7 @@ class PangeaServices {
         box.write("sourcelanguage", data.profile!.sourceLanguage);
         box.write("targetlanguage", data.profile!.targetLanguage);
         box.write("usertype", data.profile!.userType);
+        data.access !=null? await PangeaServices.fetchUserAge(data.access!, userId):null;
       }
       else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
@@ -377,9 +371,8 @@ class PangeaServices {
     }
   }
 
-  static Future fetchUserAge() async {
+  static Future fetchUserAge(String token,String userId) async {
     try {
-      PangeaServices._init();
       final value = await http.get(
         Uri.parse(ApiUrls.user_ages + userId),
         headers: {
