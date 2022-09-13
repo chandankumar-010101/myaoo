@@ -95,23 +95,35 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   Future<void> setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) async {
+    getClassPermissions();
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
 
+    participants.clear();
+    //
     if (spaceId != null) {
+      participants.clear();
       setState(() => _activeSpacesEntry = spaceId);
+      getClassPermissions();
+      getpeople();
+    }
+  }
+
+  getpeople() async {
+    if (_activeSpacesEntry!.getSpace(context) != null) {
       log(_activeSpacesEntry!.getSpace(context)!.id);
       participants.clear();
-      participants = await spaceId.getSpace(context)!.requestParticipants();
+      participants = await _activeSpacesEntry!.getSpace(context)!.requestParticipants();
 
-      getClassPermissions();
       participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+      setState(() {});
     } else {
       participants.clear();
-      //
       List<dynamic> alreadyExists = [];
       List<User> finalUsers = [];
+
+      final rooms = Matrix.of(context).client.rooms;
 
       for (var room in rooms) {
         participantsList.addAll(await room.requestParticipants());
@@ -142,6 +154,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
           isShareFiles: true,
           isShareLocation: true,
           isCreateStories: true);
+
+      setState(() {});
     }
   }
 
@@ -151,7 +165,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
   List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
-  List<Room> get rooms => Matrix.of(context).client.rooms.toList();
 
   // Note that this could change due to configuration, etc.
   // Also be aware that _activeSpacesEntry = null is the expected reset method.
