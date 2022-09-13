@@ -82,6 +82,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Stream<Client> get clientStream => _clientStream.stream;
 
+  List<User> participants = [];
   void _onScroll() {
     final newScrolledToTop = scrollController.position.pixels <= 0;
     if (newScrolledToTop != scrolledToTop) {
@@ -95,10 +96,25 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
+    participants.clear();
+    final rooms = await Matrix.of(context).client.rooms.where((element) => element.isSpace);
+    for (var room in rooms) {
+      final a = await room.requestParticipants();
+
+      for (var user in a) {
+        participants.add(user);
+        participants.removeWhere((user) => user.id == Matrix.of(context).client.userID);
+      }
+    }
+    print(participants.map((e) => e.toJson()).toString());
+
     if (spaceId != null) {
       setState(() => _activeSpacesEntry = spaceId);
-
+      log(_activeSpacesEntry!.getSpace(context)!.id);
       getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
+      participants.clear();
+      participants = await spaceId.getSpace(context)!.requestParticipants();
+      participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
     }
   }
 
@@ -204,13 +220,32 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getpeople();
     _initReceiveSharingIntent();
 
     scrollController.addListener(_onScroll);
     _waitForFirstSync();
     _hackyWebRTCFixForWeb();
+
     super.initState();
    }
+
+  getpeople() async {
+    participants.clear();
+    final rooms = Matrix.of(context).client.rooms.where((element) => element.isSpace);
+    for (var room in rooms) {
+      final a = await room.requestParticipants();
+
+      for (var user in a) {
+        if (participants.contains(user.roomId)) {
+          continue;
+        } else {
+          participants.add(user);
+        }
+      }
+    }
+    print(participants.map((e) => e.toJson()).toString());
+  }
 
   void checkBootstrap() async {
     if (!Matrix.of(context).client.encryptionEnabled) return;
