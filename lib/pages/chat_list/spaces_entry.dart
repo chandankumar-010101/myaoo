@@ -72,7 +72,12 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.isSpace).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            !room.isSpace && !(room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType))
+        .toList();
   }
 
   @override
@@ -215,7 +220,9 @@ class SpaceSpacesEntry extends SpacesEntry {
     return Matrix.of(context)
         .client
         .rooms
-        .where((room) => room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
+        .where((room) =>
+            room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType &&
+            _roomInsideSpace(room, space))
         .toList();
   }
 

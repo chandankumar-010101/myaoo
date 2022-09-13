@@ -49,6 +49,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
   void initState() {
     _subscription =
         Matrix.of(context).client.onSync.stream.where((s) => s.hasRoomUpdate).rateLimit(const Duration(seconds: 1)).listen((d) => setState(() {}));
+
     super.initState();
   }
 
@@ -272,14 +273,14 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                     }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
                                   ],
                                   // creationContent: {'type': RoomCreationTypes.mSpace},
-                                  roomAliasName: peoplerooms[i].displayName!.substring(0, 2) +
+                                  roomAliasName: peoplerooms[i].displayName! +
                                       "-" +
-                                      matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
+                                      matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                       "#" +
                                       random.nextInt(9999).toString(),
-                                  name: peoplerooms[i].displayName!.substring(0, 2) +
+                                  name: peoplerooms[i].displayName! +
                                       "-" +
-                                      matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
+                                      matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                       "#" +
                                       random.nextInt(9999).toString(),
                                 ),
