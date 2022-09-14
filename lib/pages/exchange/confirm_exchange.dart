@@ -24,19 +24,17 @@ class ConfirmExchange extends StatefulWidget {
 }
 
 class _ConfirmExchangeState extends State<ConfirmExchange> {
-  createExchange(String receiverClassId, String senderClassId, String senderId,String receiverId) async {
-       List<String> listOfParticipants = [];
+  Future<String?> createExchange(String receiverClassId, String senderClassId, String senderId,String receiverId) async {
+
 
     try {
-      final userID = Matrix.of(context).client.userID;
-      print(senderId);
-      if(senderId == userID){
+      List<String> listOfParticipants = [];
+      final client = Matrix.of(context).client;
+      if(senderId == client.userID){
         Fluttertoast.showToast(msg: "You don't have permission for this action.",webBgColor: "#ff0000",backgroundColor: Colors.red);
-        return;}
-      final FetchClassParticipants data =
-          await PangeaServices.fetchParticipants(receiverClassId);
-      final FetchClassParticipants data2 =
-      await PangeaServices.fetchParticipants(senderClassId);
+        return null;}
+      final FetchClassParticipants data =   await PangeaServices.fetchParticipants(receiverClassId);
+      final FetchClassParticipants data2 = await PangeaServices.fetchParticipants(senderClassId);
       for (final element in data.roomMembers!.members!) {
         if(listOfParticipants.contains(element)){
           continue;
@@ -52,91 +50,76 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         }
       }
 
+      listOfParticipants = listOfParticipants.where((element) => element != client.userID).toList();
+      final FetchClassInfoModel senderClassInfo = await PangeaServices.fetchClassInfo( context, senderClassId);
+      final FetchClassInfoModel receiverClassInfo =  await PangeaServices.fetchClassInfo(context, receiverClassId);
 
-      listOfParticipants = listOfParticipants.where((element) => element != userID).toList();
-      final FetchClassInfoModel senderClassInfo = await PangeaServices.fetchClassInfo(
-          context, senderClassId);
-      final FetchClassInfoModel receiverClassInfo =
-          await PangeaServices.fetchClassInfo(
-              context, receiverClassId);
-
-      final String className =
-          receiverClassInfo.className  +"-exchange-"+ senderClassInfo.className;
+      final String className = receiverClassInfo.className  +"-exchange-"+ senderClassInfo.className;
       final String city = receiverClassInfo.city + "-" + senderClassInfo.city;
-      final String country =
-          receiverClassInfo.country + "-" + senderClassInfo.country;
-      final String school =
-          receiverClassInfo.schoolName + "-" + senderClassInfo.schoolName;
+      final String country =  receiverClassInfo.country + "-" + senderClassInfo.country;
+      final String school = receiverClassInfo.schoolName + "-" + senderClassInfo.schoolName;
 
-      final matrix = Matrix.of(context);
 
-      final roomID = await showFutureLoadingDialog(
+    String exchangeId =   await client.createRoom(
+    preset: sdk.CreateRoomPreset.privateChat,
+    invite: listOfParticipants,
+    creationContent: {'type': RoomCreationTypes.mSpace},
+    visibility: null,
+    roomAliasName: className.trim().toLowerCase().replaceAll(' ', '_'),
+    name: className,
+    );
+     Room? room =  Matrix.of(context).client.getRoomById(exchangeId);
+
+    List<User> users = await room!.requestParticipants();
+    List.generate(users.length, (index) => print(users[index].id));
+    for (var element in users) {
+      if(element.id == senderId){
+        element.setPower(100);
+      }
+    }
+    //User user =   Matrix.of(context).client.getRoomById(senderId).setPower(power);
+
+    //   await showFutureLoadingDialog(
+    //     context: context,
+    //     future: () => widget.user.setPower(newPermission),
+    //   );
+      await PangeaServices.saveExchangeRecord(senderClassId,
+          receiverClassId, senderId, receiverId, exchangeId);
+      await PangeaServices.createClass(
         context: context,
-        future: () => matrix.client.createRoom(
-         preset: sdk.CreateRoomPreset.privateChat,
-          invite: listOfParticipants,
-          creationContent: {'type': RoomCreationTypes.mSpace},
-          visibility: null,
-          roomAliasName: className.trim().toLowerCase().replaceAll(' ', '_'),
-          name: className,
-        ),
-      );
-      if (roomID.result != null) {
-       Room? room =  Matrix.of(context).client.getRoomById(roomID.result!);
-
-      List<User> users = await room!.requestParticipants();
-      for (var element in users) {
-        if(element.id == senderId){
-          element.setPower(100);
-        }
-      }
-      //User user =   Matrix.of(context).client.getRoomById(senderId).setPower(power);
-
-      //   await showFutureLoadingDialog(
-      //     context: context,
-      //     future: () => widget.user.setPower(newPermission),
-      //   );
-        await PangeaServices.saveExchangeRecord(senderClassId,
-            receiverClassId, senderId, receiverId, roomID.result!);
-        await PangeaServices.createClass(
-          context: context,
-          roomId: roomID.result!,
-          className: className,
-          city: city,
-          country: country,
-          dominantLanguage: receiverClassInfo.dominantLanguage,
-          targetLanguage: receiverClassInfo.targetLanguage,
-          desc: "Exchange",
-          languageLevel: 1,
-          isPublic: false,
-          isShareFiles: false,
-          isShareLocation: false,
-          isSharePhoto: false,
-          isOpenExchange: false,
-          isOpenEnrollment: false,
-          isCreateStories: false,
-          isCreateRoomsExchange: false,
-          isCreateRooms: false,
-          isShareVideo: false,
-          oneToOneChatClass: false,
-          oneToOneChatExchange: false,
-          schoolName: school,
-          isExchange: true,
-        );
-        Fluttertoast.showToast(msg: "Exchange Created Successfully",webBgColor: "#ff0000",backgroundColor: Colors.red);
-      }
-      if (roomID == null) {
-        VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-      }
+        roomId: exchangeId,
+        className: className,
+        city: city,
+        country: country,
+        dominantLanguage: receiverClassInfo.dominantLanguage,
+        targetLanguage: receiverClassInfo.targetLanguage,
+        desc: "Exchange",
+        languageLevel: 1,
+        isPublic: false,
+        isShareFiles: false,
+        isShareLocation: false,
+        isSharePhoto: false,
+        isOpenExchange: false,
+        isOpenEnrollment: false,
+        isCreateStories: false,
+        isCreateRoomsExchange: false,
+        isCreateRooms: false,
+        isShareVideo: false,
+        oneToOneChatClass: false,
+        oneToOneChatExchange: false,
+        schoolName: school,
+        isExchange: true,
+      ).whenComplete(() => exchangeId);
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: "Error: Unable to Confirm the exchange",webBgColor: "#ff0000",backgroundColor: Colors.red);
+      return null;
     }
   }
 
   fetchFlag(FetchClassInfoModel data, String url) {
     try {
-      String path = url + data.flags[1].languageFlag.toString() ?? "";
+      String path = url + data.flags[0].languageFlag.toString() ?? "";
       print(path);
       return path.isNotEmpty
           ? SizedBox(
@@ -151,7 +134,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
   }
 
   fetchFlag2(FetchClassInfoModel data, String url) {
-    String path = url + data.flags[0].languageFlag.toString();
+    String path = url + data.flags[1].languageFlag.toString();
     print(path);
     return SizedBox(width: 20, height: 20, child: Image.network(path));
   }
@@ -175,7 +158,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         title: const Text("Request to Exchange"),
       ),
       body: GetStorage().read("clientID") == receiverId?FutureBuilder(
-        future: PangeaServices.fetchClassInfo( context, receiverClassId),
+        future: PangeaServices.fetchClassInfo( context, senderClassId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
@@ -465,7 +448,8 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  fetchFlag2(data, url)]),
+                                  fetchFlag(data, url),
+
                                 const SizedBox(
                                   width: 5,
                                 ),
@@ -482,6 +466,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                 const SizedBox(
                                   width: 10,
                                 ),
+
                                 Icon(
                                   Icons.arrow_right_alt_outlined,
                                   size: 20,
@@ -490,11 +475,12 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                       .bodyText1!
                                       .color,
                                 ),
+
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Row(children: [
-                                  fetchFlag(data, url),
+                                  fetchFlag2(data, url)]),
                                   const SizedBox(
                                     width: 5,
                                   ),
@@ -570,7 +556,16 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                               ),
                             ),
                             onPressed: () async {
-                              createExchange(receiverClassId, senderClassId, senderId, receiverId);
+                             final result =  await showFutureLoadingDialog(
+                                context: context,
+                                future: () => createExchange(receiverClassId, senderClassId, senderId, receiverId),
+                              );
+                             if(result.result != null){
+                               VRouter.of(context).to("/classDetails", queryParameters: {"id":result.result!});
+                             }
+                             if (result == null) {
+                               VRouter.of(context).toSegments(['rooms', result.result!, 'details']);
+                             }
                             },
                             child: Text(
                               "Confirm Exchange Request",

@@ -34,13 +34,16 @@ class _RequestExchangeState extends State<RequestExchange> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String id = context.vRouter.queryParameters['class_id'] ?? "";
+
+    final String requestToClass = VRouter.of(context).queryParameters['class_id'] ?? "";
+    final String userIdOfRequestedClass = VRouter.of(context).queryParameters['user_id'] ??"";
+
 
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Confirm the exchange",
+            "Request an exchange",
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
                 fontSize: 14),
@@ -54,7 +57,7 @@ class _RequestExchangeState extends State<RequestExchange> {
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               context.vRouter
-                  .to("/classDetails", queryParameters: {"class_id": id});
+                  .to("/classDetails", queryParameters: {"class_id": requestToClass});
             },
           ),
         ),
@@ -64,23 +67,6 @@ class _RequestExchangeState extends State<RequestExchange> {
             children: [
               SizedBox(
                 height: size.height * 0.04,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.1, vertical: size.height * 0.02),
-                width: size.width,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    "Confirm the exchange?",
-                    style: TextStyle().copyWith(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                    overflow: TextOverflow.clip,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               ),
               //switch buttons
               Container(
@@ -189,12 +175,10 @@ class _RequestExchangeState extends State<RequestExchange> {
                       ),
                     ),
                     FutureBuilder(
-                        future:
-                            PangeaServices.fetchTeacherAllClassInfo(context),
+                        future:  PangeaServices.fetchTeacherAllClassInfo(context),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            final TeacherAllClassModel data =
-                                snapshot.data as TeacherAllClassModel;
+                            final TeacherAllClassModel data =  snapshot.data as TeacherAllClassModel;
                             return ListView.separated(
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
@@ -203,13 +187,10 @@ class _RequestExchangeState extends State<RequestExchange> {
                                   horizontal: 16, vertical: 8),
                               itemCount: 1,
                               itemBuilder: (context, index) {
-                                print(Matrix.of(context)
-                                    .client
-                                    .getRoomById(data
-                                        .results![index].pangeaClassRoomId!)!
-                                    .displayname);
-                                languageFlagList
-                                    .add(data.results![index].className);
+                                if(!data.results![index].isExchange!){
+                                  languageFlagList.add(data.results![index].className);
+                                }
+                                //languageFlagList.add(data.results![index].className);
                                 return Container(
                                     constraints: BoxConstraints(
                                         minWidth: 100, maxWidth: 400),
@@ -240,7 +221,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                             TextAlign.center,
                                                       ),
                                                     )
-                                                  : Text(
+                                                  :Text(
                                                       " ${Matrix.of(context).client.getRoomById(classIds.toString())!.displayname}"
                                                           .toString(),
                                                       style: TextStyle()
@@ -289,10 +270,10 @@ class _RequestExchangeState extends State<RequestExchange> {
                                 );
                               },
                             );
-                          } else {
+                          }
+                          else {
                             if (snapshot.hasError) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                             print(snapshot.error);
                             }
                             return const Center(
                               child: CircularProgressIndicator(),
@@ -310,7 +291,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                   horizontal: size.width * 0.1,
                   vertical: size.height * 0.02,
                 ),
-                child: id.isEmpty
+                child: requestToClass.isEmpty
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -331,8 +312,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                           ),
                           InkWell(
                             onTap: () {
-                              if (ModalRoute.of(context)!.settings.name ==
-                                  "class_permissions") {
+                              if (ModalRoute.of(context)!.settings.name ==   "class_permissions") {
                                 // createClassPermissions();
                               } else {
                                 //update
@@ -372,8 +352,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                         children: [
                           InkWell(
                             onTap: () {
-                              VRouter.of(context).to('/classDetails',
-                                  queryParameters: {"id": id});
+                              VRouter.of(context).to('/classDetails',  queryParameters: {"id": requestToClass});
                             },
                             child: Container(
                               width: 200,
@@ -417,16 +396,8 @@ class _RequestExchangeState extends State<RequestExchange> {
                           ),
                           InkWell(
                             onTap: () async {
-                              final String requestToClass = VRouter.of(context)
-                                      .queryParameters['class_id'] ??
-                                  "";
-                              final String userIdOfRequestedClass = VRouter.of(context)
-                                  .queryParameters['user_id'] ??
-                                  "";
-                              if (classIds != null) {
-
+                            if (classIds != null) {
                                 if (requestToClass.isNotEmpty) {
-
                                 final bool isExchangeExist = await PangeaServices.validateExchange(
                                       requestFromClass: classIds!,
                                       requestToClass: requestToClass,
