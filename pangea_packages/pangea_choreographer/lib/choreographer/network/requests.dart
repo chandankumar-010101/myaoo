@@ -8,19 +8,22 @@ import 'package:http/http.dart';
 class Requests {
   static String apiKey = '';
   final String baseUrl;
-  Requests(this.baseUrl);
+  final bool skipApiKey;
+  Requests(this.baseUrl, {this.skipApiKey = false});
 
   Future<Response> post(
       {required String url, required Map<dynamic, dynamic> body}) async {
     print('calling' + _uriBuilder(url).toString());
     print(body);
-
-    Response response =
-        await http.post(_uriBuilder(url), body: jsonEncode(body), headers: {
+    Map<String, String> headers = {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      'api_key': apiKey
-    });
+    };
+    if (!skipApiKey) {
+      headers.addAll({'api_key': apiKey});
+    }
+    Response response = await http.post(_uriBuilder(url),
+        body: jsonEncode(body), headers: headers);
     if (response.statusCode != 200 && response.statusCode != 201) {
       try {
         print(jsonDecode(response.body).toString());
@@ -36,12 +39,14 @@ class Requests {
 
   Future<Response> get({required String url}) async {
     print('calling' + _uriBuilder(url).toString());
-
-    Response response = await http.get(_uriBuilder(url), headers: {
+    Map<String, String> headers = {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      'api_key': apiKey
-    });
+    };
+    if (!skipApiKey) {
+      headers.addAll({'api_key': apiKey});
+    }
+    Response response = await http.get(_uriBuilder(url), headers: headers);
     if (response.statusCode != 200 && response.statusCode != 201) {
       try {
         print(jsonDecode(response.body).toString());
