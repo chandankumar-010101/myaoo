@@ -6,22 +6,21 @@ import 'package:http/retry.dart';
 import 'package:http/http.dart';
 
 class Requests {
+  static String apiKey = '';
   final String baseUrl;
   Requests(this.baseUrl);
-
-
 
   Future<Response> post(
       {required String url, required Map<dynamic, dynamic> body}) async {
     print('calling' + _uriBuilder(url).toString());
     print(body);
 
-    Response response = await http.post(_uriBuilder(url),
-        body: jsonEncode(body),
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        });
+    Response response =
+        await http.post(_uriBuilder(url), body: jsonEncode(body), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      'api_key': apiKey
+    });
     if (response.statusCode != 200 && response.statusCode != 201) {
       try {
         print(jsonDecode(response.body).toString());
@@ -40,7 +39,8 @@ class Requests {
 
     Response response = await http.get(_uriBuilder(url), headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json"
+      "Accept": "application/json",
+      'api_key': apiKey
     });
     if (response.statusCode != 200 && response.statusCode != 201) {
       try {
@@ -54,8 +54,6 @@ class Requests {
 
     return response;
   }
-
-
 
   Uri _uriBuilder(url) => Uri.parse(baseUrl + url);
 
