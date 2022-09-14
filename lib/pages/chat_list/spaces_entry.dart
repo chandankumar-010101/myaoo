@@ -208,7 +208,11 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.spaceParents.isNotEmpty && room.spaceParents.first.roomId == space.id).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.spaceParents.isNotEmpty && room.spaceParents.first.roomId == space.id || room.membership == Membership.invite)
+        .toList();
   }
 
   List<Room> getStories(BuildContext context) {

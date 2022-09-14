@@ -295,6 +295,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     _waitForFirstSync();
     _hackyWebRTCFixForWeb();
     getClassPermissions();
+
     super.initState();
   }
 
@@ -543,7 +544,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   Future<void> _waitForFirstSync() async {
     final client = Matrix.of(context).client;
     await client.roomsLoading;
+
     await client.accountDataLoading;
+
     if (client.prevBatch?.isEmpty ?? true) {
       await client.onFirstSync.stream.first;
     }
