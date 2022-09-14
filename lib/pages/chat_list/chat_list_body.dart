@@ -649,6 +649,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
 
   bool _animationReversed() {
     bool reversed;
+
     // in case the matrix id changes, check the indexOf the matrix id
     final newClient = Matrix.of(context).client;
     if (_lastUserId != newClient.userID) {
@@ -662,6 +663,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     }
     _lastUserId = newClient.userID;
     _lastSpace = widget.controller.activeSpacesEntry;
+
     return reversed;
   }
 }
