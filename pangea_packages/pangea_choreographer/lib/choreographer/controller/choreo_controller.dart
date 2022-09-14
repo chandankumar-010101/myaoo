@@ -7,6 +7,7 @@ import 'package:pangea_choreographer/choreographer/controller/error_service.dart
 import 'package:pangea_choreographer/choreographer/controller/ml_controller.dart';
 import 'package:pangea_choreographer/choreographer/network/urls.dart';
 
+import '../network/requests.dart';
 import 'flag_controller.dart';
 import 'lang_controller.dart';
 import 'my_matrix_client.dart';
@@ -127,9 +128,12 @@ class ChoreoController {
   }
 
   static Future<void> initialize(
-      {required String choreoBaseUrl, required String flagBaseUrl}) async {
+      {required String choreoBaseUrl,
+      required String flagBaseUrl,
+      required String apiKey}) async {
     Urls.baseUrl = choreoBaseUrl;
     Urls.flagsBaseUrl = flagBaseUrl;
+    Requests.apiKey = apiKey;
     await FlagController.initialize();
   }
 
