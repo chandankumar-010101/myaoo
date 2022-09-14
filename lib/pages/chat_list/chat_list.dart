@@ -654,49 +654,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   PangeaControllers getxController = Get.put(PangeaControllers());
 
-  canCreateRoom() {
-    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
-      return getxController.classInfoModel.value!.permissions.isCreateRooms && activeSpacesEntry.getSpace(context) != null
-          ? IconButton(
-              onPressed: () {
-                activeSpacesEntry.getSpace(context) == null
-                    ? VRouter.of(context).to('/newgroup')
-                    : VRouter.of(context).to('/newgroup', queryParameters: {
-                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
-                      });
-              },
-              icon: const Icon(Icons.add))
-          : Container();
-    }
-    return IconButton(
-        onPressed: () {
-          VRouter.of(context).to('/newgroup');
-        },
-        icon: const Icon(Icons.add));
-  }
-
-  canAddPeople() {
-    if (activeSpacesEntry.getSpace(context) != null && getxController.classInfoModel.value != null) {
-      log("Space here");
-      return Obx(() => getxController.classInfoModel.value!.permissions.oneToOneChatClass && activeSpacesEntry.getSpace(context) != null
-          ? IconButton(
-              onPressed: () {
-                activeSpacesEntry.getSpace(context) == null
-                    ? VRouter.of(context).to('/newprivatechat')
-                    : VRouter.of(context).to('/newprivatechat', queryParameters: {
-                        "classId": activeSpacesEntry.getSpace(context)!.id,
-                      });
-              },
-              icon: const Icon(Icons.add))
-          : Container());
-    }
-    return IconButton(
-        onPressed: () {
-          VRouter.of(context).to('/newprivatechat');
-        },
-        icon: const Icon(Icons.add));
-  }
-
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;

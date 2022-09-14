@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
@@ -32,6 +34,7 @@ class UserBottomSheet extends StatefulWidget {
 }
 
 class UserBottomSheetController extends State<UserBottomSheet> {
+  math.Random random = new math.Random();
   String? selectedOption;
   void participantAction(String action) async {
     // ignore: prefer_function_declarations_over_variables
@@ -171,12 +174,54 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         }
         break;
       case 'message':
-        final roomIdResult = await showFutureLoadingDialog(
+        final matrix = Matrix.of(context);
+        final spaceid = widget.room!.spaceParents != null && widget.room!.spaceParents.isNotEmpty ? widget.room!.spaceParents.first.roomId! : "";
+        //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+        final roomID = await showFutureLoadingDialog(
           context: context,
-          future: () => widget.user.startDirectChat(enableEncryption: false),
+          future: () => matrix.client.createRoom(
+            invite: [widget.user.id],
+            preset: CreateRoomPreset.privateChat,
+            isDirect: true,
+            initialState: [
+              StateEvent(
+                content: {
+                  "guest_access": "can_join",
+                },
+                type: EventTypes.GuestAccess,
+                stateKey: "",
+              ),
+              StateEvent(content: {
+                "via": ["matrix.staging.pangea.chat"],
+                "canonical": true
+              }, type: EventTypes.spaceParent, stateKey: spaceid != null && spaceid != "" ? spaceid : ""),
+            ],
+            // creationContent: {'type': RoomCreationTypes.mSpace},
+            roomAliasName: widget.user.displayName! +
+                "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                "#" +
+                random.nextInt(9999).toString(),
+            name: widget.user.displayName! +
+                "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                "#" +
+                random.nextInt(9999).toString(),
+          ),
         );
-        if (roomIdResult.error != null) return;
-        VRouter.of(widget.outerContext).toSegments(['rooms', roomIdResult.result!]);
+        if (roomID.result != null) {
+          print("Room id:" + roomID.result!);
+          Fluttertoast.showToast(
+              msg: "Successfully created Private Chat", webBgColor: "#00ff00", textColor: Colors.white, toastLength: Toast.LENGTH_LONG);
+
+          VRouter.of(context).pop();
+          Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+        }
+        if (roomID == null) {
+          VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+        }
+
+        VRouter.of(widget.outerContext).toSegments(['rooms', roomID.result!]);
         Navigator.of(context, rootNavigator: false).pop();
         break;
       case 'ignore':

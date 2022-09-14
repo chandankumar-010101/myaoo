@@ -195,21 +195,29 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                     if (panelIndex == 0) {
                       isPeopleExpanded = !isExpanded;
                       isInvitationExpanded = false;
+                      isRoomExpanded = false;
                     }
                     if (panelIndex == 1) {
                       isRoomExpanded = !isExpanded;
+                      isPeopleExpanded = false;
                       isInvitationExpanded = false;
                     }
                   })
                 : setState(() {
                     if (panelIndex == 0) {
                       isPeopleExpanded = !isExpanded;
+                      isInvitationExpanded = false;
+                      isRoomExpanded = false;
                     }
                     if (panelIndex == 1) {
                       isRoomExpanded = !isExpanded;
+                      isPeopleExpanded = false;
+                      isInvitationExpanded = false;
                     }
                     if (panelIndex == 2) {
                       isInvitationExpanded = !isExpanded;
+                      isPeopleExpanded = false;
+                      isRoomExpanded = false;
                     }
                   }),
             children: widget.controller.activeSpacesEntry.getSpace(context) != null
