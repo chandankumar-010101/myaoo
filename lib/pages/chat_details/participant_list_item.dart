@@ -8,8 +8,8 @@ import '../user_bottom_sheet/user_bottom_sheet.dart';
 
 class ParticipantListItem extends StatelessWidget {
   final User user;
-
-  const ParticipantListItem(this.user, {Key? key}) : super(key: key);
+  final Room? room;
+  const ParticipantListItem(this.user, this.room, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,9 @@ class ParticipantListItem extends StatelessWidget {
       Membership.invite: L10n.of(context)!.invited,
       Membership.leave: L10n.of(context)!.leftTheChat,
     };
-    final permissionBatch = user.powerLevel == 100 ? L10n.of(context)!.admin : user.powerLevel >= 50
+    final permissionBatch = user.powerLevel == 100
+        ? L10n.of(context)!.admin
+        : user.powerLevel >= 50
             ? L10n.of(context)!.moderator
             : '';
 
@@ -28,10 +30,7 @@ class ParticipantListItem extends StatelessWidget {
       child: ListTile(
         onTap: () => showModalBottomSheet(
           context: context,
-          builder: (c) => UserBottomSheet(
-            user: user,
-            outerContext: context,
-          ),
+          builder: (c) => UserBottomSheet(user: user, outerContext: context, room: room),
         ),
         title: Row(
           children: <Widget>[
@@ -56,14 +55,12 @@ class ParticipantListItem extends StatelessWidget {
                       color: Theme.of(context).secondaryHeaderColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child:
-                        Center(child: Text(membershipBatch[user.membership]!)),
+                    child: Center(child: Text(membershipBatch[user.membership]!)),
                   ),
           ],
         ),
         subtitle: Text("${user.id}"),
-        leading:
-            Avatar(mxContent: user.avatarUrl, name: user.calcDisplayname()),
+        leading: Avatar(mxContent: user.avatarUrl, name: user.calcDisplayname()),
       ),
     );
   }

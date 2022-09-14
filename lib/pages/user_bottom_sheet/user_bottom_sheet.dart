@@ -8,6 +8,7 @@ import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
+import '../../model/report_user_model.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import 'user_bottom_sheet_view.dart';
@@ -16,10 +17,12 @@ class UserBottomSheet extends StatefulWidget {
   final User user;
   final Function? onMention;
   final BuildContext outerContext;
+  final Room? room;
 
   const UserBottomSheet({
     Key? key,
     required this.user,
+    this.room,
     required this.outerContext,
     this.onMention,
   }) : super(key: key);
@@ -29,6 +32,7 @@ class UserBottomSheet extends StatefulWidget {
 }
 
 class UserBottomSheetController extends State<UserBottomSheet> {
+  String? selectedOption;
   void participantAction(String action) async {
     // ignore: prefer_function_declarations_over_variables
     final Function _askConfirmation = () async => (await showOkCancelAlertDialog(
@@ -81,40 +85,47 @@ class UserBottomSheetController extends State<UserBottomSheet> {
               ),
         );
 
-        if (result.error != "null"){
+        if (result.error != "null") {
           print(score);
           print("object");
-           if(score==-100){
-             print("100");
-             GetStorage().write("offensive","Extremely Offensive");
-           }
-           else if(score==-50){
-             print("50");
-             GetStorage().write("offensive","Offensive");
-           }
-           else if(score==0){
-             print("0");
-             GetStorage().write("offensive","Inoffensive");
-           }
-           print(GetStorage().read("ClientName"));
+          switch (score) {
+            case -100:
+              selectedOption = "Extremely Offensive";
+              break;
+            case -50:
+              selectedOption = "Offensive";
+              break;
+            case 0:
+              selectedOption = "Inoffensive";
+              break;
+          }
+          print("Report Data:" +
+              ReportUser(
+                classRoomName: widget.room!.name,
+                classTeacherName: "naveen",
+                reportedUser: event.displayName,
+                classTeacherEmail: "naveen.kumar@oodles.io",
+                offensive: selectedOption,
+                reason: reason.single.toString(),
+              ).toJson().toString());
+
           PangeaServices.reportUser(
-               GetStorage().read("reportroomId"),
-               GetStorage().read("username"),
-               event.displayName.toString(),
-               "saurabh.singh@oodles.io",
-               GetStorage().read("offensive"),
-               reason.single
+            classRoomNamedata: widget.room!.name,
+            classTeacherEmaildata: "naveen.kumar@oodles.io",
+            classTeacherNamedata: "naveen",
+            offensivedata: selectedOption,
+            reasondata: reason.single.toString(),
+            reportedUserdata: event.displayName,
           );
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("You don't have email right now"),
-            backgroundColor: Colors.red,
-          ));
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text("You don't have email right now"),
+          //   backgroundColor: Colors.red,
+          // ));
           // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           //   content: Text(L10n.of(context)!.contentHasBeenReported),
           //   backgroundColor: Colors.red,
           // ));
         }
-
 
         break;
       case 'mention':
@@ -174,7 +185,6 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         }
     }
   }
-
 
   @override
   Widget build(BuildContext context) => UserBottomSheetView(this);

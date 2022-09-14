@@ -356,7 +356,9 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           if (i >= rooms.length) {
                             return Container();
                           }
-
+                          if (rooms[i].id.isEmpty) {
+                            return Container();
+                          }
                           return ChatListItem(
                             rooms[i],
                             selected: widget.controller.selectedRoomIds.contains(rooms[i].id),

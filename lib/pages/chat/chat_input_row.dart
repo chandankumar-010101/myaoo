@@ -35,43 +35,10 @@ class _ChatInputRowState extends State<ChatInputRow> {
   bool showVideo = false;
   bool showLocation = false;
   int userType = GetStorage().read("usertype") ?? 0;
-  Permissions? permissions;
-
-  getClassPermissions() async {
-    final activeSpaceId = widget.controller.room!.spaceParents.first.roomId!;
-    String acessToken = GetStorage().read("access");
-
-    if (activeSpaceId != null) {
-      final result = await PangeaServices.fetchClassInfo(context, activeSpaceId!);
-      permissions = result.permissions;
-    } else {
-      permissions = Permissions(
-          pangeaClass: 0,
-          isPublic: true,
-          isOpenEnrollment: true,
-          isOpenExchange: true,
-          oneToOneChatClass: true,
-          oneToOneChatExchange: true,
-          isCreateRooms: true,
-          isCreateRoomsExchange: true,
-          isShareVideo: true,
-          isSharePhoto: true,
-          isShareFiles: true,
-          isShareLocation: true,
-          isCreateStories: true);
-    }
-    setState(() {
-      showFile = permissions!.isShareFiles;
-      showImage = permissions!.isSharePhoto;
-      showLocation = permissions!.isShareLocation;
-      showVideo = permissions!.isShareVideo;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    getClassPermissions();
   }
 
   @override
