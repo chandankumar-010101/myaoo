@@ -162,12 +162,9 @@ class StoryView extends StatelessWidget {
             );
           }
           final event = events[controller.index];
-          final backgroundColor = controller.storyThemeData.color1 ??
-              event.content.tryGet<String>('body')?.color ??
-              Theme.of(context).primaryColor;
-          final backgroundColorDark = controller.storyThemeData.color2 ??
-              event.content.tryGet<String>('body')?.darkColor ??
-              Theme.of(context).primaryColorDark;
+          final backgroundColor = controller.storyThemeData.color1 ?? event.content.tryGet<String>('body')?.color ?? Theme.of(context).primaryColor;
+          final backgroundColorDark =
+              controller.storyThemeData.color2 ?? event.content.tryGet<String>('body')?.darkColor ?? Theme.of(context).primaryColorDark;
           if (event.messageType == MessageTypes.Text) {
             controller.loadingModeOff();
           }
@@ -179,17 +176,14 @@ class StoryView extends StatelessWidget {
                   hash: hash,
                   imageFit: BoxFit.cover,
                 ),
-              if ({MessageTypes.Video, MessageTypes.Audio}
-                      .contains(event.messageType) &&
-                  PlatformInfos.isMobile)
+              if ({MessageTypes.Video, MessageTypes.Audio}.contains(event.messageType) && PlatformInfos.isMobile)
                 Positioned(
                   top: 80,
                   bottom: 64,
                   left: 0,
                   right: 0,
                   child: FutureBuilder<VideoPlayerController?>(
-                    future: controller.loadVideoControllerFuture ??=
-                        controller.loadVideoController(event),
+                    future: controller.loadVideoControllerFuture ??= controller.loadVideoController(event),
                     builder: (context, snapshot) {
                       final videoPlayerController = snapshot.data;
                       if (videoPlayerController == null) {
@@ -201,12 +195,9 @@ class StoryView extends StatelessWidget {
                     },
                   ),
                 ),
-              if (event.messageType == MessageTypes.Image ||
-                  (event.messageType == MessageTypes.Video &&
-                      !PlatformInfos.isMobile))
+              if (event.messageType == MessageTypes.Image || (event.messageType == MessageTypes.Video && !PlatformInfos.isMobile))
                 FutureBuilder<MatrixFile>(
-                  future: controller.downloadAndDecryptAttachment(
-                      event, event.messageType == MessageTypes.Video),
+                  future: controller.downloadAndDecryptAttachment(event, event.messageType == MessageTypes.Video),
                   builder: (context, snapshot) {
                     final matrixFile = snapshot.data;
                     if (matrixFile == null) {
@@ -216,9 +207,7 @@ class StoryView extends StatelessWidget {
                     controller.loadingModeOff();
                     return Container(
                       constraints: const BoxConstraints.expand(),
-                      alignment: controller.storyThemeData.fit == BoxFit.cover
-                          ? null
-                          : Alignment.center,
+                      alignment: controller.storyThemeData.fit == BoxFit.cover ? null : Alignment.center,
                       child: Image.memory(
                         matrixFile.bytes,
                         fit: controller.storyThemeData.fit,
@@ -258,25 +247,19 @@ class StoryView extends StatelessWidget {
                   ),
                   child: SafeArea(
                     child: LinkText(
-                      text: controller.loadingMode
-                          ? L10n.of(context)!.loadingPleaseWait
-                          : event.content.tryGet<String>('body') ?? '',
+                      text: controller.loadingMode ? L10n.of(context)!.loadingPleaseWait : event.content.tryGet<String>('body') ?? '',
                       textAlign: TextAlign.center,
                       onLinkTap: (url) => UrlLauncher(context, url).launchUrl(),
                       linkStyle: TextStyle(
                         fontSize: 24,
                         color: Colors.blue.shade50,
                         decoration: TextDecoration.underline,
-                        shadows: event.messageType == MessageTypes.Text
-                            ? null
-                            : textShadows,
+                        shadows: event.messageType == MessageTypes.Text ? null : textShadows,
                       ),
                       textStyle: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
-                        shadows: event.messageType == MessageTypes.Text
-                            ? null
-                            : textShadows,
+                        shadows: event.messageType == MessageTypes.Text ? null : textShadows,
                       ),
                     ),
                   ),
@@ -299,59 +282,55 @@ class StoryView extends StatelessWidget {
                                   backgroundColor: Colors.grey.shade600,
                                   value: controller.loadingMode
                                       ? null
-                                      : controller.progress.inMilliseconds /
-                                          StoryPageController
-                                              .maxProgress.inMilliseconds,
+                                      : controller.progress.inMilliseconds / StoryPageController.maxProgress.inMilliseconds,
                                 )
                               : Container(
                                   margin: const EdgeInsets.all(4),
                                   height: 2,
-                                  color: i < controller.index
-                                      ? Colors.white
-                                      : Colors.grey.shade600,
+                                  color: i < controller.index ? Colors.white : Colors.grey.shade600,
                                 ),
                         ),
                     ],
                   ),
                 ),
               ),
-              if (!controller.isOwnStory && currentEvent != null)
-                Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: SafeArea(
-                    child: TextField(
-                      focusNode: controller.replyFocus,
-                      controller: controller.replyController,
-                      onSubmitted: controller.replyAction,
-                      textInputAction: TextInputAction.send,
-                      readOnly: controller.replyLoading,
-                      decoration: InputDecoration(
-                        hintText: L10n.of(context)!.reply,
-                        prefixIcon: IconButton(
-                          onPressed: controller.replyEmojiAction,
-                          icon: const Icon(Icons.emoji_emotions_outlined),
-                        ),
-                        suffixIcon: controller.replyLoading
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: Center(
-                                  child: CircularProgressIndicator.adaptive(
-                                      strokeWidth: 2),
-                                ),
-                              )
-                            : IconButton(
-                                onPressed: controller.replyAction,
-                                icon: const Icon(Icons.send_outlined),
-                              ),
-                      ),
-                    ),
-                  ),
-                ),
-              if (controller.isOwnStory &&
-                  controller.currentSeenByUsers.isNotEmpty)
+              // if (!controller.isOwnStory && currentEvent != null)
+              //   Positioned(
+              //     bottom: 16,
+              //     left: 16,
+              //     right: 16,
+              //     child: SafeArea(
+              //       child: TextField(
+              //         focusNode: controller.replyFocus,
+              //         controller: controller.replyController,
+              //         onSubmitted: controller.replyAction,
+              //         textInputAction: TextInputAction.send,
+              //         readOnly: controller.replyLoading,
+              //         decoration: InputDecoration(
+              //           hintText: L10n.of(context)!.reply,
+              //           prefixIcon: IconButton(
+              //             onPressed: controller.replyEmojiAction,
+              //             icon: const Icon(Icons.emoji_emotions_outlined),
+              //           ),
+              //           suffixIcon: controller.replyLoading
+              //               ? const SizedBox(
+              //                   width: 16,
+              //                   height: 16,
+              //                   child: Center(
+              //                     child: CircularProgressIndicator.adaptive(
+              //                         strokeWidth: 2),
+              //                   ),
+              //                 )
+              //               : IconButton(
+              //                   onPressed: controller.replyAction,
+              //                   icon: const Icon(Icons.send_outlined),
+              //                 ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+
+              if (controller.isOwnStory && controller.currentSeenByUsers.isNotEmpty)
                 Positioned(
                   bottom: 16,
                   left: 16,
@@ -360,8 +339,7 @@ class StoryView extends StatelessWidget {
                     child: Center(
                       child: OutlinedButton.icon(
                         style: OutlinedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
+                          backgroundColor: Theme.of(context).colorScheme.surface,
                         ),
                         onPressed: controller.displaySeenByUsers,
                         icon: const Icon(Icons.visibility_outlined),
