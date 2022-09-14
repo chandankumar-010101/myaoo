@@ -137,31 +137,14 @@ class AddStoryController extends State<AddStoryPage> {
 
     var storiesRoom = await client.getStoriesRoom(context, spaceId);
 
-    final undecided = await showFutureLoadingDialog(
-      context: context,
-      future: () => client.getUndecidedContactsForStories(storiesRoom),
-    );
-    var result = undecided.result;
+    final activespace = await client.getRoomById(spaceId);
 
-    if (result!.isEmpty) {
-      final activespace = await client.getRoomById(spaceId);
+    List<User> contact = await activespace!.requestParticipants();
 
-      List<User> contact = await activespace!.requestParticipants();
+    final result = contact.where((element) => element.id != client.userID).toList();
 
-      result = contact.where((element) => element.id != client.userID).toList();
-
-      dev.log(result.toList().toString());
-      final created = await showDialog<bool>(
-        context: context,
-        useRootNavigator: false,
-        builder: (context) => InviteStoryPage(
-          storiesRoom: storiesRoom,
-          spaceId: spaceId,
-          contacts: result,
-        ),
-      );
-      if (created != true) return;
-      storiesRoom ??= await client.getStoriesRoom(context, spaceId);
+    if (result.isEmpty) {
+      throw 'No participants in class to share story with';
     } else {
       final created = await showDialog<bool>(
         context: context,
@@ -179,7 +162,7 @@ class AddStoryController extends State<AddStoryPage> {
     final postResult = await showFutureLoadingDialog(
       context: context,
       future: () async {
-        if (storiesRoom == null) throw ('Stories room is null');
+        if (storiesRoom == null) throw ('Your story room is created please post story again.');
 
         var video = this.video?.detectFileType;
         if (video != null) {

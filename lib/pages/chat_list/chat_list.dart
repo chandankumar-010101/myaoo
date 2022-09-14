@@ -237,6 +237,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   void _initReceiveSharingIntent() {
+    getpeople();
     if (!PlatformInfos.isMobile) return;
 
     // For sharing images coming from outside the app while the app is in the memory
