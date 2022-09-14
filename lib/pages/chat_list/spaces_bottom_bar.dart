@@ -129,6 +129,7 @@ class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
         icon: InkWell(
           borderRadius: BorderRadius.circular(28),
           onTap: () {
+            widget.controller.getpeople();
             widget.controller.setActiveSpacesEntry(
               context,
               entry,

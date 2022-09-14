@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import 'package:pangeachat/config/environment.dart';
 import 'package:pangeachat/pages/class_profile/class_profile.dart';
@@ -11,14 +12,12 @@ import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
-
-
+import '../../widgets/matrix.dart';
 
 class RequestScreenView extends StatefulWidget {
   final RequestScreenState controller;
 
   const RequestScreenView(this.controller, {Key? key}) : super(key: key);
-
 
   @override
   State<RequestScreenView> createState() => _RequestScreenViewState();
@@ -27,20 +26,19 @@ class RequestScreenView extends StatefulWidget {
 class _RequestScreenViewState extends State<RequestScreenView> {
   final box = GetStorage();
 
-  fetchFlag(FetchClassInfoModel data,String url){
-    try{
+  fetchFlag(FetchClassInfoModel data, String url) {
+    try {
       return SizedBox(
         width: 20,
         height: 20,
         child: Image.network(url + data.flags[1].languageName.toString()),
       );
-    }catch(e){
+    } catch (e) {
       return Container();
     }
   }
 
   @override
-
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final String basePath = Environment.baseAPI;
@@ -49,6 +47,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.fetchSpaceInfo(roomAlias);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -58,7 +57,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         future: PangeaServices.fetchClassInfo(context, roomAlias),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final FetchClassInfoModel data = snapshot.data as FetchClassInfoModel;
+            final FetchClassInfoModel data =
+                snapshot.data as FetchClassInfoModel;
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Row(
-                      mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                      mainAxisAlignment: size.width >= 1000
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
                       children: [
                         Stack(
                           children: [
@@ -76,14 +78,22 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   ? CachedNetworkImage(
                                       imageUrl: data.profilePic.toString(),
                                       fit: BoxFit.cover,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                       imageBuilder: (context, imageProvider) {
                                         return Container(
                                           height: 90,
                                           width: 90,
-                                          decoration: BoxDecoration(shape: BoxShape.circle, image: DecorationImage(image: imageProvider)),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  image: imageProvider)),
                                         );
                                       },
                                     )
@@ -94,9 +104,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                       width: 2.0),
                                   shape: BoxShape.circle),
                             ),
@@ -107,8 +122,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   padding: EdgeInsets.all(2),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          width: 2)),
                                   child: const Icon(
                                     Icons.school,
                                     color: Colors.black,
@@ -126,24 +147,41 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: [
                             Text(
                               data.className.toString(),
-                              style: const TextStyle()
-                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.bold),
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "${data.classAuthor}",
-                              style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 15),
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 15),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Icon(
                                   Icons.location_pin,
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                   size: 20.0,
                                 ),
                                 Text(
                                   data.city,
-                                  style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 12),
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 12),
                                 )
                               ],
                             ),
@@ -154,14 +192,19 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 20.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(color: Colors.grey.shade200, width: 2.0),
+                      border:
+                          Border.all(color: Colors.grey.shade200, width: 2.0),
                     ),
                     child: Flex(
-                      direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                      mainAxisAlignment: size.width >= 800 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                      direction:
+                          size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                      mainAxisAlignment: size.width >= 800
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -169,8 +212,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: [
                             Text(
                               "Ratings",
-                              style: const TextStyle()
-                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -200,8 +248,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: [
                             Text(
                               "Number of Students",
-                              style: const TextStyle()
-                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
+                              style: const TextStyle().copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -219,9 +272,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.totalStudent.toString() ??"",
-                                  style: const TextStyle()
-                                      .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                  data.totalStudent.toString() ?? "",
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
                                 )
                               ],
                             )
@@ -241,8 +299,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 children: [
                                   Text(
                                     "Source Language",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -250,15 +313,23 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   Icon(
                                     Icons.arrow_right_alt_outlined,
                                     size: 20,
-                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
                                   ),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     "Target Language",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.bold, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
                                   ),
                                 ]),
                             const SizedBox(
@@ -269,15 +340,20 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  widget.controller.fetchFlag(data, url)]),
-
+                                  widget.controller.fetchFlag(data, url)
+                                ]),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
                                   data.dominantLanguage ?? "",
-                                  style: const TextStyle()
-                                      .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -285,22 +361,28 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 Icon(
                                   Icons.arrow_right_alt_outlined,
                                   size: 20,
-                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Row(children: [
                                   widget.controller.fetchFlag2(data, url),
-
                                   const SizedBox(
-
                                     width: 5,
                                   ),
                                   Text(
-                                    data.targetLanguage??"",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
+                                    data.targetLanguage ?? "",
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
                                   ),
                                 ]),
                               ],
@@ -315,75 +397,116 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
                       "About me ",
-                      style:
-                          const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w700, fontSize: 14),
+                      style: const TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       data.description.toString(),
-                      style:
-                          const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 14),
+                      style: const TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14),
                     ),
                   ),
-
-
                   Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20.0),
                       padding: EdgeInsets.only(top: 10),
                       child: Text(
                         "Class Permissions",
-                        style: const TextStyle()
-                            .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w700, fontSize: 14),
+                        style: const TextStyle().copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14),
                       )),
                   fetchPermissions(data.permissions),
-
-
-
                   widget.controller.box.read("usertype") == 2
-                      ? widget.controller.box.read("clientID") == data.classAuthorId
+                      ? widget.controller.box.read("clientID") ==
+                              data.classAuthorId
                           ? Container()
                           : Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               padding: const EdgeInsets.only(top: 10),
                               child: Flex(
-                                direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                                mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                direction: size.width >= 1000
+                                    ? Axis.horizontal
+                                    : Axis.vertical,
+                                mainAxisAlignment: size.width >= 1000
+                                    ? MainAxisAlignment.start
+                                    : MainAxisAlignment.center,
                                 children: [
-                                  widget.controller.space.isEmpty  ? data.permissions.isOpenExchange ? SizedBox(
+                                  widget.controller.space.isEmpty
+                                      ? data.permissions.isOpenExchange
+                                          ? SizedBox(
                                               width: 200,
                                               child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0)),
                                                   side: BorderSide(
                                                     width: 2,
-                                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                        ? Theme.of(context).primaryColor
-                                                        : Theme.of(context).colorScheme.onPrimary,
+                                                    color: Theme.of(context)
+                                                                .colorScheme
+                                                                .onPrimary ==
+                                                            Colors.white
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
                                                   ),
                                                 ),
                                                 onPressed: () {
                                                   final box = GetStorage();
 
-
                                                   if (roomAlias.isNotEmpty) {
-                                                    box.write("public", data.permissions.isPublic);
-                                                    box.write("openEnrollment", data.permissions.isOpenEnrollment);
-                                                    box.write("openExchange", data.permissions.isOpenExchange);
-                                                    box.write("ExchangeClientID", data.classAuthorId);
-                                                    context.vRouter.to("/classDetails/request_exchange", queryParameters: {"user_id":data.classAuthorId,
-                                                      "class_id": roomAlias,
-                                                    });
+                                                    box.write(
+                                                        "public",
+                                                        data.permissions
+                                                            .isPublic);
+                                                    box.write(
+                                                        "openEnrollment",
+                                                        data.permissions
+                                                            .isOpenEnrollment);
+                                                    box.write(
+                                                        "openExchange",
+                                                        data.permissions
+                                                            .isOpenExchange);
+                                                    box.write(
+                                                        "ExchangeClientID",
+                                                        data.classAuthorId);
+                                                    context.vRouter.to(
+                                                        "/classDetails/request_exchange",
+                                                        queryParameters: {
+                                                          "user_id": data
+                                                              .classAuthorId,
+                                                          "class_id": roomAlias,
+                                                        });
                                                   }
                                                 },
                                                 child: Text(
                                                   "Request an Exchange",
-                                                  style: const TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                                  style: const TextStyle()
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12),
                                                 ),
                                               ),
-                                            ) : Container()
+                                            )
+                                          : Container()
                                       : Container(),
                                   const SizedBox(
                                     width: 10,
@@ -393,35 +516,55 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     width: 200,
                                     child: OutlinedButton(
                                       style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0)),
                                         side: BorderSide(
                                           width: 2,
-                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary ==
+                                                  Colors.white
                                               ? Theme.of(context).primaryColor
-                                              : Theme.of(context).colorScheme.onPrimary,
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
                                         ),
                                       ),
                                       onPressed: () {
-                                        UrlLauncher(context, 'https://matrix.to/#/${data.classAuthorId.toString()}').openMatrixToUrl();
+                                        UrlLauncher(context,
+                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                            .openMatrixToUrl();
                                       },
                                       child: Text(
                                         "Message ${data.classAuthor}",
-                                        style: const TextStyle()
-                                            .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             )
-                      : widget.controller.box.read("clientID") == data.classAuthorId
+                      : widget.controller.box.read("clientID") ==
+                              data.classAuthorId
                           ? Container()
                           : Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               padding: EdgeInsets.only(top: 10),
                               child: Flex(
-                                direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                                mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                direction: size.width >= 1000
+                                    ? Axis.horizontal
+                                    : Axis.vertical,
+                                mainAxisAlignment: size.width >= 1000
+                                    ? MainAxisAlignment.start
+                                    : MainAxisAlignment.center,
                                 children: [
                                   widget.controller.space.isEmpty
                                       ? (data.permissions.isOpenEnrollment
@@ -429,28 +572,43 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                               width: 200,
                                               child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0)),
                                                   side: BorderSide(
                                                     width: 2,
-                                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                        ? Theme.of(context).primaryColor
-                                                        : Theme.of(context).colorScheme.onPrimary,
+                                                    color: Theme.of(context)
+                                                                .colorScheme
+                                                                .onPrimary ==
+                                                            Colors.white
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
                                                   ),
                                                 ),
                                                 onPressed: () async {
-                                                  final confirmed = await showOkCancelAlertDialog(
+                                                  final confirmed =
+                                                      await showOkCancelAlertDialog(
                                                     useRootNavigator: false,
                                                     context: context,
-                                                    title: L10n.of(context)!.areYouSure,
-                                                    okLabel: L10n.of(context)!.ok,
-                                                    cancelLabel: L10n.of(context)!.cancel,
+                                                    title: L10n.of(context)!
+                                                        .areYouSure,
+                                                    okLabel:
+                                                        L10n.of(context)!.ok,
+                                                    cancelLabel:
+                                                        L10n.of(context)!
+                                                            .cancel,
                                                   );
-                                                  if (confirmed == OkCancelResult.ok) {
+                                                  if (confirmed ==
+                                                      OkCancelResult.ok) {
                                                     if (roomAlias.isNotEmpty) {
-
                                                       UrlLauncher(
                                                               context,
-                                                              requestToEnroll: true,
+                                                              requestToEnroll:
+                                                                  true,
                                                               roomId: roomAlias,
                                                               'https://matrix.to/#/${data.classAuthorId.toString()}')
                                                           .openMatrixToUrl();
@@ -459,8 +617,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                                 },
                                                 child: Text(
                                                   "Request an Enroll",
-                                                  style: const TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                                  style: const TextStyle()
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12),
                                                 ),
                                               ),
                                             )
@@ -474,47 +640,72 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     width: 200,
                                     child: OutlinedButton(
                                       style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0)),
                                         side: BorderSide(
                                           width: 2,
-                                          color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary ==
+                                                  Colors.white
                                               ? Theme.of(context).primaryColor
-                                              : Theme.of(context).colorScheme.onPrimary,
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
                                         ),
                                       ),
                                       onPressed: () {
-                                        UrlLauncher(context, 'https://matrix.to/#/${data.classAuthorId.toString()}').openMatrixToUrl();
+                                        UrlLauncher(context,
+                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                            .openMatrixToUrl();
                                       },
                                       child: Text(
                                         "Message ${data.classAuthor}",
-                                        style: const TextStyle()
-                                            .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-
-                  widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
-
+                  widget.controller.box.read("usertype") == 2 &&
+                          widget.controller.box.read("clientID") ==
+                              data.classAuthorId
                       ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           padding: EdgeInsets.only(top: 10),
                           child: Flex(
-                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            direction: size.width >= 1000
+                                ? Axis.horizontal
+                                : Axis.vertical,
+                            mainAxisAlignment: size.width >= 1000
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () {
@@ -522,8 +713,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   },
                                   child: Text(
                                     "Class Analytics",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
@@ -535,25 +731,38 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
-                                      context.vRouter.to("/invite_students", queryParameters: {
-                                        "id": roomAlias,
-                                      });
+                                      context.vRouter.to("/invite_students",
+                                          queryParameters: {
+                                            "id": roomAlias,
+                                          });
                                     }
                                   },
                                   child: Text(
                                     "Add Students",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
@@ -565,21 +774,34 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () {
-                                    widget.controller.getxController.throughClassProfile.value = true;
+                                    widget.controller.getxController
+                                        .throughClassProfile.value = true;
                                   },
                                   child: Text(
                                     "Find a Language Exchange",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
@@ -587,40 +809,65 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ),
                         )
                       : Container(),
-                  widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                          widget.controller.box.read("clientID") ==
+                              data.classAuthorId
                       ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           padding: EdgeInsets.only(top: 10),
                           child: Flex(
-                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            direction: size.width >= 1000
+                                ? Axis.horizontal
+                                : Axis.vertical,
+                            mainAxisAlignment: size.width >= 1000
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
-                                      widget.controller.box.write("public", data.permissions.isPublic);
-                                      widget.controller.box.write("openEnrollment", data.permissions.isOpenEnrollment);
-                                      widget.controller.box.write("openExchange", data.permissions.isOpenExchange);
-                                      context.vRouter.to("/classDetails/update_class_permissions", queryParameters: {
-                                        "class_id": roomAlias,
-                                      });
+                                      widget.controller.box.write(
+                                          "public", data.permissions.isPublic);
+                                      widget.controller.box.write(
+                                          "openEnrollment",
+                                          data.permissions.isOpenEnrollment);
+                                      widget.controller.box.write(
+                                          "openExchange",
+                                          data.permissions.isOpenExchange);
+                                      context.vRouter.to(
+                                          "/classDetails/update_class_permissions",
+                                          queryParameters: {
+                                            "class_id": roomAlias,
+                                          });
                                     }
                                   },
                                   child: Text(
                                     "Class Permissions",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
@@ -632,44 +879,79 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
                                       try {
-                                        widget.controller.box.write("oneToOneClass", data.permissions.oneToOneChatClass);
-                                        widget.controller.box.write("oneToOneExchange", data.permissions.oneToOneChatExchange);
-                                        widget.controller.box.write("createRoom", data.permissions.isCreateRooms);
-                                        widget.controller.box.write("createRoomExchange", data.permissions.isCreateRoomsExchange);
-                                        widget.controller.box.write("createStories", data.permissions.isCreateStories);
-                                        widget.controller.box.write("shareVideo", data.permissions.isShareVideo);
-                                        widget.controller.box.write("sharePhotos", data.permissions.isSharePhoto);
-                                        widget.controller.box.write("shareFiles", data.permissions.isShareFiles);
-                                        widget.controller.box.write("shareLocation", data.permissions.isShareLocation);
+                                        widget.controller.box.write(
+                                            "oneToOneClass",
+                                            data.permissions.oneToOneChatClass);
+                                        widget.controller.box.write(
+                                            "oneToOneExchange",
+                                            data.permissions
+                                                .oneToOneChatExchange);
+                                        widget.controller.box.write(
+                                            "createRoom",
+                                            data.permissions.isCreateRooms);
+                                        widget.controller.box.write(
+                                            "createRoomExchange",
+                                            data.permissions
+                                                .isCreateRoomsExchange);
+                                        widget.controller.box.write(
+                                            "createStories",
+                                            data.permissions.isCreateStories);
+                                        widget.controller.box.write(
+                                            "shareVideo",
+                                            data.permissions.isShareVideo);
+                                        widget.controller.box.write(
+                                            "sharePhotos",
+                                            data.permissions.isSharePhoto);
+                                        widget.controller.box.write(
+                                            "shareFiles",
+                                            data.permissions.isShareFiles);
+                                        widget.controller.box.write(
+                                            "shareLocation",
+                                            data.permissions.isShareLocation);
                                       } catch (e) {
                                         if (kDebugMode) {
                                           print(e);
                                         }
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
                                           content: Text("Error accrued: $e"),
                                           backgroundColor: Colors.red,
                                         ));
                                       }
-                                      context.vRouter.to("/classDetails/update_student_permissions", queryParameters: {
-                                        "class_id": roomAlias,
-                                      });
+                                      context.vRouter.to(
+                                          "/classDetails/update_student_permissions",
+                                          queryParameters: {
+                                            "class_id": roomAlias,
+                                          });
                                     }
                                   },
                                   child: Text(
                                     "Student Permissions",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
@@ -681,33 +963,55 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
-                                      widget.controller.box.write("class_name", data.className);
-                                      widget.controller.box.write("city_name", data.city);
-                                      widget.controller.box.write("country_name", data.country);
-                                      widget.controller.box.write("language_level", data.languageLevel);
-                                      widget.controller.box.write("school_name", data.schoolName);
-                                      widget.controller.box.write("disc", data.description);
-                                      widget.controller.box.write("source_lang", data.dominantLanguage);
-                                      widget.controller.box.write("target_lang", data.targetLanguage);
-                                      context.vRouter.to("/classDetails/update_language", queryParameters: {
-                                        "class_id": roomAlias,
-                                      });
+                                      widget.controller.box
+                                          .write("class_name", data.className);
+                                      widget.controller.box
+                                          .write("city_name", data.city);
+                                      widget.controller.box
+                                          .write("country_name", data.country);
+                                      widget.controller.box.write(
+                                          "language_level", data.languageLevel);
+                                      widget.controller.box.write(
+                                          "school_name", data.schoolName);
+                                      widget.controller.box
+                                          .write("disc", data.description);
+                                      widget.controller.box.write(
+                                          "source_lang", data.dominantLanguage);
+                                      widget.controller.box.write(
+                                          "target_lang", data.targetLanguage);
+                                      context.vRouter.to(
+                                          "/classDetails/update_language",
+                                          queryParameters: {
+                                            "class_id": roomAlias,
+                                          });
                                     }
                                   },
                                   child: Text(
                                     "Class Info",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
@@ -715,29 +1019,42 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ),
                         )
                       : Container(),
-                  widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
+                  widget.controller.box.read("usertype") == 2 &&
+                          widget.controller.box.read("clientID") ==
+                              data.classAuthorId
                       ? Container(
-
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           padding: EdgeInsets.only(top: 10),
                           child: Flex(
-                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            direction: size.width >= 1000
+                                ? Axis.horizontal
+                                : Axis.vertical,
+                            mainAxisAlignment: size.width >= 1000
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 200,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
                                     side: BorderSide(
                                       width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                     ),
                                   ),
                                   onPressed: () async {
-                                    final confirmed = await showOkCancelAlertDialog(
+                                    final confirmed =
+                                        await showOkCancelAlertDialog(
                                       useRootNavigator: false,
                                       context: context,
                                       title: L10n.of(context)!.areYouSure,
@@ -745,19 +1062,28 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       cancelLabel: L10n.of(context)!.cancel,
                                     );
                                     if (confirmed == OkCancelResult.ok) {
-                                      data.isExchange?widget.controller.removeExchangeClass(roomAlias):
-                                      widget.controller.kickAndRemoveClass(roomAlias);
+                                      data.isExchange
+                                          ? widget.controller
+                                              .removeExchangeClass(roomAlias)
+                                          : widget.controller
+                                              .kickAndRemoveClass(roomAlias);
                                     }
                                   },
                                   child: Text(
-                                    data.isExchange?"End Exchange": "Delete Class",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                                    data.isExchange
+                                        ? "End Exchange"
+                                        : "Delete Class",
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
                                   ),
                                 ),
                               ),
                             ],
-
                           ),
                         )
                       : Container(),
@@ -767,11 +1093,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                 ],
               ),
             );
-
-          }
-          else {
+          } else {
             if (snapshot.hasError) {
-
               if (kDebugMode) {
                 print("Unable to fetch data: ${snapshot.error}");
               }
@@ -783,12 +1106,26 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     );
   }
 
+  int powerLevel = 0;
+  deleteButton(String roomAlias) async {
+    Room? room = Matrix.of(context).client.getRoomById(roomAlias);
+
+    List<User> users = await room!.requestParticipants();
+    for (var element in users) {
+      if (element.id == Matrix.of(context).client.userID) {
+        setState(() => powerLevel = element.powerLevel);
+      }
+    }
+  }
+
   Widget fetchPermissions(Permissions? permissions) {
     if (permissions != null) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Flex(
-          direction: MediaQuery.of(context).size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+          direction: MediaQuery.of(context).size.width >= 1000
+              ? Axis.horizontal
+              : Axis.vertical,
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width / 3.5,

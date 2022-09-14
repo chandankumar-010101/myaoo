@@ -38,7 +38,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
 
   @override
   Widget build(BuildContext context) {
-    classCode = VRouter.of(context).queryParameters['class_code'] ?? "";
+    classCode = VRouter.of(context).queryParameters['code'] ?? "";
 
 
     if (Matrix.of(context).client.loginState == LoginState.loggedOut) {
