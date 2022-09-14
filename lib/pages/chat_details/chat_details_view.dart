@@ -1,5 +1,8 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:matrix_link_text/link_text.dart';
 import 'package:vrouter/vrouter.dart';
@@ -15,14 +18,78 @@ import 'package:pangeachat/widgets/layouts/max_width_body.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import '../../utils/url_launcher.dart';
 
-class ChatDetailsView extends StatelessWidget {
+class ChatDetailsView extends StatefulWidget {
   final ChatDetailsController controller;
 
-  const ChatDetailsView(this.controller, {Key? key}) : super(key: key);
+   ChatDetailsView(this.controller, {Key? key}) : super(key: key);
+
+  @override
+  State<ChatDetailsView> createState() => _ChatDetailsViewState();
+}
+
+class _ChatDetailsViewState extends State<ChatDetailsView> {
+  Future<dynamic>? profileFuture;
+  Profile? profile;
+  bool profileUpdated = false;
+  void updateProfile() => setState(() {
+    profileUpdated = true;
+    profile = profileFuture = null;
+  });
+
+  void setDisplaynameAction() async {
+    final input = await showTextInputDialog(
+      useRootNavigator: false,
+      context: context,
+      title: L10n.of(context)!.editDisplayname,
+      okLabel: L10n.of(context)!.ok,
+      cancelLabel: L10n.of(context)!.cancel,
+      textFields: [
+        DialogTextField(
+          initialText: profile?.displayName ??
+              Matrix.of(context).client.userID!.localpart,
+        )
+      ],
+    );
+    if (input == null) return;
+    final matrix = Matrix.of(context);
+    final success = await showFutureLoadingDialog(
+      context: context,
+      future: () =>
+          matrix.client.setDisplayName(matrix.client.userID!, input.single),
+    );
+    if (success.error == null) {
+      updateProfile();
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    final room = Matrix.of(context).client.getRoomById(controller.roomId!);
+    final client = Matrix.of(context).client;
+    profileFuture ??= client
+        .getProfileFromUserId(
+      client.userID!,
+      cache: !profileUpdated,
+      getFromRooms: !profileUpdated,
+    )
+        .then((p) {
+      if (mounted) setState(() => profile = p);
+      return p;
+    });
+    GetStorage().write("username", profile!.displayName);
+    final room = Matrix.of(context).client.getRoomById(widget.controller.roomId!);
+    // String teacherName = Matrix.of(context).client.getRoomById(controller.roomId!)!.displayname ?? "";
+    // print(teacherName.toString());
+
+
+    var parentRoomID=room!.spaceParents.first.roomId;
+    final parentroom = Matrix.of(context).client.getRoomById(parentRoomID!);
+    if(parentRoomID.isNotEmpty){
+      print(parentroom!.name.toString());
+      print(Matrix.of(context).client.clientName);
+      GetStorage().write("reportroomId", parentroom.name.toString());
+    }
+
 
     if (room == null) {
       return Scaffold(
@@ -35,10 +102,10 @@ class ChatDetailsView extends StatelessWidget {
       );
     }
 
-    controller.members!.removeWhere((u) => u.membership == Membership.leave);
+    widget.controller.members!.removeWhere((u) => u.membership == Membership.leave);
     final actualMembersCount = (room.summary.mInvitedMemberCount ?? 0) +
         (room.summary.mJoinedMemberCount ?? 0);
-    final canRequestMoreMembers = controller.members!.length < actualMembersCount;
+    final canRequestMoreMembers = widget.controller.members!.length < actualMembersCount;
     final iconColor = Theme.of(context).textTheme.bodyText1!.color;
     return StreamBuilder(
         stream: room.onUpdate.stream,
@@ -53,8 +120,7 @@ class ChatDetailsView extends StatelessWidget {
                     onPressed: () =>
                         VRouter.of(context).path.startsWith('/classes/')
                             ? VRouter.of(context).pop()
-                            : VRouter.of(context)
-                                .toSegments(['rooms', controller.roomId!]),
+                            : VRouter.of(context).toSegments(['rooms', widget.controller.roomId!]),
                   ),
                   elevation: Theme.of(context).appBarTheme.elevation,
                   expandedHeight: 300.0,
@@ -81,14 +147,14 @@ class ChatDetailsView extends StatelessWidget {
                     background: ContentBanner(
                         mxContent: room.avatar,
                         onEdit: room.canSendEvent('m.room.avatar')
-                            ? controller.setAvatarAction
+                            ? widget.controller.setAvatarAction
                             : null),
                   ),
                 ),
               ],
               body: MaxWidthBody(
                 child: ListView.builder(
-                  itemCount: controller.members!.length + 1 +
+                  itemCount: widget.controller.members!.length + 1 +
                       (canRequestMoreMembers ? 1 : 0),
                   itemBuilder: (BuildContext context, int i) => i == 0
                       ? Column(
@@ -128,7 +194,7 @@ class ChatDetailsView extends StatelessWidget {
                                     UrlLauncher(context, url).launchUrl(),
                               ),
                               onTap: room.canSendEvent('m.room.topic')
-                                  ? controller.setTopicAction
+                                  ? widget.controller.setTopicAction
                                   : null,
                             ),
                             const SizedBox(height: 8),
@@ -142,12 +208,12 @@ class ChatDetailsView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              trailing: Icon(controller.displaySettings
+                              trailing: Icon(widget.controller.displaySettings
                                   ? Icons.keyboard_arrow_down_outlined
                                   : Icons.keyboard_arrow_right_outlined),
-                              onTap: controller.toggleDisplaySettings,
+                              onTap: widget.controller.toggleDisplaySettings,
                             ),
-                            if (controller.displaySettings) ...[
+                            if (widget.controller.displaySettings) ...[
                               if (room.canSendEvent('m.room.name'))
                                 ListTile(
                                   leading: CircleAvatar(
@@ -161,7 +227,7 @@ class ChatDetailsView extends StatelessWidget {
                                       .changeTheNameOfTheGroup),
                                   subtitle: Text(room.getLocalizedDisplayname(
                                       MatrixLocals(L10n.of(context)!))),
-                                  onTap: controller.setDisplaynameAction,
+                                  onTap: widget.controller.setDisplaynameAction,
                                 ),
                               if (room.joinRules == JoinRules.public)
                                 ListTile(
@@ -171,7 +237,7 @@ class ChatDetailsView extends StatelessWidget {
                                     foregroundColor: iconColor,
                                     child: const Icon(Icons.link_outlined),
                                   ),
-                                  onTap: controller.editAliases,
+                                  onTap: widget.controller.editAliases,
                                   title:
                                       Text(L10n.of(context)!.editRoomAliases),
                                   subtitle: Text(
@@ -190,10 +256,10 @@ class ChatDetailsView extends StatelessWidget {
                                 title: Text(L10n.of(context)!.emoteSettings),
                                 subtitle:
                                     Text(L10n.of(context)!.setCustomEmotes),
-                                onTap: controller.goToEmoteSettings,
+                                onTap: widget.controller.goToEmoteSettings,
                               ),
                               PopupMenuButton(
-                                onSelected: controller.setJoinRulesAction,
+                                onSelected: widget.controller.setJoinRulesAction,
                                 itemBuilder: (BuildContext context) =>
                                     <PopupMenuEntry<JoinRules>>[
                                   if (room.canChangeJoinRules)
@@ -227,7 +293,7 @@ class ChatDetailsView extends StatelessWidget {
                               ),
                               PopupMenuButton(
                                 onSelected:
-                                    controller.setHistoryVisibilityAction,
+                                    widget.controller.setHistoryVisibilityAction,
                                 itemBuilder: (BuildContext context) =>
                                     <PopupMenuEntry<HistoryVisibility>>[
                                   if (room.canChangeHistoryVisibility)
@@ -278,7 +344,7 @@ class ChatDetailsView extends StatelessWidget {
                               ),
                               if (room.joinRules == JoinRules.public)
                                 PopupMenuButton(
-                                  onSelected: controller.setGuestAccessAction,
+                                  onSelected: widget.controller.setGuestAccessAction,
                                   itemBuilder: (BuildContext context) =>
                                       <PopupMenuEntry<GuestAccess>>[
                                     if (room.canChangeGuestAccess)
@@ -363,11 +429,11 @@ class ChatDetailsView extends StatelessWidget {
                                 : Container(),
                           ],
                         )
-                      : i < controller.members!.length + 1 ? ParticipantListItem(controller.members![i - 1]):ListTile(
+                      : i < widget.controller.members!.length + 1 ? ParticipantListItem(widget.controller.members![i - 1]):ListTile(
                               title: Text(L10n.of(context)!
                                   .loadCountMoreParticipants(
                                       (actualMembersCount -
-                                              controller.members!.length)
+                                              widget.controller.members!.length)
                                           .toString())),
                               leading: CircleAvatar(
                                 backgroundColor:
@@ -377,7 +443,7 @@ class ChatDetailsView extends StatelessWidget {
                                   color: Colors.grey,
                                 ),
                               ),
-                              onTap: controller.requestMoreMembersAction,
+                              onTap: widget.controller.requestMoreMembersAction,
                             ),
                 ),
               ),

@@ -43,6 +43,7 @@ class SettingsAccountView extends StatelessWidget {
                 subtitle: Text(controller.profile?.displayName ??
                     Matrix.of(context).client.userID!.localpart!),
                 onTap: controller.setDisplaynameAction,
+
               ),
               ListTile(
                 title: Row(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -79,19 +80,39 @@ class UserBottomSheetController extends State<UserBottomSheet> {
                 score: score,
               ),
         );
-        if (result.error != null){
-          PangeaServices.requestEmail(
-            "harsh",
-            "mailto:harsh@gmail.com",
-            "no",
-            "mailto:harsh@123gmail.com",
-            "inoffensive",
-            reason.single,
+
+        if (result.error != "null"){
+          print(score);
+          print("object");
+           if(score==-100){
+             print("100");
+             GetStorage().write("offensive","Extremely Offensive");
+           }
+           else if(score==-50){
+             print("50");
+             GetStorage().write("offensive","Offensive");
+           }
+           else if(score==0){
+             print("0");
+             GetStorage().write("offensive","Inoffensive");
+           }
+           print(GetStorage().read("ClientName"));
+          PangeaServices.reportUser(
+               GetStorage().read("reportroomId"),
+               GetStorage().read("username"),
+               event.displayName.toString(),
+               "saurabh.singh@oodles.io",
+               GetStorage().read("offensive"),
+               reason.single
           );
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(L10n.of(context)!.contentHasBeenReported),
+            content: Text("You don't have email right now"),
             backgroundColor: Colors.red,
           ));
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text(L10n.of(context)!.contentHasBeenReported),
+          //   backgroundColor: Colors.red,
+          // ));
         }
 
 
