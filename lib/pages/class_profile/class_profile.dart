@@ -39,7 +39,7 @@ class RequestScreenState extends State<RequestScreen> {
   ///load flag to the UI
   fetchFlag(FetchClassInfoModel data, String url) {
     try {
-      String path = url + data.flags[1].languageFlag ?? "";
+      String path = url + data.flags[0].languageFlag ?? "";
       print(path);
       return path.isNotEmpty
           ? SizedBox(
@@ -54,7 +54,7 @@ class RequestScreenState extends State<RequestScreen> {
   }
 
   fetchFlag2(FetchClassInfoModel data, String url) {
-    String path = url + data.flags[0].languageFlag.toString();
+    String path = url + data.flags[1].languageFlag.toString();
     print(path);
     return SizedBox(width: 20, height: 20, child: Image.network(path));
   }

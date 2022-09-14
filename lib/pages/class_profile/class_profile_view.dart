@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import 'package:pangeachat/config/environment.dart';
 import 'package:pangeachat/pages/class_profile/class_profile.dart';
@@ -11,6 +12,7 @@ import 'package:pangeachat/utils/url_launcher.dart';
 import 'package:pangeachat/widgets/star_rating.dart';
 import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
+import '../../widgets/matrix.dart';
 
 
 
@@ -49,6 +51,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.fetchSpaceInfo(roomAlias);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -715,52 +718,50 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           ),
                         )
                       : Container(),
-                  widget.controller.box.read("usertype") == 2 && widget.controller.box.read("clientID") == data.classAuthorId
-                      ? Container(
+                  Container(
 
-                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                          padding: EdgeInsets.only(top: 10),
-                          child: Flex(
-                            direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
-                            mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                                    side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    final confirmed = await showOkCancelAlertDialog(
-                                      useRootNavigator: false,
-                                      context: context,
-                                      title: L10n.of(context)!.areYouSure,
-                                      okLabel: L10n.of(context)!.ok,
-                                      cancelLabel: L10n.of(context)!.cancel,
-                                    );
-                                    if (confirmed == OkCancelResult.ok) {
-                                      data.isExchange?widget.controller.removeExchangeClass(roomAlias):
-                                      widget.controller.kickAndRemoveClass(roomAlias);
-                                    }
-                                  },
-                                  child: Text(
-                                    data.isExchange?"End Exchange": "Delete Class",
-                                    style: const TextStyle()
-                                        .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
-                                  ),
-                                ),
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.only(top: 10),
+                    child: Flex(
+                      direction: size.width >= 1000 ? Axis.horizontal : Axis.vertical,
+                      mainAxisAlignment: size.width >= 1000 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+                              side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).colorScheme.onPrimary,
                               ),
-                            ],
-
+                            ),
+                            onPressed: () async {
+                              final confirmed = await showOkCancelAlertDialog(
+                                useRootNavigator: false,
+                                context: context,
+                                title: L10n.of(context)!.areYouSure,
+                                okLabel: L10n.of(context)!.ok,
+                                cancelLabel: L10n.of(context)!.cancel,
+                              );
+                              if (confirmed == OkCancelResult.ok) {
+                                data.isExchange?widget.controller.removeExchangeClass(roomAlias):
+                                widget.controller.kickAndRemoveClass(roomAlias);
+                              }
+                            },
+                            child: Text(
+                              data.isExchange?"End Exchange": "Delete Class",
+                              style: const TextStyle()
+                                  .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontWeight: FontWeight.w400, fontSize: 12),
+                            ),
                           ),
-                        )
-                      : Container(),
+                        ),
+                      ],
+
+                    ),
+                  ),
                   const SizedBox(
                     height: 50,
                   ),
@@ -781,6 +782,18 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         },
       ),
     );
+  }
+
+  int powerLevel =0;
+  deleteButton(String roomAlias)async{
+    Room? room =  Matrix.of(context).client.getRoomById(roomAlias);
+
+    List<User> users = await room!.requestParticipants();
+    for (var element in users) {
+      if(element.id == Matrix.of(context).client.userID){
+        setState(()=> powerLevel = element.powerLevel);
+      }
+    }
   }
 
   Widget fetchPermissions(Permissions? permissions) {
