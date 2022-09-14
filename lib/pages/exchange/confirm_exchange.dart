@@ -449,7 +449,6 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                               children: [
                                 Row(children: [
                                   fetchFlag(data, url),
-
                                 const SizedBox(
                                   width: 5,
                                 ),

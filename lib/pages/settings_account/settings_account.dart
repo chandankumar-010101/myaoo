@@ -28,7 +28,7 @@ class SettingsAccountController extends State<SettingsAccount> {
   void updateProfile() => setState(() {
         profileUpdated = true;
         profile = profileFuture = null;
-      });
+  });
 
   void setDisplaynameAction() async {
     final input = await showTextInputDialog(
