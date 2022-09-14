@@ -76,9 +76,6 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
       if(element.id == senderId){
         element.setPower(100);
       }
-      else if(element.id == receiverId){
-        element.setPower(100);
-      }
     }
     //User user =   Matrix.of(context).client.getRoomById(senderId).setPower(power);
 
