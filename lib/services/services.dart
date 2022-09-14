@@ -37,22 +37,19 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 class PangeaServices {
   static final box = GetStorage();
-  static String userId = GetStorage().read("clientID") ?? "";
-  static String matrixToken = GetStorage().read("accessToken") ?? "";
-  static String token = GetStorage().read("access") ?? "";
+
+
+
 
   PangeaServices._init() {
-    if (kDebugMode) {
-      print("Welcome here");
-    }
     accessTokenStatus();
   }
   static accessTokenStatus() async {
     try{
-      if (token.isEmpty) {
-        if (userId.isNotEmpty && matrixToken.isNotEmpty) {
-          if (JwtDecoder.isExpired(token)) {
-            await fetchUserTokenAndInfo(userId, matrixToken);
+      if (box.read("access") !=null) {
+        if (box.read("clientID") != null && box.read("accessToken") !=null) {
+          if (JwtDecoder.isExpired(box.read("access"))) {
+            await fetchUserTokenAndInfo(box.read("clientID"), box.read("accessToken"));
           }
         } else {
           print("Matrix UserId and Token not found");
@@ -75,7 +72,8 @@ class PangeaServices {
         await client.onSync.stream.firstWhere(
             (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
       }
-      VRouter.of(context).toSegments(['rooms', result.result!]);
+     // Fluttertoast.showToast(msg: "Class Joined Successfully", webBgColor: "#00ff00",backgroundColor: Colors.red);
+      // VRouter.of(context).toSegments(['rooms', result.result!]);
       Navigator.of(context, rootNavigator: false).pop();
       return;
     }
@@ -83,7 +81,7 @@ class PangeaServices {
 
   static joinClassWithCode(String classCode, BuildContext context) async {
     PangeaServices._init();
-    if (token.isEmpty) {
+    if (box.read("access") ==null) {
       Fluttertoast.showToast(
           msg: "Access token not found", backgroundColor: Colors.red,webBgColor: "#ff0000");
       return;
@@ -93,13 +91,15 @@ class PangeaServices {
         Uri.parse(ApiUrls.join_code + classCode),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
         },
       );
       if (value.statusCode == 200) {
         ClassCodeModel data = ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
           joinRoom(context, data.pangeaClassRoomId!);
+          Fluttertoast.showToast(msg: "Class Joined Successfully", webBgColor: "#00ff00",backgroundColor: Colors.greenAccent);
+
         } else {
           Fluttertoast.showToast(
               msg: "Unable to find User Information",
@@ -123,7 +123,7 @@ class PangeaServices {
     try {
       final result = await http.post(Uri.parse(ApiUrls.send_email_link),
           headers: {
-            "Authorization": "Bearer $token",
+            "Authorization": "Bearer ${box.read("access")}",
             "Content-Type": "application/json",
           },
           body: jsonEncode(InviteEmail(
@@ -153,7 +153,7 @@ class PangeaServices {
   static Future<ClassCodeModel?> fetchClassWithCode(
       String classCode, BuildContext context) async {
     PangeaServices._init();
-    if (token.isEmpty) {
+    if (box.read("access") ==null) {
       Fluttertoast.showToast(msg: "Access token not found",webBgColor: "#ff0000",backgroundColor: Colors.red);
       throw Exception("Access Token not found");
     }
@@ -162,7 +162,7 @@ class PangeaServices {
         Uri.parse(ApiUrls.join_code + classCode),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
         },
       );
       if (value.statusCode == 200) {
@@ -395,7 +395,7 @@ class PangeaServices {
     }
   }
 
-  static updateUserAge(day, month, year, context) async {
+  static Future updateUserAge(day, month, year, context) async {
     PangeaServices._init();
     final SearchViewController _searchController = Get.put(SearchViewController());
     await http
@@ -403,10 +403,10 @@ class PangeaServices {
       Uri.parse(ApiUrls.update_user_ages),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer ${box.read("access")}",
       },
       body: jsonEncode({
-        "pangea_user_id": userId,
+        "pangea_user_id": box.read("clientID"),
         "date_of_birth": "$day-$month-$year",
       }),
     )
@@ -480,7 +480,7 @@ class PangeaServices {
     }
     try {
       final value = await http.post(Uri.parse(ApiUrls.create_class), headers: {
-        "Authorization": "Bearer $token"
+        "Authorization": "Bearer ${box.read("access")}"
       }, body: {
         "class_name": className,
         "city": city,
@@ -500,7 +500,7 @@ class PangeaServices {
         try {
           final value = await http.post(
             Uri.parse(ApiUrls.addClassPermissions),
-            headers: {"Authorization": "Bearer $token"},
+            headers: {"Authorization": "Bearer ${box.read("access")}"},
             body: AddClassPermissionModel(
               pangeaClass: data.id.toString(),
               oneToOneChatExchange: oneToOneChatExchange.toString(),
@@ -597,7 +597,7 @@ class PangeaServices {
       final value = await http.delete(
         Uri.parse(ApiUrls.deleteClass + roomId),
         headers: <String, String>{
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
@@ -642,7 +642,7 @@ class PangeaServices {
       final value = await http.put(
         Uri.parse(ApiUrls.updateClassPermissions + classId),
         headers: {
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
@@ -701,7 +701,7 @@ class PangeaServices {
       final value = await http.put(
         Uri.parse(ApiUrls.updateClassPermissions + classId),
         headers: {
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
@@ -760,7 +760,7 @@ class PangeaServices {
       final value = await http.put(
         Uri.parse(ApiUrls.updateClassDetail + roomId),
         headers: {
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
           'Content-Type': 'application/json; charset=UTF-8'
         },
         body: jsonEncode(<String, String>{
@@ -809,7 +809,7 @@ class PangeaServices {
           Uri.parse(ApiUrls.getClassDetails + roomID),
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
+            "Authorization": "Bearer ${box.read("access")}",
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
@@ -865,7 +865,7 @@ class PangeaServices {
         Uri.parse(ApiUrls.teacherAllClass),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
         },
       );
       if (value.statusCode == 200 || value.statusCode == 201) {
@@ -891,7 +891,7 @@ class PangeaServices {
       var result = await http.post(Uri.parse(ApiUrls.exchangeClass),
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
+            "Authorization": "Bearer ${box.read("access")}",
           },
           body: jsonEncode({
             "pangea_class_room_id": roomId,
@@ -933,7 +933,7 @@ class PangeaServices {
         Uri.parse(ApiUrls.exchangeClassValidate),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
         },
         body: jsonEncode({
           "request_from_class": requestFromClass,
@@ -997,7 +997,7 @@ class PangeaServices {
       var result = await http.post(Uri.parse(ApiUrls.exchangeAcceptRequest),
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
+            "Authorization": "Bearer ${box.read("access")}",
           },
           body: jsonEncode({
             "pangea_class_room_id": roomId,
@@ -1060,7 +1060,7 @@ class PangeaServices {
         Uri.parse(ApiUrls.classParticipants + classId),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
         },
       );
       if (value.statusCode == 200) {
@@ -1113,7 +1113,7 @@ class PangeaServices {
       final result = await http.post(
         Uri.parse(ApiUrls.exchangeInfoStore),
         headers: {
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
           "Content-Type": "application/json",
         },
         body: jsonEncode(
@@ -1144,7 +1144,7 @@ class PangeaServices {
       final result = await http.get(
         Uri.parse(ApiUrls.fetchExchangeInfo + exchangePangeaId),
         headers: {
-          "Authorization": "Bearer $token",
+          "Authorization": "Bearer ${box.read("access")}",
           "Content-Type": "application/json",
         },
       );
@@ -1173,7 +1173,7 @@ class PangeaServices {
       var result = await http.post(Uri.parse(ApiUrls.request_email),
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
+            "Authorization": "Bearer ${box.read("access")}",
           },
           body: jsonEncode(ReportUser(
             classRoomName: classRoomNamedata,

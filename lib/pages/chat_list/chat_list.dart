@@ -10,6 +10,7 @@ import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/pages/chat_list/chat_list_view.dart';
@@ -59,14 +60,14 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   StreamSubscription? _intentFileStreamSubscription;
 
   StreamSubscription? _intentUriStreamSubscription;
-
+  int userType = GetStorage().read("usertype") ?? 0;
   SpacesEntry? _activeSpacesEntry;
-
   SpacesEntry get activeSpacesEntry {
     final id = _activeSpacesEntry;
     return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
   }
 
+  Permissions? permissions;
   BoxConstraints? snappingSheetContainerSize;
 
   String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
@@ -82,6 +83,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Stream<Client> get clientStream => _clientStream.stream;
 
+  List<User> participantsList = [];
   List<User> participants = [];
   void _onScroll() {
     final newScrolledToTop = scrollController.position.pixels <= 0;
@@ -93,28 +95,67 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   Future<void> setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) async {
+    getClassPermissions();
     if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
+
     participants.clear();
-    final rooms = await Matrix.of(context).client.rooms.where((element) => element.isSpace);
-    for (var room in rooms) {
-      final a = await room.requestParticipants();
-
-      for (var user in a) {
-        participants.add(user);
-        participants.removeWhere((user) => user.id == Matrix.of(context).client.userID);
-      }
-    }
-    print(participants.map((e) => e.toJson()).toString());
-
+    //
     if (spaceId != null) {
-      setState(() => _activeSpacesEntry = spaceId);
-      log(_activeSpacesEntry!.getSpace(context)!.id);
-      getxController.fetchClassInfo(context, spaceId.getSpace(context)!.id);
       participants.clear();
-      participants = await spaceId.getSpace(context)!.requestParticipants();
+      setState(() => _activeSpacesEntry = spaceId);
+      getClassPermissions();
+      getpeople();
+    }
+  }
+
+  getpeople() async {
+    if (_activeSpacesEntry!.getSpace(context) != null) {
+      log(_activeSpacesEntry!.getSpace(context)!.id);
+      participants.clear();
+      participants = await _activeSpacesEntry!.getSpace(context)!.requestParticipants();
+
       participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+      setState(() {});
+    } else {
+      participants.clear();
+      List<dynamic> alreadyExists = [];
+      List<User> finalUsers = [];
+
+      final rooms = Matrix.of(context).client.rooms;
+
+      for (var room in rooms) {
+        participantsList.addAll(await room.requestParticipants());
+
+        for (var user in participantsList) {
+          if (!participantsList.contains(user.stateKey) && user.stateKey != null && !alreadyExists.contains(user.stateKey)) {
+            Map<String, dynamic> ele = {};
+            ele.addAll(user.toJson());
+            finalUsers.add(user);
+            alreadyExists.add(user.stateKey);
+          }
+        }
+      }
+      finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+
+      participants = finalUsers;
+      permissions = Permissions(
+          pangeaClass: 0,
+          isPublic: true,
+          isOpenEnrollment: true,
+          isOpenExchange: true,
+          oneToOneChatClass: true,
+          oneToOneChatExchange: true,
+          isCreateRooms: true,
+          isCreateRoomsExchange: true,
+          isShareVideo: true,
+          isSharePhoto: true,
+          isShareFiles: true,
+          isShareLocation: true,
+          isCreateStories: true);
+
+      setState(() {});
     }
   }
 
@@ -218,33 +259,43 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
+  getClassPermissions() async {
+    String acessToken = GetStorage().read("access");
+
+    if (activeSpaceId != null) {
+      final result = await PangeaServices.fetchClassInfo(context, activeSpaceId!);
+      permissions = result.permissions;
+      log("One on One room (${activeSpaceId}): ${result.permissions.oneToOneChatClass}");
+      log("Create Room  (${activeSpaceId}): ${result.permissions.isCreateRooms}");
+      log("Stories  (${activeSpaceId}): ${result.permissions.isCreateStories}");
+    } else {
+      permissions = Permissions(
+          pangeaClass: 0,
+          isPublic: true,
+          isOpenEnrollment: true,
+          isOpenExchange: true,
+          oneToOneChatClass: true,
+          oneToOneChatExchange: true,
+          isCreateRooms: true,
+          isCreateRoomsExchange: true,
+          isShareVideo: true,
+          isSharePhoto: true,
+          isShareFiles: true,
+          isShareLocation: true,
+          isCreateStories: true);
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
-    getpeople();
     _initReceiveSharingIntent();
 
     scrollController.addListener(_onScroll);
     _waitForFirstSync();
     _hackyWebRTCFixForWeb();
-
+    getClassPermissions();
     super.initState();
-   }
-
-  getpeople() async {
-    participants.clear();
-    final rooms = Matrix.of(context).client.rooms.where((element) => element.isSpace);
-    for (var room in rooms) {
-      final a = await room.requestParticipants();
-
-      for (var user in a) {
-        if (participants.contains(user.roomId)) {
-          continue;
-        } else {
-          participants.add(user);
-        }
-      }
-    }
-    print(participants.map((e) => e.toJson()).toString());
   }
 
   void checkBootstrap() async {
@@ -646,8 +697,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
-  // Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget):null;
-    Matrix.of(context).client.userID != null? PangeaServices.validateUser(Matrix.of(context).client, context,Matrix.of(context).widget,rooms: true):null;
+    Matrix.of(context).client.userID != null
+        ? PangeaServices.validateUser(Matrix.of(context).client, context, Matrix.of(context).widget, rooms: true)
+        : null;
 
     return Obx(() => getxController.throughClassProfile.value ? const Search() : ChatListView(this));
   }

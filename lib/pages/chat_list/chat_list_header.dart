@@ -238,8 +238,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   if (selectMode == SelectMode.normal)
                     sp != null
-                        ? Obx(() => controller.getxController.classInfoModel.value != null &&
-                                controller.getxController.classInfoModel.value!.permissions.isCreateStories
+                        ? controller.permissions != null && controller.permissions!.isCreateStories
                             ? IconButton(
                                 icon: const Icon(Icons.camera_alt_outlined),
                                 tooltip: L10n.of(context)!.addToStory,
@@ -252,7 +251,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                                         '/stories/create',
                                       ),
                               )
-                            : Container())
+                            : Container()
                         : Container(),
                   PopupMenuButton<PopupMenuAction>(
                     onSelected: controller.onPopupMenuSelect,

@@ -82,6 +82,20 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         ),
       );
       if (roomID.result != null) {
+       Room? room =  Matrix.of(context).client.getRoomById(roomID.result!);
+
+      List<User> users = await room!.requestParticipants();
+      for (var element in users) {
+        if(element.id == senderId){
+          element.setPower(100);
+        }
+      }
+      //User user =   Matrix.of(context).client.getRoomById(senderId).setPower(power);
+
+      //   await showFutureLoadingDialog(
+      //     context: context,
+      //     future: () => widget.user.setPower(newPermission),
+      //   );
         await PangeaServices.saveExchangeRecord(senderClassId,
             receiverClassId, senderId, receiverId, roomID.result!);
         await PangeaServices.createClass(
@@ -149,7 +163,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
     final String senderClassId = VRouter.of(context).queryParameters['room_id'] ?? "";
     final String receiverId =  VRouter.of(context).queryParameters['user_id_of_requested_class'] ?? "";
     final String receiverClassId = VRouter.of(context).queryParameters['request_to_class'] ?? "";
-    List<Room> rooms = Matrix.of(context).client.rooms;
+   // List<Room> rooms = Matrix.of(context).client.rooms;
     final String basePath = Environment.baseAPI;
     final List<String> data = basePath.split("/api/v1");
     final String url = data[0];
@@ -161,8 +175,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         title: const Text("Request to Exchange"),
       ),
       body: GetStorage().read("clientID") == receiverId?FutureBuilder(
-        future: PangeaServices.fetchClassInfo(
-            context, receiverClassId),
+        future: PangeaServices.fetchClassInfo( context, receiverClassId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
@@ -622,10 +635,15 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
               ),
             );
           } else {
+            if(snapshot.hasError){
+              if (kDebugMode) {
+                print(snapshot.error);
+              }
+            }
             return Center(child: CircularProgressIndicator());
           }
         },
-      ):Center(child: CircularProgressIndicator(),),
+      ):Center(child: Text("You don't have permissions for this page")),
     );
   }
 }
