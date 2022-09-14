@@ -44,6 +44,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
 
   // booleans for expansion of Rooms and People Panel
   bool isRoomExpanded = false;
+  bool isInvitationExpanded = false;
   bool isPeopleExpanded = false;
   bool isAllChatExpanded = false;
   Permissions? permission;
@@ -65,6 +66,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     List<User> peoplerooms = widget.controller.participants;
 
     final rooms = widget.controller.activeSpacesEntry.getRooms(context);
+    final inviteRooms = widget.controller.activeSpacesEntry.getInviteRooms(context);
 
     // if (rooms.isEmpty && peoplerooms.isEmpty) {
     //   child = Column(
@@ -188,186 +190,448 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
             expandedHeaderPadding: EdgeInsets.all(8),
             elevation: 2,
             animationDuration: Duration(milliseconds: 400),
-            expansionCallback: (panelIndex, isExpanded) => setState(() {
-              if (panelIndex == 0) {
-                isPeopleExpanded = !isExpanded;
-              }
-              if (panelIndex == 1) {
-                isRoomExpanded = !isExpanded;
-              }
-            }),
-            children: <ExpansionPanel>[
-              ExpansionPanel(
-                canTapOnHeader: true,
-                isExpanded: isPeopleExpanded,
-                headerBuilder: ((context, isExpanded) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16.0),
-                          child: Text(
-                            "People",
-                            // Todo: Style needs to be updated
-                          ),
-                        ),
-                      ],
-                    )),
-                body: peoplerooms.length == 0
-                    ? Container(
-                        height: 200,
-                        child: Center(child: Text(" No Participants in class", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        key: ValueKey(Matrix.of(context).client.userID.toString() +
-                            widget.controller.activeSpaceId.toString() +
-                            widget.controller.activeSpacesEntry.runtimeType.toString()),
-                        controller: widget.controller.scrollController,
-                        // add +1 space below in order to properly scroll below the spaces bar
-                        itemCount: peoplerooms.length + (displayStoriesHeader ? 2 : 1),
-                        itemBuilder: (BuildContext context, int i) {
-                          // if (displayStoriesHeader) {
-                          //   if (i == 0) {``
-                          //     return const
-                          //   }
-                          //   i--;
-                          // }
-                          if (i >= peoplerooms.length) {
-                            return Container();
-                          }
-                          return PeopleListItem(peoplerooms[i],
-                              selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
-                              onTap: widget.controller.userType == 2 || permission != null && permission!.oneToOneChatClass
-                                  ? () async {
-                                      final matrix = Matrix.of(context);
-                                      final space = widget.controller.activeSpacesEntry.getSpace(context);
-                                      //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
-                                      final roomID = await showFutureLoadingDialog(
-                                        context: context,
-                                        future: () => matrix.client.createRoom(
-                                          invite: [peoplerooms[i].id],
-                                          preset: CreateRoomPreset.privateChat,
-                                          isDirect: true,
-                                          initialState: [
-                                            StateEvent(
-                                              content: {
-                                                "guest_access": "can_join",
-                                              },
-                                              type: EventTypes.GuestAccess,
-                                              stateKey: "",
-                                            ),
-                                            StateEvent(content: {
-                                              "via": ["matrix.staging.pangea.chat"],
-                                              "canonical": true
-                                            }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
-                                          ],
-                                          // creationContent: {'type': RoomCreationTypes.mSpace},
-                                          roomAliasName: peoplerooms[i].displayName! +
-                                              "-" +
-                                              matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
-                                              "#" +
-                                              random.nextInt(9999).toString(),
-                                          name: peoplerooms[i].displayName! +
-                                              "-" +
-                                              matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
-                                              "#" +
-                                              random.nextInt(9999).toString(),
-                                        ),
-                                      );
-                                      if (roomID.result != null) {
-                                        print("Room id:" + roomID.result!);
-                                        Fluttertoast.showToast(
-                                            msg: "Successfully created Private Chat",
-                                            webBgColor: "#00ff00",
-                                            textColor: Colors.white,
-                                            toastLength: Toast.LENGTH_LONG);
+            expansionCallback: (panelIndex, isExpanded) => widget.controller.activeSpacesEntry.getSpace(context) != null
+                ? setState(() {
+                    if (panelIndex == 0) {
+                      isPeopleExpanded = !isExpanded;
+                      isInvitationExpanded = false;
+                      isRoomExpanded = false;
+                    }
+                    if (panelIndex == 1) {
+                      isRoomExpanded = !isExpanded;
+                      isPeopleExpanded = false;
+                      isInvitationExpanded = false;
+                    }
+                  })
+                : setState(() {
+                    if (panelIndex == 0) {
+                      isPeopleExpanded = !isExpanded;
+                      isInvitationExpanded = false;
+                      isRoomExpanded = false;
+                    }
+                    if (panelIndex == 1) {
+                      isRoomExpanded = !isExpanded;
+                      isPeopleExpanded = false;
+                      isInvitationExpanded = false;
+                    }
+                    if (panelIndex == 2) {
+                      isInvitationExpanded = !isExpanded;
+                      isPeopleExpanded = false;
+                      isRoomExpanded = false;
+                    }
+                  }),
+            children: widget.controller.activeSpacesEntry.getSpace(context) != null
+                ? <ExpansionPanel>[
+                    ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: isPeopleExpanded,
+                      headerBuilder: ((context, isExpanded) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Text(
+                                  "People",
+                                  // Todo: Style needs to be updated
+                                ),
+                              ),
+                            ],
+                          )),
+                      body: peoplerooms.length == 0
+                          ? Container(
+                              height: 200,
+                              child: Center(child: Text(" No Participants in class", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              key: ValueKey(Matrix.of(context).client.userID.toString() +
+                                  widget.controller.activeSpaceId.toString() +
+                                  widget.controller.activeSpacesEntry.runtimeType.toString()),
+                              controller: widget.controller.scrollController,
+                              // add +1 space below in order to properly scroll below the spaces bar
+                              itemCount: peoplerooms.length + (displayStoriesHeader ? 2 : 1),
+                              itemBuilder: (BuildContext context, int i) {
+                                // if (displayStoriesHeader) {
+                                //   if (i == 0) {``
+                                //     return const
+                                //   }
+                                //   i--;
+                                // }
+                                if (i >= peoplerooms.length) {
+                                  return Container();
+                                }
+                                return PeopleListItem(peoplerooms[i],
+                                    selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
+                                    onTap: widget.controller.userType == 2 || permission != null && permission!.oneToOneChatClass
+                                        ? () async {
+                                            final matrix = Matrix.of(context);
+                                            final space = widget.controller.activeSpacesEntry.getSpace(context);
+                                            //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+                                            final roomID = await showFutureLoadingDialog(
+                                              context: context,
+                                              future: () => matrix.client.createRoom(
+                                                invite: [peoplerooms[i].id],
+                                                preset: CreateRoomPreset.privateChat,
+                                                isDirect: true,
+                                                initialState: [
+                                                  StateEvent(
+                                                    content: {
+                                                      "guest_access": "can_join",
+                                                    },
+                                                    type: EventTypes.GuestAccess,
+                                                    stateKey: "",
+                                                  ),
+                                                  StateEvent(content: {
+                                                    "via": ["matrix.staging.pangea.chat"],
+                                                    "canonical": true
+                                                  }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
+                                                ],
+                                                // creationContent: {'type': RoomCreationTypes.mSpace},
+                                                roomAliasName: peoplerooms[i].displayName! +
+                                                    "-" +
+                                                    matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                                    "#" +
+                                                    random.nextInt(9999).toString(),
+                                                name: peoplerooms[i].displayName! +
+                                                    "-" +
+                                                    matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                                    "#" +
+                                                    random.nextInt(9999).toString(),
+                                              ),
+                                            );
+                                            if (roomID.result != null) {
+                                              print("Room id:" + roomID.result!);
+                                              Fluttertoast.showToast(
+                                                  msg: "Successfully created Private Chat",
+                                                  webBgColor: "#00ff00",
+                                                  textColor: Colors.white,
+                                                  toastLength: Toast.LENGTH_LONG);
 
-                                        VRouter.of(context).pop();
-                                        Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
-                                      }
-                                      if (roomID == null) {
-                                        VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-                                      }
-                                    }
-                                  : () {
-                                      Fluttertoast.showToast(
-                                          msg: "Not allowed to create private rooms",
-                                          webBgColor: "#ff0000",
-                                          textColor: Colors.white,
-                                          toastLength: Toast.LENGTH_LONG);
-                                    });
-                        },
-                      ),
-              ),
-              ExpansionPanel(
-                canTapOnHeader: true,
-                isExpanded: isRoomExpanded,
-                headerBuilder: ((context, isExpanded) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16.0),
-                          child: Text(
-                            "Rooms",
-                            // Todo: Style needs to be updated
-                          ),
-                        ),
-                        widget.controller.userType == 2
-                            ? IconButton(
-                                onPressed: () {
-                                  widget.controller.activeSpacesEntry.getSpace(context) == null
-                                      ? VRouter.of(context).to('/newgroup')
-                                      : VRouter.of(context).to('/newgroup', queryParameters: {
-                                          "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
-                                        });
-                                },
-                                icon: const Icon(Icons.add))
-                            : permission != null && permission!.isCreateRooms
-                                ? IconButton(
-                                    onPressed: () {
-                                      widget.controller.activeSpacesEntry.getSpace(context) == null
-                                          ? VRouter.of(context).to('/newgroup')
-                                          : VRouter.of(context).to('/newgroup', queryParameters: {
-                                              "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
-                                            });
-                                    },
-                                    icon: const Icon(Icons.add))
-                                : Container(),
-                      ],
-                    )),
-                body: rooms.length == 0
-                    ? Container(
-                        height: 200,
-                        child: Center(child: Text(" No Rooms in class", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
-                      )
-                    : ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        key: ValueKey(Matrix.of(context).client.userID.toString() +
-                            widget.controller.activeSpaceId.toString() +
-                            widget.controller.activeSpacesEntry.runtimeType.toString()),
-                        controller: widget.controller.scrollController,
-                        // add +1 space below in order to properly scroll below the spaces bar
-                        itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
-                        itemBuilder: (BuildContext context, int i) {
-                          if (i >= rooms.length) {
-                            return Container();
-                          }
+                                              VRouter.of(context).pop();
+                                              Fluttertoast.showToast(
+                                                  msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                            }
+                                            if (roomID == null) {
+                                              VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+                                            }
+                                          }
+                                        : () {
+                                            Fluttertoast.showToast(
+                                                msg: "Not allowed to create private rooms",
+                                                webBgColor: "#ff0000",
+                                                textColor: Colors.white,
+                                                toastLength: Toast.LENGTH_LONG);
+                                          });
+                              },
+                            ),
+                    ),
+                    ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: isRoomExpanded,
+                      headerBuilder: ((context, isExpanded) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Text(
+                                  "Rooms",
+                                  // Todo: Style needs to be updated
+                                ),
+                              ),
+                              widget.controller.userType == 2
+                                  ? IconButton(
+                                      onPressed: () {
+                                        widget.controller.activeSpacesEntry.getSpace(context) == null
+                                            ? VRouter.of(context).to('/newgroup')
+                                            : VRouter.of(context).to('/newgroup', queryParameters: {
+                                                "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                              });
+                                      },
+                                      icon: const Icon(Icons.add))
+                                  : permission != null && permission!.isCreateRooms
+                                      ? IconButton(
+                                          onPressed: () {
+                                            widget.controller.activeSpacesEntry.getSpace(context) == null
+                                                ? VRouter.of(context).to('/newgroup')
+                                                : VRouter.of(context).to('/newgroup', queryParameters: {
+                                                    "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                                  });
+                                          },
+                                          icon: const Icon(Icons.add))
+                                      : Container(),
+                            ],
+                          )),
+                      body: rooms.length == 0
+                          ? Container(
+                              height: 200,
+                              child: Center(child: Text(" No Rooms in class", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                            )
+                          : ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              key: ValueKey(Matrix.of(context).client.userID.toString() +
+                                  widget.controller.activeSpaceId.toString() +
+                                  widget.controller.activeSpacesEntry.runtimeType.toString()),
+                              controller: widget.controller.scrollController,
+                              // add +1 space below in order to properly scroll below the spaces bar
+                              itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
+                              itemBuilder: (BuildContext context, int i) {
+                                if (i >= rooms.length) {
+                                  return Container();
+                                }
+                                if (rooms[i].id.isEmpty) {
+                                  return Container();
+                                }
+                                return ChatListItem(
+                                  rooms[i],
+                                  selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
+                                  onTap:
+                                      widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(rooms[i].id) : null,
+                                  onLongPress: () => widget.controller.toggleSelection(rooms[i].id),
+                                  activeChat: widget.controller.activeChat == rooms[i].id,
+                                );
+                              },
+                            ),
+                    ),
+                  ]
+                : <ExpansionPanel>[
+                    ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: isPeopleExpanded,
+                      headerBuilder: ((context, isExpanded) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Text(
+                                  "People",
+                                  // Todo: Style needs to be updated
+                                ),
+                              ),
+                            ],
+                          )),
+                      body: peoplerooms.length == 0
+                          ? Container(
+                              height: 200,
+                              child: Center(child: Text(" No Participants in class", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              key: ValueKey(Matrix.of(context).client.userID.toString() +
+                                  widget.controller.activeSpaceId.toString() +
+                                  widget.controller.activeSpacesEntry.runtimeType.toString()),
+                              controller: widget.controller.scrollController,
+                              // add +1 space below in order to properly scroll below the spaces bar
+                              itemCount: peoplerooms.length + (displayStoriesHeader ? 2 : 1),
+                              itemBuilder: (BuildContext context, int i) {
+                                // if (displayStoriesHeader) {
+                                //   if (i == 0) {``
+                                //     return const
+                                //   }
+                                //   i--;
+                                // }
+                                if (i >= peoplerooms.length) {
+                                  return Container();
+                                }
+                                return PeopleListItem(peoplerooms[i],
+                                    selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
+                                    onTap: widget.controller.userType == 2 || permission != null && permission!.oneToOneChatClass
+                                        ? () async {
+                                            final matrix = Matrix.of(context);
+                                            final space = widget.controller.activeSpacesEntry.getSpace(context);
+                                            //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+                                            final roomID = await showFutureLoadingDialog(
+                                              context: context,
+                                              future: () => matrix.client.createRoom(
+                                                invite: [peoplerooms[i].id],
+                                                preset: CreateRoomPreset.privateChat,
+                                                isDirect: true,
+                                                initialState: [
+                                                  StateEvent(
+                                                    content: {
+                                                      "guest_access": "can_join",
+                                                    },
+                                                    type: EventTypes.GuestAccess,
+                                                    stateKey: "",
+                                                  ),
+                                                  StateEvent(content: {
+                                                    "via": ["matrix.staging.pangea.chat"],
+                                                    "canonical": true
+                                                  }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
+                                                ],
+                                                // creationContent: {'type': RoomCreationTypes.mSpace},
+                                                roomAliasName: peoplerooms[i].displayName! +
+                                                    "-" +
+                                                    matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                                    "#" +
+                                                    random.nextInt(9999).toString(),
+                                                name: peoplerooms[i].displayName! +
+                                                    "-" +
+                                                    matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                                                    "#" +
+                                                    random.nextInt(9999).toString(),
+                                              ),
+                                            );
+                                            if (roomID.result != null) {
+                                              print("Room id:" + roomID.result!);
+                                              Fluttertoast.showToast(
+                                                  msg: "Successfully created Private Chat",
+                                                  webBgColor: "#00ff00",
+                                                  textColor: Colors.white,
+                                                  toastLength: Toast.LENGTH_LONG);
 
-                          return ChatListItem(
-                            rooms[i],
-                            selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
-                            onTap: widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(rooms[i].id) : null,
-                            onLongPress: () => widget.controller.toggleSelection(rooms[i].id),
-                            activeChat: widget.controller.activeChat == rooms[i].id,
-                          );
-                        },
-                      ),
-              ),
-            ],
+                                              VRouter.of(context).pop();
+                                              Fluttertoast.showToast(
+                                                  msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                            }
+                                            if (roomID == null) {
+                                              VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+                                            }
+                                          }
+                                        : () {
+                                            Fluttertoast.showToast(
+                                                msg: "Not allowed to create private rooms",
+                                                webBgColor: "#ff0000",
+                                                textColor: Colors.white,
+                                                toastLength: Toast.LENGTH_LONG);
+                                          });
+                              },
+                            ),
+                    ),
+                    ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: isRoomExpanded,
+                      headerBuilder: ((context, isExpanded) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Text(
+                                  "Rooms",
+                                  // Todo: Style needs to be updated
+                                ),
+                              ),
+                              widget.controller.userType == 2
+                                  ? IconButton(
+                                      onPressed: () {
+                                        widget.controller.activeSpacesEntry.getSpace(context) == null
+                                            ? VRouter.of(context).to('/newgroup')
+                                            : VRouter.of(context).to('/newgroup', queryParameters: {
+                                                "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                              });
+                                      },
+                                      icon: const Icon(Icons.add))
+                                  : permission != null && permission!.isCreateRooms
+                                      ? IconButton(
+                                          onPressed: () {
+                                            widget.controller.activeSpacesEntry.getSpace(context) == null
+                                                ? VRouter.of(context).to('/newgroup')
+                                                : VRouter.of(context).to('/newgroup', queryParameters: {
+                                                    "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                                  });
+                                          },
+                                          icon: const Icon(Icons.add))
+                                      : Container(),
+                            ],
+                          )),
+                      body: rooms.length == 0
+                          ? Container(
+                              height: 200,
+                              child: Center(child: Text(" No Rooms in class", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                            )
+                          : ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              key: ValueKey(Matrix.of(context).client.userID.toString() +
+                                  widget.controller.activeSpaceId.toString() +
+                                  widget.controller.activeSpacesEntry.runtimeType.toString()),
+                              controller: widget.controller.scrollController,
+                              // add +1 space below in order to properly scroll below the spaces bar
+                              itemCount: rooms.length + (displayStoriesHeader ? 2 : 1),
+                              itemBuilder: (BuildContext context, int i) {
+                                if (i >= rooms.length) {
+                                  return Container();
+                                }
+                                if (rooms[i].id.isEmpty) {
+                                  return Container();
+                                }
+                                return ChatListItem(
+                                  rooms[i],
+                                  selected: widget.controller.selectedRoomIds.contains(rooms[i].id),
+                                  onTap:
+                                      widget.controller.selectMode == SelectMode.select ? () => widget.controller.toggleSelection(rooms[i].id) : null,
+                                  onLongPress: () => widget.controller.toggleSelection(rooms[i].id),
+                                  activeChat: widget.controller.activeChat == rooms[i].id,
+                                );
+                              },
+                            ),
+                    ),
+                    ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: isInvitationExpanded,
+                      headerBuilder: ((context, isExpanded) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Text(
+                                  "Invitation",
+                                  // Todo: Style needs to be updated
+                                ),
+                              ),
+                              inviteRooms.length > 0
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2.0),
+                                        color: Colors.white,
+                                        child: Text("New", style: TextStyle(fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          )),
+                      body: inviteRooms.length == 0
+                          ? Container(
+                              height: 200,
+                              child: Center(child: Text(" No Invitations found", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                            )
+                          : ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              key: ValueKey(Matrix.of(context).client.userID.toString() +
+                                  widget.controller.activeSpaceId.toString() +
+                                  widget.controller.activeSpacesEntry.runtimeType.toString()),
+                              controller: widget.controller.scrollController,
+                              // add +1 space below in order to properly scroll below the spaces bar
+                              itemCount: inviteRooms.length + (displayStoriesHeader ? 2 : 1),
+                              itemBuilder: (BuildContext context, int i) {
+                                if (i >= inviteRooms.length) {
+                                  return Container();
+                                }
+                                if (inviteRooms[i].id.isEmpty) {
+                                  return Container();
+                                }
+                                return ChatListItem(
+                                  inviteRooms[i],
+                                  selected: widget.controller.selectedRoomIds.contains(inviteRooms[i].id),
+                                  onTap: widget.controller.selectMode == SelectMode.select
+                                      ? () => widget.controller.toggleSelection(inviteRooms[i].id)
+                                      : null,
+                                  onLongPress: () => widget.controller.toggleSelection(inviteRooms[i].id),
+                                  activeChat: widget.controller.activeChat == inviteRooms[i].id,
+                                );
+                              },
+                            ),
+                    ),
+                  ],
           ),
           const SizedBox(
             height: 50,
@@ -385,6 +649,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
 
   bool _animationReversed() {
     bool reversed;
+
     // in case the matrix id changes, check the indexOf the matrix id
     final newClient = Matrix.of(context).client;
     if (_lastUserId != newClient.userID) {
@@ -398,6 +663,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     }
     _lastUserId = newClient.userID;
     _lastSpace = widget.controller.activeSpacesEntry;
+
     return reversed;
   }
 }
