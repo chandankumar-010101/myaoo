@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:matrix/matrix.dart';
 
@@ -13,6 +14,8 @@ import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
+import '../../model/class_detail_model.dart';
+import '../../services/services.dart';
 import 'chat.dart';
 import 'input_bar.dart';
 import 'package:pangea_choreographer/pangea_choreographer.dart';
@@ -31,30 +34,55 @@ class _ChatInputRowState extends State<ChatInputRow> {
   bool showFile = false;
   bool showVideo = false;
   bool showLocation = false;
+  int userType = GetStorage().read("usertype") ?? 0;
+  Permissions? permissions;
+
+  getClassPermissions() async {
+    final activeSpaceId = widget.controller.room!.spaceParents.first.roomId!;
+    String acessToken = GetStorage().read("access");
+
+    if (activeSpaceId != null) {
+      final result = await PangeaServices.fetchClassInfo(context, activeSpaceId!);
+      permissions = result.permissions;
+    } else {
+      permissions = Permissions(
+          pangeaClass: 0,
+          isPublic: true,
+          isOpenEnrollment: true,
+          isOpenExchange: true,
+          oneToOneChatClass: true,
+          oneToOneChatExchange: true,
+          isCreateRooms: true,
+          isCreateRoomsExchange: true,
+          isShareVideo: true,
+          isSharePhoto: true,
+          isShareFiles: true,
+          isShareLocation: true,
+          isCreateStories: true);
+    }
+    setState(() {
+      showFile = permissions!.isShareFiles;
+      showImage = permissions!.isSharePhoto;
+      showLocation = permissions!.isShareLocation;
+      showVideo = permissions!.isShareVideo;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      if(widget.controller.getxController.classInfoModel.value !=null){
-        showImage = widget.controller.getxController.classInfoModel.value!.permissions.isSharePhoto;
-        showFile = widget.controller.getxController.classInfoModel.value!.permissions.isShareFiles;
-        showVideo = widget.controller.getxController.classInfoModel.value!.permissions.isShareVideo;
-      }
-
-    });
+    getClassPermissions();
   }
+
   @override
   Widget build(BuildContext context) {
-    if (widget.controller.showEmojiPicker &&
-        widget.controller.emojiPickerType == EmojiPickerType.reaction) {
+    if (widget.controller.showEmojiPicker && widget.controller.emojiPickerType == EmojiPickerType.reaction) {
       return Container();
     }
 
     return Column(
       children: [
         ChoreoBar(controller: widget.controller.choreoController),
-
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,10 +101,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                     ),
                   ),
                   widget.controller.selectedEvents.length == 1
-                      ? widget.controller.selectedEvents.first
-                              .getDisplayEvent(widget.controller.timeline!)
-                              .status
-                              .isSent
+                      ? widget.controller.selectedEvents.first.getDisplayEvent(widget.controller.timeline!).status.isSent
                           ? SizedBox(
                               height: 56,
                               child: TextButton(
@@ -113,15 +138,12 @@ class _ChatInputRowState extends State<ChatInputRow> {
                       alignment: Alignment.center,
                       clipBehavior: Clip.hardEdge,
                       decoration: const BoxDecoration(),
-                      child:
-                          PopupMenuButton<String>(
+                      child: PopupMenuButton<String>(
                         icon: const Icon(Icons.add_outlined),
                         onSelected: widget.controller.onAddPopupMenuButtonSelected,
-                        itemBuilder: (BuildContext context) =>
-
-                        <PopupMenuEntry<String>>[
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                           PopupMenuItem<String>(
-                            enabled: showFile,
+                            enabled: showFile || userType == 2,
                             value: 'file',
                             child: ListTile(
                               leading: const CircleAvatar(
@@ -147,7 +169,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                           //   ),
                           // ),
                           PopupMenuItem<String>(
-                            enabled: showImage,
+                            enabled: showImage || userType == 2,
                             value: 'image',
                             child: ListTile(
                               leading: const CircleAvatar(
@@ -186,9 +208,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                 contentPadding: const EdgeInsets.all(0),
                               ),
                             ),
-                          if (widget.controller.room!
-                              .getImagePacks(ImagePackUsage.sticker)
-                              .isNotEmpty)
+                          if (widget.controller.room!.getImagePacks(ImagePackUsage.sticker).isNotEmpty)
                             PopupMenuItem<String>(
                               value: 'sticker',
                               child: ListTile(
@@ -217,12 +237,8 @@ class _ChatInputRowState extends State<ChatInputRow> {
                         ],
                       ),
                     ),
-                    keysToPress: {
-                      LogicalKeyboardKey.altLeft,
-                      LogicalKeyboardKey.keyA
-                    },
-                    onKeysPressed: () =>
-                        widget.controller.onAddPopupMenuButtonSelected('file'),
+                    keysToPress: {LogicalKeyboardKey.altLeft, LogicalKeyboardKey.keyA},
+                    onKeysPressed: () => widget.controller.onAddPopupMenuButtonSelected('file'),
                     helpLabel: L10n.of(context)!.sendFile,
                   ),
                   Container(
@@ -246,18 +262,13 @@ class _ChatInputRowState extends State<ChatInputRow> {
                             );
                           },
                           child: Icon(
-                            widget.controller.showEmojiPicker
-                                ? Icons.keyboard
-                                : Icons.emoji_emotions_outlined,
+                            widget.controller.showEmojiPicker ? Icons.keyboard : Icons.emoji_emotions_outlined,
                             key: ValueKey(widget.controller.showEmojiPicker),
                           ),
                         ),
                         onPressed: widget.controller.emojiPickerAction,
                       ),
-                      keysToPress: {
-                        LogicalKeyboardKey.altLeft,
-                        LogicalKeyboardKey.keyE
-                      },
+                      keysToPress: {LogicalKeyboardKey.altLeft, LogicalKeyboardKey.keyE},
                       onKeysPressed: widget.controller.emojiPickerAction,
                       helpLabel: L10n.of(context)!.emojis,
                     ),
@@ -279,8 +290,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                         maxLines: 8,
                         autofocus: !PlatformInfos.isMobile,
                         keyboardType: TextInputType.multiline,
-                        textInputAction:
-                            AppConfig.sendOnEnter ? TextInputAction.send : null,
+                        textInputAction: AppConfig.sendOnEnter ? TextInputAction.send : null,
                         onSubmitted: widget.controller.onInputBarSubmitted,
                         focusNode: widget.controller.inputFocus,
                         controller: widget.controller.sendController,
@@ -305,12 +315,10 @@ class _ChatInputRowState extends State<ChatInputRow> {
                         onPressed: widget.controller.voiceMessageAction,
                       ),
                     ),
-                  if (!PlatformInfos.isMobile ||
-                      widget.controller.inputText.isNotEmpty)
+                  if (!PlatformInfos.isMobile || widget.controller.inputText.isNotEmpty)
                     widget.controller.choreoController.isOpen
                         ? Padding(
-                            padding:
-                                const EdgeInsets.only(right: 10, bottom: 10),
+                            padding: const EdgeInsets.only(right: 10, bottom: 10),
                             child: ItSrcSendButton(
                               controller: widget.controller.choreoController,
                             ),
@@ -341,8 +349,7 @@ class _ChatAccountPicker extends StatelessWidget {
   const _ChatAccountPicker(this.controller, {Key? key}) : super(key: key);
 
   void _popupMenuButtonSelected(String mxid) {
-    final client = controller.matrix!.currentBundle!
-        .firstWhere((cl) => cl!.userID == mxid, orElse: () => null);
+    final client = controller.matrix!.currentBundle!.firstWhere((cl) => cl!.userID == mxid, orElse: () => null);
     if (client == null) {
       Logs().w('Attempted to switch to a non-existing client $mxid');
       return;
@@ -368,12 +375,10 @@ class _ChatAccountPicker extends StatelessWidget {
                       builder: (context, snapshot) => ListTile(
                         leading: Avatar(
                           mxContent: snapshot.data?.avatarUrl,
-                          name: snapshot.data?.displayName ??
-                              client.userID!.localpart,
+                          name: snapshot.data?.displayName ?? client.userID!.localpart,
                           size: 20,
                         ),
-                        title:
-                            Text(snapshot.data?.displayName ?? client.userID!),
+                        title: Text(snapshot.data?.displayName ?? client.userID!),
                         contentPadding: const EdgeInsets.all(0),
                       ),
                     ),
@@ -381,8 +386,7 @@ class _ChatAccountPicker extends StatelessWidget {
               .toList(),
           child: Avatar(
             mxContent: snapshot.data?.avatarUrl,
-            name: snapshot.data?.displayName ??
-                controller.matrix!.client.userID!.localpart,
+            name: snapshot.data?.displayName ?? controller.matrix!.client.userID!.localpart,
             size: 20,
           ),
         ),
