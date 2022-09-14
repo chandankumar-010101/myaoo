@@ -368,8 +368,17 @@ class _SearchViewState extends State<SearchView> {
                                                       ),
                                                     ),
                                                     onTap: () {
-                                                      searchController.pageNo.value = searchController.pageNo.value - 1;
-                                                      searchController.getClasses();
+
+
+                                                      if(searchController.pageNo.value>0){
+                                                        searchController.load1.value=false;
+                                                        searchController.pageNo.value = searchController.pageNo.value - 1;
+                                                        searchController.getClasses();
+                                                      }
+                                                      else{
+                                                        print(searchController.pageNo.value);
+                                                      }
+
                                                     },
                                                   )
                                                 : const SizedBox(),
@@ -377,8 +386,10 @@ class _SearchViewState extends State<SearchView> {
                                             searchController.next.value
                                                 ? InkWell(
                                                     onTap: () {
+                                                      searchController.load1.value=false;
                                                       searchController.pageNo.value = searchController.pageNo.value + 1;
                                                       searchController.getClasses();
+
                                                     },
                                                     child: Padding(
                                                       padding: EdgeInsets.all(8.0),
@@ -398,8 +409,8 @@ class _SearchViewState extends State<SearchView> {
                                       )
                                     : const SizedBox()),
                                 Obx(() => !searchController.loading.value && searchController.classList != Null
-                                    ? GridView.builder(
-                                        //controller: searchController.controller,
+                                    ? searchController.load1.value==true? GridView.builder(
+                                        controller: searchController.controller,
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.all(12),
                                         physics: const NeverScrollableScrollPhysics(),
@@ -644,7 +655,7 @@ class _SearchViewState extends State<SearchView> {
                                             ),
                                           );
                                         },
-                                      )
+                                      ):CircularProgressIndicator()
                                     : const Center(
                                         child: CupertinoActivityIndicator(),
                                       )),

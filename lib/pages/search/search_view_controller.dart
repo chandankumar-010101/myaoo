@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 class SearchViewController extends GetxController {
   var loading = true.obs;
   List loadData = [];
+  var load1=true.obs;
   var classList = <Result>[].obs;
   var pageNo = 1.obs;
   var box = GetStorage();
@@ -41,7 +42,11 @@ class SearchViewController extends GetxController {
           data.next != null ? next.value = true : next.value = false;
           data.previous != null ? previous.value = true : previous.value = false;
           classList.value = data.results!;
-        } else {
+          load1.value=true;
+        }
+        else if (value.statusCode == 401){}
+        else if (value.statusCode == 404){}
+        else {
           loading.value = false;
           if (kDebugMode) {
             print(value.statusCode);

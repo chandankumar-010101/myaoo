@@ -1159,6 +1159,62 @@ class PangeaServices {
     }
   }
 
+  static reportUser(
+      @required String classRoomNamedata,
+      @required String classTeacherNamedata,
+      @required String reportedUserdata,
+      @required String classTeacherEmaildata,
+      @required String offensivedata,
+      @required String reasondata,
+      ) async {
+    try {
+      PangeaServices._init();
+
+
+      var result = await http.post(Uri.parse(ApiUrls.reportUser),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+          body: jsonEncode(ReportUser(
+            classRoomName: classRoomNamedata,
+            classTeacherName: classTeacherNamedata,
+            reportedUser: reportedUserdata,
+            classTeacherEmail: classTeacherEmaildata,
+            offensive: offensivedata,
+            reason: reasondata,
+          ).toJson()));
+
+      print(jsonEncode(ReportUser(
+        classRoomName: classRoomNamedata,
+        classTeacherName: classTeacherNamedata,
+        reportedUser: reportedUserdata,
+        classTeacherEmail: classTeacherEmaildata,
+        offensive: offensivedata,
+        reason: reasondata,
+      ).toJson()));
+      print(result.body);
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        Fluttertoast.showToast(msg: "report user Sent Successfully",webBgColor: "#ff0000",backgroundColor: Colors.red);
+      } else {
+        ApiException.exception(statusCode:result.statusCode, body: result.body);
+        throw Exception(
+            "Api Error ${result.statusCode}: Unable to report user");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch report user",webBgColor: "#ff0000",backgroundColor: Colors.red);
+      throw Exception("Error: Unable to fetch report user");
+    }
+  }
+
+
+
+
+
   ///-----------------------------------------------Harsh Code --------------------------------------
   static requestEmail(
     String? classRoomNamedata,
