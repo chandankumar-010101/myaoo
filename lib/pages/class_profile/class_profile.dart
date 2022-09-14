@@ -54,10 +54,15 @@ class RequestScreenState extends State<RequestScreen> {
   }
 
   fetchFlag2(FetchClassInfoModel data, String url) {
-    String path = url + data.flags[1].languageFlag.toString();
-    print(path);
-    return SizedBox(width: 20, height: 20, child: Image.network(path));
-  }
+    try{
+      String path = url + data.flags[1].languageFlag.toString();
+      print(path);
+      return SizedBox(width: 20, height: 20, child: Image.network(path));
+
+    }catch(e){
+      return Container();
+    }}
+
 
   ///Fetch User info, if it exist in the class or not
 
