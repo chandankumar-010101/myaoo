@@ -30,7 +30,9 @@ abstract class SpacesEntry {
   List<Room> getRooms(
     BuildContext context,
   );
-
+  List<Room> getInviteRooms(
+    BuildContext context,
+  );
   List<Room> getPeopleRooms(BuildContext context);
   List<Room> getStories(BuildContext context);
   // Checks that this entry is still valid.
@@ -73,12 +75,12 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) =>
-            !room.isSpace && !(room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType))
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => !room.isSpace && room.membership != Membership.invite).toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.membership == Membership.invite).toList();
   }
 
   @override
@@ -120,6 +122,11 @@ class DirectChatsSpacesEntry extends SpacesEntry {
   @override
   List<Room> getRooms(BuildContext context) {
     return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat).toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.membership == Membership.invite).toList();
   }
 
   @override
@@ -170,6 +177,11 @@ class GroupsSpacesEntry extends SpacesEntry {
   }
 
   @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.membership == Membership.invite).toList();
+  }
+
+  @override
   List<Room> getPeopleRooms(BuildContext context) {
     return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
   }
@@ -208,11 +220,12 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context)
-        .client
-        .rooms
-        .where((room) => room.spaceParents.isNotEmpty && room.spaceParents.first.roomId == space.id || room.membership == Membership.invite)
-        .toList();
+    return Matrix.of(context).client.rooms.where((room) => room.spaceParents.isNotEmpty && room.spaceParents.first.roomId == space.id).toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context).client.rooms.where((room) => room.membership == Membership.invite).toList();
   }
 
   List<Room> getStories(BuildContext context) {
