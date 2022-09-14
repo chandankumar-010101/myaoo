@@ -25,4 +25,9 @@ class Environment {
   static String get choreo_api {
     return dotenv.env['CHOREO_API'] ?? 'https://api.staging.pangea.chat';
   }
+
+  static String get choreo_api_key {
+    return dotenv.env['choreo_api_key'] ??
+        'e6fa9fa97031ba0c852efe78457922f278a2fbc109752fe18e465337699e9873';
+  }
 }
