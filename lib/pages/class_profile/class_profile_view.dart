@@ -182,6 +182,16 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .bodyText1!
                                           .color,
                                       fontSize: 12),
+                                ),
+
+                                Text(
+                                  " ${data.country==null?" ":data.country}",
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 12),
                                 )
                               ],
                             ),
