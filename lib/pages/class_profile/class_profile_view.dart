@@ -339,14 +339,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(children: [
-                                  widget.controller.fetchFlag(data, url)
-                                ]),
+                                widget.controller.fetchFlag2(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage ?? "",
+                                  data.targetLanguage ?? "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -369,22 +367,21 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Row(children: [
-                                  widget.controller.fetchFlag2(data, url),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    data.targetLanguage ?? "",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14),
-                                  ),
-                                ]),
+                                widget.controller.fetchFlag(data, url),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  data.dominantLanguage ?? "",
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                ),
+
                               ],
                             )
                           ],
