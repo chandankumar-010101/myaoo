@@ -118,7 +118,7 @@ class AppRoutes {
               widget: const NewPrivateChat(),
             ),
             VWidget(
-              path: '/newgroup',
+              path: '/newroom',
               widget: const NewGroup(),
             ),
             VWidget(
@@ -187,7 +187,7 @@ class AppRoutes {
                   buildTransition: _fadeTransition,
                 ),
                 VWidget(
-                  path: '/newgroup',
+                  path: '/newroom',
                   widget: const NewGroup(),
                   buildTransition: _fadeTransition,
                 ),

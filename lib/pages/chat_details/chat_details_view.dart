@@ -60,6 +60,19 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
     }
   }
 
+  fetchRoomInfo(Room room){
+    try{
+      final String? parentRoomID = room.spaceParents.first.roomId;
+      if (parentRoomID != null) {
+        final Room? parentroom = Matrix.of(context).client.getRoomById(parentRoomID);
+        if (parentroom != null) {
+          GetStorage().write("reportroomId", parentroom.name.toString());
+        }
+      }
+    }catch(e){
+      print("Error: $e");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;
@@ -78,13 +91,8 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
     // print(teacherName.toString());
 
     if (room != null) {
-      final String? parentRoomID = room.spaceParents.first.roomId;
-      if (parentRoomID != null) {
-        final Room? parentroom = Matrix.of(context).client.getRoomById(parentRoomID);
-        if (parentroom != null) {
-          GetStorage().write("reportroomId", parentroom.name.toString());
-        }
-      }
+      fetchRoomInfo(room);
+
     }
 
     if (room == null) {

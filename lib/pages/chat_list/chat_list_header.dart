@@ -39,7 +39,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
             children: [
               const Icon(Icons.group_add_outlined),
               const SizedBox(width: 12),
-              Text(L10n.of(context)!.createNewGroup),
+              Text("Create new Room"),
             ],
           ),
         ),
@@ -122,7 +122,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
             children: [
               const Icon(Icons.group_add_outlined),
               const SizedBox(width: 12),
-              Text(L10n.of(context)!.createNewGroup),
+              Text("Create new Room"),
             ],
           ),
         ),
