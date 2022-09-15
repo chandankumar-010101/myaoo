@@ -185,7 +185,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
 
                                 Text(
-                                  "${data.country==null?" ": "${data.country.capitalizeFirst}"}",
+                                  "${data.country==""?" ": " , ${data.country.capitalizeFirst}"}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
