@@ -175,8 +175,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .onPrimaryContainer,
                                   size: 20.0,
                                 ),
-                                Text(
-                                  "${data.city.toString().capitalizeFirst}",
+                                Text(data.city.isEmpty?"":data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -186,7 +185,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
 
                                 Text(
-                                  "${data.country==null?" ": ", ${data.country.capitalizeFirst}"}",
+                                  "${data.country==null?" ": "${data.country.capitalizeFirst}"}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -756,7 +755,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   ),
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
-                                      context.vRouter.to("/invite_students",
+                                      context.vRouter.to("/classDetails",
                                           queryParameters: {
                                             "id": roomAlias,
                                           });
