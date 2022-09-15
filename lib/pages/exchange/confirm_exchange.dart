@@ -61,10 +61,10 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
 
 
     String exchangeId =   await client.createRoom(
-    preset: sdk.CreateRoomPreset.privateChat,
+    preset: sdk.CreateRoomPreset.publicChat,
     invite: listOfParticipants,
     creationContent: {'type': RoomCreationTypes.mSpace},
-    visibility: null,
+    visibility: sdk.Visibility.public,
     roomAliasName: className.trim().toLowerCase().replaceAll(' ', '_'),
     name: className,
     );

@@ -38,8 +38,18 @@ class _InviteEmailState extends State<InviteEmail> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final roomId = VRouter.of(context).queryParameters['id'] ?? "";
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            context.vRouter.to("/invite_students",
+                queryParameters: {
+                  "id": roomId,
+                });
+          },
+        ),
         title: Text("Invitations", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white)),
       ),
       body: SingleChildScrollView(
@@ -170,14 +180,13 @@ class _InviteEmailState extends State<InviteEmail> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
-                      print(name.length);
                       List.generate(
                           name.length,
                               (index) => info.add(inviteEmail.Data(
                             email: email[index].text,
                             name: name[index].text,
                           )));
-                      final roomId = VRouter.of(context).queryParameters['id'] ?? "";
+
                       if (roomId.isEmpty) {
                         Fluttertoast.showToast(msg: "Unable to find Room ID", webBgColor: "#ff0000", backgroundColor: Colors.red);
 

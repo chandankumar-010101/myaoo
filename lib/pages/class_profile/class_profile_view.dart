@@ -755,7 +755,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   ),
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
-                                      context.vRouter.to("/classDetails",
+                                      context.vRouter.to("/invite_students",
                                           queryParameters: {
                                             "id": roomAlias,
                                           });
@@ -862,7 +862,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       context.vRouter.to(
                                           "/classDetails/update_class_permissions",
                                           queryParameters: {
-                                            "class_id": roomAlias,
+                                            "id": roomAlias,
                                           });
                                     }
                                   },
