@@ -215,16 +215,31 @@ class _ClassLanguageState extends State<ClassLanguage> {
               centerTitle: true,
               elevation: 10,
               automaticallyImplyLeading: false,
-              leading: ModalRoute.of(context)!.settings.name == "language"
-                  ? IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black),
-                      onPressed: () {
-                        context.vRouter.to("/newclass");
-                      },
-                    )
-                  : null,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  context.vRouter.to("/newclass");
+                },
+              )
             )
-          : null,
+          : AppBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        title: Text(
+          "Update class Info",
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+          overflow: TextOverflow.clip,
+          textAlign: TextAlign.center,
+        ),
+        centerTitle: true,
+        elevation: 10,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+          },
+        )
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -398,6 +413,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // SvgPicture.asset(
+                  //   fullFlagPath,
+                  //   fit: BoxFit.contain,
+                  // ),
                   Image.asset(
                     "assets/png/house.png",
                     width: 40,

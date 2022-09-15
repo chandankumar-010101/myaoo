@@ -175,8 +175,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .onPrimaryContainer,
                                   size: 20.0,
                                 ),
-                                Text(
-                                  "${data.city.toString().capitalizeFirst}",
+                                Text(data.city.isEmpty?"":data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -186,7 +185,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
 
                                 Text(
-                                  "${data.country==null?" ": ", ${data.country.capitalizeFirst}"}",
+                                  "${data.country==null?" ": "${data.country.capitalizeFirst}"}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -863,7 +862,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       context.vRouter.to(
                                           "/classDetails/update_class_permissions",
                                           queryParameters: {
-                                            "class_id": roomAlias,
+                                            "id": roomAlias,
                                           });
                                     }
                                   },
