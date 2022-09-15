@@ -82,8 +82,6 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         );
 
         if (result.error != "null"){
-          print(score);
-          print("object");
            if(score==-100){
              print("100");
              GetStorage().write("offensive","Extremely Offensive");
@@ -96,13 +94,13 @@ class UserBottomSheetController extends State<UserBottomSheet> {
              print("0");
              GetStorage().write("offensive","Inoffensive");
            }
-           print(GetStorage().read("ClientName"));
+
           PangeaServices.reportUser(
-               GetStorage().read("reportroomId"),
-               GetStorage().read("username"),
+               GetStorage().read("reportroomId").toString(),
+               GetStorage().read("username").toString(),
                event.displayName.toString(),
                "saurabh.singh@oodles.io",
-               GetStorage().read("offensive"),
+               GetStorage().read("offensive").toString(),
                reason.single
           );
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

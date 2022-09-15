@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
@@ -185,7 +186,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
 
                                 Text(
-                                  " ${data.country==null?" ":data.country}",
+                                  "${data.country==null?" ": ", ${data.country}"}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -354,7 +355,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.targetLanguage ?? "",
+                                  data.targetLanguage.toString().capitalizeFirst ?? "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -382,7 +383,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage ?? "",
+                                  data.dominantLanguage.toString().capitalizeFirst ?? "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme

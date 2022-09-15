@@ -76,18 +76,12 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
       if (mounted) setState(() => profile = p);
       return p;
     });
-    GetStorage().write("username", profile!.displayName);
+    GetStorage().write("username", profile!.displayName?.toString());
     final room = Matrix.of(context).client.getRoomById(widget.controller.roomId!);
-    // String teacherName = Matrix.of(context).client.getRoomById(controller.roomId!)!.displayname ?? "";
-    // print(teacherName.toString());
-
-
     var parentRoomID=room!.spaceParents.first.roomId;
     final parentroom = Matrix.of(context).client.getRoomById(parentRoomID!);
     if(parentRoomID.isNotEmpty){
-      print(parentroom!.name.toString());
-      print(Matrix.of(context).client.clientName);
-      GetStorage().write("reportroomId", parentroom.name.toString());
+      GetStorage().write("reportroomId", parentroom!.name.toString());
     }
 
 

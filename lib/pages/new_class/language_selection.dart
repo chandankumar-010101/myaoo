@@ -530,7 +530,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
                   width: size.width,
                   height: 40,
                   child: Center(
-                    child: Text(box.read("target_lang").toString()),
+                    child: Text("${box.read("target_lang"
+                        ).toString().capitalizeFirst}"),
                   ),
                 ),
               )
@@ -630,7 +631,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     width: size.width,
                     height: 40,
                     child: Center(
-                      child: Text(box.read("source_lang").toString()),
+                      child: Text("${box.read("source_lang").toString().capitalizeFirst}"),
                     ),
                   ),
                 )
