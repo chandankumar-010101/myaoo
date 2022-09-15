@@ -706,7 +706,14 @@ class _ClassLanguageState extends State<ClassLanguage> {
                               child: Center(
                                 child: Text(
                                   "Cancel",
-                                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary ==
+                                          Colors.white
+                                          ? Colors.white
+                                          : Colors.white,
+                                      fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),
@@ -769,7 +776,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
                               child: Center(
                                 child: Text(
                                   "Save",
-                                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                  style: TextStyle().copyWith( color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary ==
+                                      Colors.white
+                                      ? Colors.white
+                                      : Colors.white, fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),

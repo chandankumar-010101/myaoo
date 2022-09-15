@@ -1150,6 +1150,38 @@ class PangeaServices {
     }
   }
 
+  static serachresult({
+    text
+  }) async {
+    try {
+      PangeaServices._init();
+
+      var result = await http.get(Uri.parse(ApiUrls.class_search+"?q=${text}"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+
+
+      );
+
+
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        Fluttertoast.showToast(msg: "report user Sent Successfully", webBgColor: "#00ff00", backgroundColor: Colors.green);
+      } else {
+        ApiException.exception(statusCode: result.statusCode, body: result.body);
+        throw Exception("Api Error ${result.statusCode}: Unable to report user");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(msg: "Error: Unable to fetch report user", webBgColor: "#ff0000", backgroundColor: Colors.red);
+      throw Exception("Error: Unable to fetch report user");
+    }
+  }
+
   ///-----------------------------------------------Harsh Code --------------------------------------
   static requestEmail(
     String? classRoomNamedata,

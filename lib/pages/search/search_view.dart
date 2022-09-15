@@ -53,6 +53,10 @@ class _SearchViewState extends State<SearchView> {
     final int age1 = box.read("age") ?? 0;
     age1 == 0 ? searchController.age.value = 0 : searchController.age.value = age1;
     searchController.getClasses();
+
+
+
+
   }
 
   fetchFlag(String url, int i) {
@@ -410,7 +414,7 @@ class _SearchViewState extends State<SearchView> {
                                     : const SizedBox()),
                                 Obx(() => !searchController.loading.value && searchController.classList != Null
                                     ? searchController.load1.value==true? GridView.builder(
-                                        controller: searchController.controller,
+                                        //controller: searchController.controller,
                                         shrinkWrap: true,
                                         padding: const EdgeInsets.all(12),
                                         physics: const NeverScrollableScrollPhysics(),
