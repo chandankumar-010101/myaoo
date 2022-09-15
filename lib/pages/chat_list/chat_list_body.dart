@@ -345,8 +345,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   ? IconButton(
                                       onPressed: () {
                                         widget.controller.activeSpacesEntry.getSpace(context) == null
-                                            ? VRouter.of(context).to('/newgroup')
-                                            : VRouter.of(context).to('/newgroup', queryParameters: {
+                                            ? VRouter.of(context).to('/newroom')
+                                            : VRouter.of(context).to('/newroom', queryParameters: {
                                                 "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
                                               });
                                       },
@@ -355,8 +355,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                       ? IconButton(
                                           onPressed: () {
                                             widget.controller.activeSpacesEntry.getSpace(context) == null
-                                                ? VRouter.of(context).to('/newgroup')
-                                                : VRouter.of(context).to('/newgroup', queryParameters: {
+                                                ? VRouter.of(context).to('/newroom')
+                                                : VRouter.of(context).to('/newroom', queryParameters: {
                                                     "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
                                                   });
                                           },
@@ -521,8 +521,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   ? IconButton(
                                       onPressed: () {
                                         widget.controller.activeSpacesEntry.getSpace(context) == null
-                                            ? VRouter.of(context).to('/newgroup')
-                                            : VRouter.of(context).to('/newgroup', queryParameters: {
+                                            ? VRouter.of(context).to('/newroom')
+                                            : VRouter.of(context).to('/newroom', queryParameters: {
                                                 "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
                                               });
                                       },
@@ -531,8 +531,8 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                       ? IconButton(
                                           onPressed: () {
                                             widget.controller.activeSpacesEntry.getSpace(context) == null
-                                                ? VRouter.of(context).to('/newgroup')
-                                                : VRouter.of(context).to('/newgroup', queryParameters: {
+                                                ? VRouter.of(context).to('/newroom')
+                                                : VRouter.of(context).to('/newroom', queryParameters: {
                                                     "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
                                                   });
                                           },
