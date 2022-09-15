@@ -36,7 +36,12 @@ class _InviteStudentState extends State<InviteStudent> {
     // final room = Matrix.of(context).client.getRoomById(roomId);
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              VRouter.of(context).to('/classDetails', queryParameters: {"id": roomId});
+            },
+          ),
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Invite Students",

@@ -46,8 +46,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String id = context.vRouter.queryParameters['class_id'] ?? "";
-
+    String id = context.vRouter.queryParameters['id'] ?? "";
     return Scaffold(
         appBar: id.isEmpty
             ? AppBar(
@@ -68,7 +67,24 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                   },
                 ),
               )
-            : null,
+            : AppBar(
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: Text(
+            "Update class permissions",
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
+          ),
+          centerTitle: true,
+          elevation: 10,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+            },
+          ),
+        ),
         body: Container(
           width: size.width,
           height: size.height,
