@@ -182,14 +182,10 @@ class UrlLauncher {
       }
     } else if (identityParts.primaryIdentifier.sigil == '@') {
       if (requestExchange) {
-
-        final bool isExchangeExist = await PangeaServices.validateExchange(
-            requestFromClass: roomId!,
-            requestToClass: requestToclass,
-            context: context);
-        if(isExchangeExist){
-          Fluttertoast.showToast(
-              msg: "Exchange already exist with this class",webBgColor: "#ff0000",backgroundColor: Colors.red);
+        final bool isExchangeExist =
+            await PangeaServices.validateExchange(requestFromClass: roomId!, requestToClass: requestToclass, context: context);
+        if (isExchangeExist) {
+          Fluttertoast.showToast(msg: "Exchange already exist with this class", webBgColor: "#ff0000", backgroundColor: Colors.red);
           return;
         }
         final roomID = await showFutureLoadingDialog(
@@ -210,11 +206,13 @@ class UrlLauncher {
 
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "")  +   "-" +
+            roomAliasName: userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "") +
+                "-" +
                 matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-            name:userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "")  +   "-" +
+            name: userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "") +
+                "-" +
                 matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
@@ -228,15 +226,19 @@ class UrlLauncher {
             final client = Matrix.of(context).client;
             await client
                 .getRoomById(roomID.result!)!
-                .sendTextEvent(initialUrl + "/#/" + "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
+                .sendTextEvent(initialUrl +
+                    "/#/" +
+                    "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
                 .then((value) {
               VRouter.of(context).to("/rooms");
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(" Request Sent Successfully",style: TextStyle(color: Colors.white),),
+                content: Text(
+                  " Request Sent Successfully",
+                  style: TextStyle(color: Colors.white),
+                ),
                 backgroundColor: Colors.green,
-
               ));
-             // Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+              // Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);
@@ -248,7 +250,6 @@ class UrlLauncher {
           Fluttertoast.showToast(msg: "Unable to find exchnage info");
         }
       } else if (requestToEnroll) {
-
         final roomID = await showFutureLoadingDialog(
           context: context,
           future: () => matrix.client.createRoom(
@@ -266,15 +267,16 @@ class UrlLauncher {
             ],
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "")  +   "-" +
+            roomAliasName: identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "") +
+                "-" +
                 matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-            name:identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "")  +   "-" +
+            name: identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "") +
+                "-" +
                 matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-
           ),
         );
         if (roomID.result != null) {

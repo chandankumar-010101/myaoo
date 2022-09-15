@@ -33,6 +33,7 @@ import 'widgets/lock_screen.dart';
 import 'widgets/matrix.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+// Just a comment to rebuild
 GoogleSignIn googleSignIn = GoogleSignIn(
   clientId:
       '466850640825-qegdiq3mpj3h5e0e79ud5hnnq2c22mi3.apps.googleusercontent.com',

@@ -176,7 +176,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   size: 20.0,
                                 ),
                                 Text(
-                                  data.city,
+                                  "${data.city.toString().capitalizeFirst}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -186,7 +186,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
 
                                 Text(
-                                  "${data.country==null?" ": ", ${data.country}"}",
+                                  "${data.country==null?" ": ", ${data.country.capitalizeFirst}"}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme

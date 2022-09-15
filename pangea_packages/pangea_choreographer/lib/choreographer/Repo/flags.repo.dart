@@ -8,7 +8,7 @@ import '../models/flag_model.dart';
 
 class FlagRepo {
   static Future<List<LanguageFlag>> fetchFlags() async {
-    final Requests req = Requests(Urls.flagsBaseUrl);
+    final Requests req = Requests(Urls.flagsBaseUrl, skipApiKey: true);
     final Response res = await req.get(url: Urls.flags);
 
     final decodedBody =

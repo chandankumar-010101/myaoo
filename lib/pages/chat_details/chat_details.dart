@@ -35,7 +35,7 @@ class ChatDetailsController extends State<ChatDetails> {
     final input = await showTextInputDialog(
       useRootNavigator: false,
       context: context,
-      title: L10n.of(context)!.changeTheNameOfTheGroup,
+      title: "Change the name of Room",
       okLabel: L10n.of(context)!.ok,
       cancelLabel: L10n.of(context)!.cancel,
       textFields: [
@@ -316,13 +316,14 @@ class ChatDetailsController extends State<ChatDetails> {
 
   @override
   Widget build(BuildContext context) {
+    if (roomId != null) {
+      members = Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
 
-    members ??= Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
-    print(roomId);
-    print(members!.length);
-
-    for(int i=0;i<members!.length;i++) {
-      print(members![i].id);
+      for (int i = 0; i < members!.length; i++) {
+        print(members![i].id);
+      }
+    } else {
+      members = [];
     }
     return SizedBox(
       width: fixedWidth,
