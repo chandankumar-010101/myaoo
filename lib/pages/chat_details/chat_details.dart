@@ -35,7 +35,7 @@ class ChatDetailsController extends State<ChatDetails> {
     final input = await showTextInputDialog(
       useRootNavigator: false,
       context: context,
-      title: L10n.of(context)!.changeTheNameOfTheGroup,
+      title: "Change the name of Room",
       okLabel: L10n.of(context)!.ok,
       cancelLabel: L10n.of(context)!.cancel,
       textFields: [

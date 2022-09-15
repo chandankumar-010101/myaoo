@@ -37,32 +37,64 @@ class _ClassLanguageState extends State<ClassLanguage> {
   }
 
   bool validation() {
-    if (classNameController.text.isEmpty || discriptionController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Class name and Description is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+    if (classNameController.text.isEmpty ||
+        discriptionController.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Class name and Description is required!",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
-    if (targetLanguage == null || sourceLanguage == null || languageLevelDropdownValue.isEmpty || languageLevel == 0) {
-      Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+    if (targetLanguage == null ||
+        sourceLanguage == null ||
+        languageLevelDropdownValue.isEmpty ||
+        languageLevel == 0) {
+      Fluttertoast.showToast(
+          msg: "Language must be selected!",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
     if (classNameController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0,webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Class name length should below 20",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
     if (cityController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "City length should below 20",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
     if (schoolController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "School length should below 20",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
     if (countryController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Country length should below 12",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
     if (discriptionController.text.length >= 2000) {
-      Fluttertoast.showToast(msg: "Description length should below  2000", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Description length should below  2000",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return false;
     }
     return true;
@@ -101,32 +133,64 @@ class _ClassLanguageState extends State<ClassLanguage> {
       return;
     }
     final int languageLevel = fetchLangLevel();
-    if (classNameController.text.isEmpty || discriptionController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Class name and Description is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+    if (classNameController.text.isEmpty ||
+        discriptionController.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Class name and Description is required!",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
-    if (targetLanguage == null || sourceLanguage == null || languageLevelDropdownValue.isEmpty || languageLevel == 0) {
-      Fluttertoast.showToast(msg: "Language must be selected!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+    if (targetLanguage == null ||
+        sourceLanguage == null ||
+        languageLevelDropdownValue.isEmpty ||
+        languageLevel == 0) {
+      Fluttertoast.showToast(
+          msg: "Language must be selected!",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
     if (classNameController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Class name length should below 20",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
     if (cityController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "City length should below 20",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
     if (schoolController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "School length should below 20",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
     if (countryController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Country length should below 12",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
     if (discriptionController.text.length >= 2000) {
-      Fluttertoast.showToast(msg: "Description length should below  2000", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Description length should below  2000",
+          fontSize: 16.0,
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
       return;
     }
     box.write("className", classNameController.text);
@@ -156,11 +220,21 @@ class _ClassLanguageState extends State<ClassLanguage> {
     final Size size = MediaQuery.of(context).size;
     final String id = context.vRouter.queryParameters['class_id'] ?? "";
     if (id.isNotEmpty) {
-      box.read("class_name") != null ? classNameController.text = box.read("class_name") : null;
-      box.read("city_name") != null ? cityController.text = box.read("city_name") : null;
-      box.read("country_name") != null ? countryController.text = box.read("country_name") : null;
-      box.read("school_name") != null ? schoolController.text = box.read("school_name") : null;
-      box.read("disc") != null ? discriptionController.text = box.read("disc") : null;
+      box.read("class_name") != null
+          ? classNameController.text = box.read("class_name")
+          : null;
+      box.read("city_name") != null
+          ? cityController.text = box.read("city_name")
+          : null;
+      box.read("country_name") != null
+          ? countryController.text = box.read("country_name")
+          : null;
+      box.read("school_name") != null
+          ? schoolController.text = box.read("school_name")
+          : null;
+      box.read("disc") != null
+          ? discriptionController.text = box.read("disc")
+          : null;
       if (box.read("language_level") != null) {
         switch (box.read("language_level")) {
           case 1:
@@ -208,7 +282,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
               backgroundColor: Theme.of(context).backgroundColor,
               title: Text(
                 "Create a Class",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontSize: 14),
                 overflow: TextOverflow.clip,
                 textAlign: TextAlign.center,
               ),
@@ -224,7 +300,26 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     )
                   : null,
             )
-          : null,
+          : AppBar(
+              backgroundColor: Theme.of(context).backgroundColor,
+              title: Text(
+                "Update a Class",
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontSize: 14),
+                overflow: TextOverflow.clip,
+                textAlign: TextAlign.center,
+              ),
+              centerTitle: true,
+              elevation: 10,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  context.vRouter.to("/classDetails",queryParameters: {"id":id});
+                },
+              ),
+            ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -240,13 +335,15 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 controller: classNameController,
                 autofocus: true,
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z ""]")),
+                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z " "]")),
                 ],
                 maxLength: 50,
                 autocorrect: false,
                 decoration: InputDecoration(
                   hintText: "Name of Your Class",
-                  hintStyle: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                  hintStyle: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -262,9 +359,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     width: 40,
                     height: 40,
                     fit: BoxFit.fill,
-                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).colorScheme.onPrimary,
+                    color:
+                        Theme.of(context).colorScheme.onPrimary == Colors.white
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).colorScheme.onPrimary,
                   ),
                   SizedBox(
                     width: 40,
@@ -277,7 +375,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       autocorrect: false,
                       decoration: InputDecoration(
                         hintText: "Optional: City",
-                        hintStyle: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                        hintStyle: TextStyle().copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 14),
                       ),
                     ),
                   ),
@@ -295,9 +395,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     width: 40,
                     height: 40,
                     fit: BoxFit.fill,
-                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).colorScheme.onPrimary,
+                    color:
+                        Theme.of(context).colorScheme.onPrimary == Colors.white
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).colorScheme.onPrimary,
                   ),
                   SizedBox(
                     width: 40,
@@ -310,7 +411,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       autocorrect: false,
                       decoration: InputDecoration(
                         hintText: "Optional: Country",
-                        hintStyle: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                        hintStyle: TextStyle().copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 14),
                       ),
                     ),
                   ),
@@ -328,9 +431,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     width: 40,
                     height: 40,
                     fit: BoxFit.fill,
-                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).colorScheme.onPrimary,
+                    color:
+                        Theme.of(context).colorScheme.onPrimary == Colors.white
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).colorScheme.onPrimary,
                   ),
                   SizedBox(
                     width: 30,
@@ -340,7 +444,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       padding: EdgeInsets.only(left: 10),
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).primaryColorLight),
+                          border: Border.all(
+                              color: Theme.of(context).primaryColorLight),
                         ),
                         child: id.isEmpty
                             ? DropdownButton(
@@ -349,7 +454,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                     ? Center(
                                         child: Text(
                                           "Select language level ",
-                                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                          style: TextStyle().copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .color,
+                                              fontSize: 14),
                                           overflow: TextOverflow.clip,
                                           textAlign: TextAlign.center,
                                         ),
@@ -365,7 +475,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                     value: items,
                                     child: Text(
                                       items,
-                                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                      style: TextStyle().copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color,
+                                          fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.center,
                                     ),
@@ -403,9 +518,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     width: 40,
                     height: 40,
                     fit: BoxFit.fill,
-                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).colorScheme.onPrimary,
+                    color:
+                        Theme.of(context).colorScheme.onPrimary == Colors.white
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).colorScheme.onPrimary,
                   ),
                   SizedBox(
                     width: 30,
@@ -417,7 +533,9 @@ class _ClassLanguageState extends State<ClassLanguage> {
                     onSubmitted: (String? value) {},
                     decoration: InputDecoration(
                       hintText: "Optional: School",
-                      hintStyle: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                      hintStyle: TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 14),
                     ),
                   )),
                 ],
@@ -431,20 +549,152 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 maxLength: 2000,
                 onSubmitted: (String? value) {},
                 decoration: InputDecoration(
-                  hintText: "What should prospective students know\nabout your class? Potential exchange\nteachers?",
-                  hintStyle: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                  hintText:
+                      "What should prospective students know\nabout your class? Potential exchange\nteachers?",
+                  hintStyle: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
                 ),
                 maxLines: 3,
               ),
             ),
-
             Container(
               constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
               padding: EdgeInsets.all(size.height * 0.01),
               child: Center(
                 child: Text(
                   "What is the target language of your classroom?",
-                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Container(
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
+                padding: EdgeInsets.all(size.height * 0.01),
+                child: languageFlagList.isNotEmpty
+                    ? Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).primaryColorLight),
+                  ),
+                  child: id.isEmpty
+                      ? DropdownButton(
+                    // Initial Value
+                    hint: sourceLanguage == null
+                        ? Center(
+                      child: Text(
+                        "Select Language",
+                        style: TextStyle().copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .color,
+                            fontSize: 14),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                        : Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.start,
+                      crossAxisAlignment:
+                      CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          sourceLanguage!.languageFlag!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          sourceLanguage!.languageName
+                              .toString()
+                              .capitalizeFirst ??
+                              "",
+                          style: TextStyle().copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .color,
+                              fontSize: 14),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                    isExpanded: true,
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    underline: Container(),
+                    // Array list of items
+                    items: languageFlagList.map((languageFlag) {
+                      // print(items.languageFlag);
+                      return DropdownMenuItem(
+                          value: languageFlag,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                languageFlag.languageFlag!,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
+                                languageFlag.languageName
+                                    .toString()
+                                    .capitalizeFirst ??
+                                    "",
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ));
+                    }).toList(),
+                    onChanged: (LanguageFlag? newValue) {
+                      setState(() {
+                        sourceLanguage = newValue!;
+                      });
+                    },
+                  )
+                      : Container(
+                    width: size.width,
+                    height: 40,
+                    child: Center(
+                      child:
+                      Text(box.read("source_lang").toString().capitalizeFirst!),
+                    ),
+                  ),
+                )
+                    : Container()),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            Container(
+              constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+              padding: EdgeInsets.all(size.height * 0.01),
+              child: Center(
+                child: Text(
+                  "What is the dominant language of your student?",
+                  style: TextStyle().copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                 ),
@@ -456,7 +706,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
               child: languageFlag2List.isNotEmpty
                   ? Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).primaryColorLight),
+                  border: Border.all(
+                      color: Theme.of(context).primaryColorLight),
                 ),
                 child: id.isEmpty
                     ? DropdownButton(
@@ -466,7 +717,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       ? Center(
                     child: Text(
                       "Select Language",
-                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                      style: TextStyle().copyWith(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                          fontSize: 14),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.center,
                     ),
@@ -474,8 +730,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       : Padding(
                     padding: EdgeInsets.all(5.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment:
+                      MainAxisAlignment.start,
+                      crossAxisAlignment:
+                      CrossAxisAlignment.center,
                       children: [
                         Image.network(
                           targetLanguage!.languageFlag!,
@@ -487,9 +745,16 @@ class _ClassLanguageState extends State<ClassLanguage> {
                           width: 15.0,
                         ),
                         Text(
-                          targetLanguage!.languageName.toString().capitalizeFirst ?? "",
-                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-
+                          targetLanguage!.languageName
+                              .toString()
+                              .capitalizeFirst ??
+                              "",
+                          style: TextStyle().copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .color,
+                              fontSize: 14),
                         )
                       ],
                     ),
@@ -500,8 +765,10 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       return DropdownMenuItem(
                           value: val,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
                             children: [
                               Image.network(
                                 val.languageFlag!,
@@ -511,8 +778,16 @@ class _ClassLanguageState extends State<ClassLanguage> {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                val.languageName.toString().capitalizeFirst ?? "",
-                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                val.languageName
+                                    .toString()
+                                    .capitalizeFirst ??
+                                    "",
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               )
@@ -530,111 +805,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
                   width: size.width,
                   height: 40,
                   child: Center(
-                    child: Text(box.read("target_lang").toString()),
+                    child: Text(box.read("target_lang").toString().capitalizeFirst!),
                   ),
                 ),
               )
                   : Container(),
             ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Container(
-              constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
-              padding: EdgeInsets.all(size.height * 0.01),
-              child: Center(
-                child: Text(
-                  "What is the dominant language of your student?",
-                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                  overflow: TextOverflow.clip,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Container(
-                constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
-                padding: EdgeInsets.all(size.height * 0.01),
-                child: languageFlagList.isNotEmpty
-                    ? Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Theme.of(context).primaryColorLight),
-                  ),
-                  child: id.isEmpty
-                      ? DropdownButton(
-                    // Initial Value
-                    hint: sourceLanguage == null
-                        ? Center(
-                      child: Text(
-                        "Select Language",
-                        style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                        overflow: TextOverflow.clip,
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                        : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.network(
-                          sourceLanguage!.languageFlag!,
-                          fit: BoxFit.cover,
-                          width: 40,
-                          height: 40,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          sourceLanguage!.languageName.toString().capitalizeFirst ?? "",
-                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                    isExpanded: true,
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    underline: Container(),
-                    // Array list of items
-                    items: languageFlagList.map((languageFlag) {
-                      // print(items.languageFlag);
-                      return DropdownMenuItem(
-                          value: languageFlag,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                languageFlag.languageFlag!,
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                // widget.controller.sourceLanguage!.languageName.toString().capitalize??"",
-                                languageFlag.languageName.toString().capitalizeFirst ?? "",
-                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ));
-                    }).toList(),
-                    onChanged: (LanguageFlag? newValue) {
-                      setState(() {
-                        sourceLanguage = newValue!;
-                      });
-                    },
-                  )
-                      : Container(
-                    width: size.width,
-                    height: 40,
-                    child: Center(
-                      child: Text(box.read("source_lang").toString()),
-                    ),
-                  ),
-                )
-                    : Container()),
 
             SizedBox(
               height: size.height * 0.03,
@@ -652,7 +828,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
                             child: Center(
                               child: Text(
                                 "1/4",
-                                style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                style: TextStyle().copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontSize: 14),
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -666,14 +847,22 @@ class _ClassLanguageState extends State<ClassLanguage> {
                               width: 50.0,
                               height: 50.0,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                  color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary ==
+                                          Colors.white
                                       ? Theme.of(context).primaryColor
                                       : Theme.of(context).colorScheme.onPrimary,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context).colorScheme.onPrimary)),
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
                               child: Icon(
                                 Icons.arrow_right_alt,
                                 color: Colors.white,
@@ -688,24 +877,38 @@ class _ClassLanguageState extends State<ClassLanguage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+                              VRouter.of(context).to('/classDetails',
+                                  queryParameters: {"id": id});
                             },
                             child: Container(
                               width: 200,
                               height: 40,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                  color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary ==
+                                          Colors.white
                                       ? Theme.of(context).primaryColor
                                       : Theme.of(context).colorScheme.onPrimary,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context).colorScheme.onPrimary)),
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
                               child: Center(
                                 child: Text(
                                   "Cancel",
-                                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),
@@ -716,23 +919,43 @@ class _ClassLanguageState extends State<ClassLanguage> {
                             onTap: () async {
                               final int languageLevel = fetchLangLevel();
                               if (discriptionController.text.isEmpty) {
-                                Fluttertoast.showToast(msg: "Class Description is required!", fontSize: 16.0,webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                Fluttertoast.showToast(
+                                    msg: "Class Description is required!",
+                                    fontSize: 16.0,
+                                    webBgColor: "#ff0000",
+                                    backgroundColor: Colors.red);
                                 return;
                               }
                               if (cityController.text.length >= 50) {
-                                Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0,webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                Fluttertoast.showToast(
+                                    msg: "City length should below 20",
+                                    fontSize: 16.0,
+                                    webBgColor: "#ff0000",
+                                    backgroundColor: Colors.red);
                                 return;
                               }
                               if (schoolController.text.length >= 50) {
-                                Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0,webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                Fluttertoast.showToast(
+                                    msg: "School length should below 20",
+                                    fontSize: 16.0,
+                                    webBgColor: "#ff0000",
+                                    backgroundColor: Colors.red);
                                 return;
                               }
                               if (countryController.text.length >= 50) {
-                                Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0,webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                Fluttertoast.showToast(
+                                    msg: "Country length should below 12",
+                                    fontSize: 16.0,
+                                    webBgColor: "#ff0000",
+                                    backgroundColor: Colors.red);
                                 return;
                               }
                               if (discriptionController.text.length >= 2000) {
-                                Fluttertoast.showToast(msg: "Description length should below 2000", fontSize: 16.0,webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                Fluttertoast.showToast(
+                                    msg: "Description length should below 2000",
+                                    fontSize: 16.0,
+                                    webBgColor: "#ff0000",
+                                    backgroundColor: Colors.red);
                                 return;
                               }
                               final result = await showFutureLoadingDialog(
@@ -749,7 +972,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
                               );
                               if (result != null || result.result!) {
                                 print("updated");
-                                VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+                                VRouter.of(context).to('/classDetails',
+                                    queryParameters: {"id": id});
                                 // context.vRouter.to("/classDetails/update_student_permissions",queryParameters: {"class_id": id, });
                               }
                             },
@@ -757,18 +981,31 @@ class _ClassLanguageState extends State<ClassLanguage> {
                               width: 200,
                               height: 40,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                  color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary ==
+                                          Colors.white
                                       ? Theme.of(context).primaryColor
                                       : Theme.of(context).colorScheme.onPrimary,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary ==
+                                              Colors.white
                                           ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context).colorScheme.onPrimary)),
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
                               child: Center(
                                 child: Text(
                                   "Save",
-                                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                  style: TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),

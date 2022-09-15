@@ -163,7 +163,7 @@ class GroupsSpacesEntry extends SpacesEntry {
   }
 
   @override
-  String getName(BuildContext context) => L10n.of(context)!.groups;
+  String getName(BuildContext context) => "Rooms";
 
   @override
   Icon getIcon(bool active) => active ? const Icon(Icons.group) : const Icon(Icons.group_outlined);

@@ -14,7 +14,7 @@ class NewGroupView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.of(context)!.createNewGroup),
+        title: Text("Create new room"),
       ),
       body: MaxWidthBody(
         child: Column(
@@ -29,13 +29,13 @@ class NewGroupView extends StatelessWidget {
                 textInputAction: TextInputAction.go,
                 onSubmitted: controller.submitAction,
                 decoration: InputDecoration(
-                    labelText: L10n.of(context)!.optionalGroupName,
+                    labelText: "(Optional) Room name",
                     prefixIcon: const Icon(Icons.people_outlined),
-                    hintText: L10n.of(context)!.enterAGroupName),
+                    hintText: "Enter a room name"),
               ),
             ),
             SwitchListTile.adaptive(
-              title: Text(L10n.of(context)!.groupIsPublic),
+              title: Text("Room is public"),
               value: controller.publicGroup,
               onChanged: controller.setPublicGroup,
             ),
