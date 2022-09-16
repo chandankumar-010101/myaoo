@@ -22,6 +22,7 @@ import '../model/invite_email_model.dart';
 import '../model/invite_email_model.dart' as inviteModel;
 
 import '../model/report_user_model.dart';
+import '../model/search_view_model.dart';
 import '../model/teacher_all_class_model.dart';
 import '../model/user_info.dart';
 import '../pages/search/search_discover.dart';
@@ -1149,6 +1150,40 @@ class PangeaServices {
       throw Exception("Error: Unable to fetch report user");
     }
   }
+  // var classList = [].obs;
+  // Future serachresult(
+  //   text
+  // ) async {
+  //   try {
+  //     PangeaServices._init();
+  //
+  //     var result = await http.get(Uri.parse(ApiUrls.class_search+"?q=${text}"),
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Authorization": "Bearer ${box.read("access")}",
+  //         },
+  //     );
+  //
+  //
+  //
+  //     if (result.statusCode == 200 || result.statusCode == 201) {
+  //       final data = searchViewModelFromJson(result.body);
+  //       classList.value= data.results!;
+  //       Fluttertoast.showToast(msg: "report user Sent Successfully", webBgColor: "#00ff00", backgroundColor: Colors.green);
+  //     }
+  //
+  //     else {
+  //       ApiException.exception(statusCode: result.statusCode, body: result.body);
+  //       throw Exception("Api Error ${result.statusCode}: Unable to report user");
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //     Fluttertoast.showToast(msg: "Error: Unable to fetch report user", webBgColor: "#ff0000", backgroundColor: Colors.red);
+  //     throw Exception("Error: Unable to fetch report user");
+  //   }
+  // }
 
   ///-----------------------------------------------Harsh Code --------------------------------------
   static requestEmail(
