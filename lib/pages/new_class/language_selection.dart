@@ -272,12 +272,14 @@ class _ClassLanguageState extends State<ClassLanguage> {
               padding: EdgeInsets.all(size.height * 0.01),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
+                    alignment: Alignment.center,
                     height: 40,
                     width: 40,
                     "assets/png/vector.svg",
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
                     color: Theme.of(context).colorScheme.onPrimary == Colors.white
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
@@ -292,7 +294,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                   //       : Theme.of(context).colorScheme.onPrimary,
                   // ),
                   SizedBox(
-                    width: 40,
+                    width: 20,
                   ),
                   Expanded(
                     child: TextField(
@@ -310,16 +312,19 @@ class _ClassLanguageState extends State<ClassLanguage> {
               ),
             ),
             Container(
-              constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
+              constraints: BoxConstraints(minWidth: 100, maxWidth: 650, minHeight: 40),
               padding: EdgeInsets.all(size.height * 0.01),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
                     height: 40,
                     width: 40,
+                    alignment: Alignment.center,
+
                     "assets/png/vector.svg",
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
                     color: Theme.of(context).colorScheme.onPrimary == Colors.white
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
@@ -334,7 +339,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                   //       : Theme.of(context).colorScheme.onPrimary,
                   // ),
                   SizedBox(
-                    width: 40,
+                    width: 20,
                   ),
                   Expanded(
                     child: TextField(
@@ -357,71 +362,74 @@ class _ClassLanguageState extends State<ClassLanguage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/png/md_analyst.png",
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.fill,
+                  SvgPicture.asset(
+                    "assets/png/md_analyst.svg",
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.contain,
                     color: Theme.of(context).colorScheme.onPrimary == Colors.white
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   ),
+                  // Image.asset(
+                  //   "assets/png/md_analyst.png",
+                  //   width: 40,
+                  //   height: 40,
+                  //
+                  // ),
                   SizedBox(
-                    width: 30,
+                    width: 20,
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).primaryColorLight),
-                        ),
-                        child: id.isEmpty
-                            ? DropdownButton(
-                                // Initial Value
-                                hint: languageLevelDropdownValue.isEmpty
-                                    ? Center(
-                                        child: Text(
-                                          "Select language level ",
-                                          style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                          overflow: TextOverflow.clip,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    : Text(languageLevelDropdownValue),
-                                //value: widget.controller.languageLevelDropdownValue,
-                                isExpanded: true,
-                                // Down Arrow Icon
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                // Array list of items
-                                items: languageLevel.map((String items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(
-                                      items,
-                                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                      overflow: TextOverflow.clip,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                }).toList(),
-                                // After selecting the desired option,it will
-                                // change button value to selected value
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    languageLevelDropdownValue = newValue!;
-                                  });
-                                },
-                              )
-                            : Container(
-                                width: size.width,
-                                height: 40,
-                                child: Center(
-                                  child: Text(languageLevelDropdownValue),
-                                ),
-                              ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).primaryColorLight),
                       ),
-                    ),
+                      child: id.isEmpty
+                          ? DropdownButton(
+                        // Initial Value
+                        hint: languageLevelDropdownValue.isEmpty
+                            ? Center(
+                          child: Text(
+                            "Select language level ",
+                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                            : Text(languageLevelDropdownValue),
+                        //value: widget.controller.languageLevelDropdownValue,
+                        isExpanded: true,
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        // Array list of items
+                        items: languageLevel.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(
+                              items,
+                              style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                              overflow: TextOverflow.clip,
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            languageLevelDropdownValue = newValue!;
+                          });
+                        },
+                      )
+                          : Container(
+                        width: size.width,
+                        height: 40,
+                        child: Center(
+                          child: Text(languageLevelDropdownValue),
+                        ),
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -434,8 +442,8 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 children: [
                   SvgPicture.asset(
                     "assets/png/house.svg",
-                    height: 60,
-                    width: 60,
+                    height: 50,
+                    width: 50,
                     fit: BoxFit.contain,
                       color: Theme.of(context).colorScheme.onPrimary == Colors.white
                           ? Theme.of(context).primaryColor

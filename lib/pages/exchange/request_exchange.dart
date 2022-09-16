@@ -110,7 +110,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                             child: Padding(
                               padding: EdgeInsets.only(right: 5),
                               child: Text(
-                                "While both teachers allow 1-to-1 chats in exchanges, students will have this permission in this exchange.",
+                                "While both teachers allow One-to-one chats in exchanges, students will have this permission in this exchange.",
                                 style: TextStyle().copyWith(
                                     color: Theme.of(context)
                                         .textTheme

@@ -68,21 +68,8 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
     roomAliasName: className.trim().toLowerCase().replaceAll(' ', '_'),
     name: className,
     );
-     Room? room =  Matrix.of(context).client.getRoomById(exchangeId);
-
-    List<User> users = await room!.requestParticipants();
-    List.generate(users.length, (index) => print(users[index].id));
-    for (var element in users) {
-      if(element.id == senderId){
-        element.setPower(100);
-      }
-    }
-    //User user =   Matrix.of(context).client.getRoomById(senderId).setPower(power);
-
-    //   await showFutureLoadingDialog(
-    //     context: context,
-    //     future: () => widget.user.setPower(newPermission),
-    //   );
+    final bool? status = await PangeaServices.makeAdmin(exchangeId, senderId);
+    if(status !=null){
       await PangeaServices.saveExchangeRecord(senderClassId,
           receiverClassId, senderId, receiverId, exchangeId);
       await PangeaServices.createClass(
@@ -111,6 +98,9 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         schoolName: school,
         isExchange: true,
       ).whenComplete(() => exchangeId);
+    }
+
+
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: "Error: Unable to Confirm the exchange",webBgColor: "#ff0000",backgroundColor: Colors.red);

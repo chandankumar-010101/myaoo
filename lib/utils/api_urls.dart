@@ -49,4 +49,8 @@ class ApiUrls {
   ///==-------------------------Harsh Code ------------------------------------
   static String request_email = Environment.baseAPI + "/class/report/user";
 
+
+  ///---------------------------------make admin -------------------------
+static String makeAdminInExchange = Environment.baseAPI +"/class/exchange/admin/create";
+
 }
