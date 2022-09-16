@@ -382,11 +382,8 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                   .colorScheme
                                                   .onPrimary ==
                                               Colors.white
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
+                                          ? Colors.white
+                                          : Colors.white,
                                       fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
@@ -458,11 +455,8 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                   .colorScheme
                                                   .onPrimary ==
                                               Colors.white
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
+                                          ? Colors.white
+                                          : Colors.white,
                                       fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,

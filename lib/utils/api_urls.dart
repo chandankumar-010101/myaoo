@@ -11,6 +11,7 @@ class ApiUrls {
 
   static String class_list = Environment.baseAPI + "/class/list";
 
+  static String class_search = Environment.baseAPI + "/class/search";
   static String user_ages =
       Environment.baseAPI + "/account/get_update_dob?pangea_user_id=";
   static String update_user_ages =
