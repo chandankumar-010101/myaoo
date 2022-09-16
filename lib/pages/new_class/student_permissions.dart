@@ -22,6 +22,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
   bool createRooms = false;
   bool createRoomsInExchanges = false;
   bool createStories = false;
+  bool sendVoice = false;
   bool shareVideos = false;
   bool sharePhotos = false;
   bool shareFiles = false;
@@ -33,6 +34,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
   void setCreateRooms(bool b) => setState(() => createRooms = b);
   void setCreateRoomsInExchange(bool b) => setState(() => createRoomsInExchanges = b);
   void setCreateStories(bool b) => setState(() => createStories = b);
+  void setSendVoice(bool b) => setState(() => sendVoice = b);
   void setShareVideos(bool b) => setState(() => shareVideos = b);
   void setSharePhotos(bool b) => setState(() => sharePhotos = b);
   void setShareFiles(bool b) => setState(() => shareFiles = b);
@@ -99,6 +101,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           isShareFiles: shareFiles,
           isShareVideo: shareVideos,
           isCreateStories: createStories,
+          sendVoice: sendVoice,
           isShareLocation: shareLocation,
           isOpenExchange: openToExchange,
           oneToOneChatExchange: oneToOneChatsWithinExchanges,
@@ -138,6 +141,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
     box.read("createRoom") == null ? createRooms = false : createRooms = box.read("createRoom");
     box.read("createRoomExchange") == null ? createRoomsInExchanges = false : createRoomsInExchanges = box.read("createRoomExchange");
     box.read("createStories") == null ? createStories = false : createStories = box.read("createStories");
+    box.read("sendVoice") == null ? sendVoice = false : sendVoice = box.read("sendVoice");
+
     box.read("shareVideo") == null ? shareVideos = false : shareVideos = box.read("shareVideo");
     box.read("sharePhotos") == null ? sharePhotos = false : sharePhotos = box.read("sharePhotos");
     box.read("shareFiles") == null ? shareFiles = false : shareFiles = box.read("shareFiles");
@@ -355,6 +360,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             ],
                           ),
                         ),
+                        ///create stories
                         SwitchListTile.adaptive(
                           title: Text(
                             "Create Stories",
@@ -387,6 +393,42 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             ],
                           ),
                         ),
+                        ///send Voice
+                        SwitchListTile.adaptive(
+                          title: Text(
+                            "Send Voice Notes",
+                            style: TextStyle().copyWith(
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            overflow: TextOverflow.clip,
+                          ),
+                          value: sendVoice,
+                          onChanged: setCreateStories,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: Text(
+                                    "Toggle this on to allow students to send voice notes.",
+                                    style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                    overflow: TextOverflow.clip,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        ///create videos
                         SwitchListTile.adaptive(
                           title: Text(
                             "Share Video",
@@ -603,6 +645,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                       oneToOneChatsWithinClass: oneToOneChatsWithinClass.toString(),
                                       createRoomsInExchanges: createRoomsInExchanges.toString(),
                                       createStories: createStories.toString(),
+                                      sendVoice: sendVoice.toString(),
                                       shareFiles: shareFiles.toString(),
                                       oneToOneChatsWithinExchanges: oneToOneChatsWithinExchanges.toString(),
                                       createRooms: createRooms.toString(),

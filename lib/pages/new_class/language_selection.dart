@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
@@ -272,15 +273,24 @@ class _ClassLanguageState extends State<ClassLanguage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/png/vector.png",
-                    width: 40,
+                  SvgPicture.asset(
                     height: 40,
-                    fit: BoxFit.fill,
+                    width: 40,
+                    "assets/png/vector.svg",
+                    fit: BoxFit.contain,
                     color: Theme.of(context).colorScheme.onPrimary == Colors.white
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   ),
+                  // Image.asset(
+                  //   "assets/png/vector.png",
+                  //   width: 40,
+                  //   height: 40,
+                  //   fit: BoxFit.fill,
+                  //   color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                  //       ? Theme.of(context).primaryColor
+                  //       : Theme.of(context).colorScheme.onPrimary,
+                  // ),
                   SizedBox(
                     width: 40,
                   ),
@@ -305,15 +315,24 @@ class _ClassLanguageState extends State<ClassLanguage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/png/vector.png",
-                    width: 40,
+                  SvgPicture.asset(
                     height: 40,
-                    fit: BoxFit.fill,
+                    width: 40,
+                    "assets/png/vector.svg",
+                    fit: BoxFit.contain,
                     color: Theme.of(context).colorScheme.onPrimary == Colors.white
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   ),
+                  // Image.asset(
+                  //   "assets/png/vector.png",
+                  //   width: 40,
+                  //   height: 40,
+                  //   fit: BoxFit.fill,
+                  //   color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                  //       ? Theme.of(context).primaryColor
+                  //       : Theme.of(context).colorScheme.onPrimary,
+                  // ),
                   SizedBox(
                     width: 40,
                   ),
@@ -413,21 +432,26 @@ class _ClassLanguageState extends State<ClassLanguage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // SvgPicture.asset(
-                  //   fullFlagPath,
-                  //   fit: BoxFit.contain,
-                  // ),
-                  Image.asset(
-                    "assets/png/house.png",
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.fill,
-                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).colorScheme.onPrimary,
+                  SvgPicture.asset(
+                    "assets/png/house.svg",
+                    height: 60,
+                    width: 60,
+                    fit: BoxFit.contain,
+                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).colorScheme.onPrimary,
                   ),
+                  // Image.asset(
+                  //   "assets/png/house.png",
+                  //   width: 40,
+                  //   height: 40,
+                  //   fit: BoxFit.fill,
+                  //   color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                  //       ? Theme.of(context).primaryColor
+                  //       : Theme.of(context).colorScheme.onPrimary,
+                  // ),
                   SizedBox(
-                    width: 30,
+                    width: 10,
                   ),
                   Expanded(
                       child: TextField(

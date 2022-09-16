@@ -70,6 +70,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
           isSharePhoto: true,
           isShareFiles: true,
           isShareLocation: true,
+          sendVoice: true,
           isCreateStories: true);
     }
 
@@ -149,8 +150,10 @@ class _ChatInputRowState extends State<ChatInputRow> {
                               icon: const Icon(Icons.add_outlined),
                               onSelected: widget.controller.onAddPopupMenuButtonSelected,
                               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                ///share files
+                                if(permission.isShareFiles || userType ==2)
                                 PopupMenuItem<String>(
-                                  enabled: permission.isShareFiles || userType == 2,
+                                  enabled: true,
                                   value: 'file',
                                   child: ListTile(
                                     leading: const CircleAvatar(
@@ -162,21 +165,25 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                     contentPadding: const EdgeInsets.all(0),
                                   ),
                                 ),
-                                // PopupMenuItem<String>(
-                                //   enabled: showLocation,
+                                // ///share location
+                                // if((permission.isShareLocation||userType ==2) && PlatformInfos.isMobile )
+                                // const PopupMenuItem<String>(
+                                //
                                 //   value: 'location',
                                 //   child: ListTile(
-                                //     leading: const CircleAvatar(
+                                //     leading: CircleAvatar(
                                 //       backgroundColor: Colors.green,
                                 //       foregroundColor: Colors.white,
                                 //       child: Icon(Icons.location_pin),
                                 //     ),
                                 //     title: Text("Send Location"),
-                                //     contentPadding: const EdgeInsets.all(0),
+                                //     contentPadding: EdgeInsets.all(0),
                                 //   ),
                                 // ),
-                                PopupMenuItem<String>(
-                                  enabled: permission.isSharePhoto || userType == 2,
+                               ///share photo
+                                if(permission.isSharePhoto || userType ==2)
+                                  PopupMenuItem<String>(
+                                  enabled: true,
                                   value: 'image',
                                   child: ListTile(
                                     leading: const CircleAvatar(
@@ -188,8 +195,8 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                     contentPadding: const EdgeInsets.all(0),
                                   ),
                                 ),
-
-                                if (PlatformInfos.isMobile)
+                                ///share photo with camera
+                                if (PlatformInfos.isMobile && (permission.isSharePhoto||userType ==2))
                                   PopupMenuItem<String>(
                                     value: 'camera',
                                     child: ListTile(
@@ -202,7 +209,8 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
-                                if (PlatformInfos.isMobile)
+                               ///share video
+                                if (PlatformInfos.isMobile && (permission.isShareVideo||userType ==2))
                                   PopupMenuItem<String>(
                                     value: 'camera-video',
                                     child: ListTile(
@@ -215,6 +223,7 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
+                                ///share sticker
                                 if (widget.controller.room!.getImagePacks(ImagePackUsage.sticker).isNotEmpty)
                                   PopupMenuItem<String>(
                                     value: 'sticker',
@@ -228,7 +237,8 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
-                                if (PlatformInfos.isMobile)
+                               ///share location
+                                if (PlatformInfos.isMobile &&(permission.isShareLocation||userType ==2))
                                   PopupMenuItem<String>(
                                     value: 'location',
                                     child: ListTile(
