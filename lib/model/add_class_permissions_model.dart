@@ -12,6 +12,7 @@ class AddClassPermissionModel {
   final String? isShareFiles;
   final String? isShareLocation;
   final String? isCreateStories;
+  final String? sendVoice;
 
   AddClassPermissionModel({
     this.pangeaClass,
@@ -27,6 +28,7 @@ class AddClassPermissionModel {
     this.isShareFiles,
     this.isShareLocation,
     this.isCreateStories,
+    this.sendVoice,
   });
 
   AddClassPermissionModel.fromJson(Map<String, dynamic> json)
@@ -42,7 +44,8 @@ class AddClassPermissionModel {
         isSharePhoto = json['is_share_photo'] as String?,
         isShareFiles = json['is_share_files'] as String?,
         isShareLocation = json['is_share_location'] as String?,
-        isCreateStories = json['is_create_stories'] as String?;
+        isCreateStories = json['is_create_stories'] as String?,
+        sendVoice = json['is_voice_notes'] as String?;
 
   Map<String, dynamic> toJson() => {
     'pangea_class' : pangeaClass,
@@ -57,6 +60,7 @@ class AddClassPermissionModel {
     'is_share_photo' : isSharePhoto,
     'is_share_files' : isShareFiles,
     'is_share_location' : isShareLocation,
-    'is_create_stories' : isCreateStories
+    'is_create_stories' : isCreateStories,
+    'is_voice_notes':sendVoice
   };
 }

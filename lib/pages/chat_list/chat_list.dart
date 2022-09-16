@@ -151,6 +151,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
           isCreateRoomsExchange: true,
           isShareVideo: true,
           isSharePhoto: true,
+          sendVoice: true,
           isShareFiles: true,
           isShareLocation: true,
           isCreateStories: true);
@@ -280,6 +281,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
           isCreateRoomsExchange: true,
           isShareVideo: true,
           isSharePhoto: true,
+          sendVoice: true,
           isShareFiles: true,
           isShareLocation: true,
           isCreateStories: true);

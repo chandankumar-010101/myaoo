@@ -109,8 +109,10 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                           child: ElevatedButton(
                             child: const Text("Connect To Class"),
                             onPressed: () {
+                             final int? usertype =  GetStorage().read("usertype");
+                              usertype !=null && usertype !=2?
                               PangeaServices.joinRoom(
-                                  context, data.pangeaClassRoomId!);
+                                  context, data.pangeaClassRoomId!):Fluttertoast.showToast(msg: "Teacher are not allowed to join class");
                             },
                           ),
                         )

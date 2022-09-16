@@ -112,6 +112,7 @@ class Permissions {
     required this.isShareFiles,
     required this.isShareLocation,
     required this.isCreateStories,
+    required this.sendVoice,
   });
   late final int pangeaClass;
   late final bool isPublic;
@@ -126,6 +127,7 @@ class Permissions {
   late final bool isShareFiles;
   late final bool isShareLocation;
   late final bool isCreateStories;
+  late final bool sendVoice;
 
   Permissions.fromJson(Map<String, dynamic> json){
     pangeaClass = json['pangea_class'];
@@ -141,6 +143,7 @@ class Permissions {
     isShareFiles = json['is_share_files'];
     isShareLocation = json['is_share_location'];
     isCreateStories = json['is_create_stories'];
+    sendVoice = json['is_voice_notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -158,6 +161,7 @@ class Permissions {
     _data['is_share_files'] = isShareFiles;
     _data['is_share_location'] = isShareLocation;
     _data['is_create_stories'] = isCreateStories;
+    _data['is_voice_notes']=sendVoice;
     return _data;
   }
 }
