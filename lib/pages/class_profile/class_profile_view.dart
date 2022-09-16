@@ -1168,7 +1168,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: const <Widget>[
                             Text("• "),
                             Expanded(
-                              child: Text("One To One Chat"),
+                              child: Text("One-to-one"),
                             ),
                           ],
                         )
@@ -1179,7 +1179,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: const <Widget>[
                             Text("• "),
                             Expanded(
-                              child: Text("One to One Chat Exchange"),
+                              child: Text("One-to-one Chat Exchange"),
                             ),
                           ],
                         )

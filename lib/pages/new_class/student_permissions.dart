@@ -238,7 +238,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                       children: [
                         SwitchListTile.adaptive(
                           title: Text(
-                            "1-to-1 chats within class",
+                            "One-to-one chats within class",
                             style:
                                 TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                             overflow: TextOverflow.clip,
@@ -255,7 +255,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "If you allow 1-to-1 chats, your students can send and receive individual chats with other students within your class. Otherwise, they can only chat in rooms.",
+                                    "If you allow One-to-one chats, your students can send and receive individual chats with other students within your class. Otherwise, they can only chat in rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -267,7 +267,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "1-to-1 chats within exchanges",
+                            "One-to-one chats within exchanges",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -287,7 +287,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "If you allow 1-to-1 chats within exchanges, your students can send and receive individual chats with students in exchange-connected classes.",
+                                    "If you allow One-to-one chats within exchanges, your students can send and receive individual chats with students in exchange-connected classes.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -405,7 +405,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             overflow: TextOverflow.clip,
                           ),
                           value: sendVoice,
-                          onChanged: setCreateStories,
+                          onChanged: setSendVoice,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
