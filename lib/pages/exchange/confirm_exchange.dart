@@ -103,6 +103,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
         isOpenEnrollment: false,
         isCreateStories: false,
         isCreateRoomsExchange: false,
+        sendVoice: false,
         isCreateRooms: false,
         isShareVideo: false,
         oneToOneChatClass: false,

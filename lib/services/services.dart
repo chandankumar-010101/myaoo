@@ -432,6 +432,7 @@ class PangeaServices {
     required bool isShareVideo,
     required bool oneToOneChatClass,
     required bool oneToOneChatExchange,
+    required bool sendVoice,
     required String schoolName,
     required bool isExchange,
   }) async {
@@ -482,6 +483,7 @@ class PangeaServices {
               isOpenExchange: isOpenExchange.toString(),
               isSharePhoto: isSharePhoto.toString(),
               isShareLocation: isShareLocation.toString(),
+              sendVoice: sendVoice.toString(),
               isShareFiles: isShareFiles.toString(),
               isPublic: isPublic.toString(),
             ).toJson(),
@@ -659,6 +661,7 @@ class PangeaServices {
     required String shareVideos,
     required String sharePhotos,
     required String shareFiles,
+    required String sendVoice,
     required String shareLocation,
   }) async {
     PangeaServices._init();
@@ -679,6 +682,7 @@ class PangeaServices {
             'is_share_photo': sharePhotos,
             'is_share_files': shareFiles,
             'is_share_location': shareLocation,
+            'is_voice_notes':sendVoice,
             'is_create_stories': createStories,
           },
         ),
