@@ -48,9 +48,7 @@ class Requests {
     }
     Response response = await http.get(_uriBuilder(url), headers: headers);
     if (response.statusCode != 200 && response.statusCode != 201) {
-      try {
-        print(jsonDecode(response.body).toString());
-      } catch (err) {}
+      try {} catch (err) {}
       throw HttpException(jsonDecode(response.body)['detail'].toString());
     }
     if (response.statusCode != 200 && response.statusCode != 201) {

@@ -25,32 +25,43 @@ class SpacesBottomBar extends StatelessWidget {
     return Material(
       color: Theme.of(context).navigationBarTheme.backgroundColor,
       elevation: 6,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConfig.borderRadius)),
+      borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppConfig.borderRadius)),
       clipBehavior: Clip.hardEdge,
       child: SafeArea(
         child: StreamBuilder<Object>(
           stream: Matrix.of(context).client.onSync.stream.where((sync) =>
-              (sync.rooms?.join?.values.any((r) => r.state?.any((s) => s.type.startsWith('m.space')) ?? false) ?? false) ||
+              (sync.rooms?.join?.values.any((r) =>
+                      r.state?.any((s) => s.type.startsWith('m.space')) ??
+                      false) ??
+                  false) ||
               (sync.rooms?.leave?.isNotEmpty ?? false)),
           builder: (context, snapshot) {
             return SingleChildScrollView(
               controller: controller.snappingSheetScrollContentController,
               child: AnimatedBuilder(
-                child: _SpacesBottomNavigation(key: _globalKey, controller: controller),
+                child: _SpacesBottomNavigation(
+                    key: _globalKey, controller: controller),
                 builder: (context, child) {
                   if (controller.snappingSheetContainerSize == null) {
                     return child!;
                   }
-                  final rawPosition = controller.snappingSheetController.isAttached ? controller.snappingSheetController.currentPosition : 0;
-                  final position = rawPosition / controller.snappingSheetContainerSize!.maxHeight;
+                  final rawPosition =
+                      controller.snappingSheetController.isAttached
+                          ? controller.snappingSheetController.currentPosition
+                          : 0;
+                  final position = rawPosition /
+                      controller.snappingSheetContainerSize!.maxHeight;
 
                   if (rawPosition <= kSpacesBottomBarHeight) {
                     return child!;
                   } else if (position >= 0.5) {
                     return SpacesDrawer(controller: controller);
                   } else {
-                    final normalized =
-                        (rawPosition - kSpacesBottomBarHeight) / (controller.snappingSheetContainerSize!.maxHeight - kSpacesBottomBarHeight) * 2;
+                    final normalized = (rawPosition - kSpacesBottomBarHeight) /
+                        (controller.snappingSheetContainerSize!.maxHeight -
+                            kSpacesBottomBarHeight) *
+                        2;
                     var boxHeight = (1 - normalized) * kSpacesBottomBarHeight;
                     if (boxHeight < 0) boxHeight = 0;
 
@@ -58,7 +69,10 @@ class SpacesBottomBar extends StatelessWidget {
                       children: [
                         SizedBox(
                           height: boxHeight,
-                          child: ClipRect(clipBehavior: Clip.hardEdge, child: Opacity(opacity: 1 - normalized, child: child!)),
+                          child: ClipRect(
+                              clipBehavior: Clip.hardEdge,
+                              child: Opacity(
+                                  opacity: 1 - normalized, child: child!)),
                         ),
                         Opacity(
                           opacity: normalized,
@@ -81,17 +95,20 @@ class SpacesBottomBar extends StatelessWidget {
 class _SpacesBottomNavigation extends StatefulWidget {
   final ChatListController controller;
 
-  const _SpacesBottomNavigation({Key? key, required this.controller}) : super(key: key);
+  const _SpacesBottomNavigation({Key? key, required this.controller})
+      : super(key: key);
 
   @override
-  State<_SpacesBottomNavigation> createState() => _SpacesBottomNavigationState();
+  State<_SpacesBottomNavigation> createState() =>
+      _SpacesBottomNavigationState();
 }
 
 class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
   @override
   Widget build(BuildContext context) {
     final currentIndex = widget.controller.spacesEntries.indexWhere((space) =>
-            widget.controller.activeSpacesEntry.runtimeType == space.runtimeType &&
+            widget.controller.activeSpacesEntry.runtimeType ==
+                space.runtimeType &&
             (widget.controller.activeSpaceId == space.getSpace(context)?.id)) +
         1;
 
@@ -115,14 +132,17 @@ class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
               icon: const Icon(Icons.keyboard_arrow_up),
               title: Text(L10n.of(context)!.showSpaces),
             ),
-            ...widget.controller.spacesEntries.map((space) => _buildSpacesEntryUI(context, space)).toList(),
+            ...widget.controller.spacesEntries
+                .map((space) => _buildSpacesEntryUI(context, space))
+                .toList(),
           ],
         ),
       ),
     );
   }
 
-  SalomonBottomBarItem _buildSpacesEntryUI(BuildContext context, SpacesEntry entry) {
+  SalomonBottomBarItem _buildSpacesEntryUI(
+      BuildContext context, SpacesEntry entry) {
     final space = entry.getSpace(context);
     if (space != null) {
       return SalomonBottomBarItem(
