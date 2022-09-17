@@ -1368,7 +1368,7 @@ class PangeaServices {
   static Future<ClassAnalyticsModel>? classAnalyticsFromRoomId(
       {required String roomId}) async {
     try {
-      String url = ApiUrls.classAnalytics + '?room_id=' + roomId + '/';
+      String url = ApiUrls.classAnalytics + '?room_id=' + roomId;
       print('Calling ' + url);
       final response =
           await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
