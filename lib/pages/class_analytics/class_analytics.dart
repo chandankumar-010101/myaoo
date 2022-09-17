@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_analytics_model.dart';
+import 'package:pangeachat/pages/class_analytics/request.dart';
 import '../../config/app_config.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
@@ -75,7 +76,7 @@ class ClassAnalyticsController extends State<ClassAnalytics> {
     try {
       const String roomId = '!cTiZWThxFdBdsTPbSN:staging.pangea.chat';
       classAnalyticsModel =
-          await PangeaServices.classAnalyticsFromRoomId(roomId: roomId);
+          await MyRequest.classAnalyticsFromRoomId(roomId: roomId);
       await _populateUsers(context);
       _mapTableEntries(classAnalyticsModel!);
     } catch (err) {
