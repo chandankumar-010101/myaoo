@@ -10,10 +10,12 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_code_model.dart';
 import 'package:pangeachat/model/fetchClassParticipants.dart';
+import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/search/search_view.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
+import '../model/class_analytics_model.dart';
 import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/exchange_classInfo.dart';
@@ -31,6 +33,7 @@ import '../utils/api_helper.dart';
 import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/choreo_util.dart';
 import '../widgets/matrix.dart';
 import 'api_exception.dart';
 
@@ -1359,6 +1362,33 @@ class PangeaServices {
           webBgColor: "#ff0000",
           backgroundColor: Colors.red);
       throw Exception("Error: Unable to email");
+    }
+  }
+
+  static Future<ClassAnalyticsModel>? classAnalyticsFromRoomId(
+      {required String roomId}) async {
+    try {
+      String url = ApiUrls.classAnalytics + '?room_id=' + roomId;
+      print('Calling ' + url);
+      final response =
+          await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return ClassAnalyticsModel.fromJson(jsonDecode(response.body));
+      } else {
+        ApiException.exception(
+            statusCode: response.statusCode, body: response.body.toString());
+        throw Exception(
+            "Api Error ${response.statusCode}: Unable to fetch result");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(
+          msg: "Error: Unable fetch result",
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
+      throw Exception("Error: Unable fetch result");
     }
   }
 }

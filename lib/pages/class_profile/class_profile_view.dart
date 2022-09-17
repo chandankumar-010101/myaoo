@@ -175,7 +175,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .onPrimaryContainer,
                                   size: 20.0,
                                 ),
-                                Text(data.city.isEmpty?"":data.city.capitalizeFirst!,
+                                Text(
+                                  data.city.isEmpty
+                                      ? ""
+                                      : data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -183,9 +186,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontSize: 12),
                                 ),
-
                                 Text(
-                                  "${data.country==""?" ": " , ${data.country.capitalizeFirst}"}",
+                                  "${data.country == "" ? " " : " , ${data.country.capitalizeFirst}"}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -354,7 +356,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.targetLanguage.toString().capitalizeFirst ?? "",
+                                  data.targetLanguage
+                                          .toString()
+                                          .capitalizeFirst ??
+                                      "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -382,7 +387,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage.toString().capitalizeFirst ?? "",
+                                  data.dominantLanguage
+                                          .toString()
+                                          .capitalizeFirst ??
+                                      "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -391,7 +399,6 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14),
                                 ),
-
                               ],
                             )
                           ],
@@ -716,7 +723,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VRouter.of(context).to('/class_analytics');
+                                    final String roomAlias = VRouter.of(context)
+                                            .queryParameters['id'] ??
+                                        "";
+                                    VRouter.of(context)
+                                        .to('/classAnalytics/' + roomAlias);
                                   },
                                   child: Text(
                                     "Class Analytics",
