@@ -62,5 +62,5 @@ class ApiUrls {
 
   ///-------------------------------- class analytics --------------------------
   static String classAnalytics =
-      Environment.choreo_api + '/choreo/class_analytics';
+      Environment.choreo_api + '/choreo/class_analytics/';
 }
