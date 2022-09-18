@@ -6,6 +6,7 @@ import 'package:pangeachat/pages/chat_details/chat_details.dart';
 import 'package:pangeachat/pages/chat_encryption_settings/chat_encryption_settings.dart';
 import 'package:pangeachat/pages/chat_list/chat_list.dart';
 import 'package:pangeachat/pages/chat_permissions_settings/chat_permissions_settings.dart';
+import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
 
 import 'package:pangeachat/pages/class_join/join_with_link.dart';
 import 'package:pangeachat/pages/class_profile/class_profile.dart';
@@ -79,6 +80,10 @@ class AppRoutes {
                   widget: AddStoryPage(),
                 ),
               ],
+            ),
+            VWidget(
+              path: '/classAnalytics/:spaceid',
+              widget: const ClassAnalytics(),
             ),
             VWidget(
               path: '/classes/:roomid',
@@ -174,6 +179,11 @@ class AppRoutes {
                       widget: AddStoryPage(),
                     ),
                   ],
+                ),
+                VWidget(
+                  path: '/classAnalytics/:spaceid',
+                  widget: const ClassAnalytics(),
+                  buildTransition: _fadeTransition,
                 ),
                 VWidget(
                   path: '/classes/:roomid',

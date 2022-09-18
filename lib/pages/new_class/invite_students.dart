@@ -71,7 +71,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Invite students to enroll\nwith your class.",
+                          "Invite students to enroll\nin your class.",
                           style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,

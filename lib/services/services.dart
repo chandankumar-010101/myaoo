@@ -10,10 +10,12 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_code_model.dart';
 import 'package:pangeachat/model/fetchClassParticipants.dart';
+import 'package:pangeachat/pages/class_analytics/class_analytics.dart';
 import 'package:pangeachat/pages/search/search.dart';
 import 'package:pangeachat/pages/search/search_view.dart';
 import 'package:vrouter/vrouter.dart';
 import '../model/add_class_permissions_model.dart';
+import '../model/class_analytics_model.dart';
 import '../model/class_detail_model.dart';
 import '../model/create_class_model.dart';
 import '../model/exchange_classInfo.dart';
@@ -31,6 +33,7 @@ import '../utils/api_helper.dart';
 import '../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/choreo_util.dart';
 import '../widgets/matrix.dart';
 import 'api_exception.dart';
 
@@ -460,6 +463,7 @@ class PangeaServices {
   static Future<void> createClass({
     required BuildContext context,
     required String roomId,
+    required Room classRoom,
     required String className,
     required String city,
     required String country,
@@ -484,8 +488,7 @@ class PangeaServices {
     required bool isExchange,
   }) async {
     PangeaServices._init();
-    final Room? room = Matrix.of(context).client.getRoomById(roomId);
-    if (room == null) {
+    if (classRoom == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Token expired or unable to find room ",
@@ -556,7 +559,7 @@ class PangeaServices {
             context.vRouter
                 .to("/invite_students", queryParameters: {"id": roomId});
           } else {
-            await room.leave().whenComplete(() {
+            await classRoom.leave().whenComplete(() {
               deleteClass(context: context, roomId: roomId);
               ApiException.exception(
                   statusCode: value.statusCode, body: value.body);
@@ -569,7 +572,7 @@ class PangeaServices {
             }
           }
         } catch (e) {
-          await room.leave().whenComplete(() {
+          await classRoom.leave().whenComplete(() {
             deleteClass(context: context, roomId: roomId);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
@@ -585,7 +588,7 @@ class PangeaServices {
       } else {
         print("what is ggoing on");
         print(value.statusCode);
-        await room.leave().whenComplete(() {
+        await classRoom.leave().whenComplete(() {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body);
         }).catchError((e) {
@@ -593,7 +596,7 @@ class PangeaServices {
         });
       }
     } catch (e) {
-      await room.leave().whenComplete(() {
+      await classRoom.leave().whenComplete(() {
         deleteClass(context: context, roomId: roomId);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -1028,8 +1031,8 @@ class PangeaServices {
           }));
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(
-            msg: "Mail Sent Successfully",
-            backgroundColor: Colors.green,
+            msg: "Mail sent successfully!",
+            backgroundColor: Color(0xFF5625BA),
             webBgColor: "#00ff00");
       } else {
         ApiException.exception(
@@ -1359,6 +1362,34 @@ class PangeaServices {
           webBgColor: "#ff0000",
           backgroundColor: Colors.red);
       throw Exception("Error: Unable to email");
+    }
+  }
+
+  static Future<ClassAnalyticsModel>? classAnalyticsFromRoomId(
+      {required String roomId}) async {
+    try {
+      String url = ApiUrls.classAnalytics + '?room_id=' + roomId;
+      print('Calling ' + url);
+
+      final response =
+          await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return ClassAnalyticsModel.fromJson(jsonDecode(response.body));
+      } else {
+        ApiException.exception(
+            statusCode: response.statusCode, body: response.body.toString());
+        throw Exception(
+            "Api Error ${response.statusCode}: Unable to fetch result");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      Fluttertoast.showToast(
+          msg: "Error: Unable fetch result",
+          webBgColor: "#ff0000",
+          backgroundColor: Colors.red);
+      throw Exception("Error: Unable fetch result");
     }
   }
 }
