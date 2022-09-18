@@ -70,34 +70,39 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
     );
     final bool? status = await PangeaServices.makeAdmin(exchangeId, senderId);
     if(status !=null){
-      await PangeaServices.saveExchangeRecord(senderClassId,
-          receiverClassId, senderId, receiverId, exchangeId);
-      await PangeaServices.createClass(
-        context: context,
-        roomId: exchangeId,
-        className: className,
-        city: city,
-        country: country,
-        dominantLanguage: receiverClassInfo.dominantLanguage,
-        targetLanguage: receiverClassInfo.targetLanguage,
-        desc: "Exchange",
-        languageLevel: 1,
-        isPublic: false,
-        isShareFiles: false,
-        isShareLocation: false,
-        isSharePhoto: false,
-        isOpenExchange: false,
-        isOpenEnrollment: false,
-        isCreateStories: false,
-        isCreateRoomsExchange: false,
-        sendVoice: false,
-        isCreateRooms: false,
-        isShareVideo: false,
-        oneToOneChatClass: false,
-        oneToOneChatExchange: false,
-        schoolName: school,
-        isExchange: true,
-      ).whenComplete(() => exchangeId);
+      final Room? room = Matrix.of(context).client.getRoomById(exchangeId);
+      if(room !=null){
+        await PangeaServices.saveExchangeRecord(senderClassId,
+            receiverClassId, senderId, receiverId, exchangeId);
+        await PangeaServices.createClass(
+          context: context,
+          roomId: exchangeId,
+          className: className,
+          classRoom: room,
+          city: city,
+          country: country,
+          dominantLanguage: receiverClassInfo.dominantLanguage,
+          targetLanguage: receiverClassInfo.targetLanguage,
+          desc: "Exchange",
+          languageLevel: 1,
+          isPublic: false,
+          isShareFiles: false,
+          isShareLocation: false,
+          isSharePhoto: false,
+          isOpenExchange: false,
+          isOpenEnrollment: false,
+          isCreateStories: false,
+          isCreateRoomsExchange: false,
+          sendVoice: false,
+          isCreateRooms: false,
+          isShareVideo: false,
+          oneToOneChatClass: false,
+          oneToOneChatExchange: false,
+          schoolName: school,
+          isExchange: true,
+        ).whenComplete(() => exchangeId);
+      }
+
     }
 
 

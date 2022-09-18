@@ -463,6 +463,7 @@ class PangeaServices {
   static Future<void> createClass({
     required BuildContext context,
     required String roomId,
+    required Room classRoom,
     required String className,
     required String city,
     required String country,
@@ -487,8 +488,7 @@ class PangeaServices {
     required bool isExchange,
   }) async {
     PangeaServices._init();
-    final Room? room = Matrix.of(context).client.getRoomById(roomId);
-    if (room == null) {
+    if (classRoom == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Token expired or unable to find room ",
@@ -559,7 +559,7 @@ class PangeaServices {
             context.vRouter
                 .to("/invite_students", queryParameters: {"id": roomId});
           } else {
-            await room.leave().whenComplete(() {
+            await classRoom.leave().whenComplete(() {
               deleteClass(context: context, roomId: roomId);
               ApiException.exception(
                   statusCode: value.statusCode, body: value.body);
@@ -572,7 +572,7 @@ class PangeaServices {
             }
           }
         } catch (e) {
-          await room.leave().whenComplete(() {
+          await classRoom.leave().whenComplete(() {
             deleteClass(context: context, roomId: roomId);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
@@ -588,7 +588,7 @@ class PangeaServices {
       } else {
         print("what is ggoing on");
         print(value.statusCode);
-        await room.leave().whenComplete(() {
+        await classRoom.leave().whenComplete(() {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body);
         }).catchError((e) {
@@ -596,7 +596,7 @@ class PangeaServices {
         });
       }
     } catch (e) {
-      await room.leave().whenComplete(() {
+      await classRoom.leave().whenComplete(() {
         deleteClass(context: context, roomId: roomId);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -1031,8 +1031,8 @@ class PangeaServices {
           }));
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(
-            msg: "Mail Sent Successfully",
-            backgroundColor: Colors.green,
+            msg: "Mail sent successfully!",
+            backgroundColor: Color(0xFF5625BA),
             webBgColor: "#00ff00");
       } else {
         ApiException.exception(
