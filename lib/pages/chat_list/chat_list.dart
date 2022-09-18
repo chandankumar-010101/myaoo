@@ -309,7 +309,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
           sendVoice: true,
           isShareFiles: true,
           isShareLocation: true,
-          isCreateStories: true);
+        isCreateStories: false,
+          //isCreateStories: true,
+      );
     }
     setState(() {});
   }

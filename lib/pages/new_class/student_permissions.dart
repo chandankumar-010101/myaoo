@@ -102,7 +102,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           isCreateRooms: createRooms,
           isShareFiles: shareFiles,
           isShareVideo: shareVideos,
-          isCreateStories: createStories,
+          isCreateStories: false,
+          //isCreateStories: createStories,
           sendVoice: sendVoice,
           isShareLocation: shareLocation,
           isOpenExchange: openToExchange,
@@ -363,38 +364,38 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                           ),
                         ),
                         ///create stories
-                        SwitchListTile.adaptive(
-                          title: Text(
-                            "Create Stories",
-                            style: TextStyle().copyWith(
-                              color: Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            overflow: TextOverflow.clip,
-                          ),
-                          value: createStories,
-                          onChanged: setCreateStories,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: 5),
-                                  child: Text(
-                                    "Toggle this on to allow students to create stories.",
-                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
-                                    overflow: TextOverflow.clip,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // SwitchListTile.adaptive(
+                        //   title: Text(
+                        //     "Create Stories",
+                        //     style: TextStyle().copyWith(
+                        //       color: Theme.of(context).textTheme.bodyText1!.color,
+                        //       fontSize: 14,
+                        //       fontWeight: FontWeight.w700,
+                        //     ),
+                        //     overflow: TextOverflow.clip,
+                        //   ),
+                        //   value: createStories,
+                        //   onChanged: setCreateStories,
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.start,
+                        //     children: [
+                        //       Expanded(
+                        //         child: Padding(
+                        //           padding: EdgeInsets.only(right: 5),
+                        //           child: Text(
+                        //             "Toggle this on to allow students to create stories.",
+                        //             style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                        //             overflow: TextOverflow.clip,
+                        //             textAlign: TextAlign.left,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         ///send Voice
                         SwitchListTile.adaptive(
                           title: Text(
@@ -646,7 +647,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                       sharePhotos: sharePhotos.toString(),
                                       oneToOneChatsWithinClass: oneToOneChatsWithinClass.toString(),
                                       createRoomsInExchanges: createRoomsInExchanges.toString(),
-                                      createStories: createStories.toString(),
+                                    //  createStories: createStories.toString(),
+                                      createStories: false.toString(),
                                       sendVoice: sendVoice.toString(),
                                       shareFiles: shareFiles.toString(),
                                       oneToOneChatsWithinExchanges: oneToOneChatsWithinExchanges.toString(),
