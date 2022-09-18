@@ -262,6 +262,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                 if (i >= peoplerooms.length) {
                                   return Container();
                                 }
+
                                 return PeopleListItem(peoplerooms[i],
                                     selected: widget.controller.selectedRoomIds.contains(peoplerooms[i].id),
                                     onTap: widget.controller.userType == 2 || permission != null && permission!.oneToOneChatClass
@@ -289,16 +290,16 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                                   }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
                                                 ],
                                                 // creationContent: {'type': RoomCreationTypes.mSpace},
-                                                roomAliasName: peoplerooms[i].displayName! +
+                                                roomAliasName: peoplerooms[i].displayName!.replaceAll(" ", "_") +
                                                     "-" +
                                                     matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                                     "#" +
-                                                    random.nextInt(9999).toString(),
-                                                name: peoplerooms[i].displayName! +
+                                                    random.nextInt(999).toString(),
+                                                name: peoplerooms[i].displayName!.replaceAll(" ", "_") +
                                                     "-" +
                                                     matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                                     "#" +
-                                                    random.nextInt(9999).toString(),
+                                                    random.nextInt(999).toString(),
                                               ),
                                             );
                                             if (roomID.result != null) {
@@ -465,16 +466,16 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                                   }, type: EventTypes.spaceParent, stateKey: space != null ? space.id : ""),
                                                 ],
                                                 // creationContent: {'type': RoomCreationTypes.mSpace},
-                                                roomAliasName: peoplerooms[i].displayName! +
+                                                roomAliasName: peoplerooms[i].displayName!.replaceAll(" ", "_") +
                                                     "-" +
                                                     matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                                     "#" +
-                                                    random.nextInt(9999).toString(),
-                                                name: peoplerooms[i].displayName! +
+                                                    random.nextInt(999).toString(),
+                                                name: peoplerooms[i].displayName!.replaceAll(" ", "_") +
                                                     "-" +
                                                     matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                                                     "#" +
-                                                    random.nextInt(9999).toString(),
+                                                    random.nextInt(999).toString(),
                                               ),
                                             );
                                             if (roomID.result != null) {
