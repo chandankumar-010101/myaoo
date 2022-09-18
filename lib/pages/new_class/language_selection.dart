@@ -255,9 +255,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 enabled: id.isEmpty ? true : false,
                 controller: classNameController,
                 autofocus: true,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z ""]")),
-                ],
+
                 maxLength: 50,
                 autocorrect: false,
                 decoration: InputDecoration(
@@ -439,16 +437,18 @@ class _ClassLanguageState extends State<ClassLanguage> {
               padding: EdgeInsets.all(size.height * 0.01),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
+                  Padding(padding: EdgeInsets.only(bottom: 10),child:   SvgPicture.asset(
                     "assets/png/house.svg",
-                    height: 50,
-                    width: 50,
+                    height: 40,
+                    alignment: Alignment.center,
+                    width: 40,
                     fit: BoxFit.contain,
-                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).colorScheme.onPrimary,
-                  ),
+                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).colorScheme.onPrimary,
+                  ),),
                   // Image.asset(
                   //   "assets/png/house.png",
                   //   width: 40,

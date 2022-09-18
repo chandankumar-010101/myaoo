@@ -92,7 +92,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
         if (kDebugMode) {
           print(roomID.result);
         }
-        await PangeaServices.createClass(
+        final Room? room = Matrix.of(context).client.getRoomById(roomID.result!);
+        room !=null?await PangeaServices.createClass(
+          classRoom: room,
           isExchange: false,
           context: context,
           isPublic: publicGroup,
@@ -117,7 +119,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           dominantLanguage: sourceLanguage,
           targetLanguage: targetLanguage,
           schoolName: schoolName.toString(),
-        );
+        ):null;
       }
       if (roomID == null) {
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
@@ -188,7 +190,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
             : AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Update student permissions",
+            "Update Student Permissions",
             style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.left,
@@ -238,7 +240,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                       children: [
                         SwitchListTile.adaptive(
                           title: Text(
-                            "One-to-one chats within class",
+                            "One-to-one Chats within Class",
                             style:
                                 TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                             overflow: TextOverflow.clip,
@@ -267,7 +269,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "One-to-one chats within exchanges",
+                            "One-to-one Chats within Exchanges",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -299,7 +301,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "Create rooms",
+                            "Create Rooms",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -319,8 +321,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                     padding: EdgeInsets.only(right: 5),
                                     child: Text(
-                                      "Toggle this on to allow students to create rooms within your class",
-                                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                      "Toggle this on to allow students to create rooms within your class.",
+                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     )),
@@ -330,7 +332,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "Create rooms in exchanges",
+                            "Create Rooms in Exchanges",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -451,7 +453,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to share videos chats/rooms",
+                                    "Toggle this on to allow students to share videos chats/rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -512,7 +514,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to share files in chats/rooms",
+                                    "Toggle this on to allow students to share files in chats/rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -544,7 +546,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to share their location in chats/rooms",
+                                    "Toggle this on to allow students to share their location in chats/rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,

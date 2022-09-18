@@ -184,7 +184,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                       ),
                       SwitchListTile.adaptive(
                         title: Text(
-                          "Open to exchanges?",
+                          "Open to Exchanges?",
                           style: const TextStyle()
                               .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                           overflow: TextOverflow.clip,
