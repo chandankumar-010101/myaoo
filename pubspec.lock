@@ -419,10 +419,12 @@ packages:
   emoji_picker_flutter:
     dependency: "direct main"
     description:
-      name: emoji_picker_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.1"
+      path: "."
+      ref: ba6c93fdea93ee70f4611b52ebff721535e6b869
+      resolved-ref: ba6c93fdea93ee70f4611b52ebff721535e6b869
+      url: "https://github.com/Fintasys/emoji_picker_flutter.git"
+    source: git
+    version: "1.1.2"
   encrypt:
     dependency: "direct main"
     description:
