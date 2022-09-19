@@ -141,6 +141,10 @@ class ChoreoController {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  setActiveClassId(String? classId) {
+    state!.classId = classId;
+  }
+
   get srcButtonTxt => 'Send';
   setRoomId(String? roomId) {
     this.state!.setRoomId(roomId);
