@@ -26,7 +26,11 @@ class ConnectPage extends StatefulWidget {
 
 class ConnectPageController extends State<ConnectPage> {
   final TextEditingController usernameController = TextEditingController();
+  bool isTnCChecked = false;
+  String tncMessage = 'Please agree to the Terms and Conditions';
   String? signupError;
+  String? loginError;
+  String? ssoError;
   bool loading = false;
 
   void pickAvatar() async {
@@ -62,8 +66,15 @@ class ConnectPageController extends State<ConnectPage> {
   }
 
   void signUp() async {
+    if (!isTnCChecked) {
+      setState(() {
+        signupError = tncMessage;
+      });
+      return;
+    }
     usernameController.text = usernameController.text.trim();
-    final localpart = usernameController.text.toLowerCase().replaceAll(' ', '_');
+    final localpart =
+        usernameController.text.toLowerCase().replaceAll(' ', '_');
     if (localpart.isEmpty) {
       setState(() {
         signupError = L10n.of(context)!.pleaseChooseAUsername;
@@ -79,9 +90,7 @@ class ConnectPageController extends State<ConnectPage> {
     try {
       try {
         await Matrix.of(context).getLoginClient().register(username: localpart);
-
       } on MatrixException catch (e) {
-
         if (!e.requireAdditionalAuthentication) rethrow;
       }
       setState(() {
@@ -113,7 +122,15 @@ class ConnectPageController extends State<ConnectPage> {
 
   bool get supportsLogin => _supportsFlow('m.login.password');
 
-  void login() => VRouter.of(context).to('login');
+  void login() {
+    if (!isTnCChecked) {
+      setState(() {
+        loginError = tncMessage;
+      });
+      return;
+    }
+    VRouter.of(context).to('login');
+  }
 
   Map<String, dynamic>? _rawLoginTypes;
 
@@ -129,12 +146,12 @@ class ConnectPageController extends State<ConnectPage> {
     //     list.add(IdentityProvider.fromJson(rawProviders[i]["name"]));
     //   }
     // }
-    final list = (rawProviders as List).where((element) => !checkList.contains(element["name"])).toList();
+    final list = (rawProviders as List)
+        .where((element) => !checkList.contains(element["name"]))
+        .toList();
 
-
-    final newList = list.map((json) =>
-      IdentityProvider.fromJson(json)
-    ).toList();
+    final newList =
+        list.map((json) => IdentityProvider.fromJson(json)).toList();
 
     // final list = (rawProviders as List).map((json) {
     //   if (!checkList.contains(json["name"])) {
@@ -148,7 +165,23 @@ class ConnectPageController extends State<ConnectPage> {
     return newList;
   }
 
+  void onTncChange(bool? value) {
+    print(value);
+
+    isTnCChecked = value ?? false;
+    signupError = null;
+    loginError = null;
+    ssoError = null;
+    setState(() {});
+  }
+
   void ssoLoginAction(String id) async {
+    if (!isTnCChecked) {
+      setState(() {
+        ssoError = tncMessage;
+      });
+      return;
+    }
     final redirectUrl = kIsWeb
         ? html.window.origin! + '/auth.html'
         : AppConfig.appOpenUrlScheme.toLowerCase() + '://login';

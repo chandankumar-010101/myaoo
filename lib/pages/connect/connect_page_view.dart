@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_svg/svg.dart';
@@ -54,11 +55,11 @@ class ConnectPageView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 100),
-                          child:
-                          SvgPicture.asset(
-                            "assets/newAssets/pangea-bare.svg",
-                          ),),
+                        constraints: BoxConstraints(maxHeight: 100),
+                        child: SvgPicture.asset(
+                          "assets/newAssets/pangea-bare.svg",
+                        ),
+                      ),
                       const SizedBox(
                         width: 10.0,
                       ),
@@ -66,7 +67,6 @@ class ConnectPageView extends StatelessWidget {
                   ),
                 ),
               ),
-
               Expanded(
                 child: ListView(
                   children: [
@@ -163,13 +163,14 @@ class ConnectPageView extends StatelessWidget {
                                             style: FluffyThemes
                                                 .loginTextFieldStyle,
                                             decoration: InputDecoration(
-                                             contentPadding:
-                                                EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 10.0),
                                               fillColor:
                                                   const Color(0xFFDADDE2),
                                               filled: true,
                                               errorText: controller.signupError,
-
                                               hintText: L10n.of(context)!
                                                   .chooseAUsername,
                                               hintStyle: const TextStyle(
@@ -239,12 +240,11 @@ class ConnectPageView extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-
+                                    errorWidget(context, controller.loginError),
                                     SizedBox(
                                       height: 20,
                                     )
                                   ],
-
                                   if (controller.supportsSso)
                                     identityProviders == null
                                         ? const SizedBox(
@@ -257,49 +257,60 @@ class ConnectPageView extends StatelessWidget {
                                           )
                                         : Center(
                                             child: identityProviders.length == 1
-                                                ?
-                                            ConstrainedBox(
-                                              constraints:
-                                              const BoxConstraints(maxWidth: 400),
-                                              child:  Padding(
-                                                padding:
-                                                const EdgeInsets.all(
-                                                    25.0),
-                                                child: ElevatedButton.icon(
-
-                                                  onPressed: () => controller
-                                                      .ssoLoginAction(
-                                                      identityProviders
-                                                          .single.id!),
-                                                  style: ElevatedButton
-                                                      .styleFrom(
-                                                    primary: Colors.white
-                                                        .withAlpha(200),
-                                                    onPrimary: Colors.black,
-                                                    shadowColor:
-                                                    Colors.white,
-                                                  ),
-                                                  icon: identityProviders.single.icon == null
-                                                      ? Image.asset("assets/png/google.png",width:25,height: 25, )
-                                                      : CachedNetworkImage(
-                                                    imageUrl: Uri.parse(identityProviders.single.icon!)
-                                                        .getDownloadLink(
-                                                        Matrix.of(context).getLoginClient())
-                                                        .toString(),
-                                                    width: 30,
-                                                    height: 30,
-                                                  ),
-                                                  label: Text(identityProviders
-                                                      .single.name ??
-                                                      identityProviders
-                                                          .single.brand ??
-                                                      L10n.of(context)!
-                                                          .loginWithOneClick),
-
-                                                ),
-                                              )
-                                            )
-
+                                                ? ConstrainedBox(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxWidth: 400),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 25,
+                                                              right: 25),
+                                                      child:
+                                                          ElevatedButton.icon(
+                                                        onPressed: () => controller
+                                                            .ssoLoginAction(
+                                                                identityProviders
+                                                                    .single
+                                                                    .id!),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary: Colors.white
+                                                              .withAlpha(200),
+                                                          onPrimary:
+                                                              Colors.black,
+                                                          shadowColor:
+                                                              Colors.white,
+                                                        ),
+                                                        icon: identityProviders
+                                                                    .single
+                                                                    .icon ==
+                                                                null
+                                                            ? Image.asset(
+                                                                "assets/png/google.png",
+                                                                width: 25,
+                                                                height: 25,
+                                                              )
+                                                            : CachedNetworkImage(
+                                                                imageUrl: Uri.parse(
+                                                                        identityProviders
+                                                                            .single
+                                                                            .icon!)
+                                                                    .getDownloadLink(
+                                                                        Matrix.of(context)
+                                                                            .getLoginClient())
+                                                                    .toString(),
+                                                                width: 30,
+                                                                height: 30,
+                                                              ),
+                                                        label: Text(identityProviders
+                                                                .single.name ??
+                                                            identityProviders
+                                                                .single.brand ??
+                                                            L10n.of(context)!
+                                                                .loginWithOneClick),
+                                                      ),
+                                                    ))
                                                 : Wrap(
                                                     children: <Widget>[
                                                       for (final identityProvider
@@ -315,23 +326,38 @@ class ConnectPageView extends StatelessWidget {
                                                     ].toList(),
                                                   ),
                                           ),
-
+                                  errorWidget(context, controller.ssoError),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Wrap(alignment: WrapAlignment.center, children: [
-                                    TextButton(
-                                      onPressed: () => launch(AppConfig.privacyUrl),
-                                      child: Text(
-                                        L10n.of(context)!.privacy,
-                                        style: const TextStyle(
-                                          decoration: TextDecoration.underline,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(maxWidth: 400),
+                                    child: Row(children: [
+                                      Checkbox(
+                                          value: controller.isTnCChecked,
+                                          onChanged: (value) {
+                                            controller.onTncChange(value);
+                                          }),
+                                      Expanded(child: tncWidget(context))
+                                    ]),
+                                  ),
+                                  Wrap(
+                                    alignment: WrapAlignment.center,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            launch(AppConfig.privacyUrl),
+                                        child: Text(
+                                          L10n.of(context)!.privacy,
+                                          style: const TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                   ],
+                                    ],
                                   ),
                                 ],
                               ),
@@ -348,6 +374,28 @@ class ConnectPageView extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget tncWidget(BuildContext context) {
+    return RichText(
+        text: TextSpan(text: 'I agree to the', children: const [
+      TextSpan(
+          text: ' Terms and Conditions ', style: TextStyle(color: Colors.blue)),
+      TextSpan(text: 'and certify I am at least 13 years of age.')
+    ]));
+  }
+
+  Widget errorWidget(BuildContext context, String? erroMessage) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Text(
+          erroMessage ?? '',
+          style: TextStyle(color: Color(0xFFc34c4b), fontSize: 12),
         ),
       ),
     );
