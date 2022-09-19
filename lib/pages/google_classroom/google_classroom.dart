@@ -43,17 +43,13 @@ class GoogleClassroomController extends State<GoogleClassroom> {
   }
 
   getCourses(GoogleSignInAccount currentUser) async {
-    log("Get Courses");
     final a = await currentUser.authHeaders;
-    print("Current user Auth Header" + a.toString());
     final List<CourseModel> courses = [];
     final baseClient = new http.Client();
     final authenticateClient = AuthenticateClient(a, baseClient);
     final api = v1.ClassroomApi(authenticateClient);
     try {
       final response = await api.courses.list();
-
-      print(response.toString());
 
       if (response.courses != null) {
         for (final v1.Course course in response.courses!) {
@@ -96,7 +92,7 @@ class GoogleClassroomController extends State<GoogleClassroom> {
         isLoggedIn = true;
       });
     } else {
-      Fluttertoast.showToast(msg: "Cannot find any classrooms with the specific id",webBgColor: "#ff0000",backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Cannot find any classrooms with the specific id", webBgColor: "#ff0000", backgroundColor: Colors.red);
     }
     return courses;
   }
