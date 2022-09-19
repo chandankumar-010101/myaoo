@@ -70,6 +70,9 @@ class ChoreoController {
   }
 
   String? get translatedText {
+    if (state!.currentRoute == ChoreoRoute.STEP1_ERROR) {
+      return textController!.text;
+    }
     if (state!.currentRoute == ChoreoRoute.INITAL_LOADING ||
         state!.currentRoute == ChoreoRoute.SEND ||
         state!.currentRoute == ChoreoRoute.STEP1) {

@@ -18,12 +18,14 @@ class Step1Controller extends LoaderState {
     try {
       controller.state!.stopEditing();
       startLoading();
+
       ChoreoInitCallModel initCall = ChoreoInitCallModel()
         ..l1_lang = controller.lang!.srcLang!.langCode
         ..l2_lang = controller.lang!.trgLang!.langCode
         ..user_id = controller.state!.userId
         ..room_id = controller.state!.roomId
         ..text = controller.originalText;
+
       _choreoResponse = await ChoreoRepo.chereoInit(initCall);
       if (_choreoResponse!.payload_id != null) {
         controller.state!.payLoadIds.add(_choreoResponse!.payload_id!);
@@ -40,9 +42,13 @@ class Step1Controller extends LoaderState {
       print('Error in initial');
       stopLoading();
       controller.state!.changeRoute(ChoreoRoute.STEP1_ERROR);
-      controller.errorService!.showErrorAndReset(
-          'Unable to process at the moment, please try again');
+      controller.errorService!
+          .showErrorAndReset('Translation services unavailable at the moment');
+      Future.delayed(Duration(seconds: 1), () {
+        controller.send();
+      });
     }
+
     stopLoading();
   }
 
