@@ -51,7 +51,13 @@ class ChoreoController {
   }
 
   bool get isOpen => state!.isOpen;
-  openIt() {
+  openIt({bool? enabledId}) {
+    if (enabledId == null) {
+      if (!enabledId!) {
+        send();
+        return;
+      }
+    }
     this.state!.openBar();
 
     setState();
@@ -70,7 +76,8 @@ class ChoreoController {
   }
 
   String? get translatedText {
-    if (state!.currentRoute == ChoreoRoute.STEP1_ERROR) {
+    if (state!.currentRoute == ChoreoRoute.STEP1_ERROR ||
+        state!.currentRoute == ChoreoRoute.INITAL_LOADING) {
       return textController!.text;
     }
     if (state!.currentRoute == ChoreoRoute.INITAL_LOADING ||
