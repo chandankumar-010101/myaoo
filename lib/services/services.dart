@@ -142,9 +142,9 @@ class PangeaServices {
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
         Fluttertoast.showToast(
-            msg: "Mail Sent Successfully",
-            backgroundColor: Colors.green,
-            webBgColor: "#00ff00");
+            msg: "Mail sent successfully!",
+            backgroundColor: Color(0xFF5625BA),
+            webBgColor: "#5625BA");
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
@@ -1033,7 +1033,7 @@ class PangeaServices {
         Fluttertoast.showToast(
             msg: "Mail sent successfully!",
             backgroundColor: Color(0xFF5625BA),
-            webBgColor: "#00ff00");
+            webBgColor: "#5625BA");
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
