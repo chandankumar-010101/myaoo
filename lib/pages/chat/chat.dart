@@ -31,11 +31,13 @@ import 'package:pangeachat/utils/matrix_sdk_extensions.dart/matrix_locals.dart';
 import 'package:pangeachat/utils/platform_infos.dart';
 import 'package:pangeachat/utils/voip/callkeep_manager.dart';
 import 'package:pangeachat/widgets/matrix.dart';
+import '../../config/app_config.dart';
 import '../../config/environment.dart';
 import '../../utils/account_bundles.dart';
 import '../../utils/localized_exception_extension.dart';
 import '../../utils/matrix_sdk_extensions.dart/filtered_timeline_extension.dart';
 import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
+import '../chat_list/spaces_entry.dart';
 import 'send_file_dialog.dart';
 import 'send_location_dialog.dart';
 import 'sticker_picker_dialog.dart';
@@ -69,7 +71,16 @@ class ChatController extends State<Chat> {
   Timer? typingTimeout;
   bool currentlyTyping = false;
   bool dragging = false;
+  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
+      ? DirectChatsSpacesEntry()
+      : AllRoomsSpacesEntry();
+  SpacesEntry? _activeSpacesEntry;
+  SpacesEntry get activeSpacesEntry {
+    final id = _activeSpacesEntry;
+    return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
+  }
 
+  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
   void onDragEntered(_) => setState(() => dragging = true);
 
   void onDragExited(_) => setState(() => dragging = false);
@@ -192,7 +203,8 @@ class ChatController extends State<Chat> {
 
       choreoController.setSrcLang(box.read('sourcelanguage'));
       choreoController.setTrgLang(box.read('targetlanguage'));
-
+      choreoController.setActiveClassId(
+          Matrix.of(context).pangeaClassController.activeSpaceId(context));
       choreoController.stateListener.stream.listen((event) {
         setState(() {});
       });
@@ -268,6 +280,7 @@ class ChatController extends State<Chat> {
     timeline?.cancelSubscriptions();
     timeline = null;
     inputFocus.removeListener(_inputFocusListener);
+    choreoController.stateListener.close();
     super.dispose();
   }
 

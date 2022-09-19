@@ -97,6 +97,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Future<void> setActiveSpacesEntry(
       BuildContext context, SpacesEntry? spaceId) async {
+    Matrix.of(context)
+        .pangeaClassController
+        .setActiveSpacesEntry(context, spaceId);
     getClassPermissions();
     if ((snappingSheetController.isAttached
             ? snappingSheetController.currentPosition
@@ -296,21 +299,21 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       log("Stories  (${activeSpaceId}): ${result.permissions.isCreateStories}");
     } else {
       permissions = Permissions(
-          pangeaClass: 0,
-          isPublic: true,
-          isOpenEnrollment: true,
-          isOpenExchange: true,
-          oneToOneChatClass: true,
-          oneToOneChatExchange: true,
-          isCreateRooms: true,
-          isCreateRoomsExchange: true,
-          isShareVideo: true,
-          isSharePhoto: true,
-          sendVoice: true,
-          isShareFiles: true,
-          isShareLocation: true,
+        pangeaClass: 0,
+        isPublic: true,
+        isOpenEnrollment: true,
+        isOpenExchange: true,
+        oneToOneChatClass: true,
+        oneToOneChatExchange: true,
+        isCreateRooms: true,
+        isCreateRoomsExchange: true,
+        isShareVideo: true,
+        isSharePhoto: true,
+        sendVoice: true,
+        isShareFiles: true,
+        isShareLocation: true,
         isCreateStories: false,
-          //isCreateStories: true,
+        //isCreateStories: true,
       );
     }
     setState(() {});

@@ -17,7 +17,12 @@ class ChoreoState {
     this.currentRoute = ChoreoRoute.INITAL_LOADING;
   }
 
-  get classId => null;
+  String? _classId;
+  set classId(String? classId) {
+    _classId = classId;
+  }
+
+  String? get classId => _classId;
   get roomId => _roomId;
   void setRoomId(String? roomId) {
     _roomId = roomId ?? '';
