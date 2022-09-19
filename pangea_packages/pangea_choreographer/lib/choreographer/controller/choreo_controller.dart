@@ -51,9 +51,9 @@ class ChoreoController {
   }
 
   bool get isOpen => state!.isOpen;
-  openIt({bool? enabledId}) {
-    if (enabledId == null) {
-      if (!enabledId!) {
+  openIt({bool? disableIT}) {
+    if (disableIT != null) {
+      if (disableIT!) {
         send();
         return;
       }

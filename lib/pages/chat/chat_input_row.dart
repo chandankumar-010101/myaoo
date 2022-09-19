@@ -49,7 +49,9 @@ class _ChatInputRowState extends State<ChatInputRow> {
 
     String acessToken = GetStorage().read("access");
     Room room = widget.controller.room!;
-    final id = room.spaceParents != null && room.spaceParents.isNotEmpty ? room.spaceParents.first.roomId : null;
+    final id = room.spaceParents != null && room.spaceParents.isNotEmpty
+        ? room.spaceParents.first.roomId
+        : null;
     if (id != null) {
       final result = await PangeaServices.fetchClassInfo(context, id);
       permissions = result.permissions;
@@ -79,7 +81,8 @@ class _ChatInputRowState extends State<ChatInputRow> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.controller.showEmojiPicker && widget.controller.emojiPickerType == EmojiPickerType.reaction) {
+    if (widget.controller.showEmojiPicker &&
+        widget.controller.emojiPickerType == EmojiPickerType.reaction) {
       return Container();
     }
 
@@ -109,7 +112,11 @@ class _ChatInputRowState extends State<ChatInputRow> {
                           ),
                         ),
                         widget.controller.selectedEvents.length == 1
-                            ? widget.controller.selectedEvents.first.getDisplayEvent(widget.controller.timeline!).status.isSent
+                            ? widget.controller.selectedEvents.first
+                                    .getDisplayEvent(
+                                        widget.controller.timeline!)
+                                    .status
+                                    .isSent
                                 ? SizedBox(
                                     height: 56,
                                     child: TextButton(
@@ -117,7 +124,8 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                       child: Row(
                                         children: <Widget>[
                                           Text(L10n.of(context)!.reply),
-                                          const Icon(Icons.keyboard_arrow_right),
+                                          const Icon(
+                                              Icons.keyboard_arrow_right),
                                         ],
                                       ),
                                     ),
@@ -125,12 +133,15 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                 : SizedBox(
                                     height: 56,
                                     child: TextButton(
-                                      onPressed: widget.controller.sendAgainAction,
+                                      onPressed:
+                                          widget.controller.sendAgainAction,
                                       child: Row(
                                         children: <Widget>[
-                                          Text(L10n.of(context)!.tryToSendAgain),
+                                          Text(
+                                              L10n.of(context)!.tryToSendAgain),
                                           const SizedBox(width: 4),
-                                          const Icon(Icons.send_outlined, size: 16),
+                                          const Icon(Icons.send_outlined,
+                                              size: 16),
                                         ],
                                       ),
                                     ),
@@ -148,23 +159,25 @@ class _ChatInputRowState extends State<ChatInputRow> {
                             decoration: const BoxDecoration(),
                             child: PopupMenuButton<String>(
                               icon: const Icon(Icons.add_outlined),
-                              onSelected: widget.controller.onAddPopupMenuButtonSelected,
-                              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                              onSelected: widget
+                                  .controller.onAddPopupMenuButtonSelected,
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
                                 ///share files
-                                if(permission.isShareFiles || userType ==2)
-                                PopupMenuItem<String>(
-                                  enabled: true,
-                                  value: 'file',
-                                  child: ListTile(
-                                    leading: const CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      foregroundColor: Colors.white,
-                                      child: Icon(Icons.attachment_outlined),
+                                if (permission.isShareFiles || userType == 2)
+                                  PopupMenuItem<String>(
+                                    enabled: true,
+                                    value: 'file',
+                                    child: ListTile(
+                                      leading: const CircleAvatar(
+                                        backgroundColor: Colors.green,
+                                        foregroundColor: Colors.white,
+                                        child: Icon(Icons.attachment_outlined),
+                                      ),
+                                      title: Text(L10n.of(context)!.sendFile),
+                                      contentPadding: const EdgeInsets.all(0),
                                     ),
-                                    title: Text(L10n.of(context)!.sendFile),
-                                    contentPadding: const EdgeInsets.all(0),
                                   ),
-                                ),
                                 // ///share location
                                 // if((permission.isShareLocation||userType ==2) && PlatformInfos.isMobile )
                                 // const PopupMenuItem<String>(
@@ -180,23 +193,25 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                 //     contentPadding: EdgeInsets.all(0),
                                 //   ),
                                 // ),
-                               ///share photo
-                                if(permission.isSharePhoto || userType ==2)
+                                ///share photo
+                                if (permission.isSharePhoto || userType == 2)
                                   PopupMenuItem<String>(
-                                  enabled: true,
-                                  value: 'image',
-                                  child: ListTile(
-                                    leading: const CircleAvatar(
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: Colors.white,
-                                      child: Icon(Icons.image_outlined),
+                                    enabled: true,
+                                    value: 'image',
+                                    child: ListTile(
+                                      leading: const CircleAvatar(
+                                        backgroundColor: Colors.blue,
+                                        foregroundColor: Colors.white,
+                                        child: Icon(Icons.image_outlined),
+                                      ),
+                                      title: Text(L10n.of(context)!.sendImage),
+                                      contentPadding: const EdgeInsets.all(0),
                                     ),
-                                    title: Text(L10n.of(context)!.sendImage),
-                                    contentPadding: const EdgeInsets.all(0),
                                   ),
-                                ),
+
                                 ///share photo with camera
-                                if (PlatformInfos.isMobile && (permission.isSharePhoto||userType ==2))
+                                if (PlatformInfos.isMobile &&
+                                    (permission.isSharePhoto || userType == 2))
                                   PopupMenuItem<String>(
                                     value: 'camera',
                                     child: ListTile(
@@ -209,8 +224,10 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
-                               ///share video
-                                if (PlatformInfos.isMobile && (permission.isShareVideo||userType ==2))
+
+                                ///share video
+                                if (PlatformInfos.isMobile &&
+                                    (permission.isShareVideo || userType == 2))
                                   PopupMenuItem<String>(
                                     value: 'camera-video',
                                     child: ListTile(
@@ -219,26 +236,35 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                         foregroundColor: Colors.white,
                                         child: Icon(Icons.videocam_outlined),
                                       ),
-                                      title: Text(L10n.of(context)!.openVideoCamera),
+                                      title: Text(
+                                          L10n.of(context)!.openVideoCamera),
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
+
                                 ///share sticker
-                                if (widget.controller.room!.getImagePacks(ImagePackUsage.sticker).isNotEmpty)
+                                if (widget.controller.room!
+                                    .getImagePacks(ImagePackUsage.sticker)
+                                    .isNotEmpty)
                                   PopupMenuItem<String>(
                                     value: 'sticker',
                                     child: ListTile(
                                       leading: const CircleAvatar(
                                         backgroundColor: Colors.orange,
                                         foregroundColor: Colors.white,
-                                        child: Icon(Icons.emoji_emotions_outlined),
+                                        child:
+                                            Icon(Icons.emoji_emotions_outlined),
                                       ),
-                                      title: Text(L10n.of(context)!.sendSticker),
+                                      title:
+                                          Text(L10n.of(context)!.sendSticker),
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
-                               ///share location
-                                if (PlatformInfos.isMobile &&(permission.isShareLocation||userType ==2))
+
+                                ///share location
+                                if (PlatformInfos.isMobile &&
+                                    (permission.isShareLocation ||
+                                        userType == 2))
                                   PopupMenuItem<String>(
                                     value: 'location',
                                     child: ListTile(
@@ -247,15 +273,20 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                         foregroundColor: Colors.white,
                                         child: Icon(Icons.gps_fixed_outlined),
                                       ),
-                                      title: Text(L10n.of(context)!.shareLocation),
+                                      title:
+                                          Text(L10n.of(context)!.shareLocation),
                                       contentPadding: const EdgeInsets.all(0),
                                     ),
                                   ),
                               ],
                             ),
                           ),
-                          keysToPress: {LogicalKeyboardKey.altLeft, LogicalKeyboardKey.keyA},
-                          onKeysPressed: () => widget.controller.onAddPopupMenuButtonSelected('file'),
+                          keysToPress: {
+                            LogicalKeyboardKey.altLeft,
+                            LogicalKeyboardKey.keyA
+                          },
+                          onKeysPressed: () => widget.controller
+                              .onAddPopupMenuButtonSelected('file'),
                           helpLabel: L10n.of(context)!.sendFile,
                         ),
                         Container(
@@ -273,19 +304,26 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                   return SharedAxisTransition(
                                     animation: primaryAnimation,
                                     secondaryAnimation: secondaryAnimation,
-                                    transitionType: SharedAxisTransitionType.scaled,
+                                    transitionType:
+                                        SharedAxisTransitionType.scaled,
                                     child: child,
                                     fillColor: Colors.transparent,
                                   );
                                 },
                                 child: Icon(
-                                  widget.controller.showEmojiPicker ? Icons.keyboard : Icons.emoji_emotions_outlined,
-                                  key: ValueKey(widget.controller.showEmojiPicker),
+                                  widget.controller.showEmojiPicker
+                                      ? Icons.keyboard
+                                      : Icons.emoji_emotions_outlined,
+                                  key: ValueKey(
+                                      widget.controller.showEmojiPicker),
                                 ),
                               ),
                               onPressed: widget.controller.emojiPickerAction,
                             ),
-                            keysToPress: {LogicalKeyboardKey.altLeft, LogicalKeyboardKey.keyE},
+                            keysToPress: {
+                              LogicalKeyboardKey.altLeft,
+                              LogicalKeyboardKey.keyE
+                            },
                             onKeysPressed: widget.controller.emojiPickerAction,
                             helpLabel: L10n.of(context)!.emojis,
                           ),
@@ -307,8 +345,11 @@ class _ChatInputRowState extends State<ChatInputRow> {
                               maxLines: 8,
                               autofocus: !PlatformInfos.isMobile,
                               keyboardType: TextInputType.multiline,
-                              textInputAction: AppConfig.sendOnEnter ? TextInputAction.send : null,
-                              onSubmitted: widget.controller.onInputBarSubmitted,
+                              textInputAction: AppConfig.sendOnEnter
+                                  ? TextInputAction.send
+                                  : null,
+                              onSubmitted:
+                                  widget.controller.onInputBarSubmitted,
                               focusNode: widget.controller.inputFocus,
                               controller: widget.controller.sendController,
                               decoration: InputDecoration(
@@ -332,12 +373,15 @@ class _ChatInputRowState extends State<ChatInputRow> {
                               onPressed: widget.controller.voiceMessageAction,
                             ),
                           ),
-                        if (!PlatformInfos.isMobile || widget.controller.inputText.isNotEmpty)
+                        if (!PlatformInfos.isMobile ||
+                            widget.controller.inputText.isNotEmpty)
                           widget.controller.choreoController.isOpen
                               ? Padding(
-                                  padding: const EdgeInsets.only(right: 10, bottom: 10),
+                                  padding: const EdgeInsets.only(
+                                      right: 10, bottom: 10),
                                   child: ItSrcSendButton(
-                                    controller: widget.controller.choreoController,
+                                    controller:
+                                        widget.controller.choreoController,
                                   ),
                                 )
                               : Tooltip(
@@ -348,7 +392,10 @@ class _ChatInputRowState extends State<ChatInputRow> {
                                       alignment: Alignment.center,
                                       child: IconButton(
                                         icon: const Icon(Icons.send_outlined),
-                                        onPressed: widget.controller.choreoController.openIt,
+                                        onPressed: () {
+                                          widget.controller.choreoController
+                                              .openIt();
+                                        },
                                       ),
                                     ),
                                   ),
@@ -373,7 +420,8 @@ class _ChatAccountPicker extends StatelessWidget {
   const _ChatAccountPicker(this.controller, {Key? key}) : super(key: key);
 
   void _popupMenuButtonSelected(String mxid) {
-    final client = controller.matrix!.currentBundle!.firstWhere((cl) => cl!.userID == mxid, orElse: () => null);
+    final client = controller.matrix!.currentBundle!
+        .firstWhere((cl) => cl!.userID == mxid, orElse: () => null);
     if (client == null) {
       Logs().w('Attempted to switch to a non-existing client $mxid');
       return;
@@ -399,10 +447,12 @@ class _ChatAccountPicker extends StatelessWidget {
                       builder: (context, snapshot) => ListTile(
                         leading: Avatar(
                           mxContent: snapshot.data?.avatarUrl,
-                          name: snapshot.data?.displayName ?? client.userID!.localpart,
+                          name: snapshot.data?.displayName ??
+                              client.userID!.localpart,
                           size: 20,
                         ),
-                        title: Text(snapshot.data?.displayName ?? client.userID!),
+                        title:
+                            Text(snapshot.data?.displayName ?? client.userID!),
                         contentPadding: const EdgeInsets.all(0),
                       ),
                     ),
@@ -410,7 +460,8 @@ class _ChatAccountPicker extends StatelessWidget {
               .toList(),
           child: Avatar(
             mxContent: snapshot.data?.avatarUrl,
-            name: snapshot.data?.displayName ?? controller.matrix!.client.userID!.localpart,
+            name: snapshot.data?.displayName ??
+                controller.matrix!.client.userID!.localpart,
             size: 20,
           ),
         ),
