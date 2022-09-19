@@ -238,13 +238,11 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                           TextAlign.center,
                                                     ),
                                               isExpanded: true,
-                                              items: data.results!
+                                              items: data.results!.where((element) => !element.isExchange!)
                                                   .map(
                                                     (map) => DropdownMenuItem(
-                                                      child: Text(map.className
-                                                          .toString()),
-                                                      value: map
-                                                          .pangeaClassRoomId, //"${map.className.toString()} (${map.pangeaClassRoomId})",// map.pangeaClassRoomId,
+                                                      child: Text(map.className.toString()),
+                                                      value: map.pangeaClassRoomId, //"${map.className.toString()} (${map.pangeaClassRoomId})",// map.pangeaClassRoomId,
                                                     ),
                                                   )
                                                   .toList(),
