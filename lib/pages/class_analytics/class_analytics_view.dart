@@ -33,7 +33,7 @@ class ClassAnalyticsView extends StatelessWidget {
             child: Column(
               children: [
                 ClassSelectTablet(controller: controller),
-                Expanded(child: errorWidget(context))
+                Expanded(child: noDataAvailable(context))
               ],
             ),
           )
@@ -90,6 +90,12 @@ class ClassAnalyticsView extends StatelessWidget {
     }
   }
 
+  Widget noDataAvailable(BuildContext context) {
+    return Container(
+      child: Center(child: Text('No data avalible to preview')),
+    );
+  }
+
   Widget errorWidget(BuildContext context) {
     return Container(
       child: Center(child: Text('We ran into a problem')),
@@ -101,34 +107,38 @@ class ClassAnalyticsView extends StatelessWidget {
       children: [
         controller.isLoading
             ? loader(context)
-            : Expanded(
-                child: Scrollbar(
-                  controller: controller.verticalScrollController,
-                  child: SingleChildScrollView(
-                    controller: controller.verticalScrollController,
-                    scrollDirection: Axis.vertical,
+            : controller.topRow.length == 0
+                ? noDataAvailable(context)
+                : Expanded(
                     child: Scrollbar(
-                      controller: controller.horizontalScrollController,
+                      controller: controller.verticalScrollController,
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        controller: controller.horizontalScrollController,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              myTableRow(context, row: controller.topRow),
-                              myTableRow(context, row: controller.sectionRow),
-                              myTableRow(context, row: controller.classAvgRow),
-                              ...controller.userRowList
-                                  .map((e) => myTableRow(context, row: e))
-                            ]),
+                        controller: controller.verticalScrollController,
+                        scrollDirection: Axis.vertical,
+                        child: Scrollbar(
+                          controller: controller.horizontalScrollController,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            controller: controller.horizontalScrollController,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  myTableRow(context, row: controller.topRow),
+                                  myTableRow(context,
+                                      row: controller.sectionRow),
+                                  myTableRow(context,
+                                      row: controller.classAvgRow),
+                                  ...controller.userRowList
+                                      .map((e) => myTableRow(context, row: e))
+                                ]),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
       ],
     );
   }

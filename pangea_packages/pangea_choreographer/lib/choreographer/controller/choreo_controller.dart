@@ -159,8 +159,6 @@ class ChoreoController {
 
   _listernerFunction() {
     if (this.textController!.value.text != originalText) {
-      print(originalText);
-      print(this.textController!.value.text);
       print('Text Event');
       if (!state!.isEditing) {
         clearState();
