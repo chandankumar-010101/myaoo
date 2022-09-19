@@ -42,8 +42,8 @@ class Step1Controller extends LoaderState {
       print('Error in initial');
       stopLoading();
       controller.state!.changeRoute(ChoreoRoute.STEP1_ERROR);
-      controller.errorService!
-          .showErrorAndReset('Translation services unavailable at the moment');
+      controller.errorService!.showErrorAndReset(
+          'Translation services are unavailable at the moment');
       Future.delayed(Duration(seconds: 1), () {
         controller.send();
       });
