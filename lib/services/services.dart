@@ -232,6 +232,10 @@ class PangeaServices {
     if (response != null) {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
+      countryFlag = countryFlag.where((element) => element.languageType !=2).toList();
+      countryFlag.sort((a, b) {
+        return a.languageName.toString().toLowerCase().compareTo(b.languageName.toString().toLowerCase());
+      });
     } else {
       Fluttertoast.showToast(
         msg: "Something went wrong",
@@ -251,12 +255,16 @@ class PangeaServices {
     if (response != null) {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
-      countryFlag.forEach((element) {
-        if (element.languageType == 2) {
-          print(element.languageName);
-          flags.add(element);
-        }
-      });
+      flags = countryFlag.where((element) => element.languageType ==2).toList();
+     // flags.forEach((element) {print(element.languageName);});
+
+      // countryFlag.forEach((element) {
+      //   print(element.languageName);
+      //   if (element.languageType == 2) {
+      //     print(element.languageName);
+      //     flags.add(element);
+      //   }
+      // });
     } else {
       Fluttertoast.showToast(
           msg: "Something went wrong",
