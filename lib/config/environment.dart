@@ -31,6 +31,6 @@ class Environment {
   }
 
   static String get google_auth_key {
-    return dotenv.env['GOOGLE_AUTH_KEY'] ?? 'Google OAuth Key not found';
+    return dotenv.env['GOOGLE_AUTH_KEY'] ?? '466850640825-qegdiq3mpj3h5e0e79ud5hnnq2c22mi3.apps.googleusercontent.com';
   }
 }
