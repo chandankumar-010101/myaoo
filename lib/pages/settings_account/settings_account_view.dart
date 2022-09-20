@@ -78,9 +78,9 @@ class SettingsAccountView extends StatelessWidget {
                       Text(
                           "${dataStorage.read("targetlanguage").toString().toLowerCase().capitalizeFirst}"),
                     ]),
-                trailing: Icon(Icons.edit_outlined),
+               // trailing: Icon(Icons.edit_outlined),
 
-               // trailing: GetStorage().read("usertype") ==1?Icon(Icons.edit_outlined):null,
+                trailing: GetStorage().read("usertype") ==1?Icon(Icons.edit_outlined):null,
                 onTap: controller.updateLanguage,
               ),
 
