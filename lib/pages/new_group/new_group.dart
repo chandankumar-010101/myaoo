@@ -62,8 +62,6 @@ class NewGroupController extends State<NewGroup> {
   @override
   Widget build(BuildContext context) {
     spaceId = VRouter.of(context).queryParameters['spaceId']??"";
-    print("hello");
-    print(spaceId);
     return NewGroupView(this, spaceId);
   }
 }

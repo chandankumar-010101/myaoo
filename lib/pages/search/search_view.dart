@@ -304,7 +304,7 @@ class _SearchViewState extends State<SearchView> {
                       FutureBuilder(
                           future: searchController.getSearch(widget.controller.controller.text),
                           builder: (BuildContext context, AsyncSnapshot snapshot) {
-                            print(widget.controller.controller.text);
+                            //print(widget.controller.controller.text);
                             if (snapshot.hasError) {
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -358,7 +358,7 @@ class _SearchViewState extends State<SearchView> {
                                             "id": id
                                           });
                                       firstTime.value=false;
-                                      print("value of 2 ${firstTime}");
+                                      //print("value of 2 ${firstTime}");
 
 
                                       // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
