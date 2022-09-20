@@ -17,6 +17,7 @@ class ApiUrls {
   static String update_user_ages =
       Environment.baseAPI + "/account/get_update_dob";
   static String create_class = Environment.baseAPI + "/class/create";
+  static String update_user_language = Environment.baseAPI+"/account/profile/language/update";
   static String addClassPermissions =
       Environment.baseAPI + "/class/permissions/add";
 

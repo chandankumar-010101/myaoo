@@ -184,14 +184,7 @@ class ChatListItem extends StatelessWidget {
               child: Text(
                 (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
                     ? room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
-                    : room
-                        .getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
-                        .toString()
-                        .toLowerCase()
-                        .split("#")
-                        .first
-                        .replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "")
-                        .replaceAll("-", ""),
+                    : room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!)).toString().split("#").first.replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "").replaceAll("-", ""),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,

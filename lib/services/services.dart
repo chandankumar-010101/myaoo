@@ -275,6 +275,30 @@ class PangeaServices {
     return flags;
   }
 
+  static  Future updateLanguage(String sourceLanguage, String targetLanguage) async{
+    PangeaServices._init();
+    try {
+      final value = await http.post(Uri.parse(ApiUrls.update_user_language),
+          headers: {
+
+            "Authorization": "Bearer ${box.read("access")}"
+          },
+          body:{
+            "source_language":sourceLanguage,
+            "target_language":targetLanguage
+          }
+      );
+      if (value.statusCode == 201 || value.statusCode == 200) {
+        Fluttertoast.showToast(msg: "Language updated successfully!", webBgColor: "#5625BA",backgroundColor:const Color(0xFF5625BA) );
+      }
+      else {
+        throw Exception("Error ${value.statusCode}: Unable to update language");
+      }
+    } catch (e) {
+      print(e);
+      throw Exception("Error: Unable to update language");
+    }
+  }
   //------------------------------------Authentication-----------------------------------//
   static logoutUser(
       {required BuildContext context, required Client client}) async {
@@ -507,9 +531,11 @@ class PangeaServices {
       return;
     }
     try {
-      final value = await http.post(Uri.parse(ApiUrls.create_class), headers: {
+      final value = await http.post(Uri.parse(ApiUrls.create_class),
+          headers: {
         "Authorization": "Bearer ${box.read("access")}"
-      }, body: {
+      },
+          body: {
         "class_name": className,
         "city": city,
         "country": country,
@@ -593,7 +619,8 @@ class PangeaServices {
             throw Exception("Error: Unable to delete class");
           });
         }
-      } else {
+      }
+      else {
         print("what is ggoing on");
         print(value.statusCode);
         await classRoom.leave().whenComplete(() {
