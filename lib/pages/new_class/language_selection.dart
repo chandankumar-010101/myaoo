@@ -494,7 +494,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
               padding: EdgeInsets.all(size.height * 0.01),
               child: Center(
                 child: Text(
-                  "What is the target language of your classroom?",
+                  "What is the base language of your class?",
                   style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
@@ -596,7 +596,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
               padding: EdgeInsets.all(size.height * 0.01),
               child: Center(
                 child: Text(
-                  "What is the dominant language of your student?",
+                  "What is the target language of your students?",
                   style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
