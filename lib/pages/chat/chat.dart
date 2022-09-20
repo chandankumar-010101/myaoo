@@ -203,8 +203,9 @@ class ChatController extends State<Chat> {
 
       choreoController.setSrcLang(box.read('sourcelanguage'));
       choreoController.setTrgLang(box.read('targetlanguage'));
-      choreoController.setActiveClassId(
-          Matrix.of(context).pangeaClassController.activeSpaceId(context));
+      choreoController.setActiveClassId(Matrix.of(context)
+          .pangeaClassController
+          .getSpaceIdFromRoomId(context, roomId));
       choreoController.stateListener.stream.listen((event) {
         setState(() {});
       });

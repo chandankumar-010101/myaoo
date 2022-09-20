@@ -232,6 +232,10 @@ class PangeaServices {
     if (response != null) {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
+      countryFlag = countryFlag.where((element) => element.languageType !=2).toList();
+      countryFlag.sort((a, b) {
+        return a.languageName.toString().toLowerCase().compareTo(b.languageName.toString().toLowerCase());
+      });
     } else {
       Fluttertoast.showToast(
         msg: "Something went wrong",
@@ -251,12 +255,16 @@ class PangeaServices {
     if (response != null) {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
-      countryFlag.forEach((element) {
-        if (element.languageType == 2) {
-          print(element.languageName);
-          flags.add(element);
-        }
-      });
+      flags = countryFlag.where((element) => element.languageType ==2).toList();
+     // flags.forEach((element) {print(element.languageName);});
+
+      // countryFlag.forEach((element) {
+      //   print(element.languageName);
+      //   if (element.languageType == 2) {
+      //     print(element.languageName);
+      //     flags.add(element);
+      //   }
+      // });
     } else {
       Fluttertoast.showToast(
           msg: "Something went wrong",
@@ -1389,6 +1397,38 @@ class PangeaServices {
           msg: "Error: Unable fetch result",
           webBgColor: "#ff0000",
           backgroundColor: Colors.red);
+      throw Exception("Error: Unable fetch result");
+    }
+  }
+
+  static Future<ClassAnalyticsModel>? classAnalyticsFromClassId(
+      {required String classId}) async {
+    try {
+      String url = ApiUrls.classAnalytics + '?class_id=' + classId;
+      print('Calling ' + url);
+
+      final response =
+          await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return ClassAnalyticsModel.fromJson(jsonDecode(response.body));
+      } else {
+        if (response.statusCode == 404) {
+          throw Exception(
+              "Api Error ${response.statusCode}: Unable to fetch result");
+        }
+        ApiException.exception(
+            statusCode: response.statusCode, body: response.body.toString());
+        throw Exception(
+            "Api Error ${response.statusCode}: Unable to fetch result");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      // Fluttertoast.showToast(
+      //     msg: "Error: Unable fetch result",
+      //     webBgColor: "#ff0000",
+      //     backgroundColor: Colors.red);
       throw Exception("Error: Unable fetch result");
     }
   }

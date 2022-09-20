@@ -40,9 +40,12 @@ class ClassAnalyticsController extends State<ClassAnalytics> {
   void initState() {
     super.initState();
 
-    fetchClassAnalytics();
+    Future.delayed(Duration.zero, () {
+      fetchClassAnalytics();
+    });
   }
 
+  String? get spaceId => context.vRouter.pathParameters['spaceid'];
   SpaceSpacesEntry? _selectedSpacesEntry;
   SpaceSpacesEntry get selectedSpacesEntry {
     if (_selectedSpacesEntry == null) {
@@ -73,9 +76,12 @@ class ClassAnalyticsController extends State<ClassAnalytics> {
     isError = false;
     isCalibratingTable = true;
     try {
-      const String roomId = '!cTiZWThxFdBdsTPbSN:staging.pangea.chat';
+      if (spaceId == null) {
+        throw Exception();
+      }
+      final String classId = spaceId!;
       classAnalyticsModel =
-          await PangeaServices.classAnalyticsFromRoomId(roomId: roomId);
+          await PangeaServices.classAnalyticsFromClassId(classId: classId);
       await _populateUsers(context);
       _mapTableEntries(classAnalyticsModel!);
     } catch (err) {

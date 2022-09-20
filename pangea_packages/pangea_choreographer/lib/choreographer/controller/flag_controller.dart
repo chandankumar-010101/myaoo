@@ -65,7 +65,7 @@ class FlagController {
     if (dateString == null) {
       return true;
     }
-   // return true;
+    // return true;
     int lastFetched = DateTime.parse(dateString).millisecondsSinceEpoch;
     int now = DateTime.now().millisecondsSinceEpoch;
     const int fetchIntervalInMilliseconds = 86534601;
@@ -78,12 +78,11 @@ class FlagController {
   }
 
   static Future<List<ChoreoLangModel>?> _getCahedFlags() async {
-    print('Fetching flags from local');
     Map<dynamic, dynamic>? _flagsMap = await MyShared.readJson(PrefKey.FLAGS);
     if (_flagsMap == null) {
       return null;
     }
-    print('Flags fetched successfully');
+
     List<ChoreoLangModel> _flags = [];
     List mapList = _flagsMap[PrefKey.FLAGS] as List;
     mapList.forEach((element) {

@@ -104,7 +104,7 @@ class _InviteEmailState extends State<InviteEmail> {
                           children: [
                             Padding(
                               padding:const EdgeInsets.all(10.0),
-                              child: Text("Recipient Email id", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Theme.of(context).textTheme.bodyText1!.color,)),
+                              child: Text("Recipient's email", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Theme.of(context).textTheme.bodyText1!.color,)),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10, right: 10),
@@ -119,7 +119,7 @@ class _InviteEmailState extends State<InviteEmail> {
                                 textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(12),
-                                  hintText: "Enter Recipient Email id",
+                                  hintText: "Recipient's email",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),

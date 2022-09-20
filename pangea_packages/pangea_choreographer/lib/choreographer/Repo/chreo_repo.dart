@@ -34,7 +34,6 @@ class ChoreoRepo {
 
     final Response res =
         await req.post(url: Urls.subseqStep, body: subseqText.toJson());
-    print(res.body);
 
     // TODO
     final decodedBody = jsonDecode(utf8.decode(res.bodyBytes).toString());
@@ -62,7 +61,6 @@ class ChoreoRepo {
     final Response res =
         await req.post(url: Urls.choreo, body: initCall.toJson());
 
-    print(jsonDecode(res.body));
     ChoreoResponseModel receiveText = ChoreoResponseModel.fromJson(
         jsonDecode(utf8.decode(res.bodyBytes).toString()));
 

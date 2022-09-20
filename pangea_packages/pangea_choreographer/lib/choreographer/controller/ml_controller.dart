@@ -11,8 +11,8 @@ class MlController {
     MessageServiceModel serviceModel = MessageServiceModel()
       ..class_id = controller.state!.classId
       ..room_id = controller.state!.roomId
-      ..message = message
-      ..msg_id = message_id
+      ..message = message.toString()
+      ..msg_id = message_id.toString()
       ..payload_ids = controller.state!.payLoadIds
       ..user_id = controller.state!.userId;
     try {

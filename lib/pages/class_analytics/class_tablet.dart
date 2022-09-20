@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
 import 'class_analytics.dart';
 
