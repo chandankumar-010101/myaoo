@@ -37,9 +37,7 @@ class GoogleClassroomController extends State<GoogleClassroom> {
       isLoading = true;
     });
 
-    googleSignIn.signIn().whenComplete(() async {
-      coursesList = await getCourses(googleSignIn.currentUser!);
-    });
+    return googleSignIn.signIn();
   }
 
   getCourses(GoogleSignInAccount currentUser) async {

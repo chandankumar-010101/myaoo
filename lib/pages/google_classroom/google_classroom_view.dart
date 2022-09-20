@@ -118,8 +118,9 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                    onPressed: () {
-                      widget.controller!.authifNotGoogleUser();
+                    onPressed: () async {
+                      final result = await widget.controller!.authifNotGoogleUser();
+                      log("Error:" + result.toString());
                     },
                     child: Text("Login",
                         style: TextStyle(

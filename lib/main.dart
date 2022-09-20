@@ -35,8 +35,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Just a comment to rebuild
 GoogleSignIn googleSignIn = GoogleSignIn(
-  clientId:
-      '466850640825-qegdiq3mpj3h5e0e79ud5hnnq2c22mi3.apps.googleusercontent.com',
+  clientId: '723169076587-tq82s1qrugqphsl9527tng43tbuc7mv1.apps.googleusercontent.com', //Production Key
+  // clientId:'466850640825-qegdiq3mpj3h5e0e79ud5hnnq2c22mi3.apps.googleusercontent.com',  //Staging Key
   scopes: <String>[
     'email',
     ClassroomApi.classroomCoursesScope,
@@ -52,18 +52,14 @@ GoogleSignIn googleSignIn = GoogleSignIn(
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
-  await ChoreoController.initialize(
-      flagBaseUrl: Environment.baseAPI,
-      choreoBaseUrl: Environment.choreo_api,
-      apiKey: Environment.choreo_api_key);
+  await ChoreoController.initialize(flagBaseUrl: Environment.baseAPI, choreoBaseUrl: Environment.choreo_api, apiKey: Environment.choreo_api_key);
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
 
-  FlutterError.onError =
-      (FlutterErrorDetails details) => Zone.current.handleUncaughtError(
-            details.exception,
-            details.stack ?? StackTrace.current,
-          );
+  FlutterError.onError = (FlutterErrorDetails details) => Zone.current.handleUncaughtError(
+        details.exception,
+        details.stack ?? StackTrace.current,
+      );
 
   final clients = await ClientManager.getClients();
   Logs().level = kReleaseMode ? Level.warning : Level.verbose;
@@ -74,8 +70,7 @@ void main() async {
 
   final queryParameters = <String, String>{};
   if (kIsWeb) {
-    queryParameters
-        .addAll(Uri.parse(html.window.location.href).queryParameters);
+    queryParameters.addAll(Uri.parse(html.window.location.href).queryParameters);
   }
 
   runZonedGuarded(
@@ -124,8 +119,7 @@ class _FluffyChatAppState extends State<FluffyChatApp> {
   @override
   void initState() {
     super.initState();
-    _initialUrl =
-        widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
+    _initialUrl = widget.clients.any((client) => client.isLogged()) ? '/rooms' : '/home';
   }
 
   @override
@@ -138,8 +132,7 @@ class _FluffyChatAppState extends State<FluffyChatApp> {
               builder: (theme, darkTheme) => LayoutBuilder(
                 builder: (context, constraints) {
                   const maxColumns = 3;
-                  var newColumns =
-                      (constraints.maxWidth / FluffyThemes.columnWidth).floor();
+                  var newColumns = (constraints.maxWidth / FluffyThemes.columnWidth).floor();
                   if (newColumns > maxColumns) newColumns = maxColumns;
                   columnMode ??= newColumns > 1;
                   _router ??= GlobalKey<VRouterState>();
@@ -167,21 +160,15 @@ class _FluffyChatAppState extends State<FluffyChatApp> {
                     initialUrl: _initialUrl ?? '/',
                     routes: AppRoutes(columnMode ?? false).routes,
                     builder: (context, child) {
-                      LoadingDialog.defaultTitle =
-                          L10n.of(context)!.loadingPleaseWait;
+                      LoadingDialog.defaultTitle = L10n.of(context)!.loadingPleaseWait;
                       LoadingDialog.defaultBackLabel = L10n.of(context)!.close;
-                      LoadingDialog.defaultOnError =
-                          (e) => (e as Object?)!.toLocalizedString(context);
+                      LoadingDialog.defaultOnError = (e) => (e as Object?)!.toLocalizedString(context);
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         SystemChrome.setSystemUIOverlayStyle(
                           SystemUiOverlayStyle(
                             statusBarColor: Colors.transparent,
-                            systemNavigationBarColor:
-                                Theme.of(context).appBarTheme.backgroundColor,
-                            systemNavigationBarIconBrightness:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Brightness.dark
-                                    : Brightness.light,
+                            systemNavigationBarColor: Theme.of(context).appBarTheme.backgroundColor,
+                            systemNavigationBarIconBrightness: Theme.of(context).brightness == Brightness.light ? Brightness.dark : Brightness.light,
                           ),
                         );
                       });
