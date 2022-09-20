@@ -27,7 +27,10 @@ class Environment {
   }
 
   static String get choreo_api_key {
-    return dotenv.env['CHOREO_API_KEY'] ??
-        'e6fa9fa97031ba0c852efe78457922f278a2fbc109752fe18e465337699e9873';
+    return dotenv.env['CHOREO_API_KEY'] ?? 'e6fa9fa97031ba0c852efe78457922f278a2fbc109752fe18e465337699e9873';
+  }
+
+  static String get google_auth_key {
+    return dotenv.env['GOOGLE_AUTH_KEY'] ?? 'Google OAuth Key not found';
   }
 }
