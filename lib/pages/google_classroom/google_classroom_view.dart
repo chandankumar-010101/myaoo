@@ -66,13 +66,16 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    "Fetching all classrooms...",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onPrimary == Colors.black ? Colors.black : Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                    child: Text(
+                                      "Fetching all classrooms...",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.black ? Colors.black : Colors.white,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -119,8 +122,10 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
               children: [
                 ElevatedButton(
                     onPressed: () async {
-                      final result = await widget.controller!.authifNotGoogleUser();
-                      log("Error:" + result.toString());
+                      setState(() {
+                        widget.controller!.isLoading = true;
+                      });
+                      await widget.controller!.handleSignIn();
                     },
                     child: Text("Login",
                         style: TextStyle(
@@ -193,21 +198,23 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).primaryColor.withOpacity(0.5),
+                        color: Colors.grey[700],
                       ),
-                      child: widget.controller!.coursesList != null
-                          ? ListView.builder(
-                              itemCount: widget.controller!.coursesList!.length,
-                              itemBuilder: (_, i) => ListTile(
-                                selected: selectedCourse == widget.controller!.coursesList![i],
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                title: Text(widget.controller!.coursesList![i].name),
-                                subtitle: Text("Total Students:${widget.controller!.coursesList![i].students!.length}"),
-                                onTap: () {
-                                  setState(() {
-                                    selectedCourse = widget.controller!.coursesList![i];
-                                  });
-                                },
+                      child: widget.controller!.coursesList!.isNotEmpty
+                          ? Expanded(
+                              child: ListView.builder(
+                                itemCount: widget.controller!.coursesList!.length,
+                                itemBuilder: (_, i) => ListTile(
+                                  selected: selectedCourse == widget.controller!.coursesList![i],
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  title: Text(widget.controller!.coursesList![i].name),
+                                  subtitle: Text("Total Students:${widget.controller!.coursesList![i].students!.length}"),
+                                  onTap: () {
+                                    setState(() {
+                                      selectedCourse = widget.controller!.coursesList![i];
+                                    });
+                                  },
+                                ),
                               ),
                             )
                           : Center(
@@ -222,7 +229,7 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).primaryColor.withOpacity(0.8),
+                        color: Colors.grey[700],
                       ),
                       child: selectedCourse != null && selectedCourse!.students != null && selectedCourse!.students!.isNotEmpty
                           ? Column(
@@ -262,23 +269,26 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                                     ),
                                   ),
                                 ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      List<Data> info = [];
-                                      info = List.generate(
-                                          selectedCourse!.students!.length,
-                                          (index) => Data(
-                                              name: selectedCourse!.students![index].profile!.name!.fullName!,
-                                              email: selectedCourse!.students![index].profile!.emailAddress!));
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        List<Data> info = [];
+                                        info = List.generate(
+                                            selectedCourse!.students!.length,
+                                            (index) => Data(
+                                                name: selectedCourse!.students![index].profile!.name!.fullName!,
+                                                email: selectedCourse!.students![index].profile!.emailAddress!));
 
-                                      PangeaServices.sendEmailToJoinClass(
-                                        info,
-                                        widget.controller!.roomId,
-                                        selectedCourse!.teachers!.first.profile!.name!.fullName!,
-                                      );
-                                      log(info.toList().map((e) => e.name).toList().toString());
-                                    },
-                                    child: Text("Invite All"))
+                                        PangeaServices.sendEmailToJoinClass(
+                                          info,
+                                          widget.controller!.roomId,
+                                          selectedCourse!.teachers!.first.profile!.name!.fullName!,
+                                        );
+                                        log(info.toList().map((e) => e.name).toList().toString());
+                                      },
+                                      child: Text("Invite All")),
+                                )
                               ],
                             )
                           : Center(
