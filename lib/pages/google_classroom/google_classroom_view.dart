@@ -201,20 +201,18 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                         color: Colors.grey[700],
                       ),
                       child: widget.controller!.coursesList!.isNotEmpty
-                          ? Expanded(
-                              child: ListView.builder(
-                                itemCount: widget.controller!.coursesList!.length,
-                                itemBuilder: (_, i) => ListTile(
-                                  selected: selectedCourse == widget.controller!.coursesList![i],
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  title: Text(widget.controller!.coursesList![i].name),
-                                  subtitle: Text("Total Students:${widget.controller!.coursesList![i].students!.length}"),
-                                  onTap: () {
-                                    setState(() {
-                                      selectedCourse = widget.controller!.coursesList![i];
-                                    });
-                                  },
-                                ),
+                          ? ListView.builder(
+                              itemCount: widget.controller!.coursesList!.length,
+                              itemBuilder: (_, i) => ListTile(
+                                selected: selectedCourse == widget.controller!.coursesList![i],
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                title: Text(widget.controller!.coursesList![i].name),
+                                subtitle: Text("Total Students:${widget.controller!.coursesList![i].students!.length}"),
+                                onTap: () {
+                                  setState(() {
+                                    selectedCourse = widget.controller!.coursesList![i];
+                                  });
+                                },
                               ),
                             )
                           : Center(
