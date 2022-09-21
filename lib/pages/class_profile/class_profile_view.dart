@@ -157,7 +157,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "${data.classAuthor}",
+                              "${data.classAuthor.capitalizeFirst}",
                               style: const TextStyle().copyWith(
                                   color: Theme.of(context)
                                       .textTheme
