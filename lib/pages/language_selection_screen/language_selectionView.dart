@@ -190,7 +190,7 @@ class LanguageSelectionView extends StatelessWidget {
                       child: Obx(() =>
                           controller.getxController.role.value == "Teacher"
                               ? const Text(
-                                  "What do you want to teach",
+                                  "What language do you teach?",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16.0,

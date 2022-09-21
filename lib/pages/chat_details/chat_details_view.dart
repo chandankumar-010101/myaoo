@@ -60,8 +60,8 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
     }
   }
 
-  fetchRoomInfo(Room room){
-    try{
+  fetchRoomInfo(Room room) {
+    try {
       final String? parentRoomID = room.spaceParents.first.roomId;
       if (parentRoomID != null) {
         final Room? parentroom = Matrix.of(context).client.getRoomById(parentRoomID);
@@ -69,10 +69,11 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
           GetStorage().write("reportroomId", parentroom.name.toString());
         }
       }
-    }catch(e){
+    } catch (e) {
       print("Error: $e");
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;
@@ -92,7 +93,6 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
 
     if (room != null) {
       fetchRoomInfo(room);
-
     }
 
     if (room == null) {
@@ -137,7 +137,13 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                     ChatSettingsPopupMenu(room, false)
                   ],
                   title: Text(
-                    room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!)),
+                    room
+                        .getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
+                        .toString()
+                        .split("#")
+                        .first
+                        .replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "")
+                        .replaceAll("-", ""),
                   ),
                   backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
                   flexibleSpace: FlexibleSpaceBar(
