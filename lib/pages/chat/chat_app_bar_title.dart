@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/chat/chat.dart';
@@ -29,11 +30,9 @@ class ChatAppBarTitle extends StatelessWidget {
           ? () => showModalBottomSheet(
                 context: context,
                 builder: (c) => UserBottomSheet(
-                  user: room
-                      .unsafeGetUserFromMemoryOrFallback(directChatMatrixID),
+                  user: room.unsafeGetUserFromMemoryOrFallback(directChatMatrixID),
                   outerContext: context,
-                  onMention: () => controller.sendController.text +=
-                      '${room.unsafeGetUserFromMemoryOrFallback(directChatMatrixID).mention} ',
+                  onMention: () => controller.sendController.text += '${room.unsafeGetUserFromMemoryOrFallback(directChatMatrixID).mention} ',
                 ),
               )
           : () => VRouter.of(context).toSegments(['rooms', room.id, 'details']),
@@ -47,7 +46,13 @@ class ChatAppBarTitle extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!)),
+              room
+                  .getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
+                  .toString()
+                  .split("#")
+                  .first
+                  .replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "")
+                  .replaceAll("-", ""),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
