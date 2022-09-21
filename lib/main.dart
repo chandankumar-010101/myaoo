@@ -35,7 +35,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Just a comment to rebuild
 GoogleSignIn googleSignIn = GoogleSignIn(
-  clientId: Environment.google_auth_key, //Staging Key
+  clientId: Environment.google_auth_key, //Google_Auth_Key
   scopes: <String>[
     'email',
     ClassroomApi.classroomCoursesScope,
