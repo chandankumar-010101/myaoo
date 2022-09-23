@@ -64,13 +64,21 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
           await PangeaServices.fetchClassInfo(context, receiverClassId);
 
       final String className = receiverClassInfo.className +
-          "-exchange-" +
+          " - " +
           senderClassInfo.className;
-      final String city = receiverClassInfo.city + "-" + senderClassInfo.city;
-      final String country =
-          receiverClassInfo.country + "-" + senderClassInfo.country;
-      final String school =
-          receiverClassInfo.schoolName + "-" + senderClassInfo.schoolName;
+      final String city = receiverClassInfo.city.isNotEmpty?
+      senderClassInfo.city.isNotEmpty?
+      "${receiverClassInfo.city} - ${senderClassInfo.city}": receiverClassInfo.city:
+      senderClassInfo.city;
+      final String country = receiverClassInfo.country.isNotEmpty?
+      senderClassInfo.country.isNotEmpty?
+      "${receiverClassInfo.country} - ${senderClassInfo.country}": receiverClassInfo.country:
+      senderClassInfo.country;
+
+      final String school = receiverClassInfo.schoolName.isNotEmpty?
+      senderClassInfo.schoolName.isNotEmpty?
+      "${receiverClassInfo.schoolName} - ${senderClassInfo.schoolName}": receiverClassInfo.schoolName:
+      senderClassInfo.schoolName;
 
       String exchangeId = await client.createRoom(
         preset: sdk.CreateRoomPreset.publicChat,
