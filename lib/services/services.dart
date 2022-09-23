@@ -1409,7 +1409,7 @@ class PangeaServices {
       final response =
           await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return ClassAnalyticsModel.fromJson(jsonDecode(response.body));
+        return ClassAnalyticsModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes).toString()));
       } else {
         ApiException.exception(
             statusCode: response.statusCode, body: response.body.toString());
@@ -1437,7 +1437,7 @@ class PangeaServices {
       final response =
           await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return ClassAnalyticsModel.fromJson(jsonDecode(response.body));
+        return ClassAnalyticsModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes).toString()));
       } else {
         if (response.statusCode == 404) {
           throw Exception(

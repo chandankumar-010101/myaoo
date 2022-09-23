@@ -135,33 +135,34 @@ class _InviteEmailState extends State<InviteEmail> {
             SizedBox(
               height: 10,
             ),
-            Row(
-              children: [
-                const SizedBox(
-                  height: 20,
-                  width: 17,
-                ),
-                Icon(
-                  Icons.add_circle_outline_sharp,
-                  color: Theme.of(context).textTheme.bodyText1!.color,
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                InkWell(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      _addItem();
-                      name.add(TextEditingController());
-                      email.add(TextEditingController());
-                    }
-                  },
-                  child: Text(
+            InkWell(
+              child:  Row(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                    width: 17,
+                  ),
+                  Icon(
+                    Icons.add_circle_outline_sharp,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text(
                     "Add Recipient",
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
-                  ),
-                ),
-              ],
+                  )
+
+                ],
+              ),
+              onTap: (){
+                if (_formKey.currentState!.validate()) {
+                  _addItem();
+                  name.add(TextEditingController());
+                  email.add(TextEditingController());
+                }
+              },
             ),
             Center(
               child: Container(

@@ -1,4 +1,4 @@
-class AnalyticsTableView {}
+import 'package:intl/intl.dart';
 
 class ClassAnalyticsModel {
   ClassAnalyticsModel();
@@ -70,22 +70,34 @@ class Section {
 }
 
 class Data {
-  Data({
-    required this.userId,
-    required this.value,
-  });
-  late final String userId;
-  late final String value;
+  Data();
+  set value(String val) => _value = val;
+  String get value {
+    if (_value == null) {
+      return _value.toString();
+    }
+    if (value_type == 'date') {
+      return DateFormat('yyyy/M/dd hh:mm a')
+          .format(DateTime.parse(_value).toLocal())
+          .toString();
+    }
+    return _value;
+  }
 
+  late final String userId;
+  late final String _value;
+  late final String value_type;
   Data.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
-    value = json['value'];
+    _value = json['value'];
+    value_type = json['value_type'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['user_id'] = userId;
-    _data['value'] = value;
+    _data['value'] = _value;
+    _data['value_type'] = value_type;
     return _data;
   }
 }

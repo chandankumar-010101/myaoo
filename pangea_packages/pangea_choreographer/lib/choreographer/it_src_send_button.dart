@@ -126,13 +126,13 @@ class ItSrcSendButton extends StatelessWidget {
                   : controller.lang!.feedBackLang == null
                       ? SizedBox.shrink()
                       : CachedNetworkImage(
-                          imageUrl: controller.lang!.srcLang!.flagWithPath,
+                          imageUrl: controller.lang!.feedBackLang!.flagWithPath,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
                                   CircularProgressIndicator(
                                       value: downloadProgress.progress),
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
             ),
           ),
