@@ -26,7 +26,7 @@ class ConnectPageView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        automaticallyImplyLeading: !controller.loading,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
@@ -341,28 +341,26 @@ class ConnectPageView extends StatelessWidget {
                                       Expanded(child: tncWidget(context))
                                     ]),
                                   ),
-                                  Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            launch(AppConfig.privacyUrl),
-                                        child: Text(
-                                          L10n.of(context)!.privacy,
-                                          style: const TextStyle(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                 ],
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          launch(AppConfig.privacyUrl),
+                      child: Text(
+                        L10n.of(context)!.privacy,
+                        style: const TextStyle(
+                          decoration:
+                          TextDecoration.underline,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),

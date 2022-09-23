@@ -123,13 +123,8 @@ class ConnectPageController extends State<ConnectPage> {
   bool get supportsLogin => _supportsFlow('m.login.password');
 
   void login() {
-    if (!isTnCChecked) {
-      setState(() {
-        loginError = tncMessage;
-      });
-      return;
-    }
     VRouter.of(context).to('login');
+
   }
 
   Map<String, dynamic>? _rawLoginTypes;
@@ -166,8 +161,6 @@ class ConnectPageController extends State<ConnectPage> {
   }
 
   void onTncChange(bool? value) {
-    print(value);
-
     isTnCChecked = value ?? false;
     signupError = null;
     loginError = null;
