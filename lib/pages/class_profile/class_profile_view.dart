@@ -146,29 +146,54 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              data.className.toString(),
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "${data.classAuthor.capitalizeFirst}",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 15),
-                            ),
+                            data.className.isNotEmpty?
+                            Row(
+                              children: [
+
+                                Icon(
+                                  Icons.school,
+                                  color: Colors.black,
+                                  size: 15.0,
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  data.className.capitalizeFirst!,
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                )
+
+                              ],
+                            ):Container(),
+                            data.classAuthor.isNotEmpty?
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.black,
+                                  size: 15.0,
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                 data.classAuthor.capitalizeFirst.toString(),
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 15),
+                                ),
+                              ],
+                            ):Container(),
+                            data.city.isNotEmpty?
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Icon(
+                            Icon(
                                   Icons.location_pin,
                                   color: Theme.of(context)
                                       .colorScheme
@@ -176,9 +201,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   size: 20.0,
                                 ),
                                 Text(
-                                  data.city.isEmpty
-                                      ? ""
-                                      : data.city.capitalizeFirst!,
+                                  data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -187,7 +210,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       fontSize: 12),
                                 ),
                                 Text(
-                                  "${data.country == "" ? " " : " , ${data.country.capitalizeFirst}"}",
+                                  data.country.isNotEmpty? " , ${data.country.capitalizeFirst}":"",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -196,7 +219,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       fontSize: 12),
                                 )
                               ],
-                            ),
+                            ):Container(),
                           ],
                         )
                       ],
@@ -387,8 +410,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.targetLanguage
-                                      .toString()
+                                  data.targetLanguage.toString()
                                       .capitalizeFirst ??
                                       "",
                                   style: const TextStyle().copyWith(
