@@ -843,7 +843,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "editDisplayname": "Edit displayname",
+  "editDisplayname": "Edit display name",
   "@editDisplayname": {
     "type": "text",
     "placeholders": {}
