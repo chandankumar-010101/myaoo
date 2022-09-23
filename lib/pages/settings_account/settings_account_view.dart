@@ -80,8 +80,8 @@ class SettingsAccountView extends StatelessWidget {
                     ]),
                // trailing: Icon(Icons.edit_outlined),
 
-                trailing: GetStorage().read("usertype") ==1?Icon(Icons.edit_outlined):null,
-                onTap: controller.updateLanguage,
+                trailing: GetStorage().read("usertype") ==1?InkWell(onTap: controller.updateLanguage,child: Icon(Icons.edit_outlined),):null,
+
               ),
 
               ListTile(

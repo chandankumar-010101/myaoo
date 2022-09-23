@@ -47,19 +47,19 @@ class _ClassLanguageState extends State<ClassLanguage> {
       return false;
     }
     if (classNameController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0,webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Class name length should below 50", fontSize: 16.0,webBgColor: "#ff0000", backgroundColor: Colors.red);
       return false;
     }
     if (cityController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "City length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return false;
     }
     if (schoolController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "School length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return false;
     }
     if (countryController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Country length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return false;
     }
     if (discriptionController.text.length >= 2000) {
@@ -111,19 +111,19 @@ class _ClassLanguageState extends State<ClassLanguage> {
       return;
     }
     if (classNameController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Class name length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Class name length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return;
     }
     if (cityController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "City length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "City length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return;
     }
     if (schoolController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "School length should below 20", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "School length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return;
     }
     if (countryController.text.length >= 50) {
-      Fluttertoast.showToast(msg: "Country length should below 12", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: "Country length should below 50", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return;
     }
     if (discriptionController.text.length >= 2000) {
@@ -282,15 +282,6 @@ class _ClassLanguageState extends State<ClassLanguage> {
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   ),
-                  // Image.asset(
-                  //   "assets/png/vector.png",
-                  //   width: 40,
-                  //   height: 40,
-                  //   fit: BoxFit.fill,
-                  //   color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                  //       ? Theme.of(context).primaryColor
-                  //       : Theme.of(context).colorScheme.onPrimary,
-                  // ),
                   SizedBox(
                     width: 20,
                   ),
@@ -327,15 +318,6 @@ class _ClassLanguageState extends State<ClassLanguage> {
                         ? Theme.of(context).primaryColor
                         : Theme.of(context).colorScheme.onPrimary,
                   ),
-                  // Image.asset(
-                  //   "assets/png/vector.png",
-                  //   width: 40,
-                  //   height: 40,
-                  //   fit: BoxFit.fill,
-                  //   color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                  //       ? Theme.of(context).primaryColor
-                  //       : Theme.of(context).colorScheme.onPrimary,
-                  // ),
                   SizedBox(
                     width: 20,
                   ),

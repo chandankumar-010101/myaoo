@@ -26,6 +26,12 @@ class _InviteEmailState extends State<InviteEmail> {
       value = value + 1;
     });
   }
+  _removeItem() {
+    setState(() {
+      value = value - 1;
+    });
+  }
+
 
   @override
   void initState() {
@@ -135,34 +141,69 @@ class _InviteEmailState extends State<InviteEmail> {
             SizedBox(
               height: 10,
             ),
-            InkWell(
-              child:  Row(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                    width: 17,
-                  ),
-                  Icon(
-                    Icons.add_circle_outline_sharp,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Text(
-                    "Add Recipient",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
-                  )
+            Row(
+              children: [
+                InkWell(
+                  child:  Row(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                        width: 17,
+                      ),
+                      Icon(
+                        Icons.add_circle_outline_sharp,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "Add Recipient",
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+                      )
 
-                ],
-              ),
-              onTap: (){
-                if (_formKey.currentState!.validate()) {
-                  _addItem();
-                  name.add(TextEditingController());
-                  email.add(TextEditingController());
-                }
-              },
+                    ],
+                  ),
+                  onTap: (){
+                    if (_formKey.currentState!.validate()) {
+                      _addItem();
+                      name.add(TextEditingController());
+                      email.add(TextEditingController());
+                    }
+                  },
+                ),
+                SizedBox(width: 10,),
+                value >1?
+                InkWell(
+                  child:  Row(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                        width: 17,
+                      ),
+                      Icon(
+                        Icons.remove_circle_outline_sharp,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "Remove Recipient",
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+                      )
+
+                    ],
+                  ),
+                  onTap: (){
+                    if(value !=1){
+                      _removeItem();
+                      name.removeLast();
+                      email.removeLast();
+                    }
+                  },
+                ):Container(),
+              ],
             ),
             Center(
               child: Container(
