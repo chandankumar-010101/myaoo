@@ -351,14 +351,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                widget.controller.fetchFlag2(data, url),
+                                widget.controller.fetchFlag(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.targetLanguage
-                                          .toString()
-                                          .capitalizeFirst ??
+                                  data.dominantLanguage
+                                      .toString()
+                                      .capitalizeFirst ??
                                       "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
@@ -382,14 +382,14 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                widget.controller.fetchFlag(data, url),
+                                widget.controller.fetchFlag2(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage
-                                          .toString()
-                                          .capitalizeFirst ??
+                                  data.targetLanguage
+                                      .toString()
+                                      .capitalizeFirst ??
                                       "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
@@ -399,6 +399,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14),
                                 ),
+
                               ],
                             )
                           ],
