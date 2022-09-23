@@ -341,7 +341,10 @@ class PangeaServices {
       if (value.statusCode == 201 || value.statusCode == 200) {
         final data = jsonDecode(value.body);
         if (!data["is_user_exist"] || signUp) {
-          signUp ? box.remove("sign_up") : null;
+          if(signUp){
+            box.remove("sign_up");
+            box.write("firstTime", true);
+          }
           widget.router!.currentState!.to(
             '/home/connect/lang',
             queryParameters: widget.router!.currentState!.queryParameters,

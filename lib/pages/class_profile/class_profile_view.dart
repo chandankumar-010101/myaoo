@@ -374,13 +374,12 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                widget.controller.fetchFlag(data, url),
+                                widget.controller.fetchFlag2(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage
-                                      .toString()
+                                  data.targetLanguage.toString()
                                       .capitalizeFirst ??
                                       "",
                                   style: const TextStyle().copyWith(
@@ -391,6 +390,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14),
                                 ),
+
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -402,15 +402,17 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .bodyText1!
                                       .color,
                                 ),
+
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                widget.controller.fetchFlag2(data, url),
+                                widget.controller.fetchFlag(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  data.targetLanguage.toString()
+                                  data.dominantLanguage
+                                      .toString()
                                       .capitalizeFirst ??
                                       "",
                                   style: const TextStyle().copyWith(

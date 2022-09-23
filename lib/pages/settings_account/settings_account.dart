@@ -337,7 +337,7 @@ class SettingsAccountController extends State<SettingsAccount> {
               },
             ),
             TextButton(
-              child: Text("Continue"),
+              child: Text("Update"),
               onPressed:  () async {
                 try{
 

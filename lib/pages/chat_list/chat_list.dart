@@ -722,9 +722,11 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
             rooms: true)
         : null;
 
-    return Obx(() => getxController.throughClassProfile.value
-        ? const Search()
-        : ChatListView(this));
+    if(GetStorage().read("firstTime")!=null && GetStorage().read("firstTime")){
+      GetStorage().remove("firstTime");
+      GetStorage().read("usertype") ==2?VRouter.of(context).to("/newclass"):VRouter.of(context).to("/join_with_code");
+    }
+    return Obx(() => getxController.throughClassProfile.value ? const Search(): ChatListView(this));
   }
 
   void _hackyWebRTCFixForWeb() {
