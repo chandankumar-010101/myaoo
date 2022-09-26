@@ -68,6 +68,67 @@ class LanguageSelectionView extends StatelessWidget {
                     ),
                     const Center(
                       child: Text(
+                        "I am a (n)",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 40),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(3.0),
+                          border: Border.all(color: Colors.grey.shade200)),
+                      child: DropdownButton(
+                        underline: const SizedBox(),
+                        alignment: Alignment.center,
+                        icon: const Icon(Icons.arrow_drop_down_outlined,
+                            color: Colors.black, size: 20),
+                        hint: Obx(
+                            () => controller.getxController.role.value.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                      "Select One",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.0,
+                                          color: Colors.black),
+                                    ),
+                                  )
+                                : Center(
+                                    child: Text(
+                                      controller.getxController.role.value,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.0,
+                                          color: Colors.black),
+                                    ),
+                                  )),
+                        isExpanded: true,
+                        items: ["Student", "Teacher", "Indie Learner"].map(
+                          (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Center(
+                                child: Text(val,
+                                    style: const TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w400)),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          controller.getxController.role.value = value!;
+                        },
+                      ),
+                    ),
+                    const Center(
+                      child: Text(
                         "What is your first language",
                         style: TextStyle(
                             color: Colors.black,
@@ -307,67 +368,6 @@ class LanguageSelectionView extends StatelessWidget {
                     ),
                     const SizedBox(
                       height: 10,
-                    ),
-                    const Center(
-                      child: Text(
-                        "I am a (n)",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 40),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3.0),
-                          border: Border.all(color: Colors.grey.shade200)),
-                      child: DropdownButton(
-                        underline: const SizedBox(),
-                        alignment: Alignment.center,
-                        icon: const Icon(Icons.arrow_drop_down_outlined,
-                            color: Colors.black, size: 20),
-                        hint: Obx(
-                            () => controller.getxController.role.value.isEmpty
-                                ? const Center(
-                                    child: Text(
-                                      "Select One",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
-                                          color: Colors.black),
-                                    ),
-                                  )
-                                : Center(
-                                    child: Text(
-                                      controller.getxController.role.value,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
-                                          color: Colors.black),
-                                    ),
-                                  )),
-                        isExpanded: true,
-                        items: ["Student", "Teacher", "Indie Learner"].map(
-                          (val) {
-                            return DropdownMenuItem<String>(
-                              value: val,
-                              child: Center(
-                                child: Text(val,
-                                    style: const TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.w400)),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                        onChanged: (String? value) {
-                          controller.getxController.role.value = value!;
-                        },
-                      ),
                     ),
                     Container(
                       width: Get.width,
