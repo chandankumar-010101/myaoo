@@ -161,8 +161,8 @@ class SettingsAccountController extends State<SettingsAccount> {
                   padding: EdgeInsets.all(size.height * 0.01),
                   child: Center(
                     child: Text(
-                      "Target language of your students?",
-                      style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                      "Base language of your class?",
+                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.center,
                     ),
@@ -245,13 +245,14 @@ class SettingsAccountController extends State<SettingsAccount> {
                   padding: EdgeInsets.all(size.height * 0.01),
                   child: Center(
                     child: Text(
-                      "Base language of your class?",
-                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                      "Target language of your students?",
+                      style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
+
                 Container(
                     constraints: BoxConstraints(minWidth: 100, maxWidth: 400),
                     padding: EdgeInsets.all(size.height * 0.01),
@@ -353,8 +354,11 @@ class SettingsAccountController extends State<SettingsAccount> {
                     PangeaServices.updateLanguage(source, target).whenComplete(() {
                       GetStorage().write("sourcelanguage", source);
                       GetStorage().write("targetlanguage", target);
+                      Navigator.of(context).pop();
+                      setState(() {
 
-                      VRouter.of(context).to('/settings');
+                      });
+
                     });
                   }
                   else{

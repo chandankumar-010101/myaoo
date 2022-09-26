@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
@@ -275,25 +276,50 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    data.className,
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "${data.classAuthor}",
-                                    style: const TextStyle().copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                        fontSize: 15),
-                                  ),
+                                  data.className.isNotEmpty?
+                                  Row(
+                                    children: [
+
+                                      Icon(
+                                        Icons.school,
+                                        color: Colors.black,
+                                        size: 15.0,
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text(
+                                        data.className.capitalizeFirst!,
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      )
+
+                                    ],
+                                  ):Container(),
+                                  data.classAuthor.isNotEmpty?
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.person,
+                                        color: Colors.black,
+                                        size: 15.0,
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text(
+                                        data.classAuthor.capitalizeFirst.toString(),
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ):Container(),
+
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -304,15 +330,34 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                             .onPrimaryContainer,
                                         size: 20.0,
                                       ),
+                                      data.city.isNotEmpty?
                                       Text(
-                                        data.city,
+                                        data.city.capitalizeFirst!,
                                         style: const TextStyle().copyWith(
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .bodyText1!
                                                 .color,
                                             fontSize: 12),
-                                      )
+                                      ):Container(),
+                                      data.country.isNotEmpty?data.city.isNotEmpty?
+                                      Text(
+                                        " , ${data.country.capitalizeFirst}",
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontSize: 12),
+                                      ):Text(
+                                        "${data.country.capitalizeFirst}",
+                                        style: const TextStyle().copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontSize: 12),
+                                      ):Container()
                                     ],
                                   ),
                                 ],
@@ -478,12 +523,12 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(children: [
-                                        fetchFlag(data, url),
+                                        fetchFlag2(data, url),
                                         const SizedBox(
                                           width: 5,
                                         ),
                                         Text(
-                                          data.dominantLanguage,
+                                          data.targetLanguage,
                                           style: const TextStyle().copyWith(
                                               color: Theme.of(context)
                                                   .textTheme
@@ -492,9 +537,11 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                               fontWeight: FontWeight.w400,
                                               fontSize: 14),
                                         ),
+
                                         const SizedBox(
                                           width: 10,
                                         ),
+
                                         Icon(
                                           Icons.arrow_right_alt_outlined,
                                           size: 20,
@@ -503,15 +550,16 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                               .bodyText1!
                                               .color,
                                         ),
+
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Row(children: [fetchFlag2(data, url)]),
+                                        fetchFlag(data, url),
                                         const SizedBox(
                                           width: 5,
                                         ),
                                         Text(
-                                          data.targetLanguage,
+                                          data.dominantLanguage,
                                           style: const TextStyle().copyWith(
                                               color: Theme.of(context)
                                                   .textTheme
