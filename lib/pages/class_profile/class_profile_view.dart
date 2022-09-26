@@ -189,8 +189,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 ),
                               ],
                             ):Container(),
-                            data.city.isNotEmpty?
-                            Row(
+
+                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                             Icon(
@@ -200,6 +200,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .onPrimaryContainer,
                                   size: 20.0,
                                 ),
+                                data.city.isNotEmpty?
                                 Text(
                                   data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
@@ -208,18 +209,27 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .bodyText1!
                                           .color,
                                       fontSize: 12),
-                                ),
+                                ):Container(),
+                                data.country.isNotEmpty?data.city.isNotEmpty?
                                 Text(
-                                  data.country.isNotEmpty? " , ${data.country.capitalizeFirst}":"",
+                                 " , ${data.country.capitalizeFirst}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
                                           .color,
                                       fontSize: 12),
-                                )
+                                ):Text(
+                                  "${data.country.capitalizeFirst}",
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 12),
+                                ):Container()
                               ],
-                            ):Container(),
+                            ),
                           ],
                         )
                       ],

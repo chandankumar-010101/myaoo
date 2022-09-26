@@ -464,6 +464,7 @@ class PangeaServices {
         .then((response) {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+
         box.write("age", data["age"]);
         _searchController.age.value = data["age"];
         _searchController.loading.value = false;
@@ -471,6 +472,7 @@ class PangeaServices {
             msg: "User Age Updated",
             backgroundColor: Colors.green,
             webBgColor: "#00ff00");
+
       } else if (response.statusCode == 400) {
         box.write("age", 0);
         Fluttertoast.showToast(

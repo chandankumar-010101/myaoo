@@ -171,8 +171,8 @@ class SettingsAccountController extends State<SettingsAccount> {
                   padding: EdgeInsets.all(size.height * 0.01),
                   child: Center(
                     child: Text(
-                      "Target language?",
-                      style: const TextStyle().copyWith(
+                      "Base language of your class?",
+                      style: TextStyle().copyWith(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: 14),
                       overflow: TextOverflow.clip,
@@ -272,8 +272,8 @@ class SettingsAccountController extends State<SettingsAccount> {
                   padding: EdgeInsets.all(size.height * 0.01),
                   child: Center(
                     child: Text(
-                      "Base language?",
-                      style: TextStyle().copyWith(
+                      "Target language of your students?",
+                      style: const TextStyle().copyWith(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: 14),
                       overflow: TextOverflow.clip,
@@ -399,8 +399,8 @@ class SettingsAccountController extends State<SettingsAccount> {
                         .whenComplete(() {
                       GetStorage().write("sourcelanguage", source);
                       GetStorage().write("targetlanguage", target);
-
-                      VRouter.of(context).to('/settings');
+                      Navigator.of(context).pop();
+                      setState(() {});
                     });
                   } else {
                     Fluttertoast.showToast(
