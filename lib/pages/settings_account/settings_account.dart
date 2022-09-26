@@ -169,15 +169,14 @@ class SettingsAccountController extends State<SettingsAccount> {
                 Container(
                   constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
                   padding: EdgeInsets.all(size.height * 0.01),
-                  child: Center(
-                    child: Text(
-                      "Base language of your class?",
-                      style: TextStyle().copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 14),
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.center,
-                    ),
+
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "What is your base language?",
+                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.center,
+
                   ),
                 ),
                 Container(
@@ -270,15 +269,13 @@ class SettingsAccountController extends State<SettingsAccount> {
                 Container(
                   constraints: BoxConstraints(minWidth: 100, maxWidth: 650),
                   padding: EdgeInsets.all(size.height * 0.01),
-                  child: Center(
-                    child: Text(
-                      "Target language of your students?",
-                      style: const TextStyle().copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 14),
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.center,
-                    ),
+
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "What language do you want to learn?",
+                    style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 Container(
