@@ -12,8 +12,16 @@ class ItTrgSendButton extends StatelessWidget {
   final ChoreoController controller;
   ItTrgSendButton({Key? key, required this.controller}) : super(key: key);
   bool get isSendDisabled {
-    return controller.step2!.selectedTranslations!.isEmpty ||
-        controller.step2!.isLoading;
+    if (controller.state!.currentRoute == ChoreoRoute.STEP2) {
+      return controller.step2!.selectedTranslations!.isEmpty ||
+          controller.step2!.isLoading;
+    }
+
+    if (controller.state!.currentRoute == ChoreoRoute.INITAL_LOADING) {
+      return true;
+    }
+
+    return controller.step1!.isLoading;
   }
 
   @override
