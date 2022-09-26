@@ -38,8 +38,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
   }
 
   bool validation() {
-    if (classNameController.text.isEmpty || discriptionController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Class name and Description is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+    if (classNameController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Class name is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      return false;
+    }
+    if(discriptionController.text.isEmpty){
+      Fluttertoast.showToast(msg: "Description is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return false;
     }
     if (targetLanguage == null || sourceLanguage == null || languageLevelDropdownValue.isEmpty || languageLevel == 0) {
@@ -97,13 +101,18 @@ class _ClassLanguageState extends State<ClassLanguage> {
   }
 
   final box = GetStorage();
+
   void createLanguage() {
     if (!validation()) {
       return;
     }
     final int languageLevel = fetchLangLevel();
-    if (classNameController.text.isEmpty || discriptionController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Class name and Description is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+    if (classNameController.text.isEmpty ) {
+      Fluttertoast.showToast(msg: "Class name is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
+      return;
+    }
+    if(discriptionController.text.isEmpty){
+      Fluttertoast.showToast(msg: "Description is required!", fontSize: 16.0, webBgColor: "#ff0000", backgroundColor: Colors.red);
       return;
     }
     if (targetLanguage == null || sourceLanguage == null || languageLevelDropdownValue.isEmpty || languageLevel == 0) {
