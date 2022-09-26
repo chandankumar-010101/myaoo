@@ -219,7 +219,7 @@ class _InviteEmailState extends State<InviteEmail> {
                   child: Text("Send Invitation",style: TextStyle(
                       fontWeight: FontWeight.w500,color: Colors.white
                   ),),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
                       List.generate(
@@ -241,7 +241,19 @@ class _InviteEmailState extends State<InviteEmail> {
                       }
 
                       if (info.isNotEmpty) {
-                        PangeaServices.sendEmailToJoinClass(info, roomId, teacherName);
+                        await PangeaServices.sendEmailToJoinClass(info, roomId, teacherName).whenComplete(() {
+                          name.clear();
+                          email.clear();
+                          name.add(TextEditingController());
+                          email.add(TextEditingController());
+                          setState(() {
+                            value = 1;
+                          });
+                          setState(() {
+                          });
+
+                        });
+
                       }
                     }
                   },
