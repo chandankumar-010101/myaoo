@@ -126,7 +126,7 @@ class PangeaServices {
     }
   }
 
-  static sendEmailToJoinClass(
+  static Future sendEmailToJoinClass(
       List<inviteModel.Data> data, String roomId, String teacherName) async {
     PangeaServices._init();
     try {
