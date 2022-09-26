@@ -32,7 +32,7 @@ abstract class AppConfig {
   // static const String appOpenUrlScheme = 'staging.pangea.chat';
   static String _webBaseUrl = 'https://fluffychat.im/web';
   static String get webBaseUrl => _webBaseUrl;
-  static const String sourceCodeUrl = 'https://gitlab.com/famedly/fluffychat';
+  static const String sourceCodeUrl = 'https://github.com/pangeachat/client-v0';
   static const String supportUrl =
       'https://gitlab.com/famedly/fluffychat/issues';
   static const bool enableSentry = true;
