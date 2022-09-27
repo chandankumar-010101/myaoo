@@ -82,10 +82,30 @@ class PangeaServices {
     }
   }
 
+  static Future<bool?> userExitInClass(String classId) async {
+    ///fetch the list of participants of the class
+    try {
+      final FetchClassParticipants users = await fetchParticipants(classId);
+
+      ///check user exist in the class or not
+      final List exit = users.roomMembers!.members!
+          .where((element) => element == box.read("clientID"))
+          .toList();
+      if (exit.isEmpty) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      PangeaControllers.toastMsg(msg: "Error: $e");
+      return null;
+    }
+  }
+
   static joinClassWithCode(String classCode, BuildContext context) async {
     PangeaServices._init();
     if (box.read("access") == null) {
-      PangeaControllers.toastMsg(msg: "Access token not found",success: false);
+      PangeaControllers.toastMsg(msg: "Access token not found", success: false);
       return;
     }
     try {
@@ -97,23 +117,24 @@ class PangeaServices {
         },
       );
       if (value.statusCode == 200) {
-        final ClassCodeModel data = ClassCodeModel.fromJson(jsonDecode(value.body));
+        final ClassCodeModel data =
+            ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
-          ///fetch the list of participants of the class
-        final FetchClassParticipants users =   await fetchParticipants(data.pangeaClassRoomId!);
-        ///check user exist in the class or not
-        final List members = users.roomMembers!.members!.where((element) => element == box.read("clientID")).toList();
-
-        if(members.isEmpty){
-          ///join the room with class Id
-          joinRoom(context, data.pangeaClassRoomId!);
-          PangeaControllers.toastMsg(msg: "Class Joined Successfully",success: true);
-        }else{
-          PangeaControllers.toastMsg(msg: "You have already joined this class",success: true);
-
-        }
+          final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
+          if (exit != null) {
+            if (!exit) {
+              ///join the room with class Id
+              joinRoom(context, data.pangeaClassRoomId!);
+              PangeaControllers.toastMsg(
+                  msg: "Class Joined Successfully", success: true);
+            } else {
+              PangeaControllers.toastMsg(
+                  msg: "You have already joined this class", success: true);
+            }
+          }
         } else {
-          PangeaControllers.toastMsg(msg: "Unable to find User Information",success: false);
+          PangeaControllers.toastMsg(
+              msg: "Unable to find User Information", success: false);
         }
       } else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
@@ -122,7 +143,7 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg: "Error: $e",success: false);
+      PangeaControllers.toastMsg(msg: "Error: $e", success: false);
     }
   }
 
@@ -141,7 +162,8 @@ class PangeaServices {
             teacherName: teacherName,
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
-        PangeaControllers.toastMsg(msg: "Mail sent successfully!",success: true);
+        PangeaControllers.toastMsg(
+            msg: "Mail sent successfully!", success: true);
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
@@ -151,7 +173,8 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg: "Error: Unable to send email",success: false);
+      PangeaControllers.toastMsg(
+          msg: "Error: Unable to send email", success: false);
       throw Exception("Error: Unable to email");
     }
   }
@@ -160,7 +183,7 @@ class PangeaServices {
       String classCode, BuildContext context) async {
     PangeaServices._init();
     if (box.read("access") == null) {
-      PangeaControllers.toastMsg(msg: "Access token not found",success: false);
+      PangeaControllers.toastMsg(msg: "Access token not found", success: false);
       throw Exception("Access Token not found");
     }
     try {
@@ -182,7 +205,7 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg: "Error: $e",success: false);
+      PangeaControllers.toastMsg(msg: "Error: $e", success: false);
 
       throw Exception("Error: $e");
     }
@@ -196,10 +219,12 @@ class PangeaServices {
         future: () => room.invite(id),
       );
       if (success.error == null) {
-        PangeaControllers.toastMsg(msg:L10n.of(context)!.contactHasBeenInvitedToTheGroup,success: true);
+        PangeaControllers.toastMsg(
+            msg: L10n.of(context)!.contactHasBeenInvitedToTheGroup,
+            success: true);
       }
     } else {
-      PangeaControllers.toastMsg(msg: "Unable to Fetch Room",success: false);
+      PangeaControllers.toastMsg(msg: "Unable to Fetch Room", success: false);
     }
   }
 
@@ -211,13 +236,16 @@ class PangeaServices {
     if (response != null) {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
-      countryFlag = countryFlag.where((element) => element.languageType !=2).toList();
+      countryFlag =
+          countryFlag.where((element) => element.languageType != 2).toList();
       countryFlag.sort((a, b) {
-        return a.languageName.toString().toLowerCase().compareTo(b.languageName.toString().toLowerCase());
+        return a.languageName
+            .toString()
+            .toLowerCase()
+            .compareTo(b.languageName.toString().toLowerCase());
       });
     } else {
-      PangeaControllers.toastMsg(msg: "Something went wrong",success: false);
-
+      PangeaControllers.toastMsg(msg: "Something went wrong", success: false);
     }
     return countryFlag;
   }
@@ -230,31 +258,30 @@ class PangeaServices {
     if (response != null) {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
-      flags = countryFlag.where((element) => element.languageType ==2).toList();
-
+      flags =
+          countryFlag.where((element) => element.languageType == 2).toList();
     } else {
-      PangeaControllers.toastMsg(msg: "Something went wrong",success: false);
+      PangeaControllers.toastMsg(msg: "Something went wrong", success: false);
     }
     return flags;
   }
 
-  static  Future updateLanguage(String sourceLanguage, String targetLanguage) async{
+  static Future updateLanguage(
+      String sourceLanguage, String targetLanguage) async {
     PangeaServices._init();
     try {
       final value = await http.post(Uri.parse(ApiUrls.update_user_language),
           headers: {
-
             "Authorization": "Bearer ${box.read("access")}"
           },
-          body:{
-            "source_language":sourceLanguage,
-            "target_language":targetLanguage
-          }
-      );
+          body: {
+            "source_language": sourceLanguage,
+            "target_language": targetLanguage
+          });
       if (value.statusCode == 201 || value.statusCode == 200) {
-        PangeaControllers.toastMsg(msg: "Language updated successfully!",success: true);
-        }
-      else {
+        PangeaControllers.toastMsg(
+            msg: "Language updated successfully!", success: true);
+      } else {
         throw Exception("Error ${value.statusCode}: Unable to update language");
       }
     } catch (e) {
@@ -262,6 +289,7 @@ class PangeaServices {
       throw Exception("Error: Unable to update language");
     }
   }
+
   //------------------------------------Authentication-----------------------------------//
   static logoutUser(
       {required BuildContext context, required Client client}) async {
@@ -270,14 +298,14 @@ class PangeaServices {
       future: () => client.logout(),
     ).then((value) {
       box.erase();
-      PangeaControllers.toastMsg(msg: "Log out successfully",success: true);
-
+      PangeaControllers.toastMsg(msg: "Log out successfully", success: true);
     }).catchError((e) {
       if (kDebugMode) {
         print(e);
         print("logout error");
       }
-      PangeaControllers.toastMsg(msg: "Error while Log out user",success: false);
+      PangeaControllers.toastMsg(
+          msg: "Error while Log out user", success: false);
     });
   }
 
@@ -293,7 +321,7 @@ class PangeaServices {
       if (value.statusCode == 201 || value.statusCode == 200) {
         final data = jsonDecode(value.body);
         if (!data["is_user_exist"] || signUp) {
-          if(signUp){
+          if (signUp) {
             box.remove("sign_up");
             box.write("firstTime", true);
           }
@@ -326,7 +354,7 @@ class PangeaServices {
         PangeaServices.logoutUser(context: context, client: client);
       }
     } catch (e) {
-      PangeaControllers.toastMsg(msg:"User validation failed: $e");
+      PangeaControllers.toastMsg(msg: "User validation failed: $e");
       PangeaServices.logoutUser(context: context, client: client);
     }
   }
@@ -357,7 +385,7 @@ class PangeaServices {
       if (kDebugMode) {
         print("Error: $e");
       }
-      PangeaControllers.toastMsg(msg:"Error while fetching user details");
+      PangeaControllers.toastMsg(msg: "Error while fetching user details");
     }
   }
 
@@ -407,8 +435,7 @@ class PangeaServices {
         box.write("age", data["age"]);
         _searchController.age.value = data["age"];
         _searchController.loading.value = false;
-        PangeaControllers.toastMsg(msg: "User Age Updated",success: true);
-
+        PangeaControllers.toastMsg(msg: "User Age Updated", success: true);
       } else if (response.statusCode == 400) {
         box.write("age", 0);
         PangeaControllers.toastMsg(msg: "Unable to update user age");
@@ -425,7 +452,6 @@ class PangeaServices {
         print(e);
       }
       PangeaControllers.toastMsg(msg: "Error: $e");
-
     });
   }
 
@@ -460,16 +486,13 @@ class PangeaServices {
   }) async {
     PangeaServices._init();
     if (classRoom == null) {
-
       PangeaControllers.toastMsg(msg: "Token expired or unable to find room ");
       return;
     }
     try {
-      final value = await http.post(Uri.parse(ApiUrls.create_class),
-          headers: {
+      final value = await http.post(Uri.parse(ApiUrls.create_class), headers: {
         "Authorization": "Bearer ${box.read("access")}"
-      },
-          body: {
+      }, body: {
         "class_name": className,
         "city": city,
         "country": country,
@@ -517,7 +540,8 @@ class PangeaServices {
             box.remove('publicGroup');
             box.remove('openEnrollment');
             box.remove('openToExchange');
-            PangeaControllers.toastMsg(msg:"Class created successfully",success: true);
+            PangeaControllers.toastMsg(
+                msg: "Class created successfully", success: true);
 
             context.vRouter
                 .to("/invite_students", queryParameters: {"id": roomId});
@@ -537,13 +561,13 @@ class PangeaServices {
         } catch (e) {
           await classRoom.leave().whenComplete(() {
             deleteClass(context: context, roomId: roomId);
-            PangeaControllers.toastMsg(msg:"Unable to update class permissions: $e");
+            PangeaControllers.toastMsg(
+                msg: "Unable to update class permissions: $e");
           }).catchError((e) {
             throw Exception("Error: Unable to delete class");
           });
         }
-      }
-      else {
+      } else {
         print("what is ggoing on");
         print(value.statusCode);
         await classRoom.leave().whenComplete(() {
@@ -556,7 +580,7 @@ class PangeaServices {
     } catch (e) {
       await classRoom.leave().whenComplete(() {
         deleteClass(context: context, roomId: roomId);
-        PangeaControllers.toastMsg(msg:"Unable to update class details: $e");
+        PangeaControllers.toastMsg(msg: "Unable to update class details: $e");
       }).catchError((e) {
         throw Exception("Error: Unable to delete class");
       });
@@ -579,7 +603,8 @@ class PangeaServices {
       if (value.statusCode == 200 ||
           value.statusCode == 201 ||
           value.statusCode == 204) {
-        PangeaControllers.toastMsg(msg:"Class deleted successfully",success: true);
+        PangeaControllers.toastMsg(
+            msg: "Class deleted successfully", success: true);
         return true;
       } else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
@@ -616,15 +641,17 @@ class PangeaServices {
         ),
       );
       if (value.statusCode == 200 || value.statusCode == 201) {
-        PangeaControllers.toastMsg(msg:  "Permissions updated successfully",success: true);
+        PangeaControllers.toastMsg(
+            msg: "Permissions updated successfully", success: true);
         return true;
       } else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
         throw Exception("Error While Updating data");
       }
     } catch (e) {
-
-      PangeaControllers.toastMsg(msg:   "Error accured: $e",);
+      PangeaControllers.toastMsg(
+        msg: "Error accured: $e",
+      );
       if (kDebugMode) {
         print("Error accured: $e");
       }
@@ -670,15 +697,17 @@ class PangeaServices {
         ),
       );
       if (value.statusCode == 201 || value.statusCode == 200) {
-        PangeaControllers.toastMsg(msg:  "Permissions updated successfully",success: true);
+        PangeaControllers.toastMsg(
+            msg: "Permissions updated successfully", success: true);
         return true;
       } else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
         throw Exception("Error While Updating data");
       }
     } catch (e) {
-
-      PangeaControllers.toastMsg(msg:  "Error accured: $e",);
+      PangeaControllers.toastMsg(
+        msg: "Error accured: $e",
+      );
 
       if (kDebugMode) {
         print("Error accured: $e");
@@ -714,14 +743,15 @@ class PangeaServices {
         }),
       );
       if (value.statusCode == 201 || value.statusCode == 200) {
-        PangeaControllers.toastMsg(msg:   "Class Details updated successfully",success: true);
+        PangeaControllers.toastMsg(
+            msg: "Class Details updated successfully", success: true);
         return true;
       } else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
         throw Exception("Error While Updating data");
       }
     } catch (e) {
-      PangeaControllers.toastMsg(msg:   "Error accrued: $e");
+      PangeaControllers.toastMsg(msg: "Error accrued: $e");
       if (kDebugMode) {
         print(e);
       }
@@ -742,15 +772,13 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body);
           throw Exception("${value.statusCode}");
         }
-      }
-      else {
+      } else {
         throw Exception("Room ID is empty".toString());
       }
     } catch (e) {
@@ -831,8 +859,7 @@ class PangeaServices {
         return true;
       }
       if (result.statusCode == 400) {
-
-        PangeaControllers.toastMsg(msg:   "Exchange has been sent already");
+        PangeaControllers.toastMsg(msg: "Exchange has been sent already");
         return false;
       } else {
         ApiException.exception(
@@ -840,7 +867,9 @@ class PangeaServices {
         return false;
       }
     } catch (e) {
-      PangeaControllers.toastMsg(msg:   "Exception: Unable to create exchange",);
+      PangeaControllers.toastMsg(
+        msg: "Exception: Unable to create exchange",
+      );
 
       if (kDebugMode) {
         print(e);
@@ -932,7 +961,8 @@ class PangeaServices {
             "is_accepted": false,
           }));
       if (result.statusCode == 200 || result.statusCode == 201) {
-        PangeaControllers.toastMsg(msg:   "Mail sent successfully!",success: true);
+        PangeaControllers.toastMsg(
+            msg: "Mail sent successfully!", success: true);
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
@@ -941,7 +971,9 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg:   "Error: unable to reject request",);
+      PangeaControllers.toastMsg(
+        msg: "Error: unable to reject request",
+      );
       throw Exception("Error: unable to reject request");
     }
   }
@@ -1121,7 +1153,10 @@ class PangeaServices {
       print("data:-" + result.body);
 
       if (result.statusCode == 200 || result.statusCode == 201) {
-        PangeaControllers.toastMsg(msg:   "report user Sent Successfully",success: true,);
+        PangeaControllers.toastMsg(
+          msg: "report user Sent Successfully",
+          success: true,
+        );
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
@@ -1132,7 +1167,9 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg:   "Error: Unable to fetch report user",);
+      PangeaControllers.toastMsg(
+        msg: "Error: Unable to fetch report user",
+      );
       throw Exception("Error: Unable to fetch report user");
     }
   }
@@ -1196,7 +1233,10 @@ class PangeaServices {
             reason: reasondata ?? "",
           ).toJson()));
       if (result.statusCode == 200 || result.statusCode == 201) {
-        PangeaControllers.toastMsg(msg: "report user Sent Successfully",success: true,);
+        PangeaControllers.toastMsg(
+          msg: "report user Sent Successfully",
+          success: true,
+        );
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
@@ -1207,7 +1247,9 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg: "Error: Unable to fetch report user",);
+      PangeaControllers.toastMsg(
+        msg: "Error: Unable to fetch report user",
+      );
 
       throw Exception("Error: Unable to fetch report user");
     }
@@ -1238,7 +1280,9 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg: "Error: Unable to make admin",);
+      PangeaControllers.toastMsg(
+        msg: "Error: Unable to make admin",
+      );
       throw Exception("Error: Unable to make admin");
     }
   }
@@ -1252,7 +1296,8 @@ class PangeaServices {
       final response =
           await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return ClassAnalyticsModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes).toString()));
+        return ClassAnalyticsModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes).toString()));
       } else {
         ApiException.exception(
             statusCode: response.statusCode, body: response.body.toString());
@@ -1263,7 +1308,9 @@ class PangeaServices {
       if (kDebugMode) {
         print(e);
       }
-      PangeaControllers.toastMsg(msg: "Error: Unable fetch result",);
+      PangeaControllers.toastMsg(
+        msg: "Error: Unable fetch result",
+      );
 
       throw Exception("Error: Unable fetch result");
     }
@@ -1278,7 +1325,8 @@ class PangeaServices {
       final response =
           await http.get(Uri.parse(url), headers: ChoreoUtil.headers);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return ClassAnalyticsModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes).toString()));
+        return ClassAnalyticsModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes).toString()));
       } else {
         if (response.statusCode == 404) {
           throw Exception(
