@@ -8,6 +8,7 @@ import 'package:pangeachat/model/teacher_all_class_model.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 
@@ -398,8 +399,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                                       requestToClass: requestToClass,
                                       context: context);
                                  if(isExchangeExist){
-                                   Fluttertoast.showToast(
-                                       msg: "Exchange already exist with this class",webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                   PangeaControllers.toastMsg(msg: "Exchange already exist with this class",success: false);
                                    return;
                                  }
                                  if(userIdOfRequestedClass.isNotEmpty){
@@ -413,13 +413,11 @@ class _RequestExchangeState extends State<RequestExchange> {
                                        .openMatrixToUrl();
                                  }
                                 }else{
-                                  Fluttertoast.showToast(
-                                      msg: "Exchange Class Info not found",webBgColor: "#ff0000",backgroundColor: Colors.red);
-                                }
+                                  PangeaControllers.toastMsg(msg: "Exchange Class Info not found",success: false);
+                                 }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg: "Select your Class",webBgColor: "#ff0000",backgroundColor: Colors.red);
-                              }
+                              PangeaControllers.toastMsg(msg: "Select your Class",success: false);
+                            }
 
                               final String clientid =
                                   box.read("ExchangeClientID") ?? "";

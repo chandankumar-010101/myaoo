@@ -7,6 +7,7 @@ import 'package:pangeachat/services/services.dart';
 
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
 import '../../widgets/matrix.dart';
 
 class JoinClassWithLink extends StatefulWidget {
@@ -31,8 +32,8 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
     } else {
       print("unable to find classcode");
 
-      Fluttertoast.showToast(msg: "Unable to find class code",webBgColor: "#ff0000", backgroundColor: Colors.red);
-    }
+      PangeaControllers.toastMsg(msg: "Unable to find class code");
+      }
   }
 
 
@@ -112,7 +113,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                              final int? usertype =  GetStorage().read("usertype");
                               usertype !=null && usertype !=2?
                               PangeaServices.joinRoom(
-                                  context, data.pangeaClassRoomId!):Fluttertoast.showToast(msg: "Teacher are not allowed to join class");
+                                  context, data.pangeaClassRoomId!): PangeaControllers.toastMsg(msg: "Teacher are not allowed to join class");
                             },
                           ),
                         )

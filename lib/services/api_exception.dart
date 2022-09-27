@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'controllers.dart';
+
 class ApiException {
   static exception({required int statusCode, required String body}) {
     switch (statusCode) {
@@ -10,35 +12,38 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Bad request", backgroundColor: Colors.red,  webBgColor: "#ff0000");
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Bad request",success: false);
+
         return;
       case 401:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Unauthorized access", backgroundColor: Colors.red, webBgColor: "#ff0000");
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Unauthorized access",success: false);
+
         return;
       case 403:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Don't have permissions!", backgroundColor: Colors.red, webBgColor: "#ff0000");
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Don't have permissions!",success: false);
         return;
       case 500:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Internal Server Error", backgroundColor: Colors.red,webBgColor: "#ff0000");
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Internal Server Error",success: false);
         return;
       case 502:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Bad Gateway",backgroundColor: Colors.red, webBgColor: "#ff0000");
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Bad Gateway",success: false);
+
 
         return;
       case 503:
@@ -46,7 +51,7 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Service Unavailable", backgroundColor: Colors.red, webBgColor: "#ff0000");
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Service Unavailable",success: false);
 
         return;
       case 504:
@@ -54,14 +59,16 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Gateway timeout error!", backgroundColor: Colors.red,webBgColor: "#ff0000");
-        return;
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: Gateway timeout error!",success: false);
+
+       return;
       default:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        Fluttertoast.showToast(msg: "Exception $statusCode: Unknown exception accrued!", backgroundColor: Colors.red, webBgColor: "#ff0000");
+
+        PangeaControllers.toastMsg(msg:  "Exception $statusCode: Unknown exception accrued!",success: false);
         return;
     }
   }

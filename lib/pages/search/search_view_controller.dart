@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../model/search_view_model.dart';
+import '../../services/controllers.dart';
 import '../../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,11 +58,8 @@ class SearchViewController extends GetxController {
             if (kDebugMode) {
               print(value.statusCode);
             }
-            Fluttertoast.showToast(
-                msg: "Error ${value
-                    .statusCode}: Unable to fetch list of classes",
-                webBgColor: "#ff0000",
-                backgroundColor: Colors.red);
+            PangeaControllers.toastMsg(msg: "Error ${value
+                .statusCode}: Unable to fetch list of classes",success: false);
           }
 
 
@@ -72,7 +70,8 @@ class SearchViewController extends GetxController {
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: "#ff0000", backgroundColor: Colors.red);
+
+      PangeaControllers.toastMsg(msg: "Error: Access token not available",success: false);
       if (kDebugMode) {
         print("access token not found");
       }
@@ -107,7 +106,9 @@ class SearchViewController extends GetxController {
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: "#ff0000", backgroundColor: Colors.red);
+
+      PangeaControllers.toastMsg(msg: "Error: Access token not available",success: false);
+
       if (kDebugMode) {
         print("access token not found");
       }

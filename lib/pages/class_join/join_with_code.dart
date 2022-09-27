@@ -3,6 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
+
 class JoinClassWithCode extends StatefulWidget {
   const JoinClassWithCode({Key? key}) : super(key: key);
 
@@ -13,6 +15,7 @@ class JoinClassWithCode extends StatefulWidget {
 class _JoinClassWithCodeState extends State<JoinClassWithCode> {
   TextEditingController codeController = TextEditingController();
   Color color = Colors.white;
+  Color color2 = Colors.grey;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -66,6 +69,8 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                       fontSize: 14),
                   onChanged: (String? value) {
                     value?.length == 6 ? setState(() => color = Color(0xFF352048)) : setState(() => color = Colors.white);
+                    value?.length == 6 ? setState(() => color2 = Colors.white) : setState(() => color2 = Colors.grey);
+
                   },
                   decoration:  InputDecoration(
                       //prefixIcon: const Icon(Icons.label),
@@ -86,7 +91,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                   if (codeController.text.length == 6) {
                     PangeaServices.joinClassWithCode(codeController.text, context);
                   } else {
-                    Fluttertoast.showToast(msg: "length is short!!!!!!", webBgColor: "#ff0000", backgroundColor: Colors.red);
+                    PangeaControllers.toastMsg(msg: "length is short!!!!!!",);
                   }
                 },
                 child: Container(
@@ -99,7 +104,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                     color: color,
                   ),
                   child: Center(
-                    child: Text("Connect to your class", style: TextStyle(color: Colors.grey)),
+                    child: Text("Connect to your class", style: TextStyle(color: color2)),
                   ),
                 ),
               ),

@@ -21,6 +21,7 @@ import 'package:pangeachat/pages/chat_list/spaces_bottom_bar.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
 import 'package:pangeachat/pages/chat_list/stories_header.dart';
 import 'package:vrouter/vrouter.dart';
+import '../../services/controllers.dart';
 import '../../utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
 import '../../utils/stream_extension.dart';
 import '../../widgets/matrix.dart';
@@ -303,27 +304,16 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                               ),
                                             );
                                             if (roomID.result != null) {
-                                              print("Room id:" + roomID.result!);
-                                              Fluttertoast.showToast(
-                                                  msg: "Successfully created Private Chat",
-                                                  webBgColor: "#00ff00",
-                                                  textColor: Colors.white,
-                                                  toastLength: Toast.LENGTH_LONG);
-
                                               VRouter.of(context).pop();
-                                              Fluttertoast.showToast(
-                                                  msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                              PangeaControllers.toastMsg(msg: "Created Successfully",success: true);
                                             }
                                             if (roomID == null) {
                                               VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
                                             }
                                           }
                                         : () {
-                                            Fluttertoast.showToast(
-                                                msg: "Not allowed to create private rooms",
-                                                webBgColor: "#ff0000",
-                                                textColor: Colors.white,
-                                                toastLength: Toast.LENGTH_LONG);
+                                      PangeaControllers.toastMsg(msg: "Not allowed to create private rooms",success: false);
+
                                           });
                               },
                             ),
@@ -479,27 +469,15 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                               ),
                                             );
                                             if (roomID.result != null) {
-                                              print("Room id:" + roomID.result!);
-                                              Fluttertoast.showToast(
-                                                  msg: "Successfully created Private Chat",
-                                                  webBgColor: "#00ff00",
-                                                  textColor: Colors.white,
-                                                  toastLength: Toast.LENGTH_LONG);
-
                                               VRouter.of(context).pop();
-                                              Fluttertoast.showToast(
-                                                  msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+                                              PangeaControllers.toastMsg(msg: "Created Successfully",success: true);
                                             }
                                             if (roomID == null) {
                                               VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
                                             }
                                           }
                                         : () {
-                                            Fluttertoast.showToast(
-                                                msg: "Not allowed to create private rooms",
-                                                webBgColor: "#ff0000",
-                                                textColor: Colors.white,
-                                                toastLength: Toast.LENGTH_LONG);
+                                      PangeaControllers.toastMsg(msg: "Not allowed to create private rooms");
                                           });
                               },
                             ),

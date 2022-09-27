@@ -13,6 +13,7 @@ import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../config/app_config.dart';
 import '../../model/fetchClassParticipants.dart';
+import '../../services/controllers.dart';
 import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
 import 'package:matrix/matrix.dart' as sdk;
@@ -31,10 +32,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
       List<String> listOfParticipants = [];
       final client = Matrix.of(context).client;
       if (senderId == client.userID) {
-        Fluttertoast.showToast(
-            msg: "You don't have permission for this action.",
-            webBgColor: "#ff0000",
-            backgroundColor: Colors.red);
+        PangeaControllers.toastMsg(msg: "You don't have permission for this action.",success: false);
         return null;
       }
       final FetchClassParticipants data =
@@ -126,10 +124,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(
-          msg: "Error: Unable to Confirm the exchange",
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Error: Unable to Confirm the exchange");
       return null;
     }
   }

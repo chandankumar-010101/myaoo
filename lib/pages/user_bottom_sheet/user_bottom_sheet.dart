@@ -11,6 +11,7 @@ import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
 import '../../model/report_user_model.dart';
+import '../../services/controllers.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import 'user_bottom_sheet_view.dart';
@@ -210,13 +211,11 @@ class UserBottomSheetController extends State<UserBottomSheet> {
           ),
         );
         if (roomID.result != null) {
-          print("Room id:" + roomID.result!);
-          Fluttertoast.showToast(
-              msg: "Successfully created Private Chat", webBgColor: "#00ff00", textColor: Colors.white, toastLength: Toast.LENGTH_LONG);
 
           VRouter.of(context).pop();
-          Fluttertoast.showToast(msg: "Created Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
-        }
+
+          PangeaControllers.toastMsg(msg: "Created Successfully",success: true);
+          }
         if (roomID == null) {
           VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
         }

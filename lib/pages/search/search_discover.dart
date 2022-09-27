@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pangeachat/pages/search/search_view_controller.dart';
+import '../../services/controllers.dart';
 import '../../services/services.dart';
 
 class SearchDiscoverView extends StatefulWidget {
@@ -35,9 +36,8 @@ class _SearchDiscoverViewState extends State<SearchDiscoverView> {
       return;
     }
     if (!isAdult("$dayId-$monthId-$yearId")) {
-      Fluttertoast.showToast(
-          msg: "Age is below 18 year's", webBgColor: "#ff0000",backgroundColor: Colors.red
-      );
+      PangeaControllers.toastMsg(msg: "Age is below 18 year's");
+
       return;
     }
     PangeaServices.updateUserAge(dayId!, monthId!, yearId!, context);
