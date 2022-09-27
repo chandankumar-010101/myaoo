@@ -27,18 +27,6 @@ class RequestScreenView extends StatefulWidget {
 class _RequestScreenViewState extends State<RequestScreenView> {
   final box = GetStorage();
 
-  fetchFlag(FetchClassInfoModel data, String url) {
-    try {
-      return SizedBox(
-        width: 20,
-        height: 20,
-        child: Image.network(url + data.flags[1].languageName.toString()),
-      );
-    } catch (e) {
-      return Container();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;

@@ -144,7 +144,9 @@ class PangeaServices {
         Fluttertoast.showToast(
             msg: "Mail sent successfully!",
             backgroundColor: Color(0xFF5625BA),
-            webBgColor: "#5625BA");
+            webBgColor: "#5625BA",
+          textColor: Colors.white,
+        );
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
@@ -256,15 +258,7 @@ class PangeaServices {
       List temp = response.body;
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
       flags = countryFlag.where((element) => element.languageType ==2).toList();
-     // flags.forEach((element) {print(element.languageName);});
 
-      // countryFlag.forEach((element) {
-      //   print(element.languageName);
-      //   if (element.languageType == 2) {
-      //     print(element.languageName);
-      //     flags.add(element);
-      //   }
-      // });
     } else {
       Fluttertoast.showToast(
           msg: "Something went wrong",
@@ -877,14 +871,15 @@ class PangeaServices {
           },
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
-          //print("Hello");
+
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
         } else {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body);
           throw Exception("${value.statusCode}");
         }
-      } else {
+      }
+      else {
         throw Exception("Room ID is empty".toString());
       }
     } catch (e) {
@@ -1073,6 +1068,7 @@ class PangeaServices {
         Fluttertoast.showToast(
             msg: "Mail sent successfully!",
             backgroundColor: Color(0xFF5625BA),
+            textColor: Colors.white,
             webBgColor: "#5625BA");
       } else {
         ApiException.exception(
