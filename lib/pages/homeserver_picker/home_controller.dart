@@ -205,6 +205,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../model/flag_model.dart';
+import '../../services/controllers.dart';
 import '../../utils/api_helper.dart';
 import '../../utils/api_urls.dart';
 
@@ -252,10 +253,8 @@ class HomeController extends GetxController {
       //   }
       // });
     } else {
-      Fluttertoast.showToast(
-          msg: "API Error: ${response.statusCode}",
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "API Error: ${response.statusCode}");
+
       loading.value = false;
     }
   }

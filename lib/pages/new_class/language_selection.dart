@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/flag_model.dart';
 import '../../services/services.dart';
@@ -39,70 +40,43 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
   bool validation() {
     if (classNameController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Class name is required!",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Class name is required!");
+
       return false;
     }
     if (discriptionController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Description is required!",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Description is required!");
       return false;
     }
     if (targetLanguage == null ||
         sourceLanguage == null ||
         languageLevelDropdownValue.isEmpty ||
         languageLevel == 0) {
-      Fluttertoast.showToast(
-          msg: "Language must be selected!",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Language must be selected!");
+
       return false;
     }
     if (classNameController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "Class name length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Class name length should below 50");
       return false;
     }
     if (cityController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "City length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "City length should below 50");
       return false;
     }
     if (schoolController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "School length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "School length should below 50");
+
       return false;
     }
     if (countryController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "Country length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Country length should below 50");
+
       return false;
     }
     if (discriptionController.text.length >= 2000) {
-      Fluttertoast.showToast(
-          msg: "Description length should below  2000",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Description length should below  2000");
+
       return false;
     }
     return true;
@@ -201,70 +175,42 @@ class _ClassLanguageState extends State<ClassLanguage> {
     }
     final int languageLevel = fetchLangLevel();
     if (classNameController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Class name is required!",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Class name is required!",success: false);
+
       return;
     }
     if (discriptionController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Description is required!",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Description is required!",success: false);
+
       return;
     }
     if (targetLanguage == null ||
         sourceLanguage == null ||
         languageLevelDropdownValue.isEmpty ||
         languageLevel == 0) {
-      Fluttertoast.showToast(
-          msg: "Language must be selected!",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Language must be selected!",success: false);
       return;
     }
     if (classNameController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "Class name length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Class name length should below 50",success: false);
       return;
     }
     if (cityController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "City length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "City length should below 50",success: false);
+
       return;
     }
     if (schoolController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "School length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "School length should below 50",success: false);
       return;
     }
     if (countryController.text.length >= 50) {
-      Fluttertoast.showToast(
-          msg: "Country length should below 50",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Country length should below 50",success: false);
       return;
     }
     if (discriptionController.text.length >= 2000) {
-      Fluttertoast.showToast(
-          msg: "Description length should below  2000",
-          fontSize: 16.0,
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Description length should below  2000",success: false);
+
       return;
     }
     box.write("className", classNameController.text);
@@ -975,43 +921,25 @@ class _ClassLanguageState extends State<ClassLanguage> {
                             onTap: () async {
                               final int languageLevel = fetchLangLevel();
                               if (discriptionController.text.isEmpty) {
-                                Fluttertoast.showToast(
-                                    msg: "Class Description is required!",
-                                    fontSize: 16.0,
-                                    webBgColor: "#ff0000",
-                                    backgroundColor: Colors.red);
+                                PangeaControllers.toastMsg(msg:  "Class Description is required!");
                                 return;
                               }
                               if (cityController.text.length >= 50) {
-                                Fluttertoast.showToast(
-                                    msg: "City length should below 20",
-                                    fontSize: 16.0,
-                                    webBgColor: "#ff0000",
-                                    backgroundColor: Colors.red);
+                                PangeaControllers.toastMsg(msg:  "City length should below 20");
+
                                 return;
                               }
                               if (schoolController.text.length >= 50) {
-                                Fluttertoast.showToast(
-                                    msg: "School length should below 20",
-                                    fontSize: 16.0,
-                                    webBgColor: "#ff0000",
-                                    backgroundColor: Colors.red);
+                                PangeaControllers.toastMsg(msg:  "School length should below 20");
+
                                 return;
                               }
                               if (countryController.text.length >= 50) {
-                                Fluttertoast.showToast(
-                                    msg: "Country length should below 12",
-                                    fontSize: 16.0,
-                                    webBgColor: "#ff0000",
-                                    backgroundColor: Colors.red);
+                                PangeaControllers.toastMsg(msg:  "Country length should below 12");
                                 return;
                               }
                               if (discriptionController.text.length >= 2000) {
-                                Fluttertoast.showToast(
-                                    msg: "Description length should below 2000",
-                                    fontSize: 16.0,
-                                    webBgColor: "#ff0000",
-                                    backgroundColor: Colors.red);
+                                PangeaControllers.toastMsg(msg:  "Description length should below 2000");
                                 return;
                               }
                               final result = await showFutureLoadingDialog(
