@@ -6,6 +6,8 @@ import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
+
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);
 
@@ -230,13 +232,12 @@ class _InviteEmailState extends State<InviteEmail> {
                           )));
 
                       if (roomId.isEmpty) {
-                        Fluttertoast.showToast(msg: "Unable to find Room ID", webBgColor: "#ff0000", backgroundColor: Colors.red);
-
+                        PangeaControllers.toastMsg(msg: "Unable to find Room ID");
                         return;
                       }
                       String teacherName = Matrix.of(context).client.getRoomById(roomId)!.displayname ?? "";
                       if (teacherName.isEmpty) {
-                        Fluttertoast.showToast(msg: "Unable to find Room Name", webBgColor: "#ff0000", backgroundColor: Colors.red);
+                        PangeaControllers.toastMsg(msg: "Unable to find teacher name");
                         return;
                       }
 

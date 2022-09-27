@@ -15,6 +15,7 @@ import 'package:pangeachat/pages/settings_account/settings_account_view.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
 import '../../model/flag_model.dart';
+import '../../services/controllers.dart';
 
 class SettingsAccount extends StatefulWidget {
   const SettingsAccount({Key? key}) : super(key: key);
@@ -400,17 +401,12 @@ class SettingsAccountController extends State<SettingsAccount> {
                       setState(() {});
                     });
                   } else {
-                    Fluttertoast.showToast(
-                        msg: "Error: Unable to find language",
-                        webBgColor: "#ff0000",
-                        backgroundColor: const Color(0xFFFF0000));
+                    PangeaControllers.toastMsg(msg:  "Error: Unable to find language");
+
                   }
                 } catch (e) {
                   print(e);
-                  Fluttertoast.showToast(
-                      msg: "Error: $e",
-                      webBgColor: "#ff0000",
-                      backgroundColor: const Color(0xFFFF0000));
+                  PangeaControllers.toastMsg(msg:  "Error: $e");
                 }
               },
             ),
