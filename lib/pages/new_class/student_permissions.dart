@@ -678,7 +678,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                               : Theme.of(context).colorScheme.onPrimary)),
                                   child: Center(
                                     child: Text(
-                                      "Save",
+                                      "Update",
                                       style: TextStyle().copyWith(
                                           color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,

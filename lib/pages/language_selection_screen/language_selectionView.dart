@@ -300,8 +300,7 @@ class LanguageSelectionView extends StatelessWidget {
                               },
                             ).toList(),
                             onChanged: (String? value) {
-                              controller.getxController.selectedLanguageTwo
-                                  .value = value!;
+                              controller.getxController.selectedLanguageTwo .value = value!;
                             },
                           )),
                     ),

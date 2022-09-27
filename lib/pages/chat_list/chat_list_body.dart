@@ -587,13 +587,13 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   // Todo: Style needs to be updated
                                 ),
                               ),
-                              inviteRooms.length > 0
+                              inviteRooms.isNotEmpty
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2.0),
                                         color: Colors.white,
-                                        child: Text("New", style: TextStyle(fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
+                                        child: Text("${inviteRooms.length} New", style: TextStyle(fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
                                       ),
                                     )
                                   : Container(),
