@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -697,7 +699,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                               ),
                                             ),
                                             onPressed: () {
-                                              VRouter.of(context).to('/rooms');
+                                              window.close();
 
                                               // PangeaServices.ExchangeRejectRequest(
                                               //     data.pangeaClassRoomId,
