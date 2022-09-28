@@ -1,5 +1,7 @@
 //import 'dart:html';
 
+import 'dart:html';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -104,126 +106,135 @@ class RequestToEnrollPopUp extends StatelessWidget {
     final List<Room> space = spaces.where((i) => i.id == roomId).toList();
     final int userType = GetStorage().read("usertype")??0;
     if (space.isNotEmpty && space[0].id == roomId && userType ==2) {
-      return FutureBuilder(
-          future: Matrix.of(context).client.getUserProfile(id),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text("Unable to fetch user data error accured!"),
-              );
-            } else if (snapshot.hasData) {
-              final ProfileInformation data = snapshot.data as ProfileInformation;
-              return Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 300,
-                      child: Card(
-                        elevation: 8,
-                        child: Column(
-                          children: [
-                            data.avatarUrl != null
-                                ? Container(
-                                    width: 300,
-                                    height: 150,
-                                    child: Avatar(
-                                      mxContent: data.avatarUrl,
-                                    ))
-                                : Container(
-                                    padding: EdgeInsets.only(top: 10),
-                                    width: 200,
-                                    height: 100,
-                                    child: CircleAvatar(
-                                      radius: 24,
-                                      backgroundColor: Colors.black12,
-                                      child: Avatar(
-                                        mxContent: data.avatarUrl,
-                                      ),
-                                    ),
+      return Scaffold(
+        appBar: AppBar(
+       leading:   IconButton(
+            icon: Icon(Icons.clear, color: Colors.black),
+            onPressed: () {window.close();},
+          ),
+          title: Text("Confirm Enrollment",style: TextStyle(fontSize: 16),),
+        ),
+        body: FutureBuilder(
+            future: Matrix.of(context).client.getUserProfile(id),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text("Unable to fetch user data error accured!"),
+                );
+              } else if (snapshot.hasData) {
+                final ProfileInformation data = snapshot.data as ProfileInformation;
+                return Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 300,
+                        child: Card(
+                          elevation: 8,
+                          child: Column(
+                            children: [
+                              data.avatarUrl != null
+                                  ? Container(
+                                  width: 300,
+                                  height: 150,
+                                  child: Avatar(
+                                    mxContent: data.avatarUrl,
+                                  ))
+                                  : Container(
+                                padding: EdgeInsets.only(top: 10),
+                                width: 200,
+                                height: 100,
+                                child: CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: Colors.black12,
+                                  child: Avatar(
+                                    mxContent: data.avatarUrl,
                                   ),
-                            Text(
-                              data.displayname ?? "Username",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                final confirmed = await showOkCancelAlertDialog(
-                                  useRootNavigator: false,
-                                  context: context,
-                                  title: L10n.of(context)!.areYouSure,
-                                  okLabel: L10n.of(context)!.ok,
-                                  cancelLabel: L10n.of(context)!.cancel,
-                                );
-                                if (confirmed == OkCancelResult.ok) {
-                                  if (roomId.isNotEmpty && id.isNotEmpty) {
-                                    PangeaServices.inviteAction(
-                                        context, id, roomId);
-                                  } else {
-                                    print("Room id or id is empty");
+                                ),
+                              ),
+                              Text(
+                                data.displayname ?? "Username",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  final confirmed = await showOkCancelAlertDialog(
+                                    useRootNavigator: false,
+                                    context: context,
+                                    title: L10n.of(context)!.areYouSure,
+                                    okLabel: L10n.of(context)!.ok,
+                                    cancelLabel: L10n.of(context)!.cancel,
+                                  );
+                                  if (confirmed == OkCancelResult.ok) {
+                                    if (roomId.isNotEmpty && id.isNotEmpty) {
+                                      PangeaServices.inviteAction(
+                                          context, id, roomId);
+                                    } else {
+                                      print("Room id or id is empty");
+                                    }
                                   }
-                                }
-                              },
-                              child: Container(
-                                height: 40,
-                                width: size.width,
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                margin: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: Colors.black, width: 1),
-                                ),
-                                child: Center(
-                                  child: Text("Confirm Enrollment Request"),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                // window.close();
-                              },
-                              child: Container(
-                                height: 40,
-                                width: size.width,
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                margin: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: Colors.black, width: 1),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                      "Message " + data.displayname.toString()),
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: size.width,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border:
+                                    Border.all(color: Colors.black, width: 1),
+                                  ),
+                                  child: Center(
+                                    child: Text("Confirm Enrollment Request"),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            )
-                          ],
+                              SizedBox(
+                                height: 20,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  window.close();
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: size.width,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border:
+                                    Border.all(color: Colors.black, width: 1),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                        "Message " + data.displayname.toString()),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          });
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
+      );
     } else {
       return const Center(
         child: Text("You are not authorized for this page."),

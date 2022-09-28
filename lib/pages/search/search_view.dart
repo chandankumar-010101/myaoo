@@ -53,10 +53,6 @@ class _SearchViewState extends State<SearchView> {
     final int age1 = box.read("age") ?? 0;
     age1 == 0 ? searchController.age.value = 0 : searchController.age.value = age1;
     searchController.getClasses();
-
-
-
-
   }
 
   fetchFlag(String url, int i) {
@@ -73,6 +69,7 @@ class _SearchViewState extends State<SearchView> {
       return Container();
     }
   }
+  int currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +146,18 @@ class _SearchViewState extends State<SearchView> {
               hintText: L10n.of(context)!.search,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             ),
-            onChanged: widget.controller.search,
+            onChanged: (value){
+              if(currentIndex != 0){
+                widget.controller.onChangeHandler(value);
+              }
+            },
           ),
           bottom: TabBar(
+            onTap: (index){
+              setState(() {
+                currentIndex = index;
+              });
+            },
             indicatorColor: Theme.of(context).colorScheme.secondary,
             labelColor: Theme.of(context).colorScheme.secondary,
             unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
@@ -169,14 +175,13 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
+            ///Discover tab
             Obx(() => searchController.age.value >= 18
                 ? ListView(
-              keyboardDismissBehavior:
-              PlatformInfos.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
+              keyboardDismissBehavior:  PlatformInfos.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
               children: [
                 const SizedBox(height: 12),
-                widget.controller.controller.text!=""?
-                FutureBuilder(
+                widget.controller.controller.text!=""?  FutureBuilder(
                     future: searchController.getSearch(widget.controller.controller.text),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       //print(widget.controller.controller.text);
@@ -526,6 +531,7 @@ class _SearchViewState extends State<SearchView> {
                           ],
                         );
                       }
+
                       return Column(
                         children: [
                           Obx(() => searchController.next.value || searchController.previous.value
@@ -898,44 +904,6 @@ class _SearchViewState extends State<SearchView> {
                   const SizedBox(
                     height: 134,
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     createInviteAction();
-                  //   },
-                  //   child: Container(
-                  //       decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(10),
-                  //         color: Theme.of(context).colorScheme.onPrimary,
-                  //           border: Border.all(
-                  //               color: Theme.of(context)
-                  //                   .colorScheme
-                  //                   .onPrimary ==
-                  //                   Colors.white
-                  //                   ? Theme.of(context).primaryColor
-                  //                   : Theme.of(context)
-                  //                   .colorScheme
-                  //                   .onPrimary
-                  //           )
-                  //       ),
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.symmetric(
-                  //             horizontal: 42, vertical: 6),
-                  //         child: Text(
-                  //           "Invite your friends",
-                  //           style: TextStyle().copyWith(
-                  //               color: Theme.of(context)
-                  //                   .textTheme
-                  //                   .bodyText1!
-                  //                   .color,
-                  //               fontSize: 16),
-                  //         ),
-                  //       )),
-                  // ),
-                  //
-                  //
-                  // const SizedBox(
-                  //   height: 19,
-                  // ),
                   box.read("usertype") == 2
                       ? GestureDetector(
                     onTap: () {
@@ -981,11 +949,15 @@ class _SearchViewState extends State<SearchView> {
                 ],
               ),
             )),
+
+            ///Chats tab
             ListView.builder(
               keyboardDismissBehavior: PlatformInfos.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
               itemCount: rooms.length,
               itemBuilder: (_, i) => ChatListItem(rooms[i]),
             ),
+
+            ///Peoples Tab
             widget.controller.foundProfiles.isNotEmpty
                 ? ListView.builder(
                     keyboardDismissBehavior:
