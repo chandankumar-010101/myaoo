@@ -802,7 +802,8 @@ class PangeaServices {
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
-        } else {
+        }
+        else {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body);
           throw Exception("${value.statusCode}");
