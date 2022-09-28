@@ -43,6 +43,7 @@ import 'controllers.dart';
 
 class PangeaServices {
   static final box = GetStorage();
+  static SearchViewController searchViewController = Get.put(SearchViewController());
 
   PangeaServices._init() {
     accessTokenStatus();
@@ -99,6 +100,34 @@ class PangeaServices {
     } catch (e) {
       PangeaControllers.toastMsg(msg: "Error: $e");
       return null;
+    }
+  }
+
+
+  static searchClass(String text ) async {
+    try {
+      PangeaServices._init();
+      final result = await http.get(Uri.parse(ApiUrls.class_search+"?q=$text"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${box.read("access")}",
+        },
+      );
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+         searchViewController.loading.value = false;
+        final data = searchViewModelFromJson(result.body);
+
+       searchViewController.searchList.value = data.results!;
+      }
+      else{
+        ApiException.exception(statusCode: result.statusCode, body: result.body);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      PangeaControllers.toastMsg(msg: "Error: $e");
     }
   }
 

@@ -62,17 +62,12 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       );
     } else {
       if (classCode.isEmpty) {
-
         return const Scaffold(
           body: Center(
             child: Text("Unable to find the Code"),
           ),
         );
-
-
       } else {
-
-
         return Scaffold(
           appBar: AppBar(
             leading: InkWell(
@@ -86,8 +81,6 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
           ),
           body: Center(
               child: FutureBuilder(
-
-
             future: PangeaServices.fetchClassWithCode(classCode, context),
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
