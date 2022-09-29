@@ -31,7 +31,7 @@ class InvitationSelectionView extends StatelessWidget {
         title: TextField(
           autofocus: true,
           decoration: InputDecoration(
-            hintText: "Invite contact to Room",
+            hintText: "Invite contact to Chat",
             suffix: const Icon(Icons.search_outlined),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           ),

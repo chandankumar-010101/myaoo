@@ -149,6 +149,7 @@ class PangeaServices {
         final ClassCodeModel data =
             ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
+
           final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
           if (exit != null) {
             if (!exit) {
@@ -253,7 +254,8 @@ class PangeaServices {
             success: true);
       }
     } else {
-      PangeaControllers.toastMsg(msg: "Unable to Fetch Room", success: false);
+      PangeaControllers.toastMsg(msg: "Unable to Fetch Chat", success: false);
+
     }
   }
 
@@ -515,7 +517,9 @@ class PangeaServices {
   }) async {
     PangeaServices._init();
     if (classRoom == null) {
-      PangeaControllers.toastMsg(msg: "Token expired or unable to find room ");
+      PangeaControllers.toastMsg(msg: "Token expired or unable to find chat ");
+
+
       return;
     }
     try {

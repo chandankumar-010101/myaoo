@@ -239,7 +239,10 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           isRoomExpanded = false;
                         }
                       }),
-            children: widget.controller.activeSpacesEntry.getSpace(context) !=null
+
+            children: widget.controller.activeSpacesEntry.getSpace(context) !=
+                    null
+
                 ? <ExpansionPanel>[
 
                     ExpansionPanel(
@@ -257,6 +260,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               ),
                             ],
                           )),
+
                       body:Obx(()=> widget.controller.chatListController.participants.value.isEmpty  ? SizedBox(
                         height: 200,
                         child: Center(
@@ -303,6 +307,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               });
                         },
                       )),
+
                     ),
                     ExpansionPanel(
                       canTapOnHeader: true,
@@ -318,7 +323,9 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   // Todo: Style needs to be updated
                                 ),
                               ),
+
                             Obx(()=>widget.controller.checkRoomPermissions()),
+
                             ],
                           )),
                       body: rooms.length == 0
@@ -387,6 +394,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               ),
                             ],
                           )),
+
                       body: Obx(()=> widget.controller.chatListController.participants.value.isEmpty ? const SizedBox(
                         height: 200,
                         child: Center(
@@ -453,7 +461,9 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           ? Container(
                               height: 200,
                               child: Center(
-                                  child: Text(" No Rooms in class",
+
+                                  child: Text(" No Chats in class",
+
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500))),
