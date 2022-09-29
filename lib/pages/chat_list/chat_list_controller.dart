@@ -1,11 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/class_detail_model.dart';
+import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
+import 'package:pangeachat/services/controllers.dart';
 
 import '../../services/services.dart';
+import '../../widgets/matrix.dart';
+import 'package:matrix/matrix.dart';
+
 
 class ListOfClassModel {
   String activeClassId;
@@ -17,46 +20,49 @@ class ListOfClassModel {
 }
 
 class ChatListControllerGet extends GetxController {
-  final permissions = Rxn<Permissions>();
-  RxList<String> listOfClasses = RxList<String>();
-  RxList<ListOfClassModel> listOfClassModel =
-      RxList<ListOfClassModel>();
 
+  //-------------------------------variables-----------------------------------//
+  ///class permissions
+  final permissions = Rxn<Permissions>();
+  RxList<ListOfClassModel> listOfClassModel = RxList<ListOfClassModel>();
+  final int userType =  GetStorage().read("usertype")??0;
+  RxList<User> participants = RxList<User>();
+  RxList<User> participantsList = RxList<User>();
+
+
+  //-------------------------------Functions-----------------------------------//
+  ///fetch class permissions and store them into List of class Model.
   getClassPermissions(String? activeSpaceId, BuildContext context) async {
     if (activeSpaceId != null) {
-      print("current spaceId $activeSpaceId");
-      final bool exist = listOfClasses.contains(activeSpaceId);
-      if (exist) {
-       final List<ListOfClassModel> listOfClass =   listOfClassModel.where((classModel) => classModel.activeClassId ==activeSpaceId).toList();
-       permissions.value =  listOfClass.first.classModel.permissions;
-       print("permissions updated");
+      ///check activeSpaceId exist in list of class modal or not
+      final List<ListOfClassModel> listOfClass = listOfClassModel
+          .where((classModel) => classModel.activeClassId == activeSpaceId)
+          .toList();
+
+      if (listOfClass.isNotEmpty) {
+
+        permissions.value = listOfClass.first.classModel.permissions;
       } else {
         try{
-          final FetchClassInfoModel result =
-          await PangeaServices.fetchClassInfo(context, activeSpaceId);
+
+          final FetchClassInfoModel result = await PangeaServices.fetchClassInfo(context, activeSpaceId);
           listOfClassModel.add(ListOfClassModel(activeClassId: activeSpaceId, classModel: result));
-          print("space Id of class ${listOfClassModel.first.activeClassId}");
           permissions.value = result.permissions;
-          log("One on One room (${activeSpaceId}): ${result.permissions.oneToOneChatClass}");
         }catch(e){
-          permissions.value = initialPermissions();
-          print("Error accurd");
+          PangeaControllers.toastMsg(msg: "Unable to fetch class Info");
+          initialPermissions();
         }
-
       }
-
-      // log("Create Room  (${activeSpaceId}): ${result.permissions.isCreateRooms}");
-      // log("Stories  (${activeSpaceId}): ${result.permissions.isCreateStories}");
     } else {
-      permissions.value = initialPermissions();
+      initialPermissions();
     }
   }
 
-  ///
-  Permissions initialPermissions() {
-    if (GetStorage().read("usertype") != null &&
-        GetStorage().read("usertype") == 2) {
-      return Permissions(
+  /// assign initial class permissions whenever we call it.
+  initialPermissions() {
+
+    if ( userType == 2) {
+      permissions.value = Permissions(
           pangeaClass: 0,
           isPublic: true,
           isOpenEnrollment: true,
@@ -71,8 +77,10 @@ class ChatListControllerGet extends GetxController {
           isShareFiles: true,
           isShareLocation: true,
           isCreateStories: true);
-    } else {
-      return Permissions(
+    }
+    else {
+
+      permissions.value = Permissions(
           pangeaClass: 0,
           isPublic: false,
           isOpenEnrollment: false,
@@ -87,6 +95,35 @@ class ChatListControllerGet extends GetxController {
           isShareFiles: false,
           isShareLocation: false,
           isCreateStories: false);
+    }
+  }
+
+  ///fetch List of participants
+  getpeople(BuildContext context, SpacesEntry space) async {
+    participants.clear();
+    if (space.getSpace(context) != null) {
+      participants.value = await space.getSpace(context)!.requestParticipants();
+      participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+    }
+    else {
+      final List<dynamic> alreadyExists = [];
+      final List<User> finalUsers = [];
+
+      final rooms = Matrix.of(context).client.rooms;
+
+      for (var room in rooms) {
+        participantsList.addAll(await room.requestParticipants());
+        for (var user in participantsList) {
+          if (!participantsList.contains(user.stateKey) && user.stateKey != null &&!alreadyExists.contains(user.stateKey)) {
+            Map<String, dynamic> ele = {};
+            ele.addAll(user.toJson());
+            finalUsers.add(user);
+            alreadyExists.add(user.stateKey);
+          }
+        }
+      }
+      finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
+      participants.value = finalUsers;
     }
   }
 }

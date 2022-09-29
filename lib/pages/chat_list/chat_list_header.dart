@@ -28,14 +28,13 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
       ),
       leading: Matrix.of(context).isMultiAccount
           ? ClientChooserButton(controller)
-          : selectMode == SelectMode.normal
-              ? null
-              : IconButton(
-                  tooltip: L10n.of(context)!.cancel,
-                  icon: const Icon(Icons.close_outlined),
-                  onPressed: controller.cancelAction,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+          : selectMode != SelectMode.normal
+              ? IconButton(
+        tooltip: L10n.of(context)!.cancel,
+        icon: const Icon(Icons.close_outlined),
+        onPressed: controller.cancelAction,
+        color: Theme.of(context).colorScheme.primary,
+      ):null,
       centerTitle: false,
       actions: selectMode == SelectMode.share
           ? null
@@ -235,8 +234,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                   )
                 : (() {
                     final name = controller.activeSpaceId == null
-                        ? AppConfig.applicationName
-                        : Matrix.of(context).client.getRoomById(controller.activeSpaceId!)!.displayname;
+                        ? AppConfig.applicationName : Matrix.of(context).client.getRoomById(controller.activeSpaceId!)!.displayname;
                     return Text(name, key: ValueKey(name));
                   })(),
       ),
