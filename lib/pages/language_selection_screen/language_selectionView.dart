@@ -68,7 +68,6 @@ class LanguageSelectionView extends StatelessWidget {
                     ),
                     const Center(
                       child: Text(
-
                         "I am a (n)",
                         style: TextStyle(
                             color: Colors.black,
@@ -127,6 +126,9 @@ class LanguageSelectionView extends StatelessWidget {
                           controller.getxController.role.value = value!;
                         },
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     const Center(
                       child: Text(
