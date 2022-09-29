@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/services/services.dart';
@@ -26,25 +27,19 @@ class PangeaControllers extends GetxController {
   ///show toast message
   static toastMsg({bool success = false, String msg = ""}){
 
-    success?Get.snackbar("Success", msg,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: const Color(0xFF5625BA),
-      colorText: Colors.white,
-      margin:  const EdgeInsets.all(10),
-      duration: const Duration(seconds: 2),
-    ):Get.snackbar("Error", msg,
-      snackPosition: SnackPosition.BOTTOM,
+    success?Fluttertoast.showToast(
+        msg: msg,
+        fontSize: 16.0,
+        backgroundColor: const Color(0xFF5625BA),
+        webBgColor: "#5625BA",
+        textColor: Colors.white
+    ):Fluttertoast.showToast(
+      msg: msg,
+      fontSize: 16.0,
+      webBgColor: "#ff0000",
       backgroundColor: Colors.red,
-      colorText: Colors.white,
-      margin:  const EdgeInsets.all(10),
-      duration: const Duration(seconds: 2),
+      textColor: Colors.white,
     );
-    // Fluttertoast.showToast(
-    //     msg: msg,
-    //     fontSize: 16.0,
-    //     webBgColor: "#ff0000",
-    //     backgroundColor: Colors.red,
-    //   textColor: Colors.white,
-    // );
+
   }
 }
