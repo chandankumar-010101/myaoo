@@ -51,7 +51,13 @@ class ChoreoController {
   }
 
   bool get isOpen => state!.isOpen;
-  openIt() {
+  openIt({bool? disableIT}) {
+    if (disableIT != null) {
+      if (disableIT!) {
+        send();
+        return;
+      }
+    }
     this.state!.openBar();
 
     setState();
@@ -70,6 +76,10 @@ class ChoreoController {
   }
 
   String? get translatedText {
+    if (state!.currentRoute == ChoreoRoute.STEP1_ERROR ||
+        state!.currentRoute == ChoreoRoute.INITAL_LOADING) {
+      return textController!.text;
+    }
     if (state!.currentRoute == ChoreoRoute.INITAL_LOADING ||
         state!.currentRoute == ChoreoRoute.SEND ||
         state!.currentRoute == ChoreoRoute.STEP1) {
@@ -141,6 +151,10 @@ class ChoreoController {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  setActiveClassId(String? classId) {
+    state!.classId = classId;
+  }
+
   get srcButtonTxt => 'Send';
   setRoomId(String? roomId) {
     this.state!.setRoomId(roomId);
@@ -155,8 +169,6 @@ class ChoreoController {
 
   _listernerFunction() {
     if (this.textController!.value.text != originalText) {
-      print(originalText);
-      print(this.textController!.value.text);
       print('Text Event');
       if (!state!.isEditing) {
         clearState();

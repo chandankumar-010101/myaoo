@@ -1,22 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
-import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
 import '../../model/exchange_classInfo.dart';
+import '../../services/class_controllers.dart';
 import '../../services/controllers.dart';
 import '../../services/services.dart';
 
-import '../chat_list/spaces_entry.dart';
 import 'class_profile_view.dart';
 
 class RequestScreen extends StatefulWidget {
@@ -28,14 +24,18 @@ class RequestScreen extends StatefulWidget {
 
 class RequestScreenState extends State<RequestScreen> {
 
-  final box = GetStorage();
+  ///initializations
+  GetStorage box = GetStorage();
+  PangeaControllers pangeaController = Get.put(PangeaControllers());
+  ClassController classController = Get.put(ClassController());
 
+  
+  //----------------------------variables----------------------------//
   ///list of classes for current user
   List<User> space = [];
 
-  ///getx controller to toggle the UI
-  PangeaControllers getxController = Get.put(PangeaControllers());
-
+  
+  //---------------------------Functions----------------------------//
   ///load flag to the UI
   fetchFlag(FetchClassInfoModel data, String url) {
     try {
@@ -62,32 +62,7 @@ class RequestScreenState extends State<RequestScreen> {
     }catch(e){
       return Container();
     }}
-
-
-  ///Fetch User info, if it exist in the class or not
-
-  fetchSpaceInfo(String roomAlias) async {
-    final Room? rooms = Matrix.of(context).client.getRoomById(roomAlias);
-    final String? userId = Matrix.of(context).client.userID;
-    if (rooms != null && userId != null) {
-      try {
-        space = await rooms.requestParticipants();
-
-        noOfStudents = space.length;
-        space = space.where((i) => i.id == userId).toList();
-      } catch (e) {
-        // Fluttertoast.showToast(msg: "Unable to fetch Class Info", webBgColor: Colors.red, backgroundColor: Colors.red);
-
-        if (kDebugMode) {
-          print(e);
-        }
-      }
-    } else {
-
-      // Fluttertoast.showToast(msg: "Unable to fetch Class Info and Client Info", webBgColor: Colors.red, backgroundColor: Colors.red);
-    }
-  }
-
+  
   ///kick the students and leave the class
   kickAndRemoveClass(String roomAlias) async {
     try {
@@ -146,6 +121,7 @@ class RequestScreenState extends State<RequestScreen> {
     }
   }
 
+  ///Remove all the Students from the class
   removeExchangeClass(String roomAlias) async{
     try{
       ExchangeClassInfo data =  await PangeaServices.fetchExchangeClassInfo(roomAlias);
@@ -194,8 +170,6 @@ class RequestScreenState extends State<RequestScreen> {
       print(e);
     }
   }
-
-  int noOfStudents = 0;
 
 
   @override

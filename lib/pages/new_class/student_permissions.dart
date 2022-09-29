@@ -22,6 +22,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
   bool createRooms = false;
   bool createRoomsInExchanges = false;
   bool createStories = false;
+  bool sendVoice = false;
   bool shareVideos = false;
   bool sharePhotos = false;
   bool shareFiles = false;
@@ -33,6 +34,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
   void setCreateRooms(bool b) => setState(() => createRooms = b);
   void setCreateRoomsInExchange(bool b) => setState(() => createRoomsInExchanges = b);
   void setCreateStories(bool b) => setState(() => createStories = b);
+  void setSendVoice(bool b) => setState(() => sendVoice = b);
   void setShareVideos(bool b) => setState(() => shareVideos = b);
   void setSharePhotos(bool b) => setState(() => sharePhotos = b);
   void setShareFiles(bool b) => setState(() => shareFiles = b);
@@ -90,7 +92,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
         if (kDebugMode) {
           print(roomID.result);
         }
-        await PangeaServices.createClass(
+        final Room? room = Matrix.of(context).client.getRoomById(roomID.result!);
+        room !=null?await PangeaServices.createClass(
+          classRoom: room,
           isExchange: false,
           context: context,
           isPublic: publicGroup,
@@ -98,7 +102,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           isCreateRooms: createRooms,
           isShareFiles: shareFiles,
           isShareVideo: shareVideos,
-          isCreateStories: createStories,
+          isCreateStories: false,
+          //isCreateStories: createStories,
+          sendVoice: sendVoice,
           isShareLocation: shareLocation,
           isOpenExchange: openToExchange,
           oneToOneChatExchange: oneToOneChatsWithinExchanges,
@@ -114,7 +120,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           dominantLanguage: sourceLanguage,
           targetLanguage: targetLanguage,
           schoolName: schoolName.toString(),
-        );
+        ):null;
       }
       if (roomID == null) {
         VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
@@ -138,6 +144,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
     box.read("createRoom") == null ? createRooms = false : createRooms = box.read("createRoom");
     box.read("createRoomExchange") == null ? createRoomsInExchanges = false : createRoomsInExchanges = box.read("createRoomExchange");
     box.read("createStories") == null ? createStories = false : createStories = box.read("createStories");
+    box.read("sendVoice") == null ? sendVoice = false : sendVoice = box.read("sendVoice");
+
     box.read("shareVideo") == null ? shareVideos = false : shareVideos = box.read("shareVideo");
     box.read("sharePhotos") == null ? sharePhotos = false : sharePhotos = box.read("sharePhotos");
     box.read("shareFiles") == null ? shareFiles = false : shareFiles = box.read("shareFiles");
@@ -164,7 +172,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                 backgroundColor: Theme.of(context).backgroundColor,
                 title: Text(
                   "Create a Class",
-                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.left,
                 ),
@@ -172,7 +180,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                 elevation: 10,
                 automaticallyImplyLeading: false,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  icon:  Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
                   onPressed: () {
                     context.vRouter.to("/newclass/class_permissions");
                     print(ModalRoute.of(context)!.settings.name);
@@ -183,8 +191,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
             : AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Update student permissions",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+            "Update Student Permissions",
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.left,
           ),
@@ -192,7 +200,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
             },
@@ -233,7 +241,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                       children: [
                         SwitchListTile.adaptive(
                           title: Text(
-                            "1-to-1 chats within class",
+                            "One-to-one Chats within Class",
                             style:
                                 TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                             overflow: TextOverflow.clip,
@@ -250,7 +258,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "If you allow 1-to-1 chats, your students can send and receive individual chats with other students within your class. Otherwise, they can only chat in rooms.",
+                                    "If you allow One-to-one chats, your students can send and receive individual chats with other students within your class. Otherwise, they can only chat in rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -262,7 +270,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "1-to-1 chats within exchanges",
+                            "One-to-one Chats within Exchanges",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -282,7 +290,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "If you allow 1-to-1 chats within exchanges, your students can send and receive individual chats with students in exchange-connected classes.",
+                                    "If you allow One-to-one chats within exchanges, your students can send and receive individual chats with students in exchange-connected classes.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -294,7 +302,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "Create rooms",
+                            "Create Rooms",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -314,8 +322,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                     padding: EdgeInsets.only(right: 5),
                                     child: Text(
-                                      "Toggle this on to allow students to create rooms within your class",
-                                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                      "Toggle this on to allow students to create rooms within your class.",
+                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                       overflow: TextOverflow.clip,
                                       textAlign: TextAlign.left,
                                     )),
@@ -325,7 +333,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                         ),
                         SwitchListTile.adaptive(
                           title: Text(
-                            "Create rooms in exchanges",
+                            "Create Rooms in Exchanges",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -355,9 +363,43 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             ],
                           ),
                         ),
+                        ///create stories
+                        // SwitchListTile.adaptive(
+                        //   title: Text(
+                        //     "Create Stories",
+                        //     style: TextStyle().copyWith(
+                        //       color: Theme.of(context).textTheme.bodyText1!.color,
+                        //       fontSize: 14,
+                        //       fontWeight: FontWeight.w700,
+                        //     ),
+                        //     overflow: TextOverflow.clip,
+                        //   ),
+                        //   value: createStories,
+                        //   onChanged: setCreateStories,
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.start,
+                        //     children: [
+                        //       Expanded(
+                        //         child: Padding(
+                        //           padding: EdgeInsets.only(right: 5),
+                        //           child: Text(
+                        //             "Toggle this on to allow students to create stories.",
+                        //             style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                        //             overflow: TextOverflow.clip,
+                        //             textAlign: TextAlign.left,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        ///send Voice
                         SwitchListTile.adaptive(
                           title: Text(
-                            "Create Stories",
+                            "Send Voice Notes",
                             style: TextStyle().copyWith(
                               color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 14,
@@ -365,8 +407,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             ),
                             overflow: TextOverflow.clip,
                           ),
-                          value: createStories,
-                          onChanged: setCreateStories,
+                          value: sendVoice,
+                          onChanged: setSendVoice,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -375,10 +417,10 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: EdgeInsets.only(right: 5),
+                                  padding: const EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to create stories.",
-                                    style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                    "Toggle this on to allow students to send voice notes.",
+                                    style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -387,6 +429,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                             ],
                           ),
                         ),
+
+
+                        ///create videos
                         SwitchListTile.adaptive(
                           title: Text(
                             "Share Video",
@@ -409,7 +454,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to share videos chats/rooms",
+                                    "Toggle this on to allow students to share videos chats/rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -470,7 +515,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to share files in chats/rooms",
+                                    "Toggle this on to allow students to share files in chats/rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -502,7 +547,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow students to share their location in chats/rooms",
+                                    "Toggle this on to allow students to share their location in chats/rooms.",
                                     style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
@@ -602,7 +647,9 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                       sharePhotos: sharePhotos.toString(),
                                       oneToOneChatsWithinClass: oneToOneChatsWithinClass.toString(),
                                       createRoomsInExchanges: createRoomsInExchanges.toString(),
-                                      createStories: createStories.toString(),
+                                    //  createStories: createStories.toString(),
+                                      createStories: false.toString(),
+                                      sendVoice: sendVoice.toString(),
                                       shareFiles: shareFiles.toString(),
                                       oneToOneChatsWithinExchanges: oneToOneChatsWithinExchanges.toString(),
                                       createRooms: createRooms.toString(),
@@ -631,7 +678,7 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                                               : Theme.of(context).colorScheme.onPrimary)),
                                   child: Center(
                                     child: Text(
-                                      "Save",
+                                      "Update",
                                       style: TextStyle().copyWith(
                                           color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                       overflow: TextOverflow.clip,

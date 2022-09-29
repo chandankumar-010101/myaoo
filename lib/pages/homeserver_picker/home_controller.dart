@@ -205,6 +205,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../model/flag_model.dart';
+import '../../services/controllers.dart';
 import '../../utils/api_helper.dart';
 import '../../utils/api_urls.dart';
 
@@ -233,20 +234,27 @@ class HomeController extends GetxController {
         log("Flag Response is $temp");
       }
 
-      countriesList.value =
-          temp.map((value) => LanguageFlag.fromJson(value)).toList();
-      countriesList.forEach((element) {
-        if (element.languageType == 1) {
-          countriesList1.add(element);
-        } else if (element.languageType == 2) {
-          countriesList2.add(element);
-        }
+      countriesList.value = temp.map((value) => LanguageFlag.fromJson(value)).toList();
+      countriesList2.value =  countriesList.where((element) => element.languageType ==2).toList();
+      countriesList1.value =  countriesList.where((element) => element.languageType ==1).toList();
+
+      countriesList2.sort((a, b) {
+        return a.languageName.toString().toLowerCase().compareTo(b.languageName.toString().toLowerCase());
       });
+      countriesList1.sort((a, b) {
+        return a.languageName.toString().toLowerCase().compareTo(b.languageName.toString().toLowerCase());
+      });
+
+      // countriesList.forEach((element) {
+      //   if (element.languageType == 1) {
+      //     countriesList1.add(element);
+      //   } else if (element.languageType == 2) {
+      //     countriesList2.add(element);
+      //   }
+      // });
     } else {
-      Fluttertoast.showToast(
-          msg: "API Error: ${response.statusCode}",
-          webBgColor: "#ff0000",
-          backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "API Error: ${response.statusCode}");
+
       loading.value = false;
     }
   }

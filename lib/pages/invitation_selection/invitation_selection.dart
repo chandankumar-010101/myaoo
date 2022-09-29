@@ -56,7 +56,7 @@ class InvitationSelectionController extends State<InvitationSelection> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Contact has been invited to Room"),
+        content: Text("Contact has been invited to room."),
         backgroundColor: Colors.green,
       ));
     }

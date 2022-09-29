@@ -27,17 +27,6 @@ class RequestScreenView extends StatefulWidget {
 class _RequestScreenViewState extends State<RequestScreenView> {
   final box = GetStorage();
 
-  fetchFlag(FetchClassInfoModel data, String url) {
-    try {
-      return SizedBox(
-        width: 20,
-        height: 20,
-        child: Image.network(url + data.flags[1].languageName.toString()),
-      );
-    } catch (e) {
-      return Container();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +36,17 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
 
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
-    widget.controller.fetchSpaceInfo(roomAlias);
+    widget.controller.classController.isUserExist(roomAlias);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("Class Profile"),
+        title:  Text("Class Profile",
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 18, fontWeight: FontWeight.w700),
+          overflow: TextOverflow.clip,
+          textAlign: TextAlign.center,
+
+        ),
       ),
       body: FutureBuilder(
         future: PangeaServices.fetchClassInfo(context, roomAlias),
@@ -101,18 +95,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   : Icon(
                                       Icons.people,
                                       size: 60,
-                                      color: Theme.of(context).primaryColor,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                      color:Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Colors.black
+                                          : Colors.white,
                                       width: 2.0),
                                   shape: BoxShape.circle),
                             ),
@@ -120,20 +111,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 bottom: 4,
                                 right: 0,
                                 child: Container(
-                                  padding: EdgeInsets.all(2),
+                                  padding: const EdgeInsets.all(2.0),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          width: 2)),
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                      border: Border.all(color: Colors.white, width: 2)),
                                   child: const Icon(
                                     Icons.school,
-                                    color: Colors.black,
                                     size: 15.0,
                                   ),
                                 ))
@@ -146,53 +130,92 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              data.className.toString(),
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "${data.classAuthor}",
-                              style: const TextStyle().copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 15),
-                            ),
+                            data.className.isNotEmpty?
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+
+                                Icon(
+                                  Icons.school,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  size: 15.0,
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  data.className.capitalizeFirst!,
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                )
+
+                              ],
+                            ):Container(),
+                            data.classAuthor.isNotEmpty?
+                            Row(
                               children: [
                                 Icon(
+                                  Icons.person,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  size: 15.0,
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                 data.classAuthor.capitalizeFirst.toString(),
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 15),
+                                ),
+                              ],
+                            ):Container(),
+
+                             Row(
+                              //mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                               Icon(
                                   Icons.location_pin,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onPrimaryContainer,
                                   size: 20.0,
                                 ),
-                                Text(data.city.isEmpty?"":data.city.capitalizeFirst!,
+                               data.city.isNotEmpty?
+                               Text(
+                                  data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
                                           .color,
                                       fontSize: 12),
-                                ),
-
-                                Text(
-                                  "${data.country==""?" ": " , ${data.country.capitalizeFirst}"}",
+                                ):Container(),
+                               data.country.isNotEmpty?data.city.isNotEmpty?
+                               Text(
+                                 " , ${data.country.capitalizeFirst}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
                                           .color,
                                       fontSize: 12),
-                                )
+                                ):Text(
+                                  "${data.country.capitalizeFirst}",
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 12),
+                                ):Container()
                               ],
                             ),
                           ],
@@ -354,7 +377,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.targetLanguage.toString().capitalizeFirst ?? "",
+                                  data.targetLanguage.toString()
+                                      .capitalizeFirst ??
+                                      "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -363,6 +388,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14),
                                 ),
+
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -374,6 +400,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       .bodyText1!
                                       .color,
                                 ),
+
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -382,7 +409,10 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   width: 5,
                                 ),
                                 Text(
-                                  data.dominantLanguage.toString().capitalizeFirst ?? "",
+                                  data.dominantLanguage
+                                      .toString()
+                                      .capitalizeFirst ??
+                                      "",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -573,72 +603,73 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ? MainAxisAlignment.start
                                     : MainAxisAlignment.center,
                                 children: [
-                                  widget.controller.space.isEmpty
+                                  Obx(()=> widget.controller.classController.userExistInClass.value
                                       ? (data.permissions.isOpenEnrollment
-                                          ? SizedBox(
-                                              width: 200,
-                                              child: OutlinedButton(
-                                                style: OutlinedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25.0)),
-                                                  side: BorderSide(
-                                                    width: 2,
-                                                    color: Theme.of(context)
-                                                                .colorScheme
-                                                                .onPrimary ==
-                                                            Colors.white
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                  ),
-                                                ),
-                                                onPressed: () async {
-                                                  final confirmed =
-                                                      await showOkCancelAlertDialog(
-                                                    useRootNavigator: false,
-                                                    context: context,
-                                                    title: L10n.of(context)!
-                                                        .areYouSure,
-                                                    okLabel:
-                                                        L10n.of(context)!.ok,
-                                                    cancelLabel:
-                                                        L10n.of(context)!
-                                                            .cancel,
-                                                  );
-                                                  if (confirmed ==
-                                                      OkCancelResult.ok) {
-                                                    if (roomAlias.isNotEmpty) {
-                                                      UrlLauncher(
-                                                              context,
-                                                              requestToEnroll:
-                                                                  true,
-                                                              roomId: roomAlias,
-                                                              'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                                          .openMatrixToUrl();
-                                                    }
-                                                  }
-                                                },
-                                                child: Text(
-                                                  "Request an Enroll",
-                                                  style: const TextStyle()
-                                                      .copyWith(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1!
-                                                                  .color,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontSize: 12),
-                                                ),
-                                              ),
-                                            )
-                                          : Container())
-                                      : Container(),
+                                      ? SizedBox(
+                                    width: 200,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                25.0)),
+                                        side: BorderSide(
+                                          width: 2,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary ==
+                                              Colors.white
+                                              ? Theme.of(context)
+                                              .primaryColor
+                                              : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        final confirmed =
+                                        await showOkCancelAlertDialog(
+                                          useRootNavigator: false,
+                                          context: context,
+                                          title: L10n.of(context)!
+                                              .areYouSure,
+                                          okLabel:
+                                          L10n.of(context)!.ok,
+                                          cancelLabel:
+                                          L10n.of(context)!
+                                              .cancel,
+                                        );
+                                        if (confirmed ==
+                                            OkCancelResult.ok) {
+                                          if (roomAlias.isNotEmpty) {
+                                            UrlLauncher(
+                                                context,
+                                                requestToEnroll:
+                                                true,
+                                                roomId: roomAlias,
+                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                                .openMatrixToUrl();
+                                          }
+                                        }
+                                      },
+                                      child: Text(
+                                        "Request an Enroll",
+                                        style: const TextStyle()
+                                            .copyWith(
+                                            color:
+                                            Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontWeight:
+                                            FontWeight.w400,
+                                            fontSize: 12),
+                                      ),
+                                    ),
+                                  )
+                                      : Container())
+                                      : Container(),),
+                                  
                                   SizedBox(
                                     width: 10,
                                     height: 10,
@@ -716,7 +747,11 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    VRouter.of(context).to('/class_analytics');
+                                    final String roomAlias = VRouter.of(context)
+                                            .queryParameters['id'] ??
+                                        "";
+                                    VRouter.of(context)
+                                        .to('/classAnalytics/' + roomAlias);
                                   },
                                   child: Text(
                                     "Class Analytics",
@@ -797,7 +832,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    widget.controller.getxController
+                                    widget.controller.pangeaController
                                         .throughClassProfile.value = true;
                                   },
                                   child: Text(
@@ -1069,11 +1104,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                       cancelLabel: L10n.of(context)!.cancel,
                                     );
                                     if (confirmed == OkCancelResult.ok) {
-                                      data.isExchange
-                                          ? widget.controller
-                                              .removeExchangeClass(roomAlias)
-                                          : widget.controller
-                                              .kickAndRemoveClass(roomAlias);
+                                      data.isExchange? widget.controller.removeExchangeClass(roomAlias)
+                                          : widget.controller.kickAndRemoveClass(roomAlias);
                                     }
                                   },
                                   child: Text(
@@ -1168,7 +1200,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: const <Widget>[
                             Text("• "),
                             Expanded(
-                              child: Text("One To One Chat"),
+                              child: Text("One-to-one"),
                             ),
                           ],
                         )
@@ -1179,7 +1211,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                           children: const <Widget>[
                             Text("• "),
                             Expanded(
-                              child: Text("One to One Chat Exchange"),
+                              child: Text("One-to-one Chat Exchange"),
                             ),
                           ],
                         )

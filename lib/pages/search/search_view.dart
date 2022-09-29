@@ -13,7 +13,6 @@ import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/contacts_list.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
 import '../../config/environment.dart';
 import '../../services/controllers.dart';
 import '../../utils/localized_exception_extension.dart';
@@ -53,10 +52,6 @@ class _SearchViewState extends State<SearchView> {
     final int age1 = box.read("age") ?? 0;
     age1 == 0 ? searchController.age.value = 0 : searchController.age.value = age1;
     searchController.getClasses();
-
-
-
-
   }
 
   fetchFlag(String url, int i) {
@@ -73,6 +68,7 @@ class _SearchViewState extends State<SearchView> {
       return Container();
     }
   }
+  int currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +145,18 @@ class _SearchViewState extends State<SearchView> {
               hintText: L10n.of(context)!.search,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             ),
-            onChanged: widget.controller.search,
+            onChanged: (value){
+              if(currentIndex != 0){
+                widget.controller.onChangeHandler(value);
+              }
+            },
           ),
           bottom: TabBar(
+            onTap: (index){
+              setState(() {
+                currentIndex = index;
+              });
+            },
             indicatorColor: Theme.of(context).colorScheme.secondary,
             labelColor: Theme.of(context).colorScheme.secondary,
             unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
@@ -169,789 +174,800 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: TabBarView(
           children: [
-            Obx(() => searchController.age.value <= 18
-                ? SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Pangea Chat serves schools and other learning communities,ages 13 and up, around the world. In order to protect our young learners, we ask our users to verify their age before connecting to our community. Before you can search Pangea Chat for classes, rooms, and new friends, you must verify you are 18 or older.",
-                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
-                            overflow: TextOverflow.clip,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            addAgesAction();
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                  border: Border.all(
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary)),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 6),
-                                child: Text(
-                                  "Verify my account",
-                                  style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
+            ///Discover tab
+            Obx(() => searchController.age.value >= 18
+                ? ListView(
+              keyboardDismissBehavior:  PlatformInfos.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
+              children: [
+                const SizedBox(height: 12),
+                widget.controller.controller.text!=""?  FutureBuilder(
+                    future: searchController.getSearch(widget.controller.controller.text),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      //print(widget.controller.controller.text);
+                      if (snapshot.hasError) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 32),
+                            const Icon(
+                              Icons.error_outlined,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
+                            Center(
+                              child: Text(
+                                snapshot.error!.toLocalizedString(context),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
                                 ),
-                              )),
-                        ),
-                        const SizedBox(
-                          height: 134,
-                        ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     createInviteAction();
-                        //   },
-                        //   child: Container(
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         color: Theme.of(context).colorScheme.onPrimary,
-                        //           border: Border.all(
-                        //               color: Theme.of(context)
-                        //                   .colorScheme
-                        //                   .onPrimary ==
-                        //                   Colors.white
-                        //                   ? Theme.of(context).primaryColor
-                        //                   : Theme.of(context)
-                        //                   .colorScheme
-                        //                   .onPrimary
-                        //           )
-                        //       ),
-                        //       child: Padding(
-                        //         padding: const EdgeInsets.symmetric(
-                        //             horizontal: 42, vertical: 6),
-                        //         child: Text(
-                        //           "Invite your friends",
-                        //           style: TextStyle().copyWith(
-                        //               color: Theme.of(context)
-                        //                   .textTheme
-                        //                   .bodyText1!
-                        //                   .color,
-                        //               fontSize: 16),
-                        //         ),
-                        //       )),
-                        // ),
-                        //
-                        //
-                        // const SizedBox(
-                        //   height: 19,
-                        // ),
-                        box.read("usertype") == 2
-                            ? GestureDetector(
-                                onTap: () {
-                                  createNewClassAction();
-                                },
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.circular(10),
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Theme.of(context).colorScheme.onPrimary,
-                                        border: Border.all(
-                                            color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                ? Theme.of(context).primaryColor
-                                                : Theme.of(context).colorScheme.onPrimary)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 6),
-                                      child: Text(
-                                        "Create a class",
-                                        style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
-                                      ),
-                                    )),
-                              )
-                            : InkWell(
-                                onTap: () {
-                                  VRouter.of(context).to("/join_with_code");
-                                },
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.circular(10),
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Theme.of(context).colorScheme.onPrimary,
-                                        border: Border.all(
-                                            color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                ? Theme.of(context).primaryColor
-                                                : Theme.of(context).colorScheme.onPrimary)),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 42, vertical: 6),
-                                      child: Text(
-                                        "Join with a class code",
-                                        style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
-                                      ),
-                                    )))
-                      ],
-                    ),
-                  )
-                : ListView(
-                    keyboardDismissBehavior:
-                        PlatformInfos.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
-                    children: [
-                      const SizedBox(height: 12),
-                      widget.controller.controller.text!=""?
-                      FutureBuilder(
-                          future: searchController.getSearch(widget.controller.controller.text),
-                          builder: (BuildContext context, AsyncSnapshot snapshot) {
-                            print(widget.controller.controller.text);
-                            if (snapshot.hasError) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(height: 32),
-                                  const Icon(
-                                    Icons.error_outlined,
-                                    size: 80,
-                                    color: Colors.grey,
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      snapshot.error!.toLocalizedString(context),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                            if (snapshot.connectionState != ConnectionState.done) {
-                              return const Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2));
-                            }
-                            return GridView.builder(
-                              //controller: searchController.controller,
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.all(12),
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.75,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
                               ),
-                              itemCount: searchController.searchList.length,
-                              itemBuilder: (BuildContext context, int i) {
-                                //  if(searchController.classList[i])
-                                return Material(
-                                  elevation: 15,
-                                  color: const Color(0xffF6F6F6),
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      id = searchController.searchList[i].pangea_class_room_id.toString();
-                                      firstTime.value?classProfile(id):VRouter.of(context).to(
-                                          '',
-                                          queryParameters: {
-                                            "id": id
-                                          });
-                                      firstTime.value=false;
-                                      print("value of 2 ${firstTime}");
+                            ),
+                          ],
+                        );
+                      }
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2));
+                      }
+                      return GridView.builder(
+                        //controller: searchController.controller,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(12),
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: searchController.searchList.length,
+                        itemBuilder: (BuildContext context, int i) {
+                          //  if(searchController.classList[i])
+                          return Material(
+                            elevation: 15,
+                            color: const Color(0xffF6F6F6),
+                            borderRadius: BorderRadius.circular(16),
+                            child: InkWell(
+                              onTap: () async {
+                                id = searchController.searchList[i].pangea_class_room_id.toString();
+                                firstTime.value?classProfile(id):VRouter.of(context).to(
+                                    '',
+                                    queryParameters: {
+                                      "id": id
+                                    });
+                                firstTime.value=false;
+                                //print("value of 2 ${firstTime}");
 
 
-                                      // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
-                                    },
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(16.0),
-                                          boxShadow: const [
-                                            BoxShadow(color: Colors.black12, blurRadius: 1.0, offset: Offset(2.0, 2.0), spreadRadius: 1.0)
-                                          ],
-                                          color: Theme.of(context).colorScheme.background),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Stack(
-                                              children: [
-                                                Container(
-                                                  child: searchController.searchList[i].profilePic != null
-                                                      ? Avatar(
-                                                    mxContent: Uri.parse("${searchController.searchList[i].profilePic}"),
-                                                  )
-                                                      : const Padding(
-                                                    padding: EdgeInsets.all(5.0),
-                                                    child: Icon(
-                                                      Icons.people,
-                                                      size: 40,
-                                                    ),
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2.0),
-                                                      shape: BoxShape.circle),
-                                                ),
-                                                Positioned(
-                                                  child: Container(
-                                                    padding: const EdgeInsets.all(2.0),
-                                                    decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: Theme.of(context).colorScheme.onPrimary,
-                                                        border: Border.all(color: Colors.white, width: 2)),
-                                                    child: const Icon(
-                                                      Icons.school,
-                                                      size: 15.0,
-                                                    ),
-                                                  ),
-                                                  bottom: 0,
-                                                  right: 0,
-                                                )
-                                              ],
+                                // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
+                              },
+                              borderRadius: BorderRadius.circular(16),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    boxShadow: const [
+                                      BoxShadow(color: Colors.black12, blurRadius: 1.0, offset: Offset(2.0, 2.0), spreadRadius: 1.0)
+                                    ],
+                                    color: Theme.of(context).colorScheme.background),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Container(
+
+                                            child: searchController.searchList[i].profilePic != null
+                                                ? Avatar(
+                                              mxContent: Uri.parse("${searchController.searchList[i].profilePic}"),
+                                            )
+                                                : const Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Icon(
+                                                Icons.people,
+                                                size: 40,
+                                              ),
                                             ),
-                                            const SizedBox(
-                                              height: 10.0,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Theme.of(context).colorScheme.onPrimary ,
+                                                        //== Colors.white
+                                                   // ? Colors.black
+                                                    //: Colors.black,
+                                                    width: 2.0),
+                                                shape: BoxShape.circle),
+                                          ),
+                                          Positioned(
+                                            child: Container(
+                                              padding: const EdgeInsets.all(2.0),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Theme.of(context).colorScheme.onPrimary,
+                                                  border: Border.all(color: Colors.white, width: 2)),
+                                              child: const Icon(
+                                                Icons.school,
+                                                size: 15.0,
+                                              ),
                                             ),
-                                            Text(
-                                                searchController.searchList[i].classAuthor != Null
-                                                    ? "${searchController.searchList[i].classAuthor}"
-                                                    : "Na",
-                                                style: TextStyle().copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1!.color,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  overflow: TextOverflow.clip,
-                                                )),
-                                            Text(
-                                                searchController.searchList[i].className != Null
-                                                    ? "${searchController.searchList[i].className}"
-                                                    : "Na",
+                                            bottom: 0,
+                                            right: 0,
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Text(
+                                          searchController.searchList[i].classAuthor != Null
+                                              ? "${searchController.searchList[i].classAuthor}"
+                                              : "Na",
+                                          overflow: TextOverflow.fade,
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          style: TextStyle().copyWith(
+                                            color: Theme.of(context).textTheme.bodyText1!.color,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          )),
+                                      Text(
+                                          searchController.searchList[i].className != Null
+                                              ? "${searchController.searchList[i].className}"
+                                              : "Na",
+                                          overflow: TextOverflow.fade,
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          style: TextStyle().copyWith(
+                                            color: Theme.of(context).textTheme.bodyText1!.color,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                          )),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          const Icon(Icons.location_pin, size: 12),
+                                          const SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          Container(
+                                            width:50,
+                                            child: searchController.searchList[i].city!.isNotEmpty
+                                                ? Text("${searchController.searchList[i].city}",
+                                                overflow: TextOverflow.fade,
+                                                maxLines: 1,
+                                                softWrap: false,
                                                 style: TextStyle().copyWith(
                                                   color: Theme.of(context).textTheme.bodyText1!.color,
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w400,
-                                                  overflow: TextOverflow.clip,
+                                                ))
+                                                : Text("N/A",
+                                                style: TextStyle().copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w400,
                                                 )),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Icon(Icons.location_pin, size: 12),
-                                                const SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                searchController.searchList[i].city!.isNotEmpty
-                                                    ? Text("${searchController.searchList[i].city}",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    ))
-                                                    : Text("N/A",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    )),
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                const Icon(Icons.star, size: 12),
-                                                const SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                searchController.searchList[i].rating.toString().isNotEmpty
-                                                    ? Text(
-                                                    searchController.searchList[i].rating.toString() != Null
-                                                        ? "${searchController.searchList[i].rating.toString()}"
-                                                        : "Na",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    ))
-                                                    : Text("N/A",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    )),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Icon(Icons.supervisor_account_sharp, size: 12),
-                                                const SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                      searchController.searchList[i].total_student.toString() != 0
-                                                          ? "${searchController.searchList[i].total_student.toString()} Students"
-                                                          : "Na",
-                                                      style: TextStyle().copyWith(
-                                                        color: Theme.of(context).textTheme.bodyText1!.color,
-                                                        fontSize: 10,
-                                                        fontWeight: FontWeight.w400,
-                                                        overflow: TextOverflow.clip,
-                                                      )),
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Icon(Icons.query_stats, size: 12),
-                                                const SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                Text(
-                                                    searchController.searchList[i].languageLevel.toString() != Null
-                                                        ? level(searchController.searchList[i].languageLevel.toString())
-                                                        : "Na",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    ))
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Icon(Icons.account_balance, size: 12),
-                                                const SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                Text(
-                                                    searchController.searchList[i].schoolName != ""
-                                                        ? "${searchController.searchList[i].schoolName}"
-                                                        : "Not disclosed",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    ))
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Spacer(),
-                                                fetchFlag(url, i),
-                                                const SizedBox(
-                                                  width: 5.0,
-                                                ),
-                                                const Icon(Icons.arrow_right_alt_outlined, size: 17),
-                                                const SizedBox(
-                                                  width: 5.0,
-                                                ),
-                                                Avatar(
-                                                  mxContent: Uri.parse(url + "${searchController.searchList[i].flags![0].languageFlag}"),
-                                                  name: "publicRoomsResponse.chunk[i].name",
-                                                  size: 15,
-                                                ),
-                                                const Spacer(),
-                                                Text("free",
-                                                    style: TextStyle().copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.clip,
-                                                    ))
-                                              ],
-                                            )
-                                          ],
-                                        ),
+                                          ),
+
+                                          const Icon(Icons.star, size: 12),
+                                          const SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          searchController.searchList[i].rating.toString().isNotEmpty
+                                              ? Text(
+                                              searchController.searchList[i].rating.toString() != Null
+                                                  ? "${searchController.searchList[i].rating.toString()}"
+                                                  : "Na",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ))
+                                              : Text("N/A",
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          })
-                          :FutureBuilder<QueryPublicRoomsResponse>(
-                          future: widget.controller.publicRoomsResponse,
-                          builder: (BuildContext context, AsyncSnapshot<QueryPublicRoomsResponse> snapshot) {
-                            if (snapshot.hasError) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(height: 32),
-                                  const Icon(
-                                    Icons.error_outlined,
-                                    size: 80,
-                                    color: Colors.grey,
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      snapshot.error!.toLocalizedString(context),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 16,
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.supervisor_account_sharp, size: 12),
+                                          const SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                                searchController.searchList[i].total_student.toString() != 0
+                                                    ? "${searchController.searchList[i].total_student.toString()} Students"
+                                                    : "Na",
+                                                overflow: TextOverflow.fade,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                                style: TextStyle().copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w400,
+                                                )),
+                                          )
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                            if (snapshot.connectionState != ConnectionState.done) {
-                              return const Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2));
-                            }
-                            final publicRoomsResponse = snapshot.data!;
-                            if (publicRoomsResponse.chunk.isEmpty) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(height: 32),
-                                  const Icon(
-                                    Icons.search_outlined,
-                                    size: 80,
-                                    color: Colors.grey,
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      L10n.of(context)!.noPublicRoomsFound,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 16,
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.query_stats, size: 12),
+                                          const SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          Text(
+                                              searchController.searchList[i].languageLevel.toString() != Null
+                                                  ? level(searchController.searchList[i].languageLevel.toString())
+                                                  : "Na",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              ))
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                            return Column(
-                              children: [
-                                Obx(() => searchController.next.value || searchController.previous.value
-                                    ? Container(
-                                        child: Row(
-                                          children: [
-                                            searchController.previous.value
-                                                ? InkWell(
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(8.0),
-                                                      child: Icon(
-                                                        Icons.arrow_back_ios,
-                                                        size: 20,
-                                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                            ? Theme.of(context).primaryColor
-                                                            : Theme.of(context).colorScheme.onPrimary,
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-
-
-                                                      if(searchController.pageNo.value>0){
-                                                        searchController.load1.value=false;
-                                                        searchController.pageNo.value = searchController.pageNo.value - 1;
-                                                        searchController.getClasses();
-                                                      }
-                                                      else{
-                                                        print(searchController.pageNo.value);
-                                                      }
-
-                                                    },
-                                                  )
-                                                : const SizedBox(),
-                                            const Spacer(),
-                                            searchController.next.value
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      searchController.load1.value=false;
-                                                      searchController.pageNo.value = searchController.pageNo.value + 1;
-                                                      searchController.getClasses();
-
-                                                    },
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(8.0),
-                                                      child: Icon(
-                                                        Icons.arrow_forward_ios,
-                                                        size: 20,
-                                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                            ? Theme.of(context).primaryColor
-                                                            : Theme.of(context).colorScheme.onPrimary,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
-                                          ],
-                                        ),
-                                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.account_balance, size: 12),
+                                          const SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          Text(
+                                              searchController.searchList[i].schoolName != ""
+                                                  ? "${searchController.searchList[i].schoolName}"
+                                                  : "Not disclosed",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              ))
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Spacer(),
+                                          fetchFlag(url, i),
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          const Icon(Icons.arrow_right_alt_outlined, size: 17),
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          Avatar(
+                                            mxContent: Uri.parse(url + "${searchController.searchList[i].flags![0].languageFlag}"),
+                                            name: "publicRoomsResponse.chunk[i].name",
+                                            size: 15,
+                                          ),
+                                          const Spacer(),
+                                          Text("free",
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              ))
+                                        ],
                                       )
-                                    : const SizedBox()),
-                                Obx(() => !searchController.loading.value && searchController.classList != Null
-                                    ? searchController.load1.value==true? GridView.builder(
-                                        //controller: searchController.controller,
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.all(12),
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 0.75,
-                                          crossAxisSpacing: 10,
-                                          mainAxisSpacing: 10,
-                                        ),
-                                        itemCount: searchController.classList.length,
-                                        itemBuilder: (BuildContext context, int i) {
-                                          //  if(searchController.classList[i])
-                                          return Material(
-                                            elevation: 15,
-                                            color: const Color(0xffF6F6F6),
-                                            borderRadius: BorderRadius.circular(16),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                id = searchController.classList[i].pangea_class_room_id.toString();
-                                                firstTime.value?classProfile(id):VRouter.of(context).to(
-                                                    '',
-                                                    queryParameters: {
-                                                      "id": id
-                                                    });
-                                                firstTime.value=false;
-                                                print("value of 2 ${firstTime}");
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    })
+                    :FutureBuilder<QueryPublicRoomsResponse>(
+                    future: widget.controller.publicRoomsResponse,
+                    builder: (BuildContext context, AsyncSnapshot<QueryPublicRoomsResponse> snapshot) {
+                      if (snapshot.hasError) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 32),
+                            const Icon(
+                              Icons.error_outlined,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
+                            Center(
+                              child: Text(
+                                snapshot.error!.toLocalizedString(context),
+                                overflow: TextOverflow.fade,
+                                maxLines: 1,
+                                softWrap: false,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2));
+                      }
+                      final publicRoomsResponse = snapshot.data!;
+                      if (publicRoomsResponse.chunk.isEmpty) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 32),
+                            const Icon(
+                              Icons.search_outlined,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
+                            Center(
+                              child: Text(
+                                L10n.of(context)!.noPublicRoomsFound,
+                                overflow: TextOverflow.fade,
+                                maxLines: 1,
+                                softWrap: false,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          Obx(() => searchController.next.value || searchController.previous.value
+                              ? Container(
+                            child: Row(
+                              children: [
+                                searchController.previous.value
+                                    ? InkWell(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.arrow_back_ios,
+                                      size: 20,
+                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                      // Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      //     ? Theme.of(context).primaryColor
+                                      //     : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  onTap: () {
 
 
-                                               // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
-                                              },
-                                              borderRadius: BorderRadius.circular(16),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(16.0),
-                                                    boxShadow: const [
-                                                      BoxShadow(color: Colors.black12, blurRadius: 1.0, offset: Offset(2.0, 2.0), spreadRadius: 1.0)
-                                                    ],
-                                                    color: Theme.of(context).colorScheme.background),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      Stack(
-                                                        children: [
-                                                          Container(
-                                                            child: searchController.classList[i].profilePic != null
-                                                                ? Avatar(
-                                                                    mxContent: Uri.parse("${searchController.classList[i].profilePic}"),
-                                                                  )
-                                                                : const Padding(
-                                                                    padding: EdgeInsets.all(5.0),
-                                                                    child: Icon(
-                                                                      Icons.people,
-                                                                      size: 40,
-                                                                    ),
-                                                                  ),
-                                                            decoration: BoxDecoration(
-                                                                border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2.0),
-                                                                shape: BoxShape.circle),
-                                                          ),
-                                                          Positioned(
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(2.0),
-                                                              decoration: BoxDecoration(
-                                                                  shape: BoxShape.circle,
-                                                                  color: Theme.of(context).colorScheme.onPrimary,
-                                                                  border: Border.all(color: Colors.white, width: 2)),
-                                                              child: const Icon(
-                                                                Icons.school,
-                                                                size: 15.0,
-                                                              ),
-                                                            ),
-                                                            bottom: 0,
-                                                            right: 0,
-                                                          )
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Text(
-                                                          searchController.classList[i].classAuthor != Null
-                                                              ? "${searchController.classList[i].classAuthor}"
-                                                              : "Na",
-                                                          style: TextStyle().copyWith(
-                                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                                            fontSize: 14,
-                                                            fontWeight: FontWeight.w400,
-                                                            overflow: TextOverflow.clip,
-                                                          )),
-                                                      Text(
-                                                          searchController.classList[i].className != Null
-                                                              ? "${searchController.classList[i].className}"
-                                                              : "Na",
-                                                          style: TextStyle().copyWith(
-                                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                                            fontSize: 10,
-                                                            fontWeight: FontWeight.w400,
-                                                            overflow: TextOverflow.clip,
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(Icons.location_pin, size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          searchController.classList[i].city!.isNotEmpty
-                                                              ? Text("${searchController.classList[i].city}",
-                                                                  style: TextStyle().copyWith(
-                                                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                    fontSize: 10,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    overflow: TextOverflow.clip,
-                                                                  ))
-                                                              : Text("N/A",
-                                                                  style: TextStyle().copyWith(
-                                                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                    fontSize: 10,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    overflow: TextOverflow.clip,
-                                                                  )),
-                                                          const SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          const Icon(Icons.star, size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          searchController.classList[i].rating.toString().isNotEmpty
-                                                              ? Text(
-                                                                  searchController.classList[i].rating.toString() != Null
-                                                                      ? "${searchController.classList[i].rating.toString()}"
-                                                                      : "Na",
-                                                                  style: TextStyle().copyWith(
-                                                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                    fontSize: 14,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    overflow: TextOverflow.clip,
-                                                                  ))
-                                                              : Text("N/A",
-                                                                  style: TextStyle().copyWith(
-                                                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                    fontSize: 10,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    overflow: TextOverflow.clip,
-                                                                  )),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(Icons.supervisor_account_sharp, size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                                searchController.classList[i].total_student.toString() != 0
-                                                                    ? "${searchController.classList[i].total_student.toString()} Students"
-                                                                    : "Na",
-                                                                style: TextStyle().copyWith(
-                                                                  color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                  fontSize: 10,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  overflow: TextOverflow.clip,
-                                                                )),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(Icons.query_stats, size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Text(
-                                                              searchController.classList[i].languageLevel.toString() != Null
-                                                                  ? level(searchController.classList[i].languageLevel.toString())
-                                                                  : "Na",
-                                                              style: TextStyle().copyWith(
-                                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                fontSize: 10,
-                                                                fontWeight: FontWeight.w400,
-                                                                overflow: TextOverflow.clip,
-                                                              ))
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(Icons.account_balance, size: 12),
-                                                          const SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Text(
-                                                              searchController.classList[i].schoolName != ""
-                                                                  ? "${searchController.classList[i].schoolName}"
-                                                                  : "Not disclosed",
-                                                              style: TextStyle().copyWith(
-                                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                fontSize: 10,
-                                                                fontWeight: FontWeight.w400,
-                                                                overflow: TextOverflow.clip,
-                                                              ))
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10.0,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          const Spacer(),
-                                                          fetchFlag(url, i),
-                                                          const SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          const Icon(Icons.arrow_right_alt_outlined, size: 17),
-                                                          const SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          Avatar(
-                                                            mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
-                                                            name: "publicRoomsResponse.chunk[i].name",
-                                                            size: 15,
-                                                          ),
-                                                          const Spacer(),
-                                                          Text("free",
-                                                              style: TextStyle().copyWith(
-                                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                fontSize: 10,
-                                                                fontWeight: FontWeight.w400,
-                                                                overflow: TextOverflow.clip,
-                                                              ))
-                                                        ],
-                                                      )
-                                                    ],
+                                    if(searchController.pageNo.value>0){
+                                      searchController.load1.value=false;
+                                      searchController.pageNo.value = searchController.pageNo.value - 1;
+                                      searchController.getClasses();
+                                    }
+                                    else{
+                                      print(searchController.pageNo.value);
+                                    }
+
+                                  },
+                                )
+                                    : const SizedBox(),
+                                const Spacer(),
+                                searchController.next.value
+                                    ? InkWell(
+                                  onTap: () {
+                                    searchController.load1.value=false;
+                                    searchController.pageNo.value = searchController.pageNo.value + 1;
+                                    searchController.getClasses();
+
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 20,
+                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                      // Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      //     ? Theme.of(context).primaryColor
+                                      //     : Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                          )
+                              : const SizedBox()),
+                          Obx(() => !searchController.loading.value && searchController.classList != Null
+                              ? searchController.load1.value==true? GridView.builder(
+                            //controller: searchController.controller,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(12),
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemCount: searchController.classList.length,
+                            itemBuilder: (BuildContext context, int i) {
+                              //  if(searchController.classList[i])
+                              return Material(
+                                elevation: 15,
+                                color: const Color(0xffF6F6F6),
+                                borderRadius: BorderRadius.circular(16),
+                                child: InkWell(
+                                  onTap: () async {
+                                    id = searchController.classList[i].pangea_class_room_id.toString();
+                                    firstTime.value?classProfile(id):VRouter.of(context).to(
+                                        '',
+                                        queryParameters: {
+                                          "id": id
+                                        });
+                                    firstTime.value=false;
+                                    print("value of 2 ${firstTime}");
+
+
+                                    // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
+                                  },
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16.0),
+                                        boxShadow: const [
+                                          BoxShadow(color: Colors.black12, blurRadius: 1.0, offset: Offset(2.0, 2.0), spreadRadius: 1.0)
+                                        ],
+                                        color: Theme.of(context).colorScheme.background),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              Container(
+                                                child: searchController.classList[i].profilePic != null
+                                                    ? Avatar(
+                                                  mxContent: Uri.parse("${searchController.classList[i].profilePic}"),
+                                                )
+                                                    : const Padding(
+                                                  padding: EdgeInsets.all(5.0),
+                                                  child: Icon(
+                                                    Icons.people,
+                                                    size: 40,
                                                   ),
                                                 ),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(color:  Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                         ? Colors.black
+                                                         : Colors.white, width: 2.0),
+                                                    shape: BoxShape.circle),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      ):CircularProgressIndicator()
-                                    : const Center(
-                                        child: CupertinoActivityIndicator(),
-                                      )),
-                              ],
-                            );
-                          }),
-                    ],
-                  )),
+                                              Positioned(
+                                                bottom: 0,
+                                                right: 0,
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(2.0),
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Theme.of(context).colorScheme.onPrimary,
+                                                      border: Border.all(color: Colors.white, width: 2)),
+                                                  child: const Icon(
+                                                    Icons.school,
+                                                    size: 15.0,
+                                                  ),
+                                                ),
+
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          Text(
+                                              searchController.classList[i].classAuthor != Null
+                                                  ? "${searchController.classList[i].classAuthor}"
+                                                  : "Na",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                          Text(
+                                              searchController.classList[i].className != Null
+                                                  ? "${searchController.classList[i].className}"
+                                                  : "Na",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.location_pin, size: 12),
+                                              const SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              Container(
+                                                width:50,
+                                                child:  searchController.classList[i].city!.isNotEmpty
+                                                    ? Text("${searchController.classList[i].city}",
+                                                    overflow: TextOverflow.fade,
+                                                    maxLines: 1,
+                                                    softWrap: false,
+                                                    style: TextStyle().copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.w400,
+
+                                                    ))
+                                                    : Text("N/A",
+                                                    style: TextStyle().copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.w400,
+                                                    )),
+                                              ),
+                                              const Icon(Icons.star, size: 12),
+                                              const SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              searchController.classList[i].rating.toString().isNotEmpty
+                                                  ? Text(
+                                                  searchController.classList[i].rating.toString() != Null
+                                                      ? "${searchController.classList[i].rating.toString()}"
+                                                      : "Na",
+                                                  overflow: TextOverflow.fade,
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                  style: TextStyle().copyWith(
+                                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ))
+                                                  : Text("N/A",
+                                                  style: TextStyle().copyWith(
+                                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w400,
+                                                  )),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.supervisor_account_sharp, size: 12),
+                                              const SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                    searchController.classList[i].total_student.toString() != 0
+                                                        ? "${searchController.classList[i].total_student.toString()} Students"
+                                                        : "Na",
+                                                    overflow: TextOverflow.fade,
+                                                    maxLines: 1,
+                                                    softWrap: false,
+                                                    style: TextStyle().copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.w400,
+                                                    )),
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.query_stats, size: 12),
+                                              const SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              Text(
+                                                  searchController.classList[i].languageLevel.toString() != Null
+                                                      ? level(searchController.classList[i].languageLevel.toString())
+                                                      : "Na",
+                                                  overflow: TextOverflow.fade,
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                  style: TextStyle().copyWith(
+                                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w400,
+                                                  ))
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.account_balance, size: 12),
+                                              const SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              Text(
+                                                  searchController.classList[i].schoolName != ""
+                                                      ? "${searchController.classList[i].schoolName}"
+                                                      : "Not disclosed",
+                                                  overflow: TextOverflow.fade,
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                  style: TextStyle().copyWith(
+                                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w400,
+                                                  ))
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Spacer(),
+                                              fetchFlag(url, i),
+                                              const SizedBox(
+                                                width: 5.0,
+                                              ),
+                                              const Icon(Icons.arrow_right_alt_outlined, size: 17),
+                                              const SizedBox(
+                                                width: 5.0,
+                                              ),
+                                              Avatar(
+                                                mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
+                                                name: "publicRoomsResponse.chunk[i].name",
+                                                size: 15,
+                                              ),
+                                              const Spacer(),
+                                              Text("free",
+                                                  style: TextStyle().copyWith(
+                                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w400,
+                                                  ))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ):CircularProgressIndicator()
+                              : const Center(
+                            child: CupertinoActivityIndicator(),
+                          )),
+                        ],
+                      );
+                    }),
+              ],
+            )
+                : SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Pangea Chat serves schools and other learning communities,ages 13 and up, around the world. In order to protect our young learners, we ask our users to verify their age before connecting to our community. Before you can search Pangea Chat for classes, rooms, and new friends, you must verify you are 18 or older.",
+                      style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      addAgesAction();
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).colorScheme.onPrimary)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 6),
+                          child: Text(
+                            "Verify my account",
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
+                          ),
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 134,
+                  ),
+                  box.read("usertype") == 2
+                      ? GestureDetector(
+                    onTap: () {
+                      createNewClassAction();
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).colorScheme.onPrimary)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 6),
+                          child: Text(
+                            "Create a class",
+                            style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
+                          ),
+                        )),
+                  )
+                      : InkWell(
+                      onTap: () {
+                        VRouter.of(context).to("/join_with_code");
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              border: Border.all(
+                                  color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      ? Theme.of(context).primaryColor
+                                      : Theme.of(context).colorScheme.onPrimary)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 42, vertical: 6),
+                            child: Text(
+                              "Join with a class code",
+                              style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
+                            ),
+                          )))
+                ],
+              ),
+            )),
+
+            ///Chats tab
             ListView.builder(
               keyboardDismissBehavior: PlatformInfos.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
               itemCount: rooms.length,
               itemBuilder: (_, i) => ChatListItem(rooms[i]),
             ),
+
+            ///Peoples Tab
             widget.controller.foundProfiles.isNotEmpty
                 ? ListView.builder(
                     keyboardDismissBehavior:
@@ -980,13 +996,18 @@ class _SearchViewState extends State<SearchView> {
                           //size: 24,
                         ),
                         title: Text(
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
                           foundProfile.displayName ?? foundProfile.userId.localpart!,
                           style: const TextStyle(),
-                          maxLines: 1,
+
                         ),
                         subtitle: Text(
                           foundProfile.userId,
+                          overflow: TextOverflow.fade,
                           maxLines: 1,
+                          softWrap: false,
                           style: const TextStyle(
                             fontSize: 12,
                           ),

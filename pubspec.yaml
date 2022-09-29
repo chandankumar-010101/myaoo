@@ -25,7 +25,10 @@ dependencies:
   dropdown_button2: ^1.6.3
   dynamic_color: ^1.2.2
   email_validator: ^2.0.1
-  emoji_picker_flutter: ^1.1.2
+  emoji_picker_flutter:
+    git:
+      url: https://github.com/Fintasys/emoji_picker_flutter.git
+      ref: ba6c93fdea93ee70f4611b52ebff721535e6b869
   encrypt: ^5.0.1
   file_picker_cross: ^4.6.0
   flutter:
@@ -102,6 +105,7 @@ dependencies:
   video_player: ^2.2.18
   vrouter: ^1.2.0+21
   wakelock: ^0.6.1+1
+
   # tuple: any
   # get_storage: ^2.0.3
   # get: ^4.6.5

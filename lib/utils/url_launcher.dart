@@ -16,6 +16,7 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:pangeachat/widgets/profile_bottom_sheet.dart';
 import 'package:pangeachat/widgets/public_room_bottom_sheet.dart';
+import '../services/controllers.dart';
 import '../services/services.dart';
 import 'platform_infos.dart';
 
@@ -185,8 +186,8 @@ class UrlLauncher {
         final bool isExchangeExist =
             await PangeaServices.validateExchange(requestFromClass: roomId!, requestToClass: requestToclass, context: context);
         if (isExchangeExist) {
-          Fluttertoast.showToast(msg: "Exchange already exist with this class", webBgColor: "#ff0000", backgroundColor: Colors.red);
-          return;
+          PangeaControllers.toastMsg(msg: "Exchange already exist with this class");
+         return;
         }
         final roomID = await showFutureLoadingDialog(
           context: context,
@@ -243,11 +244,12 @@ class UrlLauncher {
               if (kDebugMode) {
                 print(e);
               }
-              Fluttertoast.showToast(msg: " Unable to Sent Message", webBgColor: Colors.red, backgroundColor: Colors.red);
-            });
+
+              PangeaControllers.toastMsg(msg: " Unable to Sent Message");
+             });
           }
         } else {
-          Fluttertoast.showToast(msg: "Unable to find exchnage info");
+          PangeaControllers.toastMsg(msg: "Unable to find exchnage info");
         }
       } else if (requestToEnroll) {
         final roomID = await showFutureLoadingDialog(
@@ -289,14 +291,14 @@ class UrlLauncher {
                 .sendTextEvent(initial_url + "/#" + "/request_to_enroll?id=$userId&room_id=$roomId")
                 .then((value) {
               VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
-              // VRouter.of(context).toSegments(['rooms', roomID.result!]);
+              PangeaControllers.toastMsg(msg: " Request Sent Successfully",success: true);
+             // VRouter.of(context).toSegments(['rooms', roomID.result!]);
               // Navigator.of(context, rootNavigator: false).pop();
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);
               }
-              Fluttertoast.showToast(msg: " Unable to Sent Message", webBgColor: Colors.red, backgroundColor: Colors.red);
+              PangeaControllers.toastMsg(msg: " Unable to Sent Message",);
             });
             return;
           } else {}

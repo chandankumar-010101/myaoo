@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:matrix/matrix.dart';
@@ -34,6 +34,9 @@ import '../../widgets/matrix.dart';
 import '../bootstrap/bootstrap_dialog.dart';
 import '../search/search.dart';
 import '../search/search_view_controller.dart';
+import 'chat_list_controller.dart';
+
+import 'dart:math' as math;
 
 enum SelectMode { normal, share, select }
 
@@ -62,15 +65,17 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   StreamSubscription? _intentUriStreamSubscription;
   int userType = GetStorage().read("usertype") ?? 0;
   SpacesEntry? _activeSpacesEntry;
+  ChatListControllerGet chatListController = Get.put(ChatListControllerGet());
+
   SpacesEntry get activeSpacesEntry {
     final id = _activeSpacesEntry;
     return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
   }
 
-  Permissions? permissions;
   BoxConstraints? snappingSheetContainerSize;
 
-  String? get activeSpaceId => activeSpacesEntry.getSpace(context)?.id;
+  String? get activeSpaceId =>
+      activeSpacesEntry.getSpace(context)?.id; // space_
 
   final ScrollController scrollController = ScrollController();
   bool scrolledToTop = true;
@@ -83,8 +88,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Stream<Client> get clientStream => _clientStream.stream;
 
-  List<User> participantsList = [];
-  List<User> participants = [];
+
+
   void _onScroll() {
     final newScrolledToTop = scrollController.position.pixels <= 0;
     if (newScrolledToTop != scrolledToTop) {
@@ -94,87 +99,64 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) async {
-    getClassPermissions();
-    if ((snappingSheetController.isAttached ? snappingSheetController.currentPosition : 0) != kSpacesBottomBarHeight) {
+  Future<void> setActiveSpacesEntry(
+      BuildContext context, SpacesEntry? spaceId) async {
+    ///set active space id in pangea class (LALA)
+    Matrix.of(context).pangeaClassController
+        .setActiveSpacesEntry(context, spaceId);
+    if ((snappingSheetController.isAttached
+            ? snappingSheetController.currentPosition
+            : 0) !=
+        kSpacesBottomBarHeight) {
       snapBackSpacesSheet();
     }
 
-    participants.clear();
-    //
     if (spaceId != null) {
-      participants.clear();
-      setState(() => _activeSpacesEntry = spaceId);
-      getClassPermissions();
-      getpeople();
-    }
-  }
+      if (spaceId.runtimeType != AllRoomsSpacesEntry) {
 
-  getpeople() async {
-    if (_activeSpacesEntry!.getSpace(context) != null) {
-      log(_activeSpacesEntry!.getSpace(context)!.id);
-      participants.clear();
-      participants = await _activeSpacesEntry!.getSpace(context)!.requestParticipants();
-
-      participants.removeWhere((element) => element.id == Matrix.of(context).client.userID);
-      setState(() {});
-    } else {
-      participants.clear();
-      List<dynamic> alreadyExists = [];
-      List<User> finalUsers = [];
-
-      final rooms = Matrix.of(context).client.rooms;
-
-      for (var room in rooms) {
-        participantsList.addAll(await room.requestParticipants());
-
-        for (var user in participantsList) {
-          if (!participantsList.contains(user.stateKey) && user.stateKey != null && !alreadyExists.contains(user.stateKey)) {
-            Map<String, dynamic> ele = {};
-            ele.addAll(user.toJson());
-            finalUsers.add(user);
-            alreadyExists.add(user.stateKey);
-          }
-        }
+        chatListController.getClassPermissions(
+            spaceId.getSpace(context)!.id, context);
+        chatListController.getpeople(context, spaceId);
+      }else{
+        chatListController.participants.clear();
+        chatListController.initialPermissions();
       }
-      finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
-
-      participants = finalUsers;
-      permissions = Permissions(
-          pangeaClass: 0,
-          isPublic: true,
-          isOpenEnrollment: true,
-          isOpenExchange: true,
-          oneToOneChatClass: true,
-          oneToOneChatExchange: true,
-          isCreateRooms: true,
-          isCreateRoomsExchange: true,
-          isShareVideo: true,
-          isSharePhoto: true,
-          isShareFiles: true,
-          isShareLocation: true,
-          isCreateStories: true);
-
-      setState(() {});
+      setState(() => _activeSpacesEntry = spaceId);
+    } else {
+      chatListController.initialPermissions();
     }
   }
+
+
 
   void editSpace(BuildContext context, String spaceId) async {
+
     VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
   }
 
   // Needs to match GroupsSpacesEntry for 'separate group' checking.
-  List<Room> get spaces => Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+  List<Room> get spaces {
+    return Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+  }
 
   // Note that this could change due to configuration, etc.
   // Also be aware that _activeSpacesEntry = null is the expected reset method.
-  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes ? DirectChatsSpacesEntry() : AllRoomsSpacesEntry();
+  SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
+      ? DirectChatsSpacesEntry()
+      : AllRoomsSpacesEntry();
 
   List<SpacesEntry> get spacesEntries {
     if (AppConfig.separateChatTypes) {
-      return [defaultSpacesEntry, GroupsSpacesEntry(), ...spaces.map((space) => SpaceSpacesEntry(space)).toList()];
+      return [
+        defaultSpacesEntry,
+        GroupsSpacesEntry(),
+        ...spaces.map((space) => SpaceSpacesEntry(space)).toList()
+      ];
     }
-    return [defaultSpacesEntry, ...spaces.map((space) => SpaceSpacesEntry(space)).toList()];
+    return [
+      defaultSpacesEntry,
+      ...spaces.map((space) => SpaceSpacesEntry(space)).toList()
+    ];
   }
 
   final selectedRoomIds = <String>{};
@@ -218,7 +200,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (text == null) return;
     if (text.toLowerCase().startsWith(AppConfig.deepLinkPrefix) ||
         text.toLowerCase().startsWith(AppConfig.inviteLinkPrefix) ||
-        (text.toLowerCase().startsWith(AppConfig.schemePrefix) && !RegExp(r'\s').hasMatch(text))) {
+        (text.toLowerCase().startsWith(AppConfig.schemePrefix) &&
+            !RegExp(r'\s').hasMatch(text))) {
       return _processIncomingUris(text);
     }
     Matrix.of(context).shareContent = {
@@ -240,13 +223,15 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (!PlatformInfos.isMobile) return;
 
     // For sharing images coming from outside the app while the app is in the memory
-    _intentFileStreamSubscription = ReceiveSharingIntent.getMediaStream().listen(_processIncomingSharedFiles, onError: print);
+    _intentFileStreamSubscription = ReceiveSharingIntent.getMediaStream()
+        .listen(_processIncomingSharedFiles, onError: print);
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then(_processIncomingSharedFiles);
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
-    _intentDataStreamSubscription = ReceiveSharingIntent.getTextStream().listen(_processIncomingSharedText, onError: print);
+    _intentDataStreamSubscription = ReceiveSharingIntent.getTextStream()
+        .listen(_processIncomingSharedText, onError: print);
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then(_processIncomingSharedText);
@@ -259,32 +244,100 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  getClassPermissions() async {
-    String acessToken = GetStorage().read("access");
+  ///when click on user Id then create one to one room
+  createOneToOneRooms(User user) async {
+    final math.Random random = math.Random();
 
-    if (activeSpaceId != null) {
-      final result = await PangeaServices.fetchClassInfo(context, activeSpaceId!);
-      permissions = result.permissions;
-      log("One on One room (${activeSpaceId}): ${result.permissions.oneToOneChatClass}");
-      log("Create Room  (${activeSpaceId}): ${result.permissions.isCreateRooms}");
-      log("Stories  (${activeSpaceId}): ${result.permissions.isCreateStories}");
-    } else {
-      permissions = Permissions(
-          pangeaClass: 0,
-          isPublic: true,
-          isOpenEnrollment: true,
-          isOpenExchange: true,
-          oneToOneChatClass: true,
-          oneToOneChatExchange: true,
-          isCreateRooms: true,
-          isCreateRoomsExchange: true,
-          isShareVideo: true,
-          isSharePhoto: true,
-          isShareFiles: true,
-          isShareLocation: true,
-          isCreateStories: true);
+    final space = activeSpacesEntry.getSpace(context);
+    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+    final roomID = await showFutureLoadingDialog(
+      context: context,
+      future: () => Matrix.of(context).client.createRoom(
+            invite: [user.id],
+            preset: CreateRoomPreset.privateChat,
+            isDirect: true,
+            initialState: [
+              StateEvent(
+                content: {
+                  "guest_access": "can_join",
+                },
+                type: EventTypes.GuestAccess,
+                stateKey: "",
+              ),
+              StateEvent(
+                  content: {
+                    "via": ["matrix.staging.pangea.chat"],
+                    "canonical": true
+                  },
+                  type: EventTypes.spaceParent,
+                  stateKey: space != null ? space.id : ""),
+            ],
+            // creationContent: {'type': RoomCreationTypes.mSpace},
+            roomAliasName: user.displayName!.replaceAll(" ", "_") +
+                "-" +
+                Matrix.of(context)
+                    .client
+                    .userID
+                    .toString()
+                    .split(":")
+                    .first
+                    .replaceAll("@", "") +
+                "#" +
+                random.nextInt(999).toString(),
+            name: user.displayName!.replaceAll(" ", "_") +
+                "-" +
+                Matrix.of(context)
+                    .client
+                    .userID
+                    .toString()
+                    .split(":")
+                    .first
+                    .replaceAll("@", "") +
+                "#" +
+                random.nextInt(999).toString(),
+          ),
+    );
+    if (roomID.result != null) {
+      VRouter.of(context).pop();
+      PangeaControllers.toastMsg(msg: "Created Successfully", success: true);
     }
-    setState(() {});
+    if (roomID == null) {
+      VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+    }
+  }
+
+  ///check create room permissions
+  checkRoomPermissions() {
+    if (userType == 2) {
+      return IconButton(
+          onPressed: () {
+            activeSpacesEntry.getSpace(context) == null
+                ? VRouter.of(context).to('/newroom')
+                : VRouter.of(context).to('/newroom', queryParameters: {
+                    "spaceId": activeSpacesEntry.getSpace(context)!.id,
+                  });
+          },
+          icon: const Icon(Icons.add));
+    } else {
+      if (chatListController.permissions.value != null) {
+        if (chatListController.permissions.value!.isCreateRooms) {
+          return IconButton(
+              onPressed: () {
+                activeSpacesEntry.getSpace(context) == null
+                    ? VRouter.of(context).to('/newroom')
+                    : VRouter.of(context).to('/newroom', queryParameters: {
+                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
+                      });
+              },
+              icon: const Icon(Icons.add));
+        }
+        else {
+          return Container();
+        }
+      } else {
+        return Container();
+      }
+    }
   }
 
   @override
@@ -294,7 +347,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     scrollController.addListener(_onScroll);
     _waitForFirstSync();
     _hackyWebRTCFixForWeb();
-    getClassPermissions();
+    chatListController.getClassPermissions(activeSpaceId, context);
 
     super.initState();
   }
@@ -303,8 +356,12 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (!Matrix.of(context).client.encryptionEnabled) return;
     await Matrix.of(context).client.accountDataLoading;
     await Matrix.of(context).client.userDeviceKeysLoading;
-    final crossSigning = await Matrix.of(context).client.encryption?.crossSigning.isCached() ?? false;
-    final needsBootstrap = Matrix.of(context).client.encryption?.crossSigning.enabled == false || crossSigning == false;
+    final crossSigning =
+        await Matrix.of(context).client.encryption?.crossSigning.isCached() ??
+            false;
+    final needsBootstrap =
+        Matrix.of(context).client.encryption?.crossSigning.enabled == false ||
+            crossSigning == false;
     final isUnknownSession = Matrix.of(context).client.isUnknownSession;
     if (needsBootstrap || isUnknownSession) {
       setState(() {
@@ -323,7 +380,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   void toggleSelection(String roomId) {
-    setState(() => selectedRoomIds.contains(roomId) ? selectedRoomIds.remove(roomId) : selectedRoomIds.add(roomId));
+    setState(() => selectedRoomIds.contains(roomId)
+        ? selectedRoomIds.remove(roomId)
+        : selectedRoomIds.add(roomId));
   }
 
   Future<void> toggleUnread() async {
@@ -362,7 +421,9 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     await showFutureLoadingDialog(
       context: context,
       future: () async {
-        final newState = anySelectedRoomNotMuted ? PushRuleState.mentionsOnly : PushRuleState.notify;
+        final newState = anySelectedRoomNotMuted
+            ? PushRuleState.mentionsOnly
+            : PushRuleState.notify;
         final client = Matrix.of(context).client;
         for (final roomId in selectedRoomIds) {
           final room = client.getRoomById(roomId)!;
@@ -427,11 +488,11 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
         break;
       case PopupMenuAction.invite:
         FluffyShare.share(
-            L10n.of(context)!
-                .inviteText("" + Matrix.of(context).client.userID!, 'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'),
+            L10n.of(context)!.inviteText("" + Matrix.of(context).client.userID!,
+                'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'),
             context);
-        log(L10n.of(context)!
-            .inviteText(Matrix.of(context).client.userID!, 'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'));
+        log(L10n.of(context)!.inviteText(Matrix.of(context).client.userID!,
+            'https://matrix.to/#/${Matrix.of(context).client.userID}?client=im.fluffychat'));
         log(Matrix.of(context).client.userID!);
         break;
       case PopupMenuAction.newGroup:
@@ -532,12 +593,15 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     setState(() => selectedRoomIds.clear());
   }
 
-  bool get anySelectedRoomNotMarkedUnread => selectedRoomIds.any((roomId) => !Matrix.of(context).client.getRoomById(roomId)!.markedUnread);
+  bool get anySelectedRoomNotMarkedUnread => selectedRoomIds.any(
+      (roomId) => !Matrix.of(context).client.getRoomById(roomId)!.markedUnread);
 
-  bool get anySelectedRoomNotFavorite => selectedRoomIds.any((roomId) => !Matrix.of(context).client.getRoomById(roomId)!.isFavourite);
+  bool get anySelectedRoomNotFavorite => selectedRoomIds.any(
+      (roomId) => !Matrix.of(context).client.getRoomById(roomId)!.isFavourite);
 
-  bool get anySelectedRoomNotMuted =>
-      selectedRoomIds.any((roomId) => Matrix.of(context).client.getRoomById(roomId)!.pushRuleState == PushRuleState.notify);
+  bool get anySelectedRoomNotMuted => selectedRoomIds.any((roomId) =>
+      Matrix.of(context).client.getRoomById(roomId)!.pushRuleState ==
+      PushRuleState.notify);
 
   bool waitForFirstSync = false;
 
@@ -555,7 +619,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     if (spaceId != null) {
       final space = client.getRoomById(spaceId)!;
       final localMembers = space.getParticipants().length;
-      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) + (space.summary.mJoinedMemberCount ?? 0);
+      final actualMembersCount = (space.summary.mInvitedMemberCount ?? 0) +
+          (space.summary.mJoinedMemberCount ?? 0);
       if (localMembers < actualMembersCount) {
         await space.requestParticipants();
       }
@@ -593,14 +658,19 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       _activeSpacesEntry = null;
       selectedRoomIds.clear();
       Matrix.of(context).activeBundle = bundle;
-      if (!Matrix.of(context).currentBundle!.any((client) => client == Matrix.of(context).client)) {
-        Matrix.of(context).setActiveClient(Matrix.of(context).currentBundle!.first);
+      if (!Matrix.of(context)
+          .currentBundle!
+          .any((client) => client == Matrix.of(context).client)) {
+        Matrix.of(context)
+            .setActiveClient(Matrix.of(context).currentBundle!.first);
       }
     });
   }
 
   void editBundlesForAccount(String? userId, String? activeBundle) async {
-    final client = Matrix.of(context).widget.clients[Matrix.of(context).getClientIndexByMatrixId(userId!)];
+    final client = Matrix.of(context)
+        .widget
+        .clients[Matrix.of(context).getClientIndexByMatrixId(userId!)];
     final action = await showConfirmationDialog<EditBundleAction>(
       context: context,
       title: L10n.of(context)!.editBundlesForAccount,
@@ -620,7 +690,11 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     switch (action) {
       case EditBundleAction.addToBundle:
         final bundle = await showTextInputDialog(
-            context: context, title: L10n.of(context)!.bundleName, textFields: [DialogTextField(hintText: L10n.of(context)!.bundleName)]);
+            context: context,
+            title: L10n.of(context)!.bundleName,
+            textFields: [
+              DialogTextField(hintText: L10n.of(context)!.bundleName)
+            ]);
         if (bundle == null || bundle.isEmpty || bundle.single.isEmpty) return;
         await showFutureLoadingDialog(
           context: context,
@@ -635,10 +709,16 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  bool get displayBundles => Matrix.of(context).hasComplexBundles && Matrix.of(context).accountBundles.keys.length > 1;
+  bool get displayBundles =>
+      Matrix.of(context).hasComplexBundles &&
+      Matrix.of(context).accountBundles.keys.length > 1;
 
   String? get secureActiveBundle {
-    if (Matrix.of(context).activeBundle == null || !Matrix.of(context).accountBundles.keys.contains(Matrix.of(context).activeBundle)) {
+    if (Matrix.of(context).activeBundle == null ||
+        !Matrix.of(context)
+            .accountBundles
+            .keys
+            .contains(Matrix.of(context).activeBundle)) {
       return Matrix.of(context).accountBundles.keys.first;
     }
     return Matrix.of(context).activeBundle;
@@ -658,10 +738,21 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     Matrix.of(context).navigatorContext = context;
     Matrix.of(context).client.userID != null
-        ? PangeaServices.validateUser(Matrix.of(context).client, context, Matrix.of(context).widget, rooms: true)
+        ? PangeaServices.validateUser(
+            Matrix.of(context).client, context, Matrix.of(context).widget,
+            rooms: true)
         : null;
 
-    return Obx(() => getxController.throughClassProfile.value ? const Search() : ChatListView(this));
+    if (GetStorage().read("firstTime") != null &&
+        GetStorage().read("firstTime")) {
+      GetStorage().remove("firstTime");
+      GetStorage().read("usertype") == 2
+          ? VRouter.of(context).to("/newclass")
+          : VRouter.of(context).to("/join_with_code");
+    }
+    return Obx(() => getxController.throughClassProfile.value
+        ? const Search()
+        : ChatListView(this));
   }
 
   void _hackyWebRTCFixForWeb() {

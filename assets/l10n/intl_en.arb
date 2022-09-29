@@ -683,12 +683,12 @@
       "username": {}
     }
   },
-  "createNewGroup": "Create new group",
+  "createNewGroup": "Create new room",
   "@createNewGroup": {
     "type": "text",
     "placeholders": {}
   },
-  "createNewSpace": "New class",
+  "createNewSpace": "Create new class",
   "@createNewSpace": {
     "type": "text",
     "placeholders": {}
@@ -843,7 +843,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "editDisplayname": "Edit displayname",
+  "editDisplayname": "Edit display name",
   "@editDisplayname": {
     "type": "text",
     "placeholders": {}

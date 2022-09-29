@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vrouter/vrouter.dart';
 import 'new_class.dart';
 
@@ -19,7 +20,7 @@ class _NewClassViewState extends State<NewClassView> {
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Create a Class",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 18, fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -51,10 +52,20 @@ class _NewClassViewState extends State<NewClassView> {
                   children: [
                     Column(
                       children: [
+                        // SvgPicture.asset(
+                        //   height: 70,
+                        //   width: 70,
+                        //   "assets/png/partner.svg",
+                        //   fit: BoxFit.contain,
+                        //   color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                        //       ? Theme.of(context).primaryColor
+                        //       : Theme.of(context).colorScheme.onPrimary,
+                        // ),
                         SizedBox(
                           height: 70,
-                          width: 70,
-                          child: Image.asset(
+                          width: 80,
+                          child:
+                          Image.asset(
                             "assets/png/partner.png",
                             fit: BoxFit.fill,
                             color: Theme.of(context).colorScheme.onPrimary == Colors.white

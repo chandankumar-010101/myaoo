@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -6,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/services/services.dart';
 
 import '../../model/search_view_model.dart';
+import '../../services/controllers.dart';
 import '../../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,9 +33,6 @@ class SearchViewController extends GetxController {
     final String access = box.read("access") ?? "";
     if (access.isNotEmpty) {
       try {
-
-
-
           var value = await http.get(
             Uri.parse(ApiUrls.class_list +
                 "?p=${pageNo.value.toString()}&page_size=10"),
@@ -57,11 +57,8 @@ class SearchViewController extends GetxController {
             if (kDebugMode) {
               print(value.statusCode);
             }
-            Fluttertoast.showToast(
-                msg: "Error ${value
-                    .statusCode}: Unable to fetch list of classes",
-                webBgColor: "#ff0000",
-                backgroundColor: Colors.red);
+            PangeaControllers.toastMsg(msg: "Error ${value
+                .statusCode}: Unable to fetch list of classes",success: false);
           }
 
 
@@ -72,46 +69,27 @@ class SearchViewController extends GetxController {
         }
       }
     } else {
-      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: "#ff0000", backgroundColor: Colors.red);
+
+      PangeaControllers.toastMsg(msg: "Error: Access token not available",success: false);
       if (kDebugMode) {
         print("access token not found");
       }
     }
   }
 
-  Future getSearch(text) async {
-    final String access = box.read("access") ?? "";
-    if (access.isNotEmpty) {
-      try {
+  Timer? timerForDelay;
 
-
-        var result = await http.get(Uri.parse(ApiUrls.class_search+"?q=${text}"),
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer ${box.read("access")}",
-            },
-          );
-
-          if (result.statusCode == 200 || result.statusCode == 201) {
-            loading.value = false;
-            final data = searchViewModelFromJson(result.body);
-            searchList.value = data.results!;
-          }
-          else{
-
-          }
-      } catch (e) {
-        if (kDebugMode) {
-          print("Error accured while fetching class details");
-          print(e);
-        }
-      }
-    } else {
-      Fluttertoast.showToast(msg: "Error: Access token not available", webBgColor: "#ff0000", backgroundColor: Colors.red);
-      if (kDebugMode) {
-        print("access token not found");
-      }
+  Future getSearch(String text) async {
+    if (timerForDelay != null) {
+      print("deleted");
+      timerForDelay!.cancel();
     }
+    timerForDelay = Timer(const Duration(milliseconds:800), () async {
+      if(text.length>2){
+        PangeaServices.searchClass(text);
+      }
+    });
+
   }
 
   addItems() async {

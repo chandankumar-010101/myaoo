@@ -53,7 +53,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                 backgroundColor: Theme.of(context).backgroundColor,
                 title: Text(
                   "Create a Class",
-                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                 ),
@@ -61,7 +61,8 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                 elevation: 10,
                 automaticallyImplyLeading: false,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  icon: Icon(Icons.arrow_back,
+                      color: Theme.of(context).textTheme.bodyText1!.color),
                   onPressed: () {
                     context.vRouter.to("/newclass/language");
                   },
@@ -71,7 +72,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Update class permissions",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -79,7 +80,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
             },
@@ -184,7 +185,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                       ),
                       SwitchListTile.adaptive(
                         title: Text(
-                          "Open to exchanges?",
+                          "Open to Exchanges?",
                           style: const TextStyle()
                               .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
                           overflow: TextOverflow.clip,
@@ -324,7 +325,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                             : Theme.of(context).colorScheme.onPrimary)),
                                 child: Center(
                                   child: Text(
-                                    "Save",
+                                    "Update",
                                     style: const TextStyle().copyWith(
                                         color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
                                     overflow: TextOverflow.clip,

@@ -43,9 +43,9 @@ class SettingsAccountView extends StatelessWidget {
                 subtitle: Text(controller.profile?.displayName ??
                     Matrix.of(context).client.userID!.localpart!),
                 onTap: controller.setDisplaynameAction,
-
               ),
               ListTile(
+                //
                 title: Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,7 +78,18 @@ class SettingsAccountView extends StatelessWidget {
                       Text(
                           "${dataStorage.read("targetlanguage").toString().toLowerCase().capitalizeFirst}"),
                     ]),
+                trailing: Icon(Icons.edit_outlined),
+                onTap: () {
+                  controller.updateLanguage();
+                },
+                // trailing: GetStorage().read("usertype") == 1
+                //     ? InkWell(
+                //         onTap: controller.updateLanguage,
+                //         child: Icon(Icons.edit_outlined),
+                //       )
+                //     : null,
               ),
+
               ListTile(
                 title: const Text("Role"),
                 subtitle: (dataStorage.read("usertype") == 1)

@@ -37,7 +37,8 @@ class _InviteStudentState extends State<InviteStudent> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon:  Icon(Icons.arrow_back,
+                color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               VRouter.of(context).to('/classDetails', queryParameters: {"id": roomId});
             },
@@ -71,7 +72,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Invite students to enroll\nwith your class.",
+                          "Invite students to enroll\nin your class.",
                           style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,

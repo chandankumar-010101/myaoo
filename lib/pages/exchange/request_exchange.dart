@@ -8,6 +8,7 @@ import 'package:pangeachat/model/teacher_all_class_model.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 
@@ -46,7 +47,9 @@ class _RequestExchangeState extends State<RequestExchange> {
             "Request an exchange",
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 14),
+                fontSize: 18,
+                fontWeight: FontWeight.w700
+            ),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -54,7 +57,7 @@ class _RequestExchangeState extends State<RequestExchange> {
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon:  Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               context.vRouter
                   .to("/classDetails", queryParameters: {"class_id": requestToClass});
@@ -110,7 +113,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                             child: Padding(
                               padding: EdgeInsets.only(right: 5),
                               child: Text(
-                                "While both teachers allow 1-to-1 chats in exchanges, students will have this permission in this exchange.",
+                                "While both teachers allow One-to-one chats in exchanges, students will have this permission in this exchange.",
                                 style: TextStyle().copyWith(
                                     color: Theme.of(context)
                                         .textTheme
@@ -238,13 +241,11 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                           TextAlign.center,
                                                     ),
                                               isExpanded: true,
-                                              items: data.results!
+                                              items: data.results!.where((element) => !element.isExchange!)
                                                   .map(
                                                     (map) => DropdownMenuItem(
-                                                      child: Text(map.className
-                                                          .toString()),
-                                                      value: map
-                                                          .pangeaClassRoomId, //"${map.className.toString()} (${map.pangeaClassRoomId})",// map.pangeaClassRoomId,
+                                                      child: Text(map.className.toString()),
+                                                      value: map.pangeaClassRoomId, //"${map.className.toString()} (${map.pangeaClassRoomId})",// map.pangeaClassRoomId,
                                                     ),
                                                   )
                                                   .toList(),
@@ -400,8 +401,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                                       requestToClass: requestToClass,
                                       context: context);
                                  if(isExchangeExist){
-                                   Fluttertoast.showToast(
-                                       msg: "Exchange already exist with this class",webBgColor: "#ff0000",backgroundColor: Colors.red);
+                                   PangeaControllers.toastMsg(msg: "Exchange already exist with this class",success: false);
                                    return;
                                  }
                                  if(userIdOfRequestedClass.isNotEmpty){
@@ -415,13 +415,11 @@ class _RequestExchangeState extends State<RequestExchange> {
                                        .openMatrixToUrl();
                                  }
                                 }else{
-                                  Fluttertoast.showToast(
-                                      msg: "Exchange Class Info not found",webBgColor: "#ff0000",backgroundColor: Colors.red);
-                                }
+                                  PangeaControllers.toastMsg(msg: "Exchange Class Info not found",success: false);
+                                 }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg: "Select your Class",webBgColor: "#ff0000",backgroundColor: Colors.red);
-                              }
+                              PangeaControllers.toastMsg(msg: "Select your Class",success: false);
+                            }
 
                               final String clientid =
                                   box.read("ExchangeClientID") ?? "";
