@@ -306,38 +306,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   ///check create room permissions
-  checkRoomPermissions() {
-    if (userType == 2) {
-      return IconButton(
-          onPressed: () {
-            activeSpacesEntry.getSpace(context) == null
-                ? VRouter.of(context).to('/newroom')
-                : VRouter.of(context).to('/newroom', queryParameters: {
-                    "spaceId": activeSpacesEntry.getSpace(context)!.id,
-                  });
-          },
-          icon: const Icon(Icons.add));
-    } else {
-      if (chatListController.permissions.value != null) {
-        if (chatListController.permissions.value!.isCreateRooms) {
-          return IconButton(
-              onPressed: () {
-                activeSpacesEntry.getSpace(context) == null
-                    ? VRouter.of(context).to('/newroom')
-                    : VRouter.of(context).to('/newroom', queryParameters: {
-                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
-                      });
-              },
-              icon: const Icon(Icons.add));
-        }
-        else {
-          return Container();
-        }
-      } else {
-        return Container();
-      }
-    }
-  }
+
 
   @override
   void initState() {
