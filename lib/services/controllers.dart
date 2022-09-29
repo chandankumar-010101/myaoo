@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -27,18 +26,20 @@ class PangeaControllers extends GetxController {
 
   ///show toast message
   static toastMsg({bool success = false, String msg = ""}){
+
     success?Fluttertoast.showToast(
         msg: msg,
         fontSize: 16.0,
         backgroundColor: const Color(0xFF5625BA),
         webBgColor: "#5625BA",
         textColor: Colors.white
-       ):Fluttertoast.showToast(
-        msg: msg,
-        fontSize: 16.0,
-        webBgColor: "#ff0000",
-        backgroundColor: Colors.red,
+    ):Fluttertoast.showToast(
+      msg: msg,
+      fontSize: 16.0,
+      webBgColor: "#ff0000",
+      backgroundColor: Colors.red,
       textColor: Colors.white,
     );
+
   }
 }

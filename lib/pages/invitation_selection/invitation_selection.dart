@@ -15,7 +15,8 @@ class InvitationSelection extends StatefulWidget {
   const InvitationSelection({Key? key}) : super(key: key);
 
   @override
-  InvitationSelectionController createState() => InvitationSelectionController();
+  InvitationSelectionController createState() =>
+      InvitationSelectionController();
 }
 
 class InvitationSelectionController extends State<InvitationSelection> {
@@ -35,7 +36,10 @@ class InvitationSelectionController extends State<InvitationSelection> {
       (u) => ![Membership.join, Membership.invite].contains(u.membership),
     );
     final participantsIds = participants.map((p) => p.stateKey).toList();
-    final contacts = client.rooms.where((r) => r.isDirectChat).map((r) => r.unsafeGetUserFromMemoryOrFallback(r.directChatMatrixID!)).toList()
+    final contacts = client.rooms
+        .where((r) => r.isDirectChat)
+        .map((r) => r.unsafeGetUserFromMemoryOrFallback(r.directChatMatrixID!))
+        .toList()
       ..removeWhere((u) => participantsIds.contains(u.stateKey));
     contacts.sort(
       (a, b) => a.calcDisplayname().toLowerCase().compareTo(
@@ -56,7 +60,7 @@ class InvitationSelectionController extends State<InvitationSelection> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Contact has been invited to room."),
+        content: Text("Contact has been invited to chat."),
         backgroundColor: Colors.green,
       ));
     }
@@ -94,7 +98,8 @@ class InvitationSelectionController extends State<InvitationSelection> {
     }
     setState(() {
       foundProfiles = List<Profile>.from(response.results);
-      if (text.isValidMatrixId && foundProfiles.indexWhere((profile) => text == profile.userId) == -1) {
+      if (text.isValidMatrixId &&
+          foundProfiles.indexWhere((profile) => text == profile.userId) == -1) {
         setState(() => foundProfiles = [
               Profile.fromJson({'user_id': text}),
             ]);
@@ -103,9 +108,11 @@ class InvitationSelectionController extends State<InvitationSelection> {
           .client
           .getRoomById(roomId!)!
           .getParticipants()
-          .where((user) => [Membership.join, Membership.invite].contains(user.membership))
+          .where((user) =>
+              [Membership.join, Membership.invite].contains(user.membership))
           .toList();
-      foundProfiles.removeWhere((profile) => participants.indexWhere((u) => u.id == profile.userId) != -1);
+      foundProfiles.removeWhere((profile) =>
+          participants.indexWhere((u) => u.id == profile.userId) != -1);
     });
   }
 

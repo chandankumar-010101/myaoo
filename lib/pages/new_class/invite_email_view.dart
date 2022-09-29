@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
@@ -28,12 +27,12 @@ class _InviteEmailState extends State<InviteEmail> {
       value = value + 1;
     });
   }
+
   _removeItem() {
     setState(() {
       value = value - 1;
     });
   }
-
 
   @override
   void initState() {
@@ -52,13 +51,16 @@ class _InviteEmailState extends State<InviteEmail> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            context.vRouter.to("/invite_students",
-                queryParameters: {
-                  "id": roomId,
-                });
+            context.vRouter.to("/invite_students", queryParameters: {
+              "id": roomId,
+            });
           },
         ),
-        title: Text("Invitations", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white)),
+        title: Text("Invitations",
+            style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                color: Colors.white)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -70,8 +72,7 @@ class _InviteEmailState extends State<InviteEmail> {
             ),
             Form(
               key: _formKey,
-              child:
-              ListView.builder(
+              child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: value,
                   itemBuilder: (context, index) {
@@ -84,7 +85,15 @@ class _InviteEmailState extends State<InviteEmail> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Text("Name", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Theme.of(context).textTheme.bodyText1!.color,)),
+                              child: Text("Name",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                  )),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 10, right: 10),
@@ -93,14 +102,17 @@ class _InviteEmailState extends State<InviteEmail> {
                               child: TextFormField(
                                 controller: name[index],
                                 keyboardType: TextInputType.text,
-                                validator: (value) => value!.isEmpty ? "Please type user name" : null,
+                                validator: (value) => value!.isEmpty
+                                    ? "Please type user name"
+                                    : null,
                                 keyboardAppearance: Brightness.light,
                                 textAlignVertical: TextAlignVertical.center,
                                 textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(12),
                                   hintText: "Enter Name",
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20)),
                                 ),
                               ),
                             )
@@ -111,15 +123,27 @@ class _InviteEmailState extends State<InviteEmail> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:const EdgeInsets.all(10.0),
-                              child: Text("Recipient's email", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Theme.of(context).textTheme.bodyText1!.color,)),
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text("Recipient's email",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                  )),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 10, right: 10),
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
                               // height: 45,
                               width: size.width / 3,
                               child: TextFormField(
-                                validator: (value) => EmailValidator.validate(value!) ? null : 'Please enter a valid email',
+                                validator: (value) =>
+                                    EmailValidator.validate(value!)
+                                        ? null
+                                        : 'Please enter a valid email',
                                 controller: email[index],
                                 keyboardType: TextInputType.emailAddress,
                                 keyboardAppearance: Brightness.light,
@@ -146,7 +170,7 @@ class _InviteEmailState extends State<InviteEmail> {
             Row(
               children: [
                 InkWell(
-                  child:  Row(
+                  child: Row(
                     children: [
                       const SizedBox(
                         height: 20,
@@ -161,12 +185,15 @@ class _InviteEmailState extends State<InviteEmail> {
                       ),
                       Text(
                         "Add Recipient",
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                        ),
                       )
-
                     ],
                   ),
-                  onTap: (){
+                  onTap: () {
                     if (_formKey.currentState!.validate()) {
                       _addItem();
                       name.add(TextEditingController());
@@ -174,37 +201,47 @@ class _InviteEmailState extends State<InviteEmail> {
                     }
                   },
                 ),
-                SizedBox(width: 10,),
-                value >1?
-                InkWell(
-                  child:  Row(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                        width: 17,
-                      ),
-                      Icon(
-                        Icons.remove_circle_outline_sharp,
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                      ),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      Text(
-                        "Remove Recipient",
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+                SizedBox(
+                  width: 10,
+                ),
+                value > 1
+                    ? InkWell(
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              width: 17,
+                            ),
+                            Icon(
+                              Icons.remove_circle_outline_sharp,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              "Remove Recipient",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                              ),
+                            )
+                          ],
+                        ),
+                        onTap: () {
+                          if (value != 1) {
+                            _removeItem();
+                            name.removeLast();
+                            email.removeLast();
+                          }
+                        },
                       )
-
-                    ],
-                  ),
-                  onTap: (){
-                    if(value !=1){
-                      _removeItem();
-                      name.removeLast();
-                      email.removeLast();
-                    }
-                  },
-                ):Container(),
+                    : Container(),
               ],
             ),
             Center(
@@ -214,35 +251,45 @@ class _InviteEmailState extends State<InviteEmail> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.onPrimary == Colors.white
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).colorScheme.onPrimary,
-                      )),
-                  child: Text("Send Invitation",style: TextStyle(
-                      fontWeight: FontWeight.w500,color: Colors.white
-                  ),),
+                    Theme.of(context).colorScheme.onPrimary == Colors.white
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).colorScheme.onPrimary,
+                  )),
+                  child: Text(
+                    "Send Invitation",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500, color: Colors.white),
+                  ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final List<inviteEmail.Data> info = [];
                       List.generate(
                           name.length,
-                              (index) => info.add(inviteEmail.Data(
-                            email: email[index].text,
-                            name: name[index].text,
-                          )));
+                          (index) => info.add(inviteEmail.Data(
+                                email: email[index].text,
+                                name: name[index].text,
+                              )));
 
                       if (roomId.isEmpty) {
-                        PangeaControllers.toastMsg(msg: "Unable to find Room ID");
+                        PangeaControllers.toastMsg(
+                            msg: "Unable to find Chat ID");
                         return;
                       }
-                      String teacherName = Matrix.of(context).client.getRoomById(roomId)!.displayname ?? "";
+                      String teacherName = Matrix.of(context)
+                              .client
+                              .getRoomById(roomId)!
+                              .displayname ??
+                          "";
                       if (teacherName.isEmpty) {
-                        PangeaControllers.toastMsg(msg: "Unable to find teacher name");
+                        PangeaControllers.toastMsg(
+                            msg: "Unable to find teacher name");
                         return;
                       }
 
                       if (info.isNotEmpty) {
-                        await PangeaServices.sendEmailToJoinClass(info, roomId, teacherName).whenComplete(() {
+                        await PangeaServices.sendEmailToJoinClass(
+                                info, roomId, teacherName)
+                            .whenComplete(() {
                           name.clear();
                           email.clear();
                           name.add(TextEditingController());
@@ -250,11 +297,8 @@ class _InviteEmailState extends State<InviteEmail> {
                           setState(() {
                             value = 1;
                           });
-                          setState(() {
-                          });
-
+                          setState(() {});
                         });
-
                       }
                     }
                   },

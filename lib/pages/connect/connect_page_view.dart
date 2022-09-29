@@ -74,20 +74,16 @@ class ConnectPageView extends StatelessWidget {
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 550),
                         child: ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                          child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   // color: Colors.white.withOpacity(0.3),
                                   color: Colors.grey.shade100.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(15.0),
-                                  border: Border.all(
-                                      width: 1, color: Colors.white)),
+                                  border: Border.all(width: 1, color: Colors.white)),
                               child: Column(
                                 children: [
-                                  if (Matrix.of(context)
-                                          .loginRegistrationSupported ??
-                                      false) ...[
+                                  if (Matrix.of(context).loginRegistrationSupported ??false) ...[
                                     const SizedBox(height: 20.0),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
@@ -153,36 +149,33 @@ class ConnectPageView extends StatelessWidget {
                                           const BoxConstraints(maxWidth: 400),
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
-                                        child: SizedBox(
-                                          //height: 50,
-                                          child: TextField(
-                                            controller:
-                                                controller.usernameController,
-                                            onSubmitted: (_) =>
-                                                controller.signUp(),
-                                            style: FluffyThemes
-                                                .loginTextFieldStyle,
-                                            decoration: InputDecoration(
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 8.0,
-                                                      horizontal: 10.0),
-                                              fillColor:
-                                                  const Color(0xFFDADDE2),
-                                              filled: true,
-                                              errorText: controller.signupError,
-                                              hintText: L10n.of(context)!
-                                                  .chooseAUsername,
-                                              hintStyle: const TextStyle(
-                                                  color: Color(0x35204880)),
-                                              prefixIcon: SvgPicture.asset(
-                                                "assets/newAssets/userIcon.svg",
-                                                fit: BoxFit.scaleDown,
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50.0),
-                                              ),
+                                        child:TextField(
+                                          controller:
+                                          controller.usernameController,
+                                          onSubmitted: (_) =>
+                                              controller.signUp(),
+                                          style: FluffyThemes
+                                              .loginTextFieldStyle,
+                                          decoration: InputDecoration(
+                                            contentPadding:
+                                            EdgeInsets.symmetric(
+                                                vertical: 8.0,
+                                                horizontal: 10.0),
+                                            fillColor:
+                                            const Color(0xFFDADDE2),
+                                            filled: true,
+                                            errorText: controller.signupError,
+                                            hintText: L10n.of(context)!
+                                                .chooseAUsername,
+                                            hintStyle: const TextStyle(
+                                                color: Color(0x35204880)),
+                                            prefixIcon: SvgPicture.asset(
+                                              "assets/newAssets/userIcon.svg",
+                                              fit: BoxFit.scaleDown,
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(50.0),
                                             ),
                                           ),
                                         ),
@@ -192,7 +185,7 @@ class ConnectPageView extends StatelessWidget {
                                       constraints:
                                           const BoxConstraints(maxWidth: 400),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                         child: Hero(
                                           tag: 'loginButton',
                                           child: ElevatedButton(
@@ -212,6 +205,7 @@ class ConnectPageView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: 10,),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -242,7 +236,7 @@ class ConnectPageView extends StatelessWidget {
                                     ),
                                     errorWidget(context, controller.loginError),
                                     SizedBox(
-                                      height: 20,
+                                      height: 10,
                                     )
                                   ],
                                   if (controller.supportsSso)
@@ -327,9 +321,7 @@ class ConnectPageView extends StatelessWidget {
                                                   ),
                                           ),
                                   errorWidget(context, controller.ssoError),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
+
                                   ConstrainedBox(
                                     constraints: BoxConstraints(maxWidth: 400),
                                     child: Row(children: [
@@ -351,16 +343,23 @@ class ConnectPageView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: () =>
-                          launch(AppConfig.privacyUrl),
-                      child: Text(
-                        L10n.of(context)!.privacy,
-                        style: const TextStyle(
-                          decoration:
-                          TextDecoration.underline,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: InkWell(
+                        onTap: () =>
+                            launch(AppConfig.privacyUrl),
+                        child: Text(
+                          L10n.of(context)!.privacy,
+                          style: const TextStyle(
+                            decoration:
+                            TextDecoration.underline,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),

@@ -1,6 +1,6 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'controllers.dart';
 
@@ -12,7 +12,7 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Bad request",success: false);
+        PangeaControllers.toastMsg(msg: "Exception $statusCode: ${jsonDecode(body)["error"]}",success: false);
 
         return;
       case 401:

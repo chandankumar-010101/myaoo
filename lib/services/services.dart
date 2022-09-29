@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -149,6 +148,7 @@ class PangeaServices {
         final ClassCodeModel data =
             ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
+
           final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
           if (exit != null) {
             if (!exit) {
@@ -253,7 +253,8 @@ class PangeaServices {
             success: true);
       }
     } else {
-      PangeaControllers.toastMsg(msg: "Unable to Fetch Room", success: false);
+      PangeaControllers.toastMsg(msg: "Unable to Fetch Chat", success: false);
+
     }
   }
 
@@ -515,7 +516,9 @@ class PangeaServices {
   }) async {
     PangeaServices._init();
     if (classRoom == null) {
-      PangeaControllers.toastMsg(msg: "Token expired or unable to find room ");
+      PangeaControllers.toastMsg(msg: "Token expired or unable to find chat ");
+
+
       return;
     }
     try {

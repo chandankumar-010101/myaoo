@@ -6,7 +6,6 @@ import 'package:flutter/src/widgets/visibility.dart' as vis;
 
 import 'package:animations/animations.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
@@ -318,7 +317,25 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   // Todo: Style needs to be updated
                                 ),
                               ),
-                            Obx(()=>widget.controller.checkRoomPermissions()),
+                             widget.controller.userType ==2?IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Obx(()=>widget.controller.chatListController.permissions.value!.isCreateRooms?
+                             IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Container()),
+
                             ],
                           )),
                       body: rooms.length == 0
@@ -446,7 +463,24 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   "Rooms",
                                 ),
                               ),
-                              Obx(()=>widget.controller.checkRoomPermissions()),
+                              widget.controller.userType ==2?IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Obx(()=>widget.controller.chatListController.permissions.value!.isCreateRooms?
+                              IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Container()),
                             ],
                           )),
                       body: rooms.length == 0

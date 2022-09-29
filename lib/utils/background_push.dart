@@ -293,7 +293,7 @@ class BackgroundPush {
 
   Future<void> goToRoom(String? roomId) async {
     try {
-      Logs().v('[Push] Attempting to go to room $roomId...');
+      Logs().v('[Push] Attempting to go to chat $roomId...');
       if (router == null || roomId == null) {
         return;
       }
@@ -305,9 +305,9 @@ class BackgroundPush {
               ?.content
               .tryGet<String>('type') ==
           ClientStoriesExtension.storiesRoomType;
-      router!.currentState!.toSegments([isStory ? 'stories' : 'rooms', roomId]);
+      router!.currentState!.toSegments([isStory ? 'stories' : 'chats', roomId]);
     } catch (e, s) {
-      Logs().e('[Push] Failed to open room', e, s);
+      Logs().e('[Push] Failed to open chat', e, s);
     }
   }
 

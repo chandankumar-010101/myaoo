@@ -6,7 +6,6 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -307,38 +306,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   }
 
   ///check create room permissions
-  checkRoomPermissions() {
-    if (userType == 2) {
-      return IconButton(
-          onPressed: () {
-            activeSpacesEntry.getSpace(context) == null
-                ? VRouter.of(context).to('/newroom')
-                : VRouter.of(context).to('/newroom', queryParameters: {
-                    "spaceId": activeSpacesEntry.getSpace(context)!.id,
-                  });
-          },
-          icon: const Icon(Icons.add));
-    } else {
-      if (chatListController.permissions.value != null) {
-        if (chatListController.permissions.value!.isCreateRooms) {
-          return IconButton(
-              onPressed: () {
-                activeSpacesEntry.getSpace(context) == null
-                    ? VRouter.of(context).to('/newroom')
-                    : VRouter.of(context).to('/newroom', queryParameters: {
-                        "spaceId": activeSpacesEntry.getSpace(context)!.id,
-                      });
-              },
-              icon: const Icon(Icons.add));
-        }
-        else {
-          return Container();
-        }
-      } else {
-        return Container();
-      }
-    }
-  }
+
 
   @override
   void initState() {
