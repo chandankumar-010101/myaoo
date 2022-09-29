@@ -213,8 +213,8 @@ class _StudentPermissionsState extends State<StudentPermissions> {
                   icon: const Icon(Icons.arrow_back, color: Colors.black),
                   onPressed: () {
                     context.vRouter.to("/newclass/class_permissions");
-                    print(ModalRoute.of(context)!.settings.name);
-                    print(Uri.base);
+                    // print(ModalRoute.of(context)!.settings.name);
+                    // print(Uri.base);
                   },
                 ),
               )

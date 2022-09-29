@@ -44,7 +44,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
         title: const Text("Class Profile"),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, roomAlias),
+        future: roomAlias.isNotEmpty?PangeaServices.fetchClassInfo(context, roomAlias):null,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data =
