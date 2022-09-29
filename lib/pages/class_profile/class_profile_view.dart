@@ -27,6 +27,7 @@ class RequestScreenView extends StatefulWidget {
 class _RequestScreenViewState extends State<RequestScreenView> {
   final box = GetStorage();
 
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -35,7 +36,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     final String url = data[0];
 
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
-    widget.controller.fetchSpaceInfo(roomAlias);
+    widget.controller.classController.isUserExist(roomAlias);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -603,72 +604,73 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ? MainAxisAlignment.start
                                     : MainAxisAlignment.center,
                                 children: [
-                                  widget.controller.space.isEmpty
+                                  Obx(()=> widget.controller.classController.userExistInClass.value
                                       ? (data.permissions.isOpenEnrollment
-                                          ? SizedBox(
-                                              width: 200,
-                                              child: OutlinedButton(
-                                                style: OutlinedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25.0)),
-                                                  side: BorderSide(
-                                                    width: 2,
-                                                    color: Theme.of(context)
-                                                                .colorScheme
-                                                                .onPrimary ==
-                                                            Colors.white
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                  ),
-                                                ),
-                                                onPressed: () async {
-                                                  final confirmed =
-                                                      await showOkCancelAlertDialog(
-                                                    useRootNavigator: false,
-                                                    context: context,
-                                                    title: L10n.of(context)!
-                                                        .areYouSure,
-                                                    okLabel:
-                                                        L10n.of(context)!.ok,
-                                                    cancelLabel:
-                                                        L10n.of(context)!
-                                                            .cancel,
-                                                  );
-                                                  if (confirmed ==
-                                                      OkCancelResult.ok) {
-                                                    if (roomAlias.isNotEmpty) {
-                                                      UrlLauncher(
-                                                              context,
-                                                              requestToEnroll:
-                                                                  true,
-                                                              roomId: roomAlias,
-                                                              'https://matrix.to/#/${data.classAuthorId.toString()}')
-                                                          .openMatrixToUrl();
-                                                    }
-                                                  }
-                                                },
-                                                child: Text(
-                                                  "Request an Enroll",
-                                                  style: const TextStyle()
-                                                      .copyWith(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1!
-                                                                  .color,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontSize: 12),
-                                                ),
-                                              ),
-                                            )
-                                          : Container())
-                                      : Container(),
+                                      ? SizedBox(
+                                    width: 200,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                25.0)),
+                                        side: BorderSide(
+                                          width: 2,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary ==
+                                              Colors.white
+                                              ? Theme.of(context)
+                                              .primaryColor
+                                              : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        final confirmed =
+                                        await showOkCancelAlertDialog(
+                                          useRootNavigator: false,
+                                          context: context,
+                                          title: L10n.of(context)!
+                                              .areYouSure,
+                                          okLabel:
+                                          L10n.of(context)!.ok,
+                                          cancelLabel:
+                                          L10n.of(context)!
+                                              .cancel,
+                                        );
+                                        if (confirmed ==
+                                            OkCancelResult.ok) {
+                                          if (roomAlias.isNotEmpty) {
+                                            UrlLauncher(
+                                                context,
+                                                requestToEnroll:
+                                                true,
+                                                roomId: roomAlias,
+                                                'https://matrix.to/#/${data.classAuthorId.toString()}')
+                                                .openMatrixToUrl();
+                                          }
+                                        }
+                                      },
+                                      child: Text(
+                                        "Request an Enroll",
+                                        style: const TextStyle()
+                                            .copyWith(
+                                            color:
+                                            Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                            fontWeight:
+                                            FontWeight.w400,
+                                            fontSize: 12),
+                                      ),
+                                    ),
+                                  )
+                                      : Container())
+                                      : Container(),),
+                                  
                                   SizedBox(
                                     width: 10,
                                     height: 10,
@@ -831,7 +833,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    widget.controller.getxController
+                                    widget.controller.pangeaController
                                         .throughClassProfile.value = true;
                                   },
                                   child: Text(

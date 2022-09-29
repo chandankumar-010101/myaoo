@@ -169,8 +169,7 @@ class ChatView extends StatelessWidget {
             builder: (BuildContext context, snapshot) {
               return Scaffold(
                 appBar: AppBar(
-                  actionsIconTheme: IconThemeData(
-                    color: controller.selectedEvents.isEmpty
+                  actionsIconTheme: IconThemeData(color: controller.selectedEvents.isEmpty
                         ? null
                         : Theme.of(context).colorScheme.primary,
                   ),

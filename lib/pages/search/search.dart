@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/services/controllers.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/utils/famedlysdk_store.dart';
@@ -23,20 +24,39 @@ class SearchController extends State<Search> {
   final TextEditingController controller = TextEditingController();
   Future<QueryPublicRoomsResponse>? publicRoomsResponse;
   String? lastServer;
-  Timer? _coolDown;
+
   String? genericSearchTerm;
 
-  void search(String query) async {
-    setState(() {});
-    _coolDown?.cancel();
-    _coolDown = Timer(
-      const Duration(milliseconds: 500),
-      () => setState(() {
+  Timer? timerForDelay;
+
+  onChangeHandler(value) {
+
+   if (timerForDelay != null) {
+      setState(() => timerForDelay!.cancel()); // clear timer
+    }
+    setState(() => timerForDelay = Timer(const Duration(milliseconds:800), () => search(value)));
+  }
+  search(String query) async {
+    if(query.length > 2){
+      print("Search");
+      setState(() {
         genericSearchTerm = query;
         publicRoomsResponse = null;
-        searchUser(context, controller.text);
-      }),
-    );
+      });
+
+      try {
+        final response = await Matrix.of(context).client.searchUserDirectory(query, limit: searchUserDirectoryLimit);
+        foundProfiles = List<Profile>.from(response.results ?? []);
+        if (foundProfiles.isEmpty && query.isValidMatrixId && query.sigil == '@') {
+          foundProfiles.add(Profile.fromJson({'displayname': query.localpart,'user_id': query}));
+        }
+      } catch (e) {
+        PangeaControllers.toastMsg(msg: "Error $e");
+      }
+
+      setState(() {});
+    }
+
   }
 
   void joinGroupAction(PublicRoomsChunk room) {
@@ -80,32 +100,6 @@ class SearchController extends State<Search> {
   List<Profile> foundProfiles = [];
 
   static const searchUserDirectoryLimit = 10;
-
-  void searchUser(BuildContext context, String text) async {
-    if (text.isEmpty) {
-      setState(() {
-        foundProfiles = [];
-      });
-    }
-    currentSearchTerm = text;
-    if (currentSearchTerm?.isEmpty ?? true) return;
-    final matrix = Matrix.of(context);
-    SearchUserDirectoryResponse? response;
-    try {
-      response = await matrix.client.searchUserDirectory(
-        text,
-        limit: searchUserDirectoryLimit,
-      );
-    } catch (_) {}
-    foundProfiles = List<Profile>.from(response?.results ?? []);
-    if (foundProfiles.isEmpty && text.isValidMatrixId && text.sigil == '@') {
-      foundProfiles.add(Profile.fromJson({
-        'displayname': text.localpart,
-        'user_id': text,
-      }));
-    }
-    setState(() {});
-  }
 
   @override
   void initState() {

@@ -25,13 +25,13 @@ class ConnectPageView extends StatelessWidget {
     final identityProviders = controller.identityProviders;
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: Colors.transparent,
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      //   elevation: 0,
+      //   centerTitle: true,
+      // ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
