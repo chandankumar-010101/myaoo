@@ -47,7 +47,6 @@ abstract class PlatformInfos {
       context: context,
       useRootNavigator: false,
       children: [
-        Text('Version: $version'),
         OutlinedButton(
           onPressed: () => launch(AppConfig.sourceCodeUrl),
           child: Text(L10n.of(context)!.sourceCode),
