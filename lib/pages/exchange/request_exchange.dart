@@ -1,6 +1,5 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';

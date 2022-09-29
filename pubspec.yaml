@@ -53,7 +53,7 @@ dependencies:
   flutter_typeahead: ^3.2.5
   flutter_web_auth: ^0.4.0
   flutter_webrtc: ^0.8.7
-  fluttertoast: ^8.0.9
+
   future_loading_dialog: ^0.2.3
   geolocator: ^7.6.2
   get: ^4.6.5
