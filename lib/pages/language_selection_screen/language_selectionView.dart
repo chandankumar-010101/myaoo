@@ -127,6 +127,9 @@ class LanguageSelectionView extends StatelessWidget {
                         },
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     const Center(
                       child: Text(
                         "What is your first language",
