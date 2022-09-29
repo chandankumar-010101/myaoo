@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
+import '../../model/report_user_model.dart';
+import '../../services/controllers.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import 'user_bottom_sheet_view.dart';
@@ -15,10 +19,12 @@ class UserBottomSheet extends StatefulWidget {
   final User user;
   final Function? onMention;
   final BuildContext outerContext;
+  final Room? room;
 
   const UserBottomSheet({
     Key? key,
     required this.user,
+    this.room,
     required this.outerContext,
     this.onMention,
   }) : super(key: key);
@@ -28,6 +34,8 @@ class UserBottomSheet extends StatefulWidget {
 }
 
 class UserBottomSheetController extends State<UserBottomSheet> {
+  math.Random random = new math.Random();
+  String? selectedOption;
   void participantAction(String action) async {
     // ignore: prefer_function_declarations_over_variables
     final Function _askConfirmation = () async => (await showOkCancelAlertDialog(
@@ -79,21 +87,48 @@ class UserBottomSheetController extends State<UserBottomSheet> {
                 score: score,
               ),
         );
-        if (result.error != null){
-          PangeaServices.requestEmail(
-            "harsh",
-            "mailto:harsh@gmail.com",
-            "no",
-            "mailto:harsh@123gmail.com",
-            "inoffensive",
-            reason.single,
-          );
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(L10n.of(context)!.contentHasBeenReported),
-            backgroundColor: Colors.red,
-          ));
-        }
 
+        if (result.error != "null") {
+          print(score);
+          print("object");
+          switch (score) {
+            case -100:
+              selectedOption = "Extremely Offensive";
+              break;
+            case -50:
+              selectedOption = "Offensive";
+              break;
+            case 0:
+              selectedOption = "Inoffensive";
+              break;
+          }
+          print("Report Data:" +
+              ReportUser(
+                classRoomName: widget.room!.name,
+                classTeacherName: "naveen",
+                reportedUser: event.displayName,
+                classTeacherEmail: "naveen.kumar@oodles.io",
+                offensive: selectedOption,
+                reason: reason.single.toString(),
+              ).toJson().toString());
+
+          PangeaServices.reportUser(
+            classRoomNamedata: widget.room!.name,
+            classTeacherEmaildata: "naveen.kumar@oodles.io",
+            classTeacherNamedata: "naveen",
+            offensivedata: selectedOption,
+            reasondata: reason.single.toString(),
+            reportedUserdata: event.displayName,
+          );
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text("You don't have email right now"),
+          //   backgroundColor: Colors.red,
+          // ));
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text(L10n.of(context)!.contentHasBeenReported),
+          //   backgroundColor: Colors.red,
+          // ));
+        }
 
         break;
       case 'mention':
@@ -139,12 +174,52 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         }
         break;
       case 'message':
-        final roomIdResult = await showFutureLoadingDialog(
+        final matrix = Matrix.of(context);
+        final spaceid = widget.room!.spaceParents != null && widget.room!.spaceParents.isNotEmpty ? widget.room!.spaceParents.first.roomId! : "";
+        //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
+        final roomID = await showFutureLoadingDialog(
           context: context,
-          future: () => widget.user.startDirectChat(enableEncryption: false),
+          future: () => matrix.client.createRoom(
+            invite: [widget.user.id],
+            preset: CreateRoomPreset.privateChat,
+            isDirect: true,
+            initialState: [
+              StateEvent(
+                content: {
+                  "guest_access": "can_join",
+                },
+                type: EventTypes.GuestAccess,
+                stateKey: "",
+              ),
+              StateEvent(content: {
+                "via": ["matrix.staging.pangea.chat"],
+                "canonical": true
+              }, type: EventTypes.spaceParent, stateKey: spaceid != null && spaceid != "" ? spaceid : ""),
+            ],
+            // creationContent: {'type': RoomCreationTypes.mSpace},
+            roomAliasName: widget.user.displayName! +
+                "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                "#" +
+                random.nextInt(9999).toString(),
+            name: widget.user.displayName! +
+                "-" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
+                "#" +
+                random.nextInt(9999).toString(),
+          ),
         );
-        if (roomIdResult.error != null) return;
-        VRouter.of(widget.outerContext).toSegments(['rooms', roomIdResult.result!]);
+        if (roomID.result != null) {
+
+          VRouter.of(context).pop();
+
+          PangeaControllers.toastMsg(msg: "Created Successfully",success: true);
+          }
+        if (roomID == null) {
+          VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+        }
+
+        VRouter.of(widget.outerContext).toSegments(['rooms', roomID.result!]);
         Navigator.of(context, rootNavigator: false).pop();
         break;
       case 'ignore':
@@ -153,7 +228,6 @@ class UserBottomSheetController extends State<UserBottomSheet> {
         }
     }
   }
-
 
   @override
   Widget build(BuildContext context) => UserBottomSheetView(this);

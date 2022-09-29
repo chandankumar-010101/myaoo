@@ -8,13 +8,14 @@ import 'package:pangeachat/widgets/layouts/max_width_body.dart';
 class NewGroupView extends StatelessWidget {
   final NewGroupController controller;
   final String spaceId;
-  const NewGroupView(this.controller, this.spaceId, {Key? key}) : super(key: key);
+  const NewGroupView(this.controller, this.spaceId, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.of(context)!.createNewGroup),
+        title: Text("Create new chat"),
       ),
       body: MaxWidthBody(
         child: Column(
@@ -29,13 +30,13 @@ class NewGroupView extends StatelessWidget {
                 textInputAction: TextInputAction.go,
                 onSubmitted: controller.submitAction,
                 decoration: InputDecoration(
-                    labelText: L10n.of(context)!.optionalGroupName,
+                    labelText: "(Optional) Chat name",
                     prefixIcon: const Icon(Icons.people_outlined),
-                    hintText: L10n.of(context)!.enterAGroupName),
+                    hintText: "Enter a chat name"),
               ),
             ),
             SwitchListTile.adaptive(
-              title: Text(L10n.of(context)!.groupIsPublic),
+              title: Text("Chat is public"),
               value: controller.publicGroup,
               onChanged: controller.setPublicGroup,
             ),

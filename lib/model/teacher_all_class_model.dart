@@ -56,6 +56,7 @@ class Result {
     this.rating,
     this.profilePic,
     this.totalStudent,
+    this.isExchange,
   });
 
   int? id;
@@ -76,6 +77,8 @@ class Result {
   int? rating;
   dynamic profilePic;
   int? totalStudent;
+   bool? isExchange;
+
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     id: json["id"],
@@ -96,6 +99,8 @@ class Result {
     rating: json["rating"],
     profilePic: json["profile_pic"],
     totalStudent: json["total_student"],
+    isExchange:  json['is_exchange']??false,
+
   );
 
   Map<String, dynamic> toJson() => {

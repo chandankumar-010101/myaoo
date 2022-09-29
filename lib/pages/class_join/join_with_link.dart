@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_code_model.dart';
@@ -7,6 +7,7 @@ import 'package:pangeachat/services/services.dart';
 
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
 import '../../widgets/matrix.dart';
 
 class JoinClassWithLink extends StatefulWidget {
@@ -25,20 +26,32 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       final box = GetStorage();
       box.write("classCode", classCode);
       Future.delayed(const Duration(seconds: 2), () {
-        print("data added to box");
         VRouter.of(context).to('/home');
       });
     } else {
-      print("unable to find classcode");
 
-      Fluttertoast.showToast(msg: "Unable to find class code", webBgColor: Colors.red, backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg: "Unable to find class code");
+      }
+  }
+  joinTheClass(String classId) async {
+    final int? usertype =  GetStorage().read("usertype");
+    if( usertype !=null && usertype !=2){
+      final bool? exist = await PangeaServices.userExitInClass(classId);
+      if(exist !=null && !exist){
+        PangeaServices.joinRoom(context, classId);
+      }else{
+        PangeaControllers.toastMsg(msg: "You are already a part of this class");
+      }
+    }else{
+      PangeaControllers.toastMsg(msg: "Teacher are not allowed to join class");
     }
+
   }
 
 
   @override
   Widget build(BuildContext context) {
-    classCode = VRouter.of(context).queryParameters['class_code'] ?? "";
+    classCode = VRouter.of(context).queryParameters['code'] ?? "";
 
 
     if (Matrix.of(context).client.loginState == LoginState.loggedOut) {
@@ -48,17 +61,12 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
       );
     } else {
       if (classCode.isEmpty) {
-
         return const Scaffold(
           body: Center(
             child: Text("Unable to find the Code"),
           ),
         );
-
-
       } else {
-
-
         return Scaffold(
           appBar: AppBar(
             leading: InkWell(
@@ -72,8 +80,6 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
           ),
           body: Center(
               child: FutureBuilder(
-
-
             future: PangeaServices.fetchClassWithCode(classCode, context),
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
@@ -101,16 +107,15 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: ElevatedButton(
                             child: const Text("Connect To Class"),
-                            onPressed: () {
-                              PangeaServices.joinRoom(
-                                  context, data.pangeaClassRoomId!);
+                            onPressed: () async {
+                              joinTheClass(data.pangeaClassRoomId!);
                             },
                           ),
                         )
@@ -118,11 +123,15 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                     ),
                   ),
                 );
-              } else if (snapshot.hasError) {
-                print(snapshot.error);
+              }
+              else if (snapshot.hasError) {
+                if (kDebugMode) {
+                  print(snapshot.error);
+                }
                 return CircularProgressIndicator();
-              } else {
-                return CircularProgressIndicator();
+              }
+              else {
+                return const CircularProgressIndicator();
               }
             },
           )),

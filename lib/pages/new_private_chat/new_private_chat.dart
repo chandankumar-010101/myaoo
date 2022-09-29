@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
@@ -24,6 +23,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
+import '../../services/controllers.dart';
 import '../chat_list/spaces_entry.dart';
 
 import 'package:matrix/matrix.dart' as sdk;
@@ -90,10 +90,8 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     String className = classId.isNotEmpty
         ? matrix.client.getRoomById(classId)!.displayname
         : "";
-    Fluttertoast.showToast(
-        msg: "Functionality under process",
-        webBgColor: Colors.red,
-        backgroundColor: Colors.red);
+    PangeaControllers.toastMsg(msg:  "Functionality under process");
+
 
     matrix.client
         .getDisplayName(controller.text)
@@ -164,10 +162,8 @@ class NewPrivateChatController extends State<NewPrivateChat> {
         print("Room id:" + roomID.result!);
       }
       VRouter.of(context).pop();
-      Fluttertoast.showToast(
-          msg: "Created Successfully",
-          webBgColor: Colors.green,
-          backgroundColor: Colors.green);
+      PangeaControllers.toastMsg(msg:  "Created Successfully",success: true);
+
     }
     if (roomID == null) {
       VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);

@@ -169,19 +169,17 @@ class ChatView extends StatelessWidget {
             builder: (BuildContext context, snapshot) {
               return Scaffold(
                 appBar: AppBar(
-                  actionsIconTheme: IconThemeData(
-                    color: controller.selectedEvents.isEmpty
+                  actionsIconTheme: IconThemeData(color: controller.selectedEvents.isEmpty
                         ? null
                         : Theme.of(context).colorScheme.primary,
                   ),
-                  leading: controller.selectMode
-                      ? IconButton(
+                  leading: controller.selectMode  ? IconButton(
                           icon: const Icon(Icons.close),
                           onPressed: controller.clearSelectedEvents,
                           tooltip: L10n.of(context)!.close,
                           color: Theme.of(context).colorScheme.primary,
-                        )
-                      : UnreadBadgeBackButton(roomId: controller.roomId!),
+                        ) : BackButton(),
+                    //UnreadBadgeBackButton(roomId: controller.roomId!),
                   titleSpacing: 0,
                   title: ChatAppBarTitle(controller),
                   actions: _appBarActions(context),

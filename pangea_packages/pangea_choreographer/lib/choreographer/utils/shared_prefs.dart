@@ -22,7 +22,7 @@ class MyShared {
     try {
       final SharedPreferences _prefs = await SharedPreferences.getInstance();
       String? source = _prefs.getString(key);
-      print(source);
+
       if (source == null) {
         return null;
       }

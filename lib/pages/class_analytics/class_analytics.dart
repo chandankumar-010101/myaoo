@@ -1,541 +1,279 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:pangeachat/config/app_config.dart';
+import 'package:matrix/matrix.dart';
+import 'package:pangeachat/model/class_analytics_model.dart';
+import '../../config/app_config.dart';
+import '../../services/services.dart';
+import '../../widgets/matrix.dart';
+import '../chat_list/spaces_entry.dart';
+import './class_analytics_view.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:vrouter/vrouter.dart';
+import 'table_model.dart';
 
-import 'class_analytics_controller.dart';
+class ClassAnalytics extends StatefulWidget {
+  const ClassAnalytics({Key? key}) : super(key: key);
 
-class ClassAnalyticsScreen extends StatelessWidget {
-  ClassAnalyticsScreen({Key? key}) : super(key: key);
-  final controller = Get.put(ClassAnalyticsController());
+  @override
+  State<ClassAnalytics> createState() => ClassAnalyticsController();
+}
+
+class ClassAnalyticsController extends State<ClassAnalytics> {
+  int _retry = 2;
+  bool isLoading = true;
+  bool isError = false;
+  bool waitForFirstSync = false;
+  bool isCalibratingTable = true;
+  List<MyTableCell> topRow = [];
+  List<MyTableCell> sectionRow = [];
+  List<MyTableCell> classAvgRow = [];
+  List<List<MyTableCell>> userRowList = [];
+  Map<String, String> userInfoHashMap = {};
+  ClassAnalyticsModel? classAnalyticsModel;
+  ScrollController verticalScrollController = ScrollController();
+  ScrollController horizontalScrollController = ScrollController();
+  ScrollController classTabletScrollController = ScrollController();
+  String appBarTitle(BuildContext context) {
+    return 'Class Analytics';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () {
+      fetchClassAnalytics();
+    });
+  }
+
+  String? get spaceId => context.vRouter.pathParameters['spaceid'];
+  SpaceSpacesEntry? _selectedSpacesEntry;
+  SpaceSpacesEntry get selectedSpacesEntry {
+    if (_selectedSpacesEntry == null) {
+      String? spaceId = context.vRouter.pathParameters['spaceid'];
+      spacesEntries.forEach((element) {
+        if (element.space.id == spaceId) {
+          _selectedSpacesEntry = element;
+        }
+      });
+    }
+    return _selectedSpacesEntry!;
+  }
+
+  List<SpaceSpacesEntry> get spacesEntries {
+    return [...spaces.map((space) => SpaceSpacesEntry(space)).toList()];
+  }
+
+  List<Room> get spaces =>
+      Matrix.of(context).client.rooms.where((r) => r.isSpace).toList();
+
+  void changeClass(SpaceSpacesEntry space) {
+    VRouter.of(context).to('/classAnalytics/' + space.space.id);
+    _selectedSpacesEntry = space;
+  }
+
+  void fetchClassAnalytics() async {
+    isLoading = true;
+    isError = false;
+    isCalibratingTable = true;
+    try {
+      if (spaceId == null) {
+        throw Exception();
+      }
+      final String classId = spaceId!;
+      classAnalyticsModel =
+          await PangeaServices.classAnalyticsFromClassId(classId: classId);
+      await _populateUsers(context);
+      _mapTableEntries(classAnalyticsModel!);
+    } catch (err) {
+      isError = true;
+    }
+    isLoading = false;
+    setState(() {});
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      _calibrateTable();
+    });
+  }
+
+  Color get _nameBG {
+    return const Color(0xFFEAEAEA);
+  }
+
+  _mapTableEntries(ClassAnalyticsModel analyticsModel) {
+    topRow = [];
+    sectionRow = [];
+    classAvgRow = [];
+    userRowList = [];
+
+    topRow = [
+      MyTableCell(
+          value: '',
+          bgColor: Theme.of(context).scaffoldBackgroundColor,
+          width: null)
+    ];
+    sectionRow = [MyTableCell(value: 'Name', bgColor: _nameBG, width: null)];
+    classAvgRow = [
+      MyTableCell(
+          value: 'Class avg',
+          bgColor: Theme.of(context).scaffoldBackgroundColor,
+          width: null)
+    ];
+
+    for (final element in analyticsModel.analytics) {
+      topRow.add(MyTableCell(
+          value: element.title,
+          bgColor: Theme.of(context).scaffoldBackgroundColor,
+          width: null));
+      for (final section in element.section) {
+        sectionRow.add(
+            MyTableCell(value: section.title, bgColor: _nameBG, width: null));
+        classAvgRow.add(MyTableCell(
+            value: section.classTotal,
+            bgColor: Theme.of(context).scaffoldBackgroundColor,
+            width: null));
+      }
+    }
+
+    for (int userIndex = 0;
+        userIndex < analyticsModel.userIds.length;
+        userIndex++) {
+      final String userId = analyticsModel.userIds[userIndex];
+      final List<MyTableCell> usersRow = [
+        MyTableCell(
+            value: userInfoHashMap[userId],
+            bgColor: Theme.of(context).scaffoldBackgroundColor,
+            width: null)
+      ];
+      for (final element in analyticsModel.analytics) {
+        for (final section in element.section) {
+          bool isFound = false;
+          if (section.data[userIndex].userId == userId) {
+            isFound = true;
+            usersRow.add(MyTableCell(
+                value: section.data[userIndex].value,
+                bgColor: Theme.of(context).scaffoldBackgroundColor,
+                width: null));
+          } else {
+            for (final data in section.data) {
+              if (data.userId == userId) {
+                isFound = true;
+                usersRow.add(MyTableCell(
+                    value: data.value,
+                    bgColor: Theme.of(context).scaffoldBackgroundColor,
+                    width: null));
+              }
+            }
+          }
+          if (!isFound) {
+            usersRow.add(MyTableCell(
+                value: '',
+                bgColor: Theme.of(context).scaffoldBackgroundColor,
+                width: null));
+          }
+        }
+      }
+      userRowList.add(usersRow);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  _calibrateTable() {
+    try {
+      _secondAndAfterColumnAdjustment();
+      _topColumnAdjustment();
+      _retry = 2;
+    } catch (err) {
+      _retry--;
+      if (_retry > 0) {
+        Future.delayed(Duration(milliseconds: 100), () {
+          _calibrateTable();
+        });
+      } else {
+        isError = true;
+      }
+      print('Exception ' + err.toString());
+    }
+    isCalibratingTable = false;
+    setState(() {});
+  }
+
+  Future<Map<String, ProfileInformation>> _getUserProfile(
+      BuildContext context, String userId) async {
+    ProfileInformation profile =
+        await Matrix.of(context).client.getUserProfile(userId);
+    return {userId: profile};
+  }
+
+  _populateUsers(BuildContext context) async {
+    List<Future<Map<String, ProfileInformation>>> userInfoFutures = [];
+    classAnalyticsModel!.userIds.forEach((element) {
+      userInfoFutures.add(_getUserProfile(context, element));
+    });
+    final response = await Future.wait(userInfoFutures);
+    for (final element in response) {
+      element.forEach((key, value) {
+        print('Key ' + key + ' displyname' + value.displayname!);
+        userInfoHashMap[key] = value.displayname ?? '';
+      });
+    }
+  }
+
+  _secondAndAfterColumnAdjustment() {
+    for (int i = 0; i < sectionRow.length; i++) {
+      double max = 0;
+      // if (topRow[i].width! > max) {
+      //   max = topRow[i].width!;
+      // }
+      if (sectionRow[i].width! > max) {
+        max = sectionRow[i].width!;
+      }
+      if (classAvgRow[i].width! > max) {
+        max = classAvgRow[i].width!;
+      }
+      userRowList.forEach((element) {
+        if (element[i].width! > max) {
+          max = element[i].width!;
+        }
+      });
+      // topRow[i].width = max;
+      sectionRow[i].width = max;
+      classAvgRow[i].width = max;
+      userRowList.forEach((element) {
+        element[i].width = max;
+      });
+    }
+  }
+
+  _topColumnAdjustment() {
+    int index = 0;
+
+    int startIndex = 0;
+    int endIndex = 0;
+    for (final element in topRow) {
+      int noOfSection = 0;
+      if (index == 0) {
+        noOfSection = 1;
+      } else {
+        noOfSection = classAnalyticsModel!.analytics[index - 1].section.length;
+      }
+
+      double accumulativeWidth = 0;
+      startIndex = endIndex;
+      endIndex = startIndex + noOfSection;
+      for (int i = startIndex; i < endIndex; i++) {
+        accumulativeWidth = accumulativeWidth + sectionRow[i].width!;
+      }
+      element.width = accumulativeWidth;
+      index++;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading:
-        const Icon(Icons.arrow_back_ios, color: Colors.black, size: 15),
-        title: const Text("Class Analytics",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400,
-              fontSize: 16.0,
-            )),
-        centerTitle: false,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(50, 50, 50, 10),
-            child: Row(
-              children: [
-                Container(
-                  height: 45,
-                  padding: const EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3.0),
-                      border: Border.all(color: AppConfig.greyBorder)),
-                  child: DropdownButton(
-                    underline: const SizedBox(),
-                    icon: const Icon(Icons.arrow_drop_down_outlined,
-                        color: Colors.black, size: 20),
-                    hint: Obx(() => Center(
-                      child: Text(
-                        controller.classes.value,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.0,
-                            color: Colors.black),
-                      ),
-                    )),
-                    isExpanded: false,
-                    items: ["All Classes", "A1 Spanish", "A2 Spanish"].map(
-                          (val) {
-                        return DropdownMenuItem<String>(
-                          value: val,
-                          child: Center(
-                            child: Text(val,
-                                style: const TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500)),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (String? value) {
-                      controller.classes.value = value!;
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  height: 45,
-                  padding: const EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3.0),
-                      border: Border.all(
-                          color: Theme.of(context).colorScheme.onPrimary)),
-                  child: DropdownButton(
-                    underline: const SizedBox(),
-                    icon: const Icon(Icons.arrow_drop_down_outlined,
-                        color: Colors.black, size: 20),
-                    hint: Obx(() => Center(
-                      child: Text(
-                        controller.sort.value,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.0,
-                            color: Colors.black),
-                      ),
-                    )),
-                    isExpanded: false,
-                    items: ["Minutes in App"].map(
-                          (val) {
-                        return DropdownMenuItem<String>(
-                          value: val,
-                          child: Center(
-                            child: Text(val,
-                                style: const TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500)),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (String? value) {
-                      controller.sort.value = value!;
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: AppConfig.lightGrey,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Most recent engagements",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: AppConfig.lightGrey,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Totals of this past week",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Name",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("In app",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Message",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Minutes in app",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Sent messages",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6.0, horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color:
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  width: 0.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text("Active chats",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0)),
-                          ),
-                        )),
-                  ],
-                ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    itemCount: 6,
-                    itemBuilder: (context, int index) => index % 2 == 0
-                        ? Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("Eliza",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("Today, 4:13pm",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("Today, 4:13pm",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("34",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("153",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("1",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                      ],
-                    )
-                        : Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffF4F4F4),
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("Marta",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffF4F4F4),
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("Today, 2:13pm",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffF4F4F4),
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("Today, 2:13pm",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffF4F4F4),
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("5",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffF4F4F4),
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("12",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 6.0, horizontal: 8.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffF4F4F4),
-                                  border: Border.all(
-                                      color: AppConfig.greyBorder,
-                                      width: 0.5)),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text("2",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.0)),
-                              ),
-                            )),
-                      ],
-                    ))
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+    return ClassAnalyticsView(this);
   }
 }

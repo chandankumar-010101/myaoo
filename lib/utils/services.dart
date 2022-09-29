@@ -1,8 +1,6 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import '../model/flag_model.dart';
+import '../services/controllers.dart';
 import 'api_helper.dart';
 import 'api_urls.dart';
 
@@ -17,7 +15,7 @@ class Services {
       log("Flag Response is $temp");
       countryFlag = temp.map((value) => LanguageFlag.fromJson(value)).toList();
     } else {
-      Fluttertoast.showToast(msg: "Something went wrong", fontSize: 16.0, webBgColor: Colors.green, backgroundColor: Colors.green);
+      PangeaControllers.toastMsg(msg:  "Something went wrong");
     }
     return countryFlag;
   }
@@ -39,7 +37,7 @@ class Services {
         }
       });
     } else {
-      Fluttertoast.showToast(msg: "Something went wrong", fontSize: 16.0, webBgColor: Colors.red, backgroundColor: Colors.red);
+      PangeaControllers.toastMsg(msg:  "Something went wrong");
     }
     return flags;
   }

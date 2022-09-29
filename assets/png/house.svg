@@ -1,0 +1,11 @@
+<svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.5 11.5L15 5L28 11.5M1.5 11.5H28M1.5 11.5V30H10V24C11.5 19.5 17.5 18.5 20 24V30H28V11.5" stroke="black" stroke-width="0.5"/>
+<rect x="22" y="22" width="3" height="4" fill="black"/>
+<rect x="22" y="14" width="3" height="4" fill="black"/>
+<rect x="13" y="14" width="3" height="4" fill="black"/>
+<rect x="5" y="14" width="3" height="4" fill="black"/>
+<rect x="5" y="22" width="3" height="4" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M15 5L2 11.5H27.5L15 5ZM14.5 10C15.3284 10 16 9.32843 16 8.5C16 7.67157 15.3284 7 14.5 7C13.6716 7 13 7.67157 13 8.5C13 9.32843 13.6716 10 14.5 10Z" fill="black"/>
+<path d="M1 9L15 2L29 9" stroke="black" stroke-width="2.5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19 25V30H11V25C11 22.791 12.7909 21 15 21C17.2091 21 19 22.791 19 25ZM14 26.5C14 26.7764 13.7761 27 13.5 27C13.2239 27 13 26.7764 13 26.5C13 26.2236 13.2239 26 13.5 26C13.7761 26 14 26.2236 14 26.5ZM16.5 27C16.7761 27 17 26.7764 17 26.5C17 26.2236 16.7761 26 16.5 26C16.2239 26 16 26.2236 16 26.5C16 26.7764 16.2239 27 16.5 27Z" fill="black"/>
+</svg>

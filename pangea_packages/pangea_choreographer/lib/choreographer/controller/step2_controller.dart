@@ -89,6 +89,7 @@ class Step2Controller extends LoaderState {
 
       _setState();
     }).catchError((err) {
+      stopLoading();
       controller.errorService!.showError('please try again');
       print(err);
     });

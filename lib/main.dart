@@ -33,8 +33,9 @@ import 'widgets/lock_screen.dart';
 import 'widgets/matrix.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+// Just a comment to rebuild
 GoogleSignIn googleSignIn = GoogleSignIn(
-  clientId: '466850640825-qegdiq3mpj3h5e0e79ud5hnnq2c22mi3.apps.googleusercontent.com',
+  clientId: Environment.google_auth_key, //Google_Auth_Key
   scopes: <String>[
     'email',
     ClassroomApi.classroomCoursesScope,
@@ -50,7 +51,7 @@ GoogleSignIn googleSignIn = GoogleSignIn(
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
-  await ChoreoController.initialize(flagBaseUrl: Environment.baseAPI, choreoBaseUrl: Environment.choreo_api);
+  await ChoreoController.initialize(flagBaseUrl: Environment.baseAPI, choreoBaseUrl: Environment.choreo_api, apiKey: Environment.choreo_api_key);
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -85,7 +86,7 @@ void main() async {
     SentryController.captureException,
   );
 
-  await PangeaServices.fetchAccessToken();
+  await PangeaServices.accessTokenStatus();
 }
 
 class FluffyChatApp extends StatefulWidget {

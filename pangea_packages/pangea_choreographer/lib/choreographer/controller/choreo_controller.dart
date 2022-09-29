@@ -7,6 +7,7 @@ import 'package:pangea_choreographer/choreographer/controller/error_service.dart
 import 'package:pangea_choreographer/choreographer/controller/ml_controller.dart';
 import 'package:pangea_choreographer/choreographer/network/urls.dart';
 
+import '../network/requests.dart';
 import 'flag_controller.dart';
 import 'lang_controller.dart';
 import 'my_matrix_client.dart';
@@ -50,7 +51,13 @@ class ChoreoController {
   }
 
   bool get isOpen => state!.isOpen;
-  openIt() {
+  openIt({bool? disableIT}) {
+    if (disableIT != null) {
+      if (disableIT!) {
+        send();
+        return;
+      }
+    }
     this.state!.openBar();
 
     setState();
@@ -69,6 +76,10 @@ class ChoreoController {
   }
 
   String? get translatedText {
+    if (state!.currentRoute == ChoreoRoute.STEP1_ERROR ||
+        state!.currentRoute == ChoreoRoute.INITAL_LOADING) {
+      return textController!.text;
+    }
     if (state!.currentRoute == ChoreoRoute.INITAL_LOADING ||
         state!.currentRoute == ChoreoRoute.SEND ||
         state!.currentRoute == ChoreoRoute.STEP1) {
@@ -127,14 +138,21 @@ class ChoreoController {
   }
 
   static Future<void> initialize(
-      {required String choreoBaseUrl, required String flagBaseUrl}) async {
+      {required String choreoBaseUrl,
+      required String flagBaseUrl,
+      required String apiKey}) async {
     Urls.baseUrl = choreoBaseUrl;
     Urls.flagsBaseUrl = flagBaseUrl;
+    Requests.apiKey = apiKey;
     await FlagController.initialize();
   }
 
   dismissKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  setActiveClassId(String? classId) {
+    state!.classId = classId;
   }
 
   get srcButtonTxt => 'Send';
@@ -151,8 +169,6 @@ class ChoreoController {
 
   _listernerFunction() {
     if (this.textController!.value.text != originalText) {
-      print(originalText);
-      print(this.textController!.value.text);
       print('Text Event');
       if (!state!.isEditing) {
         clearState();

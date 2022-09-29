@@ -33,7 +33,8 @@ class NewGroupController extends State<NewGroup> {
             sdk.StateEvent(content: {
               "via": ["matrix.staging.pangea.chat"],
               "canonical": true
-            }, type: EventTypes.spaceParent, stateKey: spaceId),
+            },
+                type: EventTypes.spaceParent, stateKey: spaceId),
           ]
               : [],
           preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
@@ -53,11 +54,14 @@ class NewGroupController extends State<NewGroup> {
   @override
   void initState() {
     // TODO: implement initState
-    Future.delayed(Duration(seconds: 1)).whenComplete(() => spaceId = VRouter.of(context).queryParameters['spaceId'].toString());
+    // Future.delayed(Duration(seconds: 1)).whenComplete(() => );
 
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) => NewGroupView(this, spaceId);
+  Widget build(BuildContext context) {
+    spaceId = VRouter.of(context).queryParameters['spaceId']??"";
+    return NewGroupView(this, spaceId);
+  }
 }

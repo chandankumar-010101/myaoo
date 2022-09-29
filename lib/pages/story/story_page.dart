@@ -60,53 +60,53 @@ class StoryPageController extends State<StoryPage> {
       builder: (context) => EmojiPicker(
         onEmojiSelected: (c, e) {
           Navigator.of(context).pop();
-          replyAction(e.emoji);
+          // replyAction(e.emoji);
         },
       ),
     );
     _modalOpened = false;
   }
 
-  void replyAction([String? message]) async {
-    message ??= replyController.text;
-    if (message.isEmpty) return;
-    final currentEvent = this.currentEvent;
-    if (currentEvent == null) return;
-    setState(() {
-      replyLoading = true;
-    });
-    try {
-      final client = Matrix.of(context).client;
+  // void replyAction([String? message]) async {
+  //   message ??= replyController.text;
+  //   if (message.isEmpty) return;
+  //   final currentEvent = this.currentEvent;
+  //   if (currentEvent == null) return;
+  //   setState(() {
+  //     replyLoading = true;
+  //   });
+  //   try {
+  //     final client = Matrix.of(context).client;
 
-      final roomId = await client.startDirectChat(currentEvent.senderId, enableEncryption: false);
-      var replyText =
-          L10n.of(context)!.storyFrom(currentEvent.originServerTs.localizedTime(context), currentEvent.content.tryGet<String>('body') ?? '');
+  //     final roomId = await client.startDirectChat(currentEvent.senderId, enableEncryption: false);
+  //     var replyText =
+  //         L10n.of(context)!.storyFrom(currentEvent.originServerTs.localizedTime(context), currentEvent.content.tryGet<String>('body') ?? '');
 
-      replyText = replyText.split('\n').map((line) => '> $line').join('\n');
-      message = '$replyText\n\n$message';
-      await client.getRoomById(roomId)!.sendTextEvent(message);
-      replyController.clear();
-      replyFocus.unfocus();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(L10n.of(context)!.replyHasBeenSent),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e, s) {
-      Logs().w('Unable to reply to story', e, s);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toLocalizedString(context)),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      setState(() {
-        replyLoading = false;
-      });
-    }
-  }
+  //     replyText = replyText.split('\n').map((line) => '> $line').join('\n');
+  //     message = '$replyText\n\n$message';
+  //     await client.getRoomById(roomId)!.sendTextEvent(message);
+  //     replyController.clear();
+  //     replyFocus.unfocus();
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(L10n.of(context)!.replyHasBeenSent),
+  //         backgroundColor: Colors.green,
+  //       ),
+  //     );
+  //   } catch (e, s) {
+  //     Logs().w('Unable to reply to story', e, s);
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(e.toLocalizedString(context)),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //   } finally {
+  //     setState(() {
+  //       replyLoading = false;
+  //     });
+  //   }
+  // }
 
   List<User> get currentSeenByUsers {
     final timeline = this.timeline;

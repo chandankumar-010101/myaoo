@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/config/environment.dart';
@@ -16,6 +15,8 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:pangeachat/widgets/profile_bottom_sheet.dart';
 import 'package:pangeachat/widgets/public_room_bottom_sheet.dart';
+import '../services/controllers.dart';
+import '../services/services.dart';
 import 'platform_infos.dart';
 
 import 'package:universal_html/html.dart' as html;
@@ -181,6 +182,12 @@ class UrlLauncher {
       }
     } else if (identityParts.primaryIdentifier.sigil == '@') {
       if (requestExchange) {
+        final bool isExchangeExist =
+            await PangeaServices.validateExchange(requestFromClass: roomId!, requestToClass: requestToclass, context: context);
+        if (isExchangeExist) {
+          PangeaControllers.toastMsg(msg: "Exchange already exist with this class");
+         return;
+        }
         final roomID = await showFutureLoadingDialog(
           context: context,
           future: () => matrix.client.createRoom(
@@ -199,17 +206,14 @@ class UrlLauncher {
 
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+            roomAliasName: userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "") +
                 "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-            name: userIdOfRequestedClass.split(":").first.replaceAll("@", "").substring(0, 6) +
+            name: userIdOfRequestedClass.toString().split(":").first.replaceAll("@", "") +
                 "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
           ),
@@ -217,29 +221,34 @@ class UrlLauncher {
         if (roomID.result != null) {
           String userId = Matrix.of(context).client.userID ?? "";
           if (userId.isNotEmpty) {
-            final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
+            final String initialUrl = kIsWeb ? html.window.origin! : Environment.frontendURL;
 
             final client = Matrix.of(context).client;
             await client
                 .getRoomById(roomID.result!)!
-                .sendTextEvent(initial_url + "/#/" + "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
+                .sendTextEvent(initialUrl +
+                    "/#/" +
+                    "confirm_exchange?user_id=$userId&room_id=$roomId&user_id_of_requested_class=$userIdOfRequestedClass&request_to_class=$requestToclass")
                 .then((value) {
               VRouter.of(context).to("/rooms");
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(" Request Sent Successfully",style: TextStyle(color: Colors.white),),
+                content: Text(
+                  " Request Sent Successfully",
+                  style: TextStyle(color: Colors.white),
+                ),
                 backgroundColor: Colors.green,
-
               ));
-             // Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
+              // Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);
               }
-              Fluttertoast.showToast(msg: " Unable to Sent Message", webBgColor: Colors.red, backgroundColor: Colors.red);
-            });
+
+              PangeaControllers.toastMsg(msg: " Unable to Sent Message");
+             });
           }
         } else {
-          Fluttertoast.showToast(msg: "Unable to find exchnage info");
+          PangeaControllers.toastMsg(msg: "Unable to find exchnage info");
         }
       } else if (requestToEnroll) {
         final roomID = await showFutureLoadingDialog(
@@ -259,17 +268,14 @@ class UrlLauncher {
             ],
             // creationContent: {'type': RoomCreationTypes.mSpace},
             visibility: sdk.Visibility.private,
-            roomAliasName: identityParts.primaryIdentifier.split(":").first.replaceAll("@", "").substring(0, 6) +
+            roomAliasName: identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "") +
                 "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
-            name: identityParts.primaryIdentifier.split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+            name: identityParts.primaryIdentifier.toString().split(":").first.replaceAll("@", "") +
                 "-" +
-                matrix.client.userID.toString().split(":").first.replaceAll("@", "").substring(0, 2) +
-                "private" +
+                matrix.client.userID.toString().split(":").first.replaceAll("@", "") +
                 "#" +
                 random.nextInt(9999).toString(),
           ),
@@ -284,14 +290,14 @@ class UrlLauncher {
                 .sendTextEvent(initial_url + "/#" + "/request_to_enroll?id=$userId&room_id=$roomId")
                 .then((value) {
               VRouter.of(context).to("/rooms");
-              Fluttertoast.showToast(msg: " Request Sent Successfully", webBgColor: Colors.green, backgroundColor: Colors.green);
-              // VRouter.of(context).toSegments(['rooms', roomID.result!]);
+              PangeaControllers.toastMsg(msg: " Request Sent Successfully",success: true);
+             // VRouter.of(context).toSegments(['rooms', roomID.result!]);
               // Navigator.of(context, rootNavigator: false).pop();
             }).catchError((e) {
               if (kDebugMode) {
                 print(e);
               }
-              Fluttertoast.showToast(msg: " Unable to Sent Message", webBgColor: Colors.red, backgroundColor: Colors.red);
+              PangeaControllers.toastMsg(msg: " Unable to Sent Message",);
             });
             return;
           } else {}

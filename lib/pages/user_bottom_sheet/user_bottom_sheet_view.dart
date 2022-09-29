@@ -24,8 +24,7 @@ class UserBottomSheetView extends StatelessWidget {
     final presence = client.presences[user.id];
     return Center(
       child: SizedBox(
-        width: min(
-            MediaQuery.of(context).size.width, FluffyThemes.columnWidth * 1.5),
+        width: min(MediaQuery.of(context).size.width, FluffyThemes.columnWidth * 1.5),
         child: Material(
           elevation: 4,
           child: SafeArea(
@@ -33,8 +32,7 @@ class UserBottomSheetView extends StatelessWidget {
               extendBodyBehindAppBar: true,
               appBar: AppBar(
                 elevation: 0,
-                backgroundColor:
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_downward_outlined),
                   onPressed: Navigator.of(context, rootNavigator: false).pop,
@@ -85,8 +83,7 @@ class UserBottomSheetView extends StatelessWidget {
                               Icons.warning_sharp,
                             ),
                           )
-                        else if (user.canBan &&
-                            user.membership == Membership.ban)
+                        else if (user.canBan && user.membership == Membership.ban)
                           PopupMenuItem(
                             value: 'unban',
                             child: _TextWithIcon(
@@ -127,18 +124,13 @@ class UserBottomSheetView extends StatelessWidget {
                     title: Text(L10n.of(context)!.username),
                     subtitle: Text(user.id),
                     trailing: Icon(Icons.adaptive.share_outlined),
-                    onTap: () => FluffyShare.share(
-                        user.id, controller.widget.outerContext),
+                    onTap: () => FluffyShare.share(user.id, controller.widget.outerContext),
                   ),
                   if (presence != null)
                     ListTile(
                       title: Text(presence.getLocalizedStatusMessage(context)),
-                      subtitle:
-                          Text(presence.getLocalizedLastActiveAgo(context)),
-                      trailing: Icon(Icons.circle,
-                          color: presence.presence == PresenceType.online
-                              ? Colors.green
-                              : Colors.grey),
+                      subtitle: Text(presence.getLocalizedLastActiveAgo(context)),
+                      trailing: Icon(Icons.circle, color: presence.presence == PresenceType.online ? Colors.green : Colors.grey),
                     ),
                 ],
               ),

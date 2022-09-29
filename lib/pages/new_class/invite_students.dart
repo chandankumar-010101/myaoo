@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -36,7 +35,12 @@ class _InviteStudentState extends State<InviteStudent> {
     // final room = Matrix.of(context).client.getRoomById(roomId);
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              VRouter.of(context).to('/classDetails', queryParameters: {"id": roomId});
+            },
+          ),
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Invite Students",
@@ -66,7 +70,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Invite students to enroll\nwith your class.",
+                          "Invite students to enroll\nin your class.",
                           style: TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.clip,
                           textAlign: TextAlign.center,

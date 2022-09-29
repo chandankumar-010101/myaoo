@@ -45,9 +45,10 @@ class HomeserverPickerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final benchmarkResults = controller.benchmarkResults;
     return LoginScaffold(
-      appBar: VRouter.of(context).path == '/home'
-          ? null
-          : AppBar(title: Text(L10n.of(context)!.addAccount)),
+     // appBar:
+      // VRouter.of(context).path == '/home'
+          // ? null
+          // : AppBar(title: Text(L10n.of(context)!.addAccount)),
       body: Column(
         children: [
           ConstrainedBox(
@@ -100,8 +101,9 @@ class HomeserverPickerView extends StatelessWidget {
                                 padding: const EdgeInsets.only(right: 5.0),
                                 child: ConstrainedBox(
                                     constraints: BoxConstraints(maxHeight: 80),
-                                    child: Image.asset(
-                                        "assets/newAssets/pangea-bare.png")),
+                                    child: SvgPicture.asset(
+                                      "assets/newAssets/pangea-bare.svg",
+                                    ),),
                               ),
                               Column(
                                 children: [

@@ -17,163 +17,6 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
 
   ChatListHeader({Key? key, required this.controller}) : super(key: key);
 
-  checkUser(BuildContext context) {
-    final box = GetStorage();
-    if (box.read("usertype") == 2) {
-      return [
-        PopupMenuItem(
-          value: PopupMenuAction.setStatus,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.edit_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.setStatus),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: PopupMenuAction.newGroup,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.group_add_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.createNewGroup),
-            ],
-          ),
-        ),
-
-        PopupMenuItem(
-          enabled: GetStorage().read("usertype") == 2 ? true : false,
-          value: PopupMenuAction.newSpace,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.group_work_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.createNewSpace),
-            ],
-          ),
-        ),
-
-        // PopupMenuItem(
-        //   value: PopupMenuAction.invite,
-        //   child: Row(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       Icon(Icons.adaptive.share_outlined),
-        //       const SizedBox(width: 12),
-        //       Text(L10n.of(context)!.inviteContact),
-        //     ],
-        //   ),
-        // ),
-        PopupMenuItem(
-          value: PopupMenuAction.archive,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.archive_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.archive),
-            ],
-          ),
-        ),
-        // PopupMenuItem(
-        //   value: PopupMenuAction.copyCode,
-        //   child: Row(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       const Icon(Icons.class_outlined),
-        //       const SizedBox(width: 12),
-        //       Text("Join with Code"),
-        //     ],
-        //   ),
-        // ),
-        PopupMenuItem(
-          value: PopupMenuAction.settings,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.settings_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.settings),
-            ],
-          ),
-        ),
-      ];
-    } else {
-      return [
-        PopupMenuItem(
-          value: PopupMenuAction.setStatus,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.edit_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.setStatus),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: PopupMenuAction.newGroup,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.group_add_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.createNewGroup),
-            ],
-          ),
-        ),
-        // PopupMenuItem(
-        //   value: PopupMenuAction.invite,
-        //   child: Row(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       Icon(Icons.adaptive.share_outlined),
-        //       const SizedBox(width: 12),
-        //       Text(L10n.of(context)!.inviteContact),
-        //     ],
-        //   ),
-        // ),
-        PopupMenuItem(
-          value: PopupMenuAction.archive,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.archive_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.archive),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: PopupMenuAction.copyCode,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.class_outlined),
-              const SizedBox(width: 12),
-              Text("Join with Code"),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: PopupMenuAction.settings,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.settings_outlined),
-              const SizedBox(width: 12),
-              Text(L10n.of(context)!.settings),
-            ],
-          ),
-        ),
-      ];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectMode = controller.selectMode;
@@ -185,14 +28,13 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
       ),
       leading: Matrix.of(context).isMultiAccount
           ? ClientChooserButton(controller)
-          : selectMode == SelectMode.normal
-              ? null
-              : IconButton(
-                  tooltip: L10n.of(context)!.cancel,
-                  icon: const Icon(Icons.close_outlined),
-                  onPressed: controller.cancelAction,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+          : selectMode != SelectMode.normal
+              ? IconButton(
+        tooltip: L10n.of(context)!.cancel,
+        icon: const Icon(Icons.close_outlined),
+        onPressed: controller.cancelAction,
+        color: Theme.of(context).colorScheme.primary,
+      ):null,
       centerTitle: false,
       actions: selectMode == SelectMode.share
           ? null
@@ -236,28 +78,130 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                       onPressed: () => VRouter.of(context).to('/search'),
                     ),
                   ),
-                  if (selectMode == SelectMode.normal)
-                    sp != null
-                        ? Obx(() => controller.getxController.classInfoModel.value != null &&
-                                controller.getxController.classInfoModel.value!.permissions.isCreateStories
-                            ? IconButton(
-                                icon: const Icon(Icons.camera_alt_outlined),
-                                tooltip: L10n.of(context)!.addToStory,
-                                onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
-                                    ? VRouter.of(context).to(
-                                        '/stories/create',
-                                        queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
-                                      )
-                                    : VRouter.of(context).to(
-                                        '/stories/create',
-                                      ),
-                              )
-                            : Container())
-                        : Container(),
+                  // if (selectMode == SelectMode.normal)
+                  //   sp != null
+                  //       ? controller.permissions != null && controller.permissions!.isCreateStories
+                  //           ? IconButton(
+                  //               icon: const Icon(Icons.camera_alt_outlined),
+                  //               tooltip: L10n.of(context)!.addToStory,
+                  //               onPressed: () => controller.activeSpacesEntry.getSpace(context) != null
+                  //                   ? VRouter.of(context).to(
+                  //                       '/stories/create',
+                  //                       queryParameters: {"spaceId": controller.activeSpacesEntry.getSpace(context)!.id},
+                  //                     )
+                  //                   : VRouter.of(context).to(
+                  //                       '/stories/create',
+                  //                     ),
+                  //             )
+                  //           : Container()
+                  //       : Container(),
                   PopupMenuButton<PopupMenuAction>(
-                    onSelected: controller.onPopupMenuSelect,
-                    itemBuilder: (_) => checkUser(context),
-                  ),
+                      onSelected: controller.onPopupMenuSelect,
+                      itemBuilder: (_) => [
+                            PopupMenuItem(
+                              value: PopupMenuAction.setStatus,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.edit_outlined),
+                                  const SizedBox(width: 12),
+                                  Text(L10n.of(context)!.setStatus),
+                                ],
+                              ),
+                            ),
+
+                            ///create new room
+                            PopupMenuItem(
+                              value: PopupMenuAction.newGroup,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.group_add_outlined),
+                                  const SizedBox(width: 12),
+                                  Text(L10n.of(context)!.createNewGroup),
+                                ],
+                              ),
+                            ),
+
+                            ///create new class
+                            if (GetStorage().read("usertype") == 2)
+                              PopupMenuItem(
+                                enabled: true,
+                                value: PopupMenuAction.newSpace,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.group_work_outlined),
+                                    const SizedBox(width: 12),
+                                    Text(L10n.of(context)!.createNewSpace),
+                                  ],
+                                ),
+                              ),
+
+                            ///join with class code
+                            if (GetStorage().read("usertype") != 2)
+                              PopupMenuItem(
+                                value: PopupMenuAction.copyCode,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.class_outlined),
+                                    const SizedBox(width: 12),
+                                    Text("Join with Code"),
+                                  ],
+                                ),
+                              ),
+
+                            ///archive
+                            PopupMenuItem(
+                              value: PopupMenuAction.archive,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.archive_outlined),
+                                  const SizedBox(width: 12),
+                                  Text(L10n.of(context)!.archive),
+                                ],
+                              ),
+                            ),
+
+                            ///settings
+                            PopupMenuItem(
+                              value: PopupMenuAction.settings,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.settings_outlined),
+                                  const SizedBox(width: 12),
+                                  Text(L10n.of(context)!.settings),
+                                ],
+                              ),
+                            ),
+
+                            // PopupMenuItem(
+                            //   value: PopupMenuAction.copyCode,
+                            //   child: Row(
+                            //     mainAxisSize: MainAxisSize.min,
+                            //     children: [
+                            //       const Icon(Icons.class_outlined),
+                            //       const SizedBox(width: 12),
+                            //       Text("Join with Code"),
+                            //     ],
+                            //   ),
+                            // ),
+
+                            // PopupMenuItem(
+                            //   value: PopupMenuAction.invite,
+                            //   child: Row(
+                            //     mainAxisSize: MainAxisSize.min,
+                            //     children: [
+                            //       Icon(Icons.adaptive.share_outlined),
+                            //       const SizedBox(width: 12),
+                            //       Text(L10n.of(context)!.inviteContact),
+                            //     ],
+                            //   ),
+                            // ),
+                          ]),
                 ],
       title: PageTransitionSwitcher(
         reverse: false,
@@ -290,8 +234,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                   )
                 : (() {
                     final name = controller.activeSpaceId == null
-                        ? AppConfig.applicationName
-                        : Matrix.of(context).client.getRoomById(controller.activeSpaceId!)!.displayname;
+                        ? AppConfig.applicationName : Matrix.of(context).client.getRoomById(controller.activeSpaceId!)!.displayname;
                     return Text(name, key: ValueKey(name));
                   })(),
       ),

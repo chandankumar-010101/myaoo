@@ -8,6 +8,7 @@ import 'package:matrix/matrix.dart';
 
 import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/utils/matrix_sdk_extensions.dart/client_stories_extension.dart';
+import '../../utils/matrix_sdk_extensions.dart/matrix_locals.dart';
 import '../../widgets/matrix.dart';
 
 // This is not necessarily a Space, but an abstract categorization of a room.
@@ -22,15 +23,20 @@ abstract class SpacesEntry {
   // Gets the (translated) name of this entry.
   String getName(BuildContext context);
   // Gets an icon for this entry (avoided if a space is given)
-  Icon getIcon(bool active) => active ? const Icon(CupertinoIcons.chat_bubble_2_fill) : const Icon(CupertinoIcons.chat_bubble_2);
+  Icon getIcon(bool active) => active
+      ? const Icon(CupertinoIcons.chat_bubble_2_fill)
+      : const Icon(CupertinoIcons.chat_bubble_2);
   // If this is a specific Room, returns the space Room for various purposes.
   Room? getSpace(BuildContext context) => null;
   // Gets a list of rooms - this is done as part of _ChatListViewBodyState to get the full list of rooms visible from this SpacesEntry.
   List<Room> getRooms(
     BuildContext context,
   );
-
+  List<Room> getInviteRooms(
+    BuildContext context,
+  );
   List<Room> getPeopleRooms(BuildContext context);
+  List<Room> getStories(BuildContext context);
   // Checks that this entry is still valid.
   bool stillValid(BuildContext context) => true;
   // Returns true if the Stories header should be shown.
@@ -42,7 +48,8 @@ bool _roomCheckCommon(Room room, BuildContext context) {
   if (room.isSpace && room.membership == Membership.join && !room.isUnread) {
     return false;
   }
-  if (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType) {
+  if (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') ==
+      ClientStoriesExtension.storiesRoomType) {
     return false;
   }
   return true;
@@ -71,12 +78,43 @@ class AllRoomsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && !room.isSpace).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => !room.isSpace && room.membership != Membership.invite)
+        .toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.membership == Membership.invite)
+        .toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && _roomCheckCommon(room, context)).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room.name.contains("#") && _roomCheckCommon(room, context))
+        .toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room
+                .getState(EventTypes.RoomCreate)
+                ?.content
+                .tryGet<String>('type') ==
+            ClientStoriesExtension.storiesRoomType)
+        .toList();
   }
 
   @override
@@ -104,12 +142,42 @@ class DirectChatsSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.isDirectChat).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => !room.isDirectChat)
+        .toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.membership == Membership.invite)
+        .toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.isDirectChat)
+        .toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room
+                .getState(EventTypes.RoomCreate)
+                ?.content
+                .tryGet<String>('type') ==
+            ClientStoriesExtension.storiesRoomType)
+        .toList();
   }
 
   @override
@@ -133,22 +201,54 @@ class GroupsSpacesEntry extends SpacesEntry {
   }
 
   @override
-  String getName(BuildContext context) => L10n.of(context)!.groups;
+  String getName(BuildContext context) => "Rooms";
 
   @override
-  Icon getIcon(bool active) => active ? const Icon(Icons.group) : const Icon(Icons.group_outlined);
+  Icon getIcon(bool active) =>
+      active ? const Icon(Icons.group) : const Icon(Icons.group_outlined);
 
   @override
   List<Room> getRooms(BuildContext context) {
     final rooms = Matrix.of(context).client.rooms;
     // Needs to match ChatList's definition of a space.
     final spaces = rooms.where((room) => room.isSpace).toList();
-    return rooms.where((room) => (!room.isDirectChat) && _roomCheckCommon(room, context) && separatedGroup(room, spaces)).toList();
+    return rooms
+        .where((room) =>
+            (!room.isDirectChat) &&
+            _roomCheckCommon(room, context) &&
+            separatedGroup(room, spaces))
+        .toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.membership == Membership.invite)
+        .toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.isDirectChat).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.isDirectChat)
+        .toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room
+                .getState(EventTypes.RoomCreate)
+                ?.content
+                .tryGet<String>('type') ==
+            ClientStoriesExtension.storiesRoomType)
+        .toList();
   }
 
   bool separatedGroup(Room room, List<Room> spaces) {
@@ -177,12 +277,45 @@ class SpaceSpacesEntry extends SpacesEntry {
 
   @override
   List<Room> getRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => !room.name.contains("#") && _roomInsideSpace(room, space)).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room.spaceParents.isNotEmpty &&
+            room.spaceParents.first.roomId == space.id)
+        .toList();
+  }
+
+  @override
+  List<Room> getInviteRooms(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.membership == Membership.invite)
+        .toList();
+  }
+
+  List<Room> getStories(BuildContext context) {
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room
+                    .getState(EventTypes.RoomCreate)
+                    ?.content
+                    .tryGet<String>('type') ==
+                ClientStoriesExtension.storiesRoomType &&
+            _roomInsideSpace(room, space))
+        .toList();
   }
 
   @override
   List<Room> getPeopleRooms(BuildContext context) {
-    return Matrix.of(context).client.rooms.where((room) => room.name.contains("#") && roomCheck(room, context)).toList();
+    return Matrix.of(context)
+        .client
+        .rooms
+        .where((room) => room.name.contains("#") && roomCheck(room, context))
+        .toList();
   }
 
   bool roomCheck(Room room, BuildContext context) {
@@ -218,7 +351,8 @@ class SpaceSpacesEntry extends SpacesEntry {
   }
 
   @override
-  bool stillValid(BuildContext context) => Matrix.of(context).client.getRoomById(space.id) != null;
+  bool stillValid(BuildContext context) =>
+      Matrix.of(context).client.getRoomById(space.id) != null;
 
   @override
   bool operator ==(Object other) {

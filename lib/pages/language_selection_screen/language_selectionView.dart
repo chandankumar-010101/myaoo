@@ -68,6 +68,7 @@ class LanguageSelectionView extends StatelessWidget {
                     ),
                     const Center(
                       child: Text(
+
                         "I am a (n)",
                         style: TextStyle(
                             color: Colors.black,
@@ -130,6 +131,7 @@ class LanguageSelectionView extends StatelessWidget {
                     const Center(
                       child: Text(
                         "What is your first language",
+
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16.0,
@@ -251,14 +253,14 @@ class LanguageSelectionView extends StatelessWidget {
                       child: Obx(() =>
                           controller.getxController.role.value == "Teacher"
                               ? const Text(
-                                  "What do you want to teach",
+                                  "What language do you teach?",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w500),
                                 )
                               : const Text(
-                                  "What do you want to learn",
+                                  "What language do you want to learn?",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16.0,
@@ -361,8 +363,7 @@ class LanguageSelectionView extends StatelessWidget {
                               },
                             ).toList(),
                             onChanged: (String? value) {
-                              controller.getxController.selectedLanguageTwo
-                                  .value = value!;
+                              controller.getxController.selectedLanguageTwo .value = value!;
                             },
                           )),
                     ),

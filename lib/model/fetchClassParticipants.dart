@@ -5,14 +5,14 @@ class FetchClassParticipants {
 
   FetchClassParticipants.fromJson(Map<String, dynamic> json) {
     roomMembers = json['room_members'] != null
-        ? new RoomMembers.fromJson(json['room_members'])
+        ? RoomMembers.fromJson(json['room_members'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.roomMembers != null) {
-      data['room_members'] = this.roomMembers!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (roomMembers != null) {
+      data['room_members'] = roomMembers!.toJson();
     }
     return data;
   }
@@ -30,9 +30,9 @@ class RoomMembers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['members'] = this.members;
-    data['total'] = this.total;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['members'] = members;
+    data['total'] = total;
     return data;
   }
 }

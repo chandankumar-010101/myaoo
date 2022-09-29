@@ -112,7 +112,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "archivedRoom": "Archived Room",
+  "archivedRoom": "Archived Chat",
   "@archivedRoom": {
     "type": "text",
     "placeholders": {}
@@ -342,7 +342,7 @@
       "username": {}
     }
   },
-  "changedTheRoomAliases": "{username} changed the room aliases",
+  "changedTheRoomAliases": "{username} changed the chat aliases",
   "@changedTheRoomAliases": {
     "type": "text",
     "placeholders": {
@@ -470,7 +470,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "commandHint_ban": "Ban the given user from this room",
+  "commandHint_ban": "Ban the given user from this chat",
   "@commandHint_ban": {
     "type": "text",
     "description": "Usage hint for the command /ban"
@@ -500,22 +500,22 @@
     "type": "text",
     "description": "Usage hint for the command /html"
   },
-  "commandHint_invite": "Invite the given user to this room",
+  "commandHint_invite": "Invite the given user to this chat",
   "@commandHint_invite": {
     "type": "text",
     "description": "Usage hint for the command /invite"
   },
-  "commandHint_join": "Join the given room",
+  "commandHint_join": "Join the given chat",
   "@commandHint_join": {
     "type": "text",
     "description": "Usage hint for the command /join"
   },
-  "commandHint_kick": "Remove the given user from this room",
+  "commandHint_kick": "Remove the given user from this chat",
   "@commandHint_kick": {
     "type": "text",
     "description": "Usage hint for the command /kick"
   },
-  "commandHint_leave": "Leave this room",
+  "commandHint_leave": "Leave this chat",
   "@commandHint_leave": {
     "type": "text",
     "description": "Usage hint for the command /leave"
@@ -525,12 +525,12 @@
     "type": "text",
     "description": "Usage hint for the command /me"
   },
-  "commandHint_myroomavatar": "Set your picture for this room (by mxc-uri)",
+  "commandHint_myroomavatar": "Set your picture for this chat (by mxc-uri)",
   "@commandHint_myroomavatar": {
     "type": "text",
     "description": "Usage hint for the command /myroomavatar"
   },
-  "commandHint_myroomnick": "Set your display name for this room",
+  "commandHint_myroomnick": "Set your display name for this chat",
   "@commandHint_myroomnick": {
     "type": "text",
     "description": "Usage hint for the command /myroomnick"
@@ -555,7 +555,7 @@
     "type": "text",
     "description": "Usage hint for the command /send"
   },
-  "commandHint_unban": "Unban the given user from this room",
+  "commandHint_unban": "Unban the given user from this chat",
   "@commandHint_unban": {
     "type": "text",
     "description": "Usage hint for the command /unban"
@@ -683,12 +683,12 @@
       "username": {}
     }
   },
-  "createNewGroup": "Create new group",
+  "createNewGroup": "Create new chat",
   "@createNewGroup": {
     "type": "text",
     "placeholders": {}
   },
-  "createNewSpace": "New class",
+  "createNewSpace": "Create new class",
   "@createNewSpace": {
     "type": "text",
     "placeholders": {}
@@ -843,7 +843,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "editDisplayname": "Edit displayname",
+  "editDisplayname": "Edit display name",
   "@editDisplayname": {
     "type": "text",
     "placeholders": {}
@@ -853,12 +853,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "editRoomAliases": "Edit room aliases",
+  "editRoomAliases": "Edit chat aliases",
   "@editRoomAliases": {
     "type": "text",
     "placeholders": {}
   },
-  "editRoomAvatar": "Edit room avatar",
+  "editRoomAvatar": "Edit chat avatar",
   "@editRoomAvatar": {
     "type": "text",
     "placeholders": {}
@@ -873,7 +873,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "emotePacks": "Emote packs for room",
+  "emotePacks": "Emote packs for chat",
   "@emotePacks": {
     "type": "text",
     "placeholders": {}
@@ -1036,7 +1036,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "goToTheNewRoom": "Go to the new room",
+  "goToTheNewRoom": "Go to the new chat",
   "@goToTheNewRoom": {
     "type": "text",
     "placeholders": {}
@@ -1136,7 +1136,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "ignoreListDescription": "You can ignore users who are disturbing you. You won't be able to receive any messages or room invites from the users on your personal ignore list.",
+  "ignoreListDescription": "You can ignore users who are disturbing you. You won't be able to receive any messages or chat invites from the users on your personal ignore list.",
   "@ignoreListDescription": {
     "type": "text",
     "placeholders": {}
@@ -1226,7 +1226,7 @@
       "username": {}
     }
   },
-  "joinRoom": "Join room",
+  "joinRoom": "Join chat",
   "@joinRoom": {
     "type": "text",
     "placeholders": {}
@@ -1453,7 +1453,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "noEncryptionForPublicRooms": "You can only activate encryption as soon as the room is no longer publicly accessible.",
+  "noEncryptionForPublicRooms": "You can only activate encryption as soon as the chat is no longer publicly accessible.",
   "@noEncryptionForPublicRooms": {
     "type": "text",
     "placeholders": {}
@@ -1503,12 +1503,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "noPublicRoomsFound": "No public rooms found…",
+  "noPublicRoomsFound": "No public chats found…",
   "@noPublicRoomsFound": {
     "type": "text",
     "placeholders": {}
   },
-  "noRoomsFound": "No rooms found…",
+  "noRoomsFound": "No chats found…",
   "@noRoomsFound": {
     "type": "text",
     "placeholders": {}
@@ -1767,7 +1767,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "publicRooms": "Public Rooms",
+  "publicRooms": "Public Chats",
   "@publicRooms": {
     "type": "text",
     "placeholders": {}
@@ -1868,7 +1868,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "replaceRoomWithNewerVersion": "Replace room with newer version",
+  "replaceRoomWithNewerVersion": "Replace chat with newer version",
   "@replaceRoomWithNewerVersion": {
     "type": "text",
     "placeholders": {}
@@ -1898,12 +1898,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "roomHasBeenUpgraded": "Room has been upgraded",
+  "roomHasBeenUpgraded": "Chat has been upgraded",
   "@roomHasBeenUpgraded": {
     "type": "text",
     "placeholders": {}
   },
-  "roomVersion": "Room version",
+  "roomVersion": "Chat version",
   "@roomVersion": {
     "type": "text",
     "placeholders": {}
@@ -2258,7 +2258,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "thisRoomHasBeenArchived": "This room has been archived.",
+  "thisRoomHasBeenArchived": "This chat has been archived.",
   "@thisRoomHasBeenArchived": {
     "type": "text",
     "placeholders": {}
@@ -2740,7 +2740,7 @@
       "reaction": {}
     }
   },
-  "pinMessage": "Pin to room",
+  "pinMessage": "Pin to chat",
   "@pinMessage": {},
   "pinnedEventsError": "Error loading pinned messages",
   "@pinnedEventsError": {},

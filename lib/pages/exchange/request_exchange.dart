@@ -1,6 +1,5 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -8,6 +7,7 @@ import 'package:pangeachat/model/teacher_all_class_model.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../services/controllers.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 
@@ -34,13 +34,17 @@ class _RequestExchangeState extends State<RequestExchange> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String id = context.vRouter.queryParameters['class_id'] ?? "";
+
+    final String requestToClass =
+        VRouter.of(context).queryParameters['class_id'] ?? "";
+    final String userIdOfRequestedClass =
+        VRouter.of(context).queryParameters['user_id'] ?? "";
 
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Confirm the exchange",
+            "Request an exchange",
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
                 fontSize: 14),
@@ -53,8 +57,8 @@ class _RequestExchangeState extends State<RequestExchange> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              context.vRouter
-                  .to("/classDetails", queryParameters: {"class_id": id});
+              context.vRouter.to("/classDetails",
+                  queryParameters: {"class_id": requestToClass});
             },
           ),
         ),
@@ -64,23 +68,6 @@ class _RequestExchangeState extends State<RequestExchange> {
             children: [
               SizedBox(
                 height: size.height * 0.04,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.1, vertical: size.height * 0.02),
-                width: size.width,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    "Confirm the exchange?",
-                    style: TextStyle().copyWith(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                    overflow: TextOverflow.clip,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               ),
               //switch buttons
               Container(
@@ -100,7 +87,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                             child: Padding(
                               padding: EdgeInsets.only(right: 5),
                               child: Text(
-                                "A space will be made where you can both create rooms for your students to chat. Students from both classes will see these rooms in the exchange tab, and be able to join and chat within them.",
+                                "A space will be made where you can both create group chats for your students to connect. Students from both classes will see these chats in the exchange tab, and be able to join and send messages within them.",
                                 style: TextStyle().copyWith(
                                     color: Theme.of(context)
                                         .textTheme
@@ -124,7 +111,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                             child: Padding(
                               padding: EdgeInsets.only(right: 5),
                               child: Text(
-                                "While both teachers allow 1-to-1 chats in exchanges, students will have this permission in this exchange.",
+                                "While both teachers allow One-to-one chats in exchanges, students will have this permission in this exchange.",
                                 style: TextStyle().copyWith(
                                     color: Theme.of(context)
                                         .textTheme
@@ -203,13 +190,11 @@ class _RequestExchangeState extends State<RequestExchange> {
                                   horizontal: 16, vertical: 8),
                               itemCount: 1,
                               itemBuilder: (context, index) {
-                                print(Matrix.of(context)
-                                    .client
-                                    .getRoomById(data
-                                        .results![index].pangeaClassRoomId!)!
-                                    .displayname);
-                                languageFlagList
-                                    .add(data.results![index].className);
+                                if (!data.results![index].isExchange!) {
+                                  languageFlagList
+                                      .add(data.results![index].className);
+                                }
+                                //languageFlagList.add(data.results![index].className);
                                 return Container(
                                     constraints: BoxConstraints(
                                         minWidth: 100, maxWidth: 400),
@@ -258,6 +243,8 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                     ),
                                               isExpanded: true,
                                               items: data.results!
+                                                  .where((element) =>
+                                                      !element.isExchange!)
                                                   .map(
                                                     (map) => DropdownMenuItem(
                                                       child: Text(map.className
@@ -291,8 +278,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                             );
                           } else {
                             if (snapshot.hasError) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              print(snapshot.error);
                             }
                             return const Center(
                               child: CircularProgressIndicator(),
@@ -310,7 +296,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                   horizontal: size.width * 0.1,
                   vertical: size.height * 0.02,
                 ),
-                child: id.isEmpty
+                child: requestToClass.isEmpty
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -373,7 +359,7 @@ class _RequestExchangeState extends State<RequestExchange> {
                           InkWell(
                             onTap: () {
                               VRouter.of(context).to('/classDetails',
-                                  queryParameters: {"id": id});
+                                  queryParameters: {"id": requestToClass});
                             },
                             child: Container(
                               width: 200,
@@ -403,11 +389,8 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                   .colorScheme
                                                   .onPrimary ==
                                               Colors.white
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
+                                          ? Colors.white
+                                          : Colors.white,
                                       fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
@@ -417,72 +400,43 @@ class _RequestExchangeState extends State<RequestExchange> {
                           ),
                           InkWell(
                             onTap: () async {
-                              final String requestToClass = VRouter.of(context)
-                                      .queryParameters['class_id'] ??
-                                  "";
-                              final String userIdOfRequestedClass = VRouter.of(context)
-                                  .queryParameters['user_id'] ??
-                                  "";
                               if (classIds != null) {
-
                                 if (requestToClass.isNotEmpty) {
-
-                                final bool isExchangeExist = await PangeaServices.validateExchange(
-                                      requestFromClass: classIds!,
-                                      requestToClass: requestToClass,
-                                      context: context);
-                                 if(isExchangeExist){
-                                   Fluttertoast.showToast(
-                                       msg: "Exchange already exist with this class");
-                                   return;
-                                 }
-                                 if(userIdOfRequestedClass.isNotEmpty){
-                                   UrlLauncher(
-                                       context,
-                                       requestExchange:true,
-                                       roomId: classIds!,
-                                       userIdOfRequestedClass: userIdOfRequestedClass,
-                                       requestToclass:requestToClass,
-                                       'https://matrix.to/#/${userIdOfRequestedClass}')
-                                       .openMatrixToUrl();
-                                 }
-
-                                
-
-
-                                }else{
-                                  Fluttertoast.showToast(
-                                      msg: "Exchange Class Info not found");
+                                  final bool isExchangeExist =
+                                      await PangeaServices.validateExchange(
+                                          requestFromClass: classIds!,
+                                          requestToClass: requestToClass,
+                                          context: context);
+                                  if (isExchangeExist) {
+                                    PangeaControllers.toastMsg(
+                                        msg:
+                                            "Exchange already exist with this class",
+                                        success: false);
+                                    return;
+                                  }
+                                  if (userIdOfRequestedClass.isNotEmpty) {
+                                    UrlLauncher(
+                                            context,
+                                            requestExchange: true,
+                                            roomId: classIds!,
+                                            userIdOfRequestedClass:
+                                                userIdOfRequestedClass,
+                                            requestToclass: requestToClass,
+                                            'https://matrix.to/#/${userIdOfRequestedClass}')
+                                        .openMatrixToUrl();
+                                  }
+                                } else {
+                                  PangeaControllers.toastMsg(
+                                      msg: "Exchange Class Info not found",
+                                      success: false);
                                 }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg: "Select your Class");
+                                PangeaControllers.toastMsg(
+                                    msg: "Select your Class", success: false);
                               }
 
                               final String clientid =
                                   box.read("ExchangeClientID") ?? "";
-                              // if(clientid.isNotEmpty){
-                              //   final bool value = await PangeaServices.createExchangeRequest(roomId: sourceLanguage.toString(), context: context, teacherID: clientid, toClass: roomId,);
-                              //   if(sourceLanguage !=null){
-                              //     value?
-                              //     UrlLauncher(
-                              //         context,
-                              //         requestExchange:true,
-                              //         roomId: roomId.toString(),
-                              //         rid: clientid.toString(),
-                              //         receivedroomID: sourceLanguage.toString(),
-                              //         'https://matrix.to/#/${clientid.toString()}')
-                              //         .openMatrixToUrl():null;
-                              //
-                              //   }
-                              //   else{
-                              //     ScaffoldMessenger.of(context)
-                              //         .showSnackBar(SnackBar(content: Text("Select Class with whom you to merge classes")));
-                              //   }
-                              // }
-                              // else{
-                              //   print("No exchange client id");
-                              // }
                             },
                             child: Container(
                               width: 200,
@@ -512,11 +466,8 @@ class _RequestExchangeState extends State<RequestExchange> {
                                                   .colorScheme
                                                   .onPrimary ==
                                               Colors.white
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
+                                          ? Colors.white
+                                          : Colors.white,
                                       fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,

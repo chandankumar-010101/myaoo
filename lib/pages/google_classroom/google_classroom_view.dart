@@ -36,60 +36,51 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
             ? SizedBox(
                 height: double.infinity,
                 width: double.infinity,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.black.withOpacity(0.2),
-                      //     offset: Offset(1, -1),
-                      //   ),
-                      // ],
-                    ),
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: SizedBox(
-                          height: Get.height * 0.20,
-                          width: Get.width * 0.30,
-                          child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.15),
-                                  // boxShadow: [
-                                  //   BoxShadow(
-                                  //     color: Colors.black.withOpacity(0.2),
-                                  //     offset: Offset(1, -1),
-                                  //   ),
-                                  // ],
-                                ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CircularProgressIndicator(),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Fetching all classrooms...",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.black : Colors.white,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SizedBox(
+                      height: Get.height * 0.20,
+                      width: Get.width * 0.30,
+                      child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.black.withOpacity(0.2),
+                              //     offset: Offset(1, -1),
+                              //   ),
+                              // ],
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircularProgressIndicator.adaptive(
+                                    backgroundColor: Colors.white,
                                   ),
-                                ),
-                              )),
-                        ),
-                      ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                    child: Text(
+                                      "Fetching all classrooms...",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Theme.of(context).colorScheme.onPrimary == Colors.black ? Colors.black : Colors.white,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
                     ),
                   ),
                 ),
@@ -130,10 +121,16 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                    onPressed: () {
-                      widget.controller!.authifNotGoogleUser();
+                    onPressed: () async {
+                      setState(() {
+                        widget.controller!.isLoading = true;
+                      });
+                      await widget.controller!.handleSignIn();
                     },
-                    child: Text("Login"),
+                    child: Text("Login",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white,
+                        )),
                     style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(Size(100, 50)),
                         backgroundColor: MaterialStateProperty.all(
@@ -201,9 +198,9 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).primaryColorDark.withOpacity(0.5),
+                        color: Colors.grey[700],
                       ),
-                      child: widget.controller!.coursesList != null
+                      child: widget.controller!.coursesList!.isNotEmpty
                           ? ListView.builder(
                               itemCount: widget.controller!.coursesList!.length,
                               itemBuilder: (_, i) => ListTile(
@@ -230,7 +227,7 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).primaryColorDark.withOpacity(0.8),
+                        color: Colors.grey[700],
                       ),
                       child: selectedCourse != null && selectedCourse!.students != null && selectedCourse!.students!.isNotEmpty
                           ? Column(
@@ -270,23 +267,26 @@ class _GoogleClassroomViewState extends State<GoogleClassroomView> {
                                     ),
                                   ),
                                 ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      List<Data> info = [];
-                                      info = List.generate(
-                                          selectedCourse!.students!.length,
-                                          (index) => Data(
-                                              name: selectedCourse!.students![index].profile!.name!.fullName!,
-                                              email: selectedCourse!.students![index].profile!.emailAddress!));
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        List<Data> info = [];
+                                        info = List.generate(
+                                            selectedCourse!.students!.length,
+                                            (index) => Data(
+                                                name: selectedCourse!.students![index].profile!.name!.fullName!,
+                                                email: selectedCourse!.students![index].profile!.emailAddress!));
 
-                                      PangeaServices.sendEmailToJoinClass(
-                                        info,
-                                        widget.controller!.roomId,
-                                        selectedCourse!.teachers!.first.profile!.name!.fullName!,
-                                      );
-                                      log(info.toList().map((e) => e.name).toList().toString());
-                                    },
-                                    child: Text("Invite All"))
+                                        PangeaServices.sendEmailToJoinClass(
+                                          info,
+                                          widget.controller!.roomId,
+                                          selectedCourse!.teachers!.first.profile!.name!.fullName!,
+                                        );
+                                        log(info.toList().map((e) => e.name).toList().toString());
+                                      },
+                                      child: Text("Invite All")),
+                                )
                               ],
                             )
                           : Center(
