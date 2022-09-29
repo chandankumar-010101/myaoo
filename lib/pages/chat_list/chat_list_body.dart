@@ -238,10 +238,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           isRoomExpanded = false;
                         }
                       }),
-
-            children: widget.controller.activeSpacesEntry.getSpace(context) !=
-                    null
-
+            children: widget.controller.activeSpacesEntry.getSpace(context) !=null
                 ? <ExpansionPanel>[
 
                     ExpansionPanel(
@@ -259,7 +256,6 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               ),
                             ],
                           )),
-
                       body:Obx(()=> widget.controller.chatListController.participants.value.isEmpty  ? SizedBox(
                         height: 200,
                         child: Center(
@@ -306,7 +302,6 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               });
                         },
                       )),
-
                     ),
                     ExpansionPanel(
                       canTapOnHeader: true,
@@ -322,8 +317,24 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   // Todo: Style needs to be updated
                                 ),
                               ),
-
-                            Obx(()=>widget.controller.checkRoomPermissions()),
+                             widget.controller.userType ==2?IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Obx(()=>widget.controller.chatListController.permissions.value!.isCreateRooms?
+                             IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Container()),
 
                             ],
                           )),
@@ -393,7 +404,6 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                               ),
                             ],
                           )),
-
                       body: Obx(()=> widget.controller.chatListController.participants.value.isEmpty ? const SizedBox(
                         height: 200,
                         child: Center(
@@ -453,16 +463,31 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                                   "Rooms",
                                 ),
                               ),
-                              Obx(()=>widget.controller.checkRoomPermissions()),
+                              widget.controller.userType ==2?IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Obx(()=>widget.controller.chatListController.permissions.value!.isCreateRooms?
+                              IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry.getSpace(context) == null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context).to('/newroom', queryParameters: {
+                                      "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add)):Container()),
                             ],
                           )),
                       body: rooms.length == 0
                           ? Container(
                               height: 200,
                               child: Center(
-
-                                  child: Text(" No Chats in class",
-
+                                  child: Text(" No Rooms in class",
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500))),
