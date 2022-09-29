@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_code_model.dart';

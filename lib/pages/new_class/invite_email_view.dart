@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pangeachat/model/invite_email_model.dart' as inviteEmail;
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
