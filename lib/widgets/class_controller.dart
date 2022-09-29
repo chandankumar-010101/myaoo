@@ -29,19 +29,21 @@ class PangeaClassController {
   SpacesEntry get defaultSpacesEntry => AppConfig.separateChatTypes
       ? DirectChatsSpacesEntry()
       : AllRoomsSpacesEntry();
-  String? activeSpaceId(BuildContext context) =>
-      activeSpacesEntry(context).getSpace(context)?.id; // space_
+
+  String? activeSpaceId(BuildContext context) => activeSpacesEntry(context).getSpace(context)?.id; // space_
   SpacesEntry? _activeSpacesEntry;
+  ///use to get active space entry
   SpacesEntry activeSpacesEntry(BuildContext context) {
     final id = _activeSpacesEntry;
     return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
   }
 
-  Future<void> setActiveSpacesEntry(
-      BuildContext context, SpacesEntry? spaceId) async {
+  ///set activeSpace entry
+  Future<void> setActiveSpacesEntry(BuildContext context, SpacesEntry? spaceId) async {
     _isSynced = true;
     if (spaceId != null) {
       _activeSpacesEntry = spaceId;
+
     }
   }
 

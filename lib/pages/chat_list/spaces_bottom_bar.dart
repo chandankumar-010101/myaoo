@@ -106,9 +106,7 @@ class _SpacesBottomNavigation extends StatefulWidget {
 class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
   @override
   Widget build(BuildContext context) {
-    final currentIndex = widget.controller.spacesEntries.indexWhere((space) =>
-            widget.controller.activeSpacesEntry.runtimeType ==
-                space.runtimeType &&
+    final currentIndex = widget.controller.spacesEntries.indexWhere((space) => widget.controller.activeSpacesEntry.runtimeType == space.runtimeType &&
             (widget.controller.activeSpaceId == space.getSpace(context)?.id)) +
         1;
 
@@ -120,21 +118,24 @@ class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
         child: SalomonBottomBar(
           itemPadding: const EdgeInsets.all(8),
           currentIndex: currentIndex,
-          onTap: (i) => i == 0
-              ? widget.controller.expandSpaces()
-              : widget.controller.setActiveSpacesEntry(
-                  context,
-                  widget.controller.spacesEntries[i - 1],
-                ),
+          onTap: (i){
+            if(i != 0){
+              // widget.controller.getpeople();
+              widget.controller.setActiveSpacesEntry(context, widget.controller.spacesEntries[i - 1]);
+            }else{
+              widget.controller.expandSpaces();
+            }
+
+          },
           selectedItemColor: Theme.of(context).colorScheme.primary,
           items: [
             SalomonBottomBarItem(
               icon: const Icon(Icons.keyboard_arrow_up),
               title: Text(L10n.of(context)!.showSpaces),
             ),
-            ...widget.controller.spacesEntries
-                .map((space) => _buildSpacesEntryUI(context, space))
-                .toList(),
+            ///build horizontal row of classes
+            ...widget.controller.spacesEntries.map((space) => _buildSpacesEntryUI(context, space, currentIndex)).toList(),
+
           ],
         ),
       ),
@@ -142,18 +143,15 @@ class _SpacesBottomNavigationState extends State<_SpacesBottomNavigation> {
   }
 
   SalomonBottomBarItem _buildSpacesEntryUI(
-      BuildContext context, SpacesEntry entry) {
+      BuildContext context, SpacesEntry entry, int? i) {
     final space = entry.getSpace(context);
     if (space != null) {
       return SalomonBottomBarItem(
         icon: InkWell(
           borderRadius: BorderRadius.circular(28),
           onTap: () {
-            widget.controller.getpeople();
-            widget.controller.setActiveSpacesEntry(
-              context,
-              entry,
-            );
+            widget.controller.setActiveSpacesEntry(context, entry);
+
           },
           onLongPress: () => widget.controller.editSpace(context, space.id),
           child: Avatar(
