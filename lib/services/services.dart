@@ -121,7 +121,7 @@ class PangeaServices {
     }
   }
 
-  static joinRoom(BuildContext context, String roomAlias) async {
+  static joinClass(BuildContext context, String roomAlias) async {
     final client = Matrix.of(context).client;
     final result = await showFutureLoadingDialog<String>(
       context: context,
@@ -158,12 +158,11 @@ class PangeaServices {
             ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
 
-
           final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
           if (exit != null) {
             if (!exit) {
               ///join the room with class Id
-              joinRoom(context, data.pangeaClassRoomId!);
+              joinClass(context, data.pangeaClassRoomId!);
               PangeaControllers.toastMsg(
                   msg: "Class Joined Successfully", success: true);
             } else {
@@ -176,7 +175,11 @@ class PangeaServices {
           PangeaControllers.toastMsg(
               msg: "Unable to find User Information", success: false);
         }
-      } else {
+      }
+      else if(value.statusCode ==400){
+        PangeaControllers.toastMsg(msg: "Invalid class code", success: false);
+      }
+      else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
       }
     } catch (e) {

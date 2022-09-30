@@ -38,7 +38,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
     if( usertype !=null && usertype !=2){
       final bool? exist = await PangeaServices.userExitInClass(classId);
       if(exist !=null && !exist){
-        PangeaServices.joinRoom(context, classId);
+        PangeaServices.joinClass(context, classId);
       }else{
         PangeaControllers.toastMsg(msg: "You are already a part of this class");
       }
