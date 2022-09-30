@@ -157,23 +157,20 @@ class PangeaServices {
         final ClassCodeModel data =
             ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
-          ///fetch the list of participants of the class
-          final FetchClassParticipants users =
-              await fetchParticipants(data.pangeaClassRoomId!);
 
-          ///check user exist in the class or not
-          final List members = users.roomMembers!.members!
-              .where((element) => element == box.read("clientID"))
-              .toList();
 
-          if (members.isEmpty) {
-            ///join the room with class Id
-            joinRoom(context, data.pangeaClassRoomId!);
-            PangeaControllers.toastMsg(
-                msg: "Class Joined Successfully", success: true);
-          } else {
-            PangeaControllers.toastMsg(
-                msg: "You have already joined this class", success: true);
+          final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
+          if (exit != null) {
+            if (!exit) {
+              ///join the room with class Id
+              joinRoom(context, data.pangeaClassRoomId!);
+              PangeaControllers.toastMsg(
+                  msg: "Class Joined Successfully", success: true);
+            } else {
+              PangeaControllers.toastMsg(
+                  msg: "You have already joined this class", success: true);
+            }
+
           }
         } else {
           PangeaControllers.toastMsg(
@@ -268,6 +265,7 @@ class PangeaServices {
       }
     } else {
       PangeaControllers.toastMsg(msg: "Unable to Fetch Chat", success: false);
+
     }
   }
 
@@ -530,6 +528,7 @@ class PangeaServices {
     PangeaServices._init();
     if (classRoom == null) {
       PangeaControllers.toastMsg(msg: "Token expired or unable to find chat ");
+
       return;
     }
     try {
