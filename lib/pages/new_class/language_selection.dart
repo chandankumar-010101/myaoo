@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/flag_model.dart';
 import '../../services/services.dart';
@@ -372,7 +372,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       maxLength: 50,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        hintText: "Optional: City",
+                        hintText: "Optional: City, State",
                         hintStyle: TextStyle().copyWith(
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontSize: 14),
@@ -555,7 +555,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 onSubmitted: (String? value) {},
                 decoration: InputDecoration(
                   hintText:
-                      "What should prospective students know\nabout your class? Potential exchange\nteachers?",
+                      "Class Description",
                   hintStyle: TextStyle().copyWith(
                       color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),

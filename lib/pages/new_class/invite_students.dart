@@ -8,7 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:matrix/src/room.dart';
 import 'package:pangea_choreographer/choreographer/widgets/it_shimmer.dart';
 import 'package:pangeachat/pages/google_classroom/google_classroom.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';

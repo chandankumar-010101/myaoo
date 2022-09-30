@@ -10,7 +10,7 @@ import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
 import '../../model/report_user_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import 'user_bottom_sheet_view.dart';

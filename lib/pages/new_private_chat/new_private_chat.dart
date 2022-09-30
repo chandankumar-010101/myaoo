@@ -23,7 +23,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../chat_list/spaces_entry.dart';
 
 import 'package:matrix/matrix.dart' as sdk;

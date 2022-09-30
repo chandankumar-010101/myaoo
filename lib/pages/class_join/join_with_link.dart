@@ -7,7 +7,7 @@ import 'package:pangeachat/services/services.dart';
 
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../widgets/matrix.dart';
 
 class JoinClassWithLink extends StatefulWidget {

@@ -204,7 +204,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../model/flag_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../utils/api_helper.dart';
 import '../../utils/api_urls.dart';
 

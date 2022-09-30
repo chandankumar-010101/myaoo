@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/utils.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:vrouter/vrouter.dart';
@@ -184,7 +185,7 @@ class ChatListItem extends StatelessWidget {
               child: Text(
                 (room.getState(EventTypes.RoomCreate)?.content.tryGet<String>('type') == ClientStoriesExtension.storiesRoomType)
                     ? room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!))
-                    : room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!)).toString().split("#").first.replaceAll("${Matrix.of(context).client.userID!.toString().toLowerCase().split(":").first.replaceAll("@", "")}", "").replaceAll("-", ""),
+                    : room.getLocalizedDisplayname(MatrixLocals(L10n.of(context)!)).toString().split("#").first.replaceAll("${Matrix.of(context).client.userID!.toString().split(":").first.replaceAll("@", "")}", "").replaceAll("-", ""),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,

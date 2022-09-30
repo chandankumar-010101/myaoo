@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:matrix/matrix.dart';
 import 'package:matrix_link_text/link_text.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 
 import 'package:pangeachat/pages/chat/events/video_player.dart';
 import 'package:pangeachat/utils/matrix_sdk_extensions.dart/matrix_locals.dart';
@@ -28,15 +29,18 @@ class MessageContent extends StatelessWidget {
 
   void _verifyOrRequestKey(BuildContext context) async {
     if (event.content['can_request_session'] != true) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.green,
-          content: Text(
-            event.type == EventTypes.Encrypted
-                ? L10n.of(context)!.needPantalaimonWarning
-                : event.calcLocalizedBodyFallback(
-                    MatrixLocals(L10n.of(context)!),
-                  ),
-          )));
+      PangeaControllers.toastMsg(msg:event.type == EventTypes.Encrypted
+          ? L10n.of(context)!.needPantalaimonWarning
+          : event.calcLocalizedBodyFallback(MatrixLocals(L10n.of(context)!)));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     backgroundColor: Colors.green,
+      //     content: Text(
+      //       event.type == EventTypes.Encrypted
+      //           ? L10n.of(context)!.needPantalaimonWarning
+      //           : event.calcLocalizedBodyFallback(
+      //               MatrixLocals(L10n.of(context)!),
+      //             ),
+      //     )));
       return;
     }
     final client = Matrix.of(context).client;
@@ -53,8 +57,9 @@ class MessageContent extends StatelessWidget {
         future: () => event.requestKey(),
       );
       if (success.error == null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(backgroundColor: Colors.green, content: Text(L10n.of(context)!.requestToReadOlderMessages)));
+        PangeaControllers.toastMsg(msg:L10n.of(context)!.requestToReadOlderMessages,success: true );
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(SnackBar(backgroundColor: Colors.green, content: Text(L10n.of(context)!.requestToReadOlderMessages)));
       }
     }
   }
