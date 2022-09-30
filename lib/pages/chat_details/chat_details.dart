@@ -317,11 +317,15 @@ class ChatDetailsController extends State<ChatDetails> {
   @override
   Widget build(BuildContext context) {
     if (roomId != null) {
-      members = Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
-
-      for (int i = 0; i < members!.length; i++) {
-        print(members![i].id);
+      try{
+        members = Matrix.of(context).client.getRoomById(roomId!)!.getParticipants();
+        // for (int i = 0; i < members!.length; i++) {
+        //   print(members![i].id);
+        // }
+      }catch(e){
+        members = [];
       }
+
     } else {
       members = [];
     }
