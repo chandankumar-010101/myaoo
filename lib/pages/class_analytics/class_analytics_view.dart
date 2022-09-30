@@ -14,7 +14,11 @@ class ClassAnalyticsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(controller.appBarTitle(context)),
+          title: Text(controller.appBarTitle(context),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 18, fontWeight: FontWeight.w700),
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
+          ),
         ),
         body: SizedBox(
             height: double.infinity,
