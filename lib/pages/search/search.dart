@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/utils/famedlysdk_store.dart';

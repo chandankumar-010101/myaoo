@@ -7,7 +7,7 @@ import 'package:pangeachat/model/teacher_all_class_model.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 

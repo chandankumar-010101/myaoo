@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -74,10 +75,11 @@ class _StudentPermissionsState extends State<StudentPermissions> {
           print("Unable to fetch Data from storage");
           print(e);
         }
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Unable to fetch Data from storage"),
-          backgroundColor: Colors.red,
-        ));
+        PangeaControllers.toastMsg(msg: "Unable to fetch Data from storage");
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //   content: Text("Unable to fetch Data from storage"),
+        //   backgroundColor: Colors.red,
+        // ));
         return;
       }
       final matrix = Matrix.of(context);

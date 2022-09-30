@@ -14,7 +14,7 @@ import 'package:pangeachat/widgets/contacts_list.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../config/environment.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../utils/localized_exception_extension.dart';
 import '../../utils/platform_infos.dart';
 import 'search.dart';
@@ -110,12 +110,12 @@ class _SearchViewState extends State<SearchView> {
       return res;
     });
 
-    final rooms = List<Room>.from(Matrix.of(context).client.rooms);
-    rooms.removeWhere(
-      (room) =>
-          room.lastEvent == null ||
-          !room.displayname.toLowerCase().removeDiacritics().contains(widget.controller.controller.text.toLowerCase().removeDiacritics()),
-    );
+    final rooms = List<Room>.from(Matrix.of(context).client  .rooms
+        .where((room) => !room.isSpace && room.membership != Membership.invite)
+        .toList());
+    rooms.removeWhere( (room) => room.lastEvent == null || !room.displayname.toLowerCase().removeDiacritics().contains(widget.controller.controller.text.toLowerCase().removeDiacritics()));
+
+
     const tabCount = 3;
     final String basePath = Environment.baseAPI;
     final List<String> data = basePath.split("/api/v1");

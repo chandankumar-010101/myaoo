@@ -14,7 +14,7 @@ import 'package:pangeachat/pages/settings_account/settings_account_view.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
 import '../../model/flag_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 
 class SettingsAccount extends StatefulWidget {
   const SettingsAccount({Key? key}) : super(key: key);

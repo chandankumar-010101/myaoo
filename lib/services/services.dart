@@ -38,7 +38,7 @@ import 'api_exception.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-import 'controllers.dart';
+import '../controllers/controllers.dart';
 
 class PangeaServices {
   static final box = GetStorage();

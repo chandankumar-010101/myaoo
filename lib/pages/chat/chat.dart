@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:provider/provider.dart';
 
 import 'package:record/record.dart';

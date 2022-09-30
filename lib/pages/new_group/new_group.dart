@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:future_loading_dialog/future_loading_dialog.dart';
+import 'package:get/get.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/controllers/chat_list_controller.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/pages/new_group/new_group_view.dart';
@@ -21,14 +23,17 @@ class NewGroupController extends State<NewGroup> {
 
   void setPublicGroup(bool b) => setState(() => publicGroup = b);
 
+  ChatListControllerGet controllerGet = Get.put(ChatListControllerGet());
   void submitAction([_]) async {
+   final value =  controllerGet.listOfClassModel.firstWhere((value) => value.activeClassId == spaceId);
+
     final client = Matrix.of(context).client;
     final roomID = await showFutureLoadingDialog(
       context: context,
       future: () async {
         final roomId = await client.createGroupChat(
-          initialState: spaceId.isNotEmpty
-              ? [
+          invite: [value.classModel.classAuthorId] ,
+          initialState: spaceId.isNotEmpty? [
             sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
             sdk.StateEvent(content: {
               "via": ["matrix.staging.pangea.chat"],

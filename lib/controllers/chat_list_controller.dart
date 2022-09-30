@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/model/class_detail_model.dart';
 import 'package:pangeachat/pages/chat_list/spaces_entry.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 
-import '../../services/services.dart';
-import '../../widgets/matrix.dart';
+import '../services/services.dart';
+import '../widgets/matrix.dart';
 import 'package:matrix/matrix.dart';
 
 
