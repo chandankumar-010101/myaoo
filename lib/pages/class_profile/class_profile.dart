@@ -9,8 +9,8 @@ import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/class_detail_model.dart';
 import '../../model/exchange_classInfo.dart';
-import '../../services/class_controllers.dart';
-import '../../services/controllers.dart';
+import '../../controllers/class_controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../services/services.dart';
 
 import 'class_profile_view.dart';

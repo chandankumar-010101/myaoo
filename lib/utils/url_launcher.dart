@@ -15,7 +15,7 @@ import 'package:pangeachat/config/app_config.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:pangeachat/widgets/profile_bottom_sheet.dart';
 import 'package:pangeachat/widgets/public_room_bottom_sheet.dart';
-import '../services/controllers.dart';
+import '../controllers/controllers.dart';
 import '../services/services.dart';
 import 'platform_infos.dart';
 
@@ -44,6 +44,7 @@ class UrlLauncher {
     final uri = Uri.tryParse(url!);
     if (uri == null) {
       // we can't open this thing
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           L10n.of(context)!.cantOpenUri(url!),

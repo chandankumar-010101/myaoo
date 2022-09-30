@@ -26,14 +26,14 @@ import 'package:vrouter/vrouter.dart';
 import '../../../utils/account_bundles.dart';
 import '../../main.dart';
 import '../../model/class_detail_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 import '../bootstrap/bootstrap_dialog.dart';
 import '../search/search.dart';
 import '../search/search_view_controller.dart';
-import 'chat_list_controller.dart';
+import '../../controllers/chat_list_controller.dart';
 
 import 'dart:math' as math;
 
@@ -87,8 +87,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Stream<Client> get clientStream => _clientStream.stream;
 
-
-
   void _onScroll() {
     final newScrolledToTop = scrollController.position.pixels <= 0;
     if (newScrolledToTop != scrolledToTop) {
@@ -101,7 +99,8 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   Future<void> setActiveSpacesEntry(
       BuildContext context, SpacesEntry? spaceId) async {
     ///set active space id in pangea class (LALA)
-    Matrix.of(context).pangeaClassController
+    Matrix.of(context)
+        .pangeaClassController
         .setActiveSpacesEntry(context, spaceId);
     if ((snappingSheetController.isAttached
             ? snappingSheetController.currentPosition
@@ -112,11 +111,10 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
     if (spaceId != null) {
       if (spaceId.runtimeType != AllRoomsSpacesEntry) {
-
         chatListController.getClassPermissions(
             spaceId.getSpace(context)!.id, context);
         chatListController.getpeople(context, spaceId);
-      }else{
+      } else {
         chatListController.participants.clear();
         chatListController.initialPermissions();
       }
@@ -126,10 +124,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-
-
   void editSpace(BuildContext context, String spaceId) async {
-
     VRouter.of(context).to('/classDetails', queryParameters: {"id": spaceId});
   }
 
@@ -248,65 +243,81 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     final math.Random random = math.Random();
 
     final space = activeSpacesEntry.getSpace(context);
-    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
-    final roomID = await showFutureLoadingDialog(
-      context: context,
-      future: () => Matrix.of(context).client.createRoom(
-            invite: [user.id],
-            preset: CreateRoomPreset.privateChat,
-            isDirect: true,
-            initialState: [
-              StateEvent(
-                content: {
-                  "guest_access": "can_join",
-                },
-                type: EventTypes.GuestAccess,
-                stateKey: "",
-              ),
-              StateEvent(
+    final rooms = Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room.spaceParents.isNotEmpty &&
+            room.spaceParents.first.roomId == space!.id)
+        .toList();
+    print(rooms.map((e) => e.displayname).toList().toString());
+    final List<Room> room = rooms.where((element) => element.displayname.contains(
+        user.displayName!.replaceAll(" ", "_") + "-" + Matrix.of(context).client.userID.toString().split(":").first.replaceAll("@", "") + "#")).toList();
+
+    if (room.isNotEmpty) {
+      PangeaControllers.toastMsg(msg: "Room already exist with this user");
+    }
+    else {
+
+      final roomID = await showFutureLoadingDialog(
+        context: context,
+        future: () => Matrix.of(context).client.createRoom(
+              invite: [user.id],
+              preset: CreateRoomPreset.privateChat,
+              isDirect: true,
+              initialState: [
+                StateEvent(
                   content: {
-                    "via": ["matrix.staging.pangea.chat"],
-                    "canonical": true
+                    "guest_access": "can_join",
                   },
-                  type: EventTypes.spaceParent,
-                  stateKey: space != null ? space.id : ""),
-            ],
-            // creationContent: {'type': RoomCreationTypes.mSpace},
-            roomAliasName: user.displayName!.replaceAll(" ", "_") +
-                "-" +
-                Matrix.of(context)
-                    .client
-                    .userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "") +
-                "#" +
-                random.nextInt(999).toString(),
-            name: user.displayName!.replaceAll(" ", "_") +
-                "-" +
-                Matrix.of(context)
-                    .client
-                    .userID
-                    .toString()
-                    .split(":")
-                    .first
-                    .replaceAll("@", "") +
-                "#" +
-                random.nextInt(999).toString(),
-          ),
-    );
-    if (roomID.result != null) {
-      VRouter.of(context).pop();
-      PangeaControllers.toastMsg(msg: "Created Successfully", success: true);
+                  type: EventTypes.GuestAccess,
+                  stateKey: "",
+                ),
+                StateEvent(
+                    content: {
+                      "via": ["matrix.staging.pangea.chat"],
+                      "canonical": true
+                    },
+                    type: EventTypes.spaceParent,
+                    stateKey: space != null ? space.id : ""),
+              ],
+              // creationContent: {'type': RoomCreationTypes.mSpace},
+              roomAliasName: user.displayName!.replaceAll(" ", "_") +
+                  "-" +
+                  Matrix.of(context)
+                      .client
+                      .userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "") +
+                  "#" +
+                  random.nextInt(999).toString(),
+              name: user.displayName!.replaceAll(" ", "_") +
+                  "-" +
+                  Matrix.of(context)
+                      .client
+                      .userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "") +
+                  "#" +
+                  random.nextInt(999).toString(),
+            ),
+      );
+      if (roomID.result != null) {
+        VRouter.of(context).pop();
+        PangeaControllers.toastMsg(msg: "Created Successfully", success: true);
+      }
+      if (roomID == null) {
+        VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+      }
     }
-    if (roomID == null) {
-      VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
-    }
+    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
   }
 
   ///check create room permissions
-
 
   @override
   void initState() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 
 class JoinClassWithCode extends StatefulWidget {
   const JoinClassWithCode({Key? key}) : super(key: key);

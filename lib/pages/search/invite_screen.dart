@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 
 class InviteScreen extends StatefulWidget {
   const InviteScreen({Key? key}) : super(key: key);
@@ -83,15 +84,17 @@ class _InviteScreenState extends State<InviteScreen> {
 
                       print(link);
                       Clipboard.setData( ClipboardData(text: link))
-                          .then((_){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(link)
-                            )
-                          );
-
-                         }
-                       );
+                          .then((_) {
+                        PangeaControllers.toastMsg(msg: link, success: true);
+                      });
+                       //  ScaffoldMessenger.of(context).showSnackBar(
+                       //      SnackBar(
+                       //          content: Text(link)
+                       //      )
+                       //    );
+                       //
+                       //   }
+                       // );
                      },
                     child: Padding(
                       padding: EdgeInsets.all(8.0),

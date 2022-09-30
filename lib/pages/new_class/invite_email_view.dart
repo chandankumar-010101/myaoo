@@ -5,7 +5,7 @@ import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 
 class InviteEmail extends StatefulWidget {
   const InviteEmail({Key? key}) : super(key: key);

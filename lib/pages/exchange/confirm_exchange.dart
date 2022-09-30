@@ -14,7 +14,7 @@ import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../config/app_config.dart';
 import '../../model/fetchClassParticipants.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
 import 'package:matrix/matrix.dart' as sdk;
