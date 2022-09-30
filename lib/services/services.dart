@@ -46,6 +46,64 @@ class PangeaServices {
   PangeaServices._init() {
     accessTokenStatus();
   }
+
+
+  static SearchViewController searchViewController = Get.put(SearchViewController());
+
+
+  static Future<bool> userExitInClass(String classId) async {
+    ///fetch the list of participants of the class
+    try {
+      if(classId.isNotEmpty){
+        final FetchClassParticipants users = await fetchParticipants(classId);
+
+        ///check user exist in the class or not
+        final List exit = users.roomMembers!.members!
+            .where((element) => element == box.read("clientID"))
+            .toList();
+
+        if (exit.isEmpty) {
+          return false;
+        } else {
+          return true;
+        }
+      }else{
+        return false;
+      }
+
+    } catch (e) {
+      PangeaControllers.toastMsg(msg: "UserExistInClass: $e");
+      return false;
+    }
+  }
+
+
+  static searchClass(String text ) async {
+    try {
+      PangeaServices._init();
+      final result = await http.get(Uri.parse(ApiUrls.class_search+"?q=$text"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${box.read("access")}",
+        },
+      );
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        searchViewController.loading.value = false;
+        final data = searchViewModelFromJson(result.body);
+
+        searchViewController.searchList.value = data.results!;
+      }
+      else{
+        ApiException.exception(statusCode: result.statusCode, body: result.body);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      PangeaControllers.toastMsg(msg: "Error: $e");
+    }
+  }
   static accessTokenStatus() async {
     try {
       if (box.read("access") != null) {
@@ -764,7 +822,7 @@ class PangeaServices {
           throw Exception("${value.statusCode}");
         }
       } else {
-        throw Exception("Room ID is empty".toString());
+        throw "Room ID is empty";
       }
     } catch (e) {
       throw Exception(e.toString());
