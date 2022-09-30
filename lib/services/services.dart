@@ -42,10 +42,67 @@ import 'controllers.dart';
 
 class PangeaServices {
   static final box = GetStorage();
-  static SearchViewController searchViewController = Get.put(SearchViewController());
 
   PangeaServices._init() {
     accessTokenStatus();
+  }
+
+
+  static SearchViewController searchViewController = Get.put(SearchViewController());
+
+
+  static Future<bool> userExitInClass(String classId) async {
+    ///fetch the list of participants of the class
+    try {
+      if(classId.isNotEmpty){
+        final FetchClassParticipants users = await fetchParticipants(classId);
+
+        ///check user exist in the class or not
+        final List exit = users.roomMembers!.members!
+            .where((element) => element == box.read("clientID"))
+            .toList();
+
+        if (exit.isEmpty) {
+          return false;
+        } else {
+          return true;
+        }
+      }else{
+        return false;
+      }
+
+    } catch (e) {
+      PangeaControllers.toastMsg(msg: "UserExistInClass: $e");
+      return false;
+    }
+  }
+
+
+  static searchClass(String text ) async {
+    try {
+      PangeaServices._init();
+      final result = await http.get(Uri.parse(ApiUrls.class_search+"?q=$text"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${box.read("access")}",
+        },
+      );
+
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        searchViewController.loading.value = false;
+        final data = searchViewModelFromJson(result.body);
+
+        searchViewController.searchList.value = data.results!;
+      }
+      else{
+        ApiException.exception(statusCode: result.statusCode, body: result.body);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      PangeaControllers.toastMsg(msg: "Error: $e");
+    }
   }
   static accessTokenStatus() async {
     try {
@@ -82,54 +139,6 @@ class PangeaServices {
     }
   }
 
-  static Future<bool?> userExitInClass(String classId) async {
-    ///fetch the list of participants of the class
-    try {
-      final FetchClassParticipants users = await fetchParticipants(classId);
-
-      ///check user exist in the class or not
-      final List exit = users.roomMembers!.members!
-          .where((element) => element == box.read("clientID"))
-          .toList();
-      if (exit.isEmpty) {
-        return false;
-      } else {
-        return true;
-      }
-    } catch (e) {
-      PangeaControllers.toastMsg(msg: "Error: $e");
-      return null;
-    }
-  }
-
-
-  static searchClass(String text ) async {
-    try {
-      PangeaServices._init();
-      final result = await http.get(Uri.parse(ApiUrls.class_search+"?q=$text"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${box.read("access")}",
-        },
-      );
-
-      if (result.statusCode == 200 || result.statusCode == 201) {
-         searchViewController.loading.value = false;
-        final data = searchViewModelFromJson(result.body);
-
-       searchViewController.searchList.value = data.results!;
-      }
-      else{
-        ApiException.exception(statusCode: result.statusCode, body: result.body);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      PangeaControllers.toastMsg(msg: "Error: $e");
-    }
-  }
-
   static joinClassWithCode(String classCode, BuildContext context) async {
     PangeaServices._init();
     if (box.read("access") == null) {
@@ -149,6 +158,7 @@ class PangeaServices {
             ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
 
+
           final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
           if (exit != null) {
             if (!exit) {
@@ -160,6 +170,7 @@ class PangeaServices {
               PangeaControllers.toastMsg(
                   msg: "You have already joined this class", success: true);
             }
+
           }
         } else {
           PangeaControllers.toastMsg(
@@ -518,7 +529,6 @@ class PangeaServices {
     if (classRoom == null) {
       PangeaControllers.toastMsg(msg: "Token expired or unable to find chat ");
 
-
       return;
     }
     try {
@@ -805,14 +815,13 @@ class PangeaServices {
         );
         if (value.statusCode == 200 || value.statusCode == 201) {
           return FetchClassInfoModel.fromJson(jsonDecode(value.body));
-        }
-        else {
+        } else {
           ApiException.exception(
               statusCode: value.statusCode, body: value.body);
           throw Exception("${value.statusCode}");
         }
       } else {
-        throw Exception("Room ID is empty".toString());
+        throw "Room ID is empty";
       }
     } catch (e) {
       throw Exception(e.toString());

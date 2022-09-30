@@ -49,18 +49,17 @@ class _InviteEmailState extends State<InviteEmail> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).textTheme.bodyText1!.color),
           onPressed: () {
             context.vRouter.to("/invite_students", queryParameters: {
               "id": roomId,
             });
           },
         ),
-        title: Text("Invitations",
-            style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-                color: Colors.white)),
+
+        title: Text("Invitations", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Theme.of(context).textTheme.bodyText1!.color)),
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -152,8 +151,10 @@ class _InviteEmailState extends State<InviteEmail> {
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(12),
                                   hintText: "Recipient's email",
+
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
+
                                   ),
                                 ),
                               ),

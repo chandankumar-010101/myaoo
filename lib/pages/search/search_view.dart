@@ -13,7 +13,6 @@ import 'package:pangeachat/widgets/avatar.dart';
 import 'package:pangeachat/widgets/contacts_list.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
-
 import '../../config/environment.dart';
 import '../../services/controllers.dart';
 import '../../utils/localized_exception_extension.dart';
@@ -259,6 +258,7 @@ class _SearchViewState extends State<SearchView> {
                                       Stack(
                                         children: [
                                           Container(
+
                                             child: searchController.searchList[i].profilePic != null
                                                 ? Avatar(
                                               mxContent: Uri.parse("${searchController.searchList[i].profilePic}"),
@@ -271,7 +271,12 @@ class _SearchViewState extends State<SearchView> {
                                               ),
                                             ),
                                             decoration: BoxDecoration(
-                                                border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2.0),
+                                                border: Border.all(
+                                                    color: Theme.of(context).colorScheme.onPrimary ,
+                                                        //== Colors.white
+                                                   // ? Colors.black
+                                                    //: Colors.black,
+                                                    width: 2.0),
                                                 shape: BoxShape.circle),
                                           ),
                                           Positioned(
@@ -545,9 +550,10 @@ class _SearchViewState extends State<SearchView> {
                                     child: Icon(
                                       Icons.arrow_back_ios,
                                       size: 20,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                      // Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      //     ? Theme.of(context).primaryColor
+                                      //     : Theme.of(context).colorScheme.onPrimary,
                                     ),
                                   ),
                                   onTap: () {
@@ -579,9 +585,10 @@ class _SearchViewState extends State<SearchView> {
                                     child: Icon(
                                       Icons.arrow_forward_ios,
                                       size: 20,
-                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context).colorScheme.onPrimary,
+                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                      // Theme.of(context).colorScheme.onPrimary == Colors.white
+                                      //     ? Theme.of(context).primaryColor
+                                      //     : Theme.of(context).colorScheme.onPrimary,
                                     ),
                                   ),
                                 )
@@ -652,10 +659,14 @@ class _SearchViewState extends State<SearchView> {
                                                   ),
                                                 ),
                                                 decoration: BoxDecoration(
-                                                    border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2.0),
+                                                    border: Border.all(color:  Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                         ? Colors.black
+                                                         : Colors.white, width: 2.0),
                                                     shape: BoxShape.circle),
                                               ),
                                               Positioned(
+                                                bottom: 0,
+                                                right: 0,
                                                 child: Container(
                                                   padding: const EdgeInsets.all(2.0),
                                                   decoration: BoxDecoration(
@@ -667,8 +678,7 @@ class _SearchViewState extends State<SearchView> {
                                                     size: 15.0,
                                                   ),
                                                 ),
-                                                bottom: 0,
-                                                right: 0,
+
                                               )
                                             ],
                                           ),

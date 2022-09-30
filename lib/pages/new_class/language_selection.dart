@@ -299,10 +299,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
       appBar:  AppBar(
               backgroundColor: Theme.of(context).backgroundColor,
               title: Text(
-                id.isNotEmpty?"Create a Class":"Update class Info",
+                id.isEmpty?"Create a Class":"Update class Info",
                 style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
-                    fontSize: 14),
+                    fontSize: 18,
+                fontWeight: FontWeight.w700
+                ),
                 overflow: TextOverflow.clip,
                 textAlign: TextAlign.center,
               ),
@@ -310,7 +312,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
               elevation: 10,
               automaticallyImplyLeading: false,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                icon: Icon(Icons.arrow_back, color:Theme.of(context).textTheme.bodyText1!.color),
                 onPressed: () {
                   id.isNotEmpty?VRouter.of(context).to('/classDetails', queryParameters: {"id": id}): context.vRouter.to("/newclass");
                 },

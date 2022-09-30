@@ -47,7 +47,9 @@ class _RequestExchangeState extends State<RequestExchange> {
             "Request an exchange",
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 14),
+                fontSize: 18,
+                fontWeight: FontWeight.w700
+            ),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -55,7 +57,7 @@ class _RequestExchangeState extends State<RequestExchange> {
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon:  Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               context.vRouter.to("/classDetails",
                   queryParameters: {"class_id": requestToClass});

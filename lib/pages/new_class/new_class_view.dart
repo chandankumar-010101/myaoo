@@ -20,7 +20,7 @@ class _NewClassViewState extends State<NewClassView> {
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Create a Class",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 18, fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
