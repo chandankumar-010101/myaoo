@@ -43,6 +43,10 @@ import '../controllers/controllers.dart';
 class PangeaServices {
   static final box = GetStorage();
 
+  static SearchViewController searchViewController =
+      Get.put(SearchViewController());
+
+
   PangeaServices._init() {
     accessTokenStatus();
   }
@@ -77,11 +81,11 @@ class PangeaServices {
     }
   }
 
-
-  static searchClass(String text ) async {
+  static searchClass(String text) async {
     try {
       PangeaServices._init();
-      final result = await http.get(Uri.parse(ApiUrls.class_search+"?q=$text"),
+      final result = await http.get(
+        Uri.parse(ApiUrls.class_search + "?q=$text"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${box.read("access")}",
@@ -93,9 +97,11 @@ class PangeaServices {
         final data = searchViewModelFromJson(result.body);
 
         searchViewController.searchList.value = data.results!;
-      }
-      else{
-        ApiException.exception(statusCode: result.statusCode, body: result.body);
+
+      } else {
+        ApiException.exception(
+            statusCode: result.statusCode, body: result.body);
+
       }
     } catch (e) {
       if (kDebugMode) {
@@ -1362,9 +1368,13 @@ class PangeaServices {
   }
 
   static Future<ClassAnalyticsModel>? classAnalyticsFromClassId(
-      {required String classId}) async {
+      {required String classId, required String targetLanguage}) async {
     try {
-      String url = ApiUrls.classAnalytics + '?class_id=' + classId;
+      String url = ApiUrls.classAnalytics +
+          '?class_id=' +
+          classId +
+          '&target_language=' +
+          targetLanguage;
       print('Calling ' + url);
 
       final response =
