@@ -90,7 +90,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                   if (codeController.text.length == 6) {
                     PangeaServices.joinClassWithCode(codeController.text, context);
                   } else {
-                    PangeaControllers.toastMsg(msg: "length is short!!!!!!",);
+                    PangeaControllers.toastMsg(msg: "Class code length is short!",);
                   }
                 },
                 child: Container(

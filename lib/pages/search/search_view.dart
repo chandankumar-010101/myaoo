@@ -405,19 +405,23 @@ class _SearchViewState extends State<SearchView> {
                                           const Icon(Icons.query_stats, size: 12),
                                           const SizedBox(
                                             width: 10.0,
+
                                           ),
-                                          Text(
-                                              searchController.searchList[i].languageLevel.toString() != Null
-                                                  ? level(searchController.searchList[i].languageLevel.toString())
-                                                  : "Na",
-                                              overflow: TextOverflow.fade,
-                                              maxLines: 1,
-                                              softWrap: false,
-                                              style: TextStyle().copyWith(
-                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w400,
-                                              ))
+                                         Expanded(
+                                           child: Text(
+                                               searchController.searchList[i].languageLevel.toString() != Null
+                                                   ? level(searchController.searchList[i].languageLevel.toString())
+                                                   : "Na",
+                                               overflow: TextOverflow.fade,
+                                               maxLines: 1,
+                                               softWrap: false,
+                                               style: TextStyle().copyWith(
+                                                 color: Theme.of(context).textTheme.bodyText1!.color,
+                                                 fontSize: 10,
+                                                 fontWeight: FontWeight.w400,
+                                               )),
+                                         )
+
                                         ],
                                       ),
                                       Row(
@@ -426,18 +430,21 @@ class _SearchViewState extends State<SearchView> {
                                           const SizedBox(
                                             width: 10.0,
                                           ),
-                                          Text(
-                                              searchController.searchList[i].schoolName != ""
-                                                  ? "${searchController.searchList[i].schoolName}"
-                                                  : "Not disclosed",
-                                              overflow: TextOverflow.fade,
-                                              maxLines: 1,
-                                              softWrap: false,
-                                              style: TextStyle().copyWith(
-                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w400,
-                                              ))
+                                          Expanded(
+                                            child: Text(
+                                                searchController.searchList[i].schoolName != ""
+                                                    ? "${searchController.searchList[i].schoolName}"
+                                                    : "Not disclosed",
+                                                overflow: TextOverflow.fade,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                                style: TextStyle().copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w400,
+                                                )),
+                                          )
+
                                         ],
                                       ),
                                       const SizedBox(
@@ -743,7 +750,7 @@ class _SearchViewState extends State<SearchView> {
                                                 width: 10.0,
                                               ),
                                               searchController.classList[i].rating.toString().isNotEmpty
-                                                  ? Text(
+                                                  ? Expanded(child: Text(
                                                   searchController.classList[i].rating.toString() != Null
                                                       ? "${searchController.classList[i].rating.toString()}"
                                                       : "Na",
@@ -754,7 +761,7 @@ class _SearchViewState extends State<SearchView> {
                                                     color: Theme.of(context).textTheme.bodyText1!.color,
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w400,
-                                                  ))
+                                                  )))
                                                   : Text("N/A",
                                                   style: TextStyle().copyWith(
                                                     color: Theme.of(context).textTheme.bodyText1!.color,
@@ -791,18 +798,18 @@ class _SearchViewState extends State<SearchView> {
                                               const SizedBox(
                                                 width: 10.0,
                                               ),
-                                              Text(
-                                                  searchController.classList[i].languageLevel.toString() != Null
-                                                      ? level(searchController.classList[i].languageLevel.toString())
-                                                      : "Na",
-                                                  overflow: TextOverflow.fade,
-                                                  maxLines: 1,
-                                                  softWrap: false,
-                                                  style: TextStyle().copyWith(
-                                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w400,
-                                                  ))
+                                             Expanded(child:  Text(
+                                                 searchController.classList[i].languageLevel.toString() != Null
+                                                     ? level(searchController.classList[i].languageLevel.toString())
+                                                     : "Na",
+                                                 overflow: TextOverflow.fade,
+                                                 maxLines: 1,
+                                                 softWrap: false,
+                                                 style: TextStyle().copyWith(
+                                                   color: Theme.of(context).textTheme.bodyText1!.color,
+                                                   fontSize: 10,
+                                                   fontWeight: FontWeight.w400,
+                                                 )))
                                             ],
                                           ),
                                           Row(
@@ -811,18 +818,19 @@ class _SearchViewState extends State<SearchView> {
                                               const SizedBox(
                                                 width: 10.0,
                                               ),
-                                              Text(
-                                                  searchController.classList[i].schoolName != ""
-                                                      ? "${searchController.classList[i].schoolName}"
-                                                      : "Not disclosed",
-                                                  overflow: TextOverflow.fade,
-                                                  maxLines: 1,
-                                                  softWrap: false,
-                                                  style: TextStyle().copyWith(
-                                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w400,
-                                                  ))
+                                             Expanded(child: Text(
+                                                 searchController.classList[i].schoolName != ""
+                                                     ? "${searchController.classList[i].schoolName}"
+                                                     : "Not disclosed",
+                                                 overflow: TextOverflow.fade,
+                                                 maxLines: 1,
+                                                 softWrap: false,
+                                                 style: TextStyle().copyWith(
+                                                   color: Theme.of(context).textTheme.bodyText1!.color,
+                                                   fontSize: 10,
+                                                   fontWeight: FontWeight.w400,
+                                                 )))
+
                                             ],
                                           ),
                                           const SizedBox(
