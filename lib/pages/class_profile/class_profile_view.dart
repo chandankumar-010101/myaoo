@@ -41,10 +41,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("Class Profile"),
+        title:  Text("Class Profile",
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 18, fontWeight: FontWeight.w700),
+          overflow: TextOverflow.clip,
+          textAlign: TextAlign.center,
+
+        ),
       ),
       body: FutureBuilder(
-        future: PangeaServices.fetchClassInfo(context, roomAlias),
+        future: roomAlias.isNotEmpty?PangeaServices.fetchClassInfo(context, roomAlias):null,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final FetchClassInfoModel data =
@@ -90,18 +95,15 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   : Icon(
                                       Icons.people,
                                       size: 60,
-                                      color: Theme.of(context).primaryColor,
+                                      color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary ==
-                                              Colors.white
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                      color:Theme.of(context).colorScheme.onPrimary == Colors.white
+                                          ? Colors.black
+                                          : Colors.white,
                                       width: 2.0),
                                   shape: BoxShape.circle),
                             ),
@@ -109,20 +111,13 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 bottom: 4,
                                 right: 0,
                                 child: Container(
-                                  padding: EdgeInsets.all(2),
+                                  padding: const EdgeInsets.all(2.0),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          width: 2)),
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                      border: Border.all(color: Colors.white, width: 2)),
                                   child: const Icon(
                                     Icons.school,
-                                    color: Colors.black,
                                     size: 15.0,
                                   ),
                                 ))
@@ -141,7 +136,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
                                 Icon(
                                   Icons.school,
-                                  color: Colors.black,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                   size: 15.0,
                                 ),
                                 SizedBox(width: 10,),
@@ -163,7 +160,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               children: [
                                 Icon(
                                   Icons.person,
-                                  color: Colors.black,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                   size: 15.0,
                                 ),
                                 SizedBox(width: 10,),
@@ -180,17 +179,17 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                             ):Container(),
 
                              Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              //mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                            Icon(
+                               Icon(
                                   Icons.location_pin,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onPrimaryContainer,
                                   size: 20.0,
                                 ),
-                                data.city.isNotEmpty?
-                                Text(
+                               data.city.isNotEmpty?
+                               Text(
                                   data.city.capitalizeFirst!,
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)
@@ -199,8 +198,8 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                           .color,
                                       fontSize: 12),
                                 ):Container(),
-                                data.country.isNotEmpty?data.city.isNotEmpty?
-                                Text(
+                               data.country.isNotEmpty?data.city.isNotEmpty?
+                               Text(
                                  " , ${data.country.capitalizeFirst}",
                                   style: const TextStyle().copyWith(
                                       color: Theme.of(context)

@@ -9,8 +9,8 @@ import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/class_detail_model.dart';
 import '../../model/exchange_classInfo.dart';
-import '../../services/class_controllers.dart';
-import '../../services/controllers.dart';
+import '../../controllers/class_controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../services/services.dart';
 
 import 'class_profile_view.dart';
@@ -40,15 +40,10 @@ class RequestScreenState extends State<RequestScreen> {
   fetchFlag(FetchClassInfoModel data, String url) {
     try {
       String path = url + data.flags[0].languageFlag ?? "";
-      print(path);
-      return path.isNotEmpty
-          ? SizedBox(
-              width: 20,
-              height: 20,
-              child: Image.network(path),
-            )
-          : Container();
+
+      return path.isNotEmpty ? SizedBox(width: 20,height: 20, child: Image.network(path),): Container();
     } catch (e) {
+      print("Error");
       return Container();
     }
   }
@@ -56,10 +51,11 @@ class RequestScreenState extends State<RequestScreen> {
   fetchFlag2(FetchClassInfoModel data, String url) {
     try{
       String path = url + data.flags[1].languageFlag.toString();
-      print(path);
+
       return SizedBox(width: 20, height: 20, child: Image.network(path));
 
     }catch(e){
+      print("Error");
       return Container();
     }}
   

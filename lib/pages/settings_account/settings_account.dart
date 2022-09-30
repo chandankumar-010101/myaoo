@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,7 +14,7 @@ import 'package:pangeachat/pages/settings_account/settings_account_view.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
 import '../../model/flag_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 
 class SettingsAccount extends StatefulWidget {
   const SettingsAccount({Key? key}) : super(key: key);

@@ -3,7 +3,6 @@ import 'dart:math' as math;
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
@@ -11,7 +10,7 @@ import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
 import '../../model/report_user_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 import 'user_bottom_sheet_view.dart';

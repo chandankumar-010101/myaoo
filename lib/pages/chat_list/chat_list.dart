@@ -3,12 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:matrix/matrix.dart';
@@ -27,13 +26,16 @@ import 'package:vrouter/vrouter.dart';
 import '../../../utils/account_bundles.dart';
 import '../../main.dart';
 import '../../model/class_detail_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../utils/matrix_sdk_extensions.dart/matrix_file_extension.dart';
 import '../../utils/url_launcher.dart';
 import '../../widgets/matrix.dart';
 import '../bootstrap/bootstrap_dialog.dart';
 import '../search/search.dart';
 import '../search/search_view_controller.dart';
+import '../../controllers/chat_list_controller.dart';
+
+import 'dart:math' as math;
 
 enum SelectMode { normal, share, select }
 
@@ -62,12 +64,13 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   StreamSubscription? _intentUriStreamSubscription;
   int userType = GetStorage().read("usertype") ?? 0;
   SpacesEntry? _activeSpacesEntry;
+  ChatListControllerGet chatListController = Get.put(ChatListControllerGet());
+
   SpacesEntry get activeSpacesEntry {
     final id = _activeSpacesEntry;
     return (id == null || !id.stillValid(context)) ? defaultSpacesEntry : id;
   }
 
-  Permissions? permissions;
   BoxConstraints? snappingSheetContainerSize;
 
   String? get activeSpaceId =>
@@ -84,8 +87,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Stream<Client> get clientStream => _clientStream.stream;
 
-  List<User> participantsList = [];
-  List<User> participants = [];
   void _onScroll() {
     final newScrolledToTop = scrollController.position.pixels <= 0;
     if (newScrolledToTop != scrolledToTop) {
@@ -97,10 +98,10 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
 
   Future<void> setActiveSpacesEntry(
       BuildContext context, SpacesEntry? spaceId) async {
+    ///set active space id in pangea class (LALA)
     Matrix.of(context)
         .pangeaClassController
         .setActiveSpacesEntry(context, spaceId);
-    getClassPermissions();
     if ((snappingSheetController.isAttached
             ? snappingSheetController.currentPosition
             : 0) !=
@@ -108,68 +109,18 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
       snapBackSpacesSheet();
     }
 
-    participants.clear();
-    //
     if (spaceId != null) {
-      participants.clear();
-      setState(() => _activeSpacesEntry = spaceId);
-      getClassPermissions();
-      getpeople();
-    }
-  }
-
-  getpeople() async {
-    if (_activeSpacesEntry!.getSpace(context) != null) {
-      log(_activeSpacesEntry!.getSpace(context)!.id);
-      participants.clear();
-      participants =
-          await _activeSpacesEntry!.getSpace(context)!.requestParticipants();
-
-      participants.removeWhere(
-          (element) => element.id == Matrix.of(context).client.userID);
-      setState(() {});
-    } else {
-      participants.clear();
-      List<dynamic> alreadyExists = [];
-      List<User> finalUsers = [];
-
-      final rooms = Matrix.of(context).client.rooms;
-
-      for (var room in rooms) {
-        participantsList.addAll(await room.requestParticipants());
-
-        for (var user in participantsList) {
-          if (!participantsList.contains(user.stateKey) &&
-              user.stateKey != null &&
-              !alreadyExists.contains(user.stateKey)) {
-            Map<String, dynamic> ele = {};
-            ele.addAll(user.toJson());
-            finalUsers.add(user);
-            alreadyExists.add(user.stateKey);
-          }
-        }
+      if (spaceId.runtimeType != AllRoomsSpacesEntry) {
+        chatListController.getClassPermissions(
+            spaceId.getSpace(context)!.id, context);
+        chatListController.getpeople(context, spaceId);
+      } else {
+        chatListController.participants.clear();
+        chatListController.initialPermissions();
       }
-      finalUsers.removeWhere(
-          (element) => element.id == Matrix.of(context).client.userID);
-
-      participants = finalUsers;
-      permissions = Permissions(
-          pangeaClass: 0,
-          isPublic: true,
-          isOpenEnrollment: true,
-          isOpenExchange: true,
-          oneToOneChatClass: true,
-          oneToOneChatExchange: true,
-          isCreateRooms: true,
-          isCreateRoomsExchange: true,
-          isShareVideo: true,
-          isSharePhoto: true,
-          sendVoice: true,
-          isShareFiles: true,
-          isShareLocation: true,
-          isCreateStories: true);
-
-      setState(() {});
+      setState(() => _activeSpacesEntry = spaceId);
+    } else {
+      chatListController.initialPermissions();
     }
   }
 
@@ -287,37 +238,86 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     }
   }
 
-  getClassPermissions() async {
-    String acessToken = GetStorage().read("access");
+  ///when click on user Id then create one to one room
+  createOneToOneRooms(User user) async {
+    final math.Random random = math.Random();
 
-    if (activeSpaceId != null) {
-      final result =
-          await PangeaServices.fetchClassInfo(context, activeSpaceId!);
-      permissions = result.permissions;
-      log("One on One room (${activeSpaceId}): ${result.permissions.oneToOneChatClass}");
-      log("Create Room  (${activeSpaceId}): ${result.permissions.isCreateRooms}");
-      log("Stories  (${activeSpaceId}): ${result.permissions.isCreateStories}");
-    } else {
-      permissions = Permissions(
-        pangeaClass: 0,
-        isPublic: true,
-        isOpenEnrollment: true,
-        isOpenExchange: true,
-        oneToOneChatClass: true,
-        oneToOneChatExchange: true,
-        isCreateRooms: true,
-        isCreateRoomsExchange: true,
-        isShareVideo: true,
-        isSharePhoto: true,
-        sendVoice: true,
-        isShareFiles: true,
-        isShareLocation: true,
-        isCreateStories: false,
-        //isCreateStories: true,
-      );
+    final space = activeSpacesEntry.getSpace(context);
+    final rooms = Matrix.of(context)
+        .client
+        .rooms
+        .where((room) =>
+            room.spaceParents.isNotEmpty &&
+            room.spaceParents.first.roomId == space!.id)
+        .toList();
+    print(rooms.map((e) => e.displayname).toList().toString());
+    final List<Room> room = rooms.where((element) => element.displayname.contains(
+        user.displayName!.replaceAll(" ", "_") + "-" + Matrix.of(context).client.userID.toString().split(":").first.replaceAll("@", "") + "#")).toList();
+
+    if (room.isNotEmpty) {
+      PangeaControllers.toastMsg(msg: "Room already exist with this user");
     }
-    setState(() {});
+    else {
+
+      final roomID = await showFutureLoadingDialog(
+        context: context,
+        future: () => Matrix.of(context).client.createRoom(
+              invite: [user.id],
+              preset: CreateRoomPreset.privateChat,
+              isDirect: true,
+              initialState: [
+                StateEvent(
+                  content: {
+                    "guest_access": "can_join",
+                  },
+                  type: EventTypes.GuestAccess,
+                  stateKey: "",
+                ),
+                StateEvent(
+                    content: {
+                      "via": ["matrix.staging.pangea.chat"],
+                      "canonical": true
+                    },
+                    type: EventTypes.spaceParent,
+                    stateKey: space != null ? space.id : ""),
+              ],
+              // creationContent: {'type': RoomCreationTypes.mSpace},
+              roomAliasName: user.displayName!.replaceAll(" ", "_") +
+                  "-" +
+                  Matrix.of(context)
+                      .client
+                      .userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "") +
+                  "#" +
+                  random.nextInt(999).toString(),
+              name: user.displayName!.replaceAll(" ", "_") +
+                  "-" +
+                  Matrix.of(context)
+                      .client
+                      .userID
+                      .toString()
+                      .split(":")
+                      .first
+                      .replaceAll("@", "") +
+                  "#" +
+                  random.nextInt(999).toString(),
+            ),
+      );
+      if (roomID.result != null) {
+        VRouter.of(context).pop();
+        PangeaControllers.toastMsg(msg: "Created Successfully", success: true);
+      }
+      if (roomID == null) {
+        VRouter.of(context).toSegments(['rooms', roomID.result!, 'details']);
+      }
+    }
+    //  final user = space.getState(EventTypes.RoomMember, userId)?.asUser;
   }
+
+  ///check create room permissions
 
   @override
   void initState() {
@@ -326,7 +326,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     scrollController.addListener(_onScroll);
     _waitForFirstSync();
     _hackyWebRTCFixForWeb();
-    getClassPermissions();
+    chatListController.getClassPermissions(activeSpaceId, context);
 
     super.initState();
   }
@@ -722,11 +722,16 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
             rooms: true)
         : null;
 
-    if(GetStorage().read("firstTime")!=null && GetStorage().read("firstTime")){
+    if (GetStorage().read("firstTime") != null &&
+        GetStorage().read("firstTime")) {
       GetStorage().remove("firstTime");
-      GetStorage().read("usertype") ==2?VRouter.of(context).to("/newclass"):VRouter.of(context).to("/join_with_code");
+      GetStorage().read("usertype") == 2
+          ? VRouter.of(context).to("/newclass")
+          : VRouter.of(context).to("/join_with_code");
     }
-    return Obx(() => getxController.throughClassProfile.value ? const Search(): ChatListView(this));
+    return Obx(() => getxController.throughClassProfile.value
+        ? const Search()
+        : ChatListView(this));
   }
 
   void _hackyWebRTCFixForWeb() {

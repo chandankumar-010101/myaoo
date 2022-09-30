@@ -121,7 +121,8 @@ class AddStoryController extends State<AddStoryPage> {
 
     setState(() {
       video = MatrixVideoFile(bytes: bytes, name: picked.name);
-      videoPlayerController = VideoPlayerController.file(File(picked.path))..setLooping(true);
+      videoPlayerController = VideoPlayerController.file(File(picked.path))
+        ..setLooping(true);
     });
   }
 
@@ -141,7 +142,8 @@ class AddStoryController extends State<AddStoryPage> {
 
     List<User> contact = await activespace!.requestParticipants();
 
-    final result = contact.where((element) => element.id != client.userID).toList();
+    final result =
+        contact.where((element) => element.id != client.userID).toList();
 
     if (result.isEmpty) {
       throw 'No participants in class to share story with';
@@ -162,7 +164,8 @@ class AddStoryController extends State<AddStoryPage> {
     final postResult = await showFutureLoadingDialog(
       context: context,
       future: () async {
-        if (storiesRoom == null) throw ('Your story room is created please post story again.');
+        if (storiesRoom == null)
+          throw ('Your story chat is created please post story again.');
 
         var video = this.video?.detectFileType;
         if (video != null) {
@@ -253,7 +256,8 @@ class AddStoryController extends State<AddStoryPage> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 1)).whenComplete(() => spaceId = VRouter.of(context).queryParameters["spaceId"].toString());
+    Future.delayed(Duration(seconds: 1)).whenComplete(() =>
+        spaceId = VRouter.of(context).queryParameters["spaceId"].toString());
 
     final rand = Random().nextInt(1000).toString();
     backgroundColor = rand.color;

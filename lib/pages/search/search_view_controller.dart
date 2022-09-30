@@ -4,13 +4,12 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pangeachat/services/services.dart';
 
 import '../../model/search_view_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../utils/api_urls.dart';
 import 'package:http/http.dart' as http;
 

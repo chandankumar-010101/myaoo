@@ -4,7 +4,6 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/classroom/v1.dart' as v1;
 import 'package:hive_flutter/hive_flutter.dart';

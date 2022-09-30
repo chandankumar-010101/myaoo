@@ -20,7 +20,7 @@ abstract class FluffyThemes {
     String? hintText,
     Widget? suffixIcon,
     Widget? prefixIcon,
-    Color? errorColor,
+    Color? errorColor, required OutlineInputBorder enabledBorder, required OutlineInputBorder border, required InputBorder focusedBorder, required bool filled, required Color fillColor,
   }) =>
       InputDecoration(
         border: OutlineInputBorder(

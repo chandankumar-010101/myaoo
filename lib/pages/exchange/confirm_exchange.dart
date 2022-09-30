@@ -3,7 +3,6 @@ import 'dart:html';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,7 +14,7 @@ import 'package:pangeachat/widgets/star_rating.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../config/app_config.dart';
 import '../../model/fetchClassParticipants.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
 import 'package:matrix/matrix.dart' as sdk;
@@ -231,36 +230,22 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                                 Theme.of(context).primaryColor,
                                           ),
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary ==
-                                                    Colors.white
-                                                ? Theme.of(context).primaryColor
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary,
-                                            width: 2.0),
+                                        border: Border.all(color:  Theme.of(context).colorScheme.onPrimary == Colors.white
+                                            ? Colors.black
+                                            : Colors.white, width: 2.0),
                                         shape: BoxShape.circle),
                                   ),
                                   Positioned(
                                       bottom: 4,
                                       right: 0,
                                       child: Container(
-                                        padding: EdgeInsets.all(2),
+                                        padding: const EdgeInsets.all(2.0),
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                            border: Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary,
-                                                width: 2)),
+                                            color: Theme.of(context).colorScheme.onPrimary,
+                                            border: Border.all(color: Colors.white, width: 2)),
                                         child: const Icon(
                                           Icons.school,
-                                          color: Colors.black,
                                           size: 15.0,
                                         ),
                                       ))

@@ -35,9 +35,15 @@ class _ClassPermissionsState extends State<ClassPermissions> {
   @override
   void initState() {
     super.initState();
-    box.read("public") == null ? publicGroup = false : publicGroup = box.read("public");
-    box.read("openEnrollment") == null ? openEnrollment = false : openEnrollment = box.read("openEnrollment");
-    box.read("openExchange") == null ? openToExchange = false : openToExchange = box.read("openExchange");
+    box.read("public") == null
+        ? publicGroup = false
+        : publicGroup = box.read("public");
+    box.read("openEnrollment") == null
+        ? openEnrollment = false
+        : openEnrollment = box.read("openEnrollment");
+    box.read("openExchange") == null
+        ? openToExchange = false
+        : openToExchange = box.read("openExchange");
     box.remove("public");
     box.remove("openEnrollment");
     box.remove("openExchange");
@@ -53,7 +59,9 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                 backgroundColor: Theme.of(context).backgroundColor,
                 title: Text(
                   "Create a Class",
-                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
+
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                 ),
@@ -61,7 +69,8 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                 elevation: 10,
                 automaticallyImplyLeading: false,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  icon: Icon(Icons.arrow_back,
+                      color: Theme.of(context).textTheme.bodyText1!.color),
                   onPressed: () {
                     context.vRouter.to("/newclass/language");
                   },
@@ -71,7 +80,7 @@ class _ClassPermissionsState extends State<ClassPermissions> {
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
             "Update class permissions",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -79,12 +88,13 @@ class _ClassPermissionsState extends State<ClassPermissions> {
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
             },
           ),
         ),
+
         body: Container(
           width: size.width,
           height: size.height,
@@ -96,14 +106,18 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                   height: size.height * 0.04,
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: size.width * 0.1, vertical: size.height * 0.02),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.1,
+                      vertical: size.height * 0.02),
                   width: size.width,
                   height: 40,
                   child: Center(
                     child: Text(
                       "Class Permissions",
-                      style:
-                          const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+                      style: const TextStyle().copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.center,
                     ),
@@ -121,15 +135,19 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                       SwitchListTile.adaptive(
                         title: Text(
                           "Public",
-                          style: const TextStyle()
-                              .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+                          style: const TextStyle().copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
                           overflow: TextOverflow.clip,
                         ),
                         value: publicGroup,
                         onChanged: setPublicGroup,
                       ),
                       Container(
-                        constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
+                        constraints:
+                            BoxConstraints(minWidth: 100, maxWidth: 700),
                         padding: EdgeInsets.all(size.height * 0.01),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -140,7 +158,12 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "Public classes are discoverable in the classes tab. Private classes are hidden to anyone not already in the class but can still be joined by a private invite link.",
-                                    style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -153,15 +176,19 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                       SwitchListTile.adaptive(
                         title: Text(
                           "Open Enrollment?",
-                          style: const TextStyle()
-                              .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+                          style: const TextStyle().copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
                           overflow: TextOverflow.clip,
                         ),
                         value: openEnrollment,
                         onChanged: setOpenEnrollment,
                       ),
                       Container(
-                        constraints: BoxConstraints(minWidth: 100, maxWidth: 700),
+                        constraints:
+                            BoxConstraints(minWidth: 100, maxWidth: 700),
                         padding: EdgeInsets.all(size.height * 0.01),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -172,7 +199,12 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
                                     "If your class is Open Enrollment, new Students can request to enroll. Otherwise, your class is invite Only, and new students will need a private link or class code.",
-                                    style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -185,15 +217,19 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                       SwitchListTile.adaptive(
                         title: Text(
                           "Open to Exchanges?",
-                          style: const TextStyle()
-                              .copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14, fontWeight: FontWeight.w700),
+                          style: const TextStyle().copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
                           overflow: TextOverflow.clip,
                         ),
                         value: openToExchange,
                         onChanged: setOpentToExchange,
                       ),
                       Container(
-                        constraints: const BoxConstraints(minWidth: 100, maxWidth: 700),
+                        constraints:
+                            const BoxConstraints(minWidth: 100, maxWidth: 700),
                         padding: EdgeInsets.all(size.height * 0.01),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -203,8 +239,13 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Text(
-                                    "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create rooms, and students from both classes can join the rooms for  language exchanges.",
-                                    style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                    "Toggle this on to allow for Exchange Requests initiated by you or another teacher. Exchanges are linked spaces in which both teachers can create chats, and students from both classes can join the chats for language exchanges.",
+                                    style: const TextStyle().copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.left,
                                   ),
@@ -233,7 +274,12 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                               child: Center(
                                 child: Text(
                                   "2/4",
-                                  style: const TextStyle().copyWith(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 14),
+                                  style: const TextStyle().copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 14),
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),
@@ -247,14 +293,25 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                 width: 50.0,
                                 height: 50.0,
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary ==
+                                            Colors.white
                                         ? Theme.of(context).primaryColor
-                                        : Theme.of(context).colorScheme.onPrimary,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                            ? Theme.of(context).primaryColorLight
-                                            : Theme.of(context).colorScheme.onPrimary)),
+                                        color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                Colors.white
+                                            ? Theme.of(context)
+                                                .primaryColorLight
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary)),
                                 child: const Icon(
                                   Icons.arrow_right_alt,
                                   color: Colors.white,
@@ -269,25 +326,43 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                           children: [
                             InkWell(
                               onTap: () {
-                                VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+                                VRouter.of(context).to('/classDetails',
+                                    queryParameters: {"id": id});
                               },
                               child: Container(
                                 width: 200,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary ==
+                                            Colors.white
                                         ? Theme.of(context).primaryColor
-                                        : Theme.of(context).colorScheme.onPrimary,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                            ? Theme.of(context).primaryColorLight
-                                            : Theme.of(context).colorScheme.onPrimary)),
+                                        color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                Colors.white
+                                            ? Theme.of(context)
+                                                .primaryColorLight
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary)),
                                 child: Center(
                                   child: Text(
                                     "Cancel",
                                     style: const TextStyle().copyWith(
-                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
+                                        color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                Colors.white
+                                            ? Colors.white
+                                            : Colors.white,
+                                        fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.center,
                                   ),
@@ -298,7 +373,8 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                               onTap: () async {
                                 final result = await showFutureLoadingDialog(
                                   context: context,
-                                  future: () => PangeaServices.updateClassPermission(
+                                  future: () =>
+                                      PangeaServices.updateClassPermission(
                                     context: context,
                                     classId: id,
                                     isPublic: publicGroup.toString(),
@@ -307,26 +383,44 @@ class _ClassPermissionsState extends State<ClassPermissions> {
                                   ),
                                 );
                                 if (result != null) {
-                                  VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+                                  VRouter.of(context).to('/classDetails',
+                                      queryParameters: {"id": id});
                                 }
                               },
                               child: Container(
                                 width: 200,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.onPrimary == Colors.white
+                                    color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary ==
+                                            Colors.white
                                         ? Theme.of(context).primaryColor
-                                        : Theme.of(context).colorScheme.onPrimary,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white
-                                            ? Theme.of(context).primaryColorLight
-                                            : Theme.of(context).colorScheme.onPrimary)),
+                                        color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                Colors.white
+                                            ? Theme.of(context)
+                                                .primaryColorLight
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary)),
                                 child: Center(
                                   child: Text(
                                     "Update",
                                     style: const TextStyle().copyWith(
-                                        color: Theme.of(context).colorScheme.onPrimary == Colors.white ? Colors.white : Colors.white, fontSize: 14),
+                                        color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary ==
+                                                Colors.white
+                                            ? Colors.white
+                                            : Colors.white,
+                                        fontSize: 14),
                                     overflow: TextOverflow.clip,
                                     textAlign: TextAlign.center,
                                   ),

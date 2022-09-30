@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
@@ -24,7 +23,7 @@ import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
 import '../../model/class_detail_model.dart';
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../chat_list/spaces_entry.dart';
 
 import 'package:matrix/matrix.dart' as sdk;

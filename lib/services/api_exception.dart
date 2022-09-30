@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert';
 
-import 'controllers.dart';
+import 'package:flutter/foundation.dart';
+
+import '../controllers/controllers.dart';
 
 class ApiException {
   static exception({required int statusCode, required String body}) {
@@ -12,15 +12,14 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Bad request",success: false);
-
+        PangeaControllers.toastMsg(msg: "Unknown error accrued",success: false);
         return;
       case 401:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Unauthorized access",success: false);
+        PangeaControllers.toastMsg(msg: "Exception: Unauthorized access",success: false);
 
         return;
       case 403:
@@ -28,21 +27,21 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Don't have permissions!",success: false);
+        PangeaControllers.toastMsg(msg: "Exception: Don't have permissions!",success: false);
         return;
       case 500:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Internal Server Error",success: false);
+        PangeaControllers.toastMsg(msg: "Exception: Internal Server Error",success: false);
         return;
       case 502:
         if (kDebugMode) {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Bad Gateway",success: false);
+        PangeaControllers.toastMsg(msg: "Exception: Bad Gateway",success: false);
 
 
         return;
@@ -51,7 +50,7 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Service Unavailable",success: false);
+        PangeaControllers.toastMsg(msg: "Exception: Service Unavailable",success: false);
 
         return;
       case 504:
@@ -59,7 +58,7 @@ class ApiException {
           print(body);
           print(statusCode);
         }
-        PangeaControllers.toastMsg(msg: "Exception $statusCode: Gateway timeout error!",success: false);
+        PangeaControllers.toastMsg(msg: "Exception: Gateway timeout error!",success: false);
 
        return;
       default:
@@ -68,7 +67,7 @@ class ApiException {
           print(statusCode);
         }
 
-        PangeaControllers.toastMsg(msg:  "Exception $statusCode: Unknown exception accrued!",success: false);
+        PangeaControllers.toastMsg(msg:  "Unknown exception accrued!",success: false);
         return;
     }
   }

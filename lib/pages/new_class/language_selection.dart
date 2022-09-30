@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:vrouter/vrouter.dart';
 import '../../model/flag_model.dart';
 import '../../services/services.dart';
@@ -301,10 +299,12 @@ class _ClassLanguageState extends State<ClassLanguage> {
       appBar:  AppBar(
               backgroundColor: Theme.of(context).backgroundColor,
               title: Text(
-                id.isNotEmpty?"Create a Class":"Update class Info",
+                id.isEmpty?"Create a Class":"Update class Info",
                 style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
-                    fontSize: 14),
+                    fontSize: 18,
+                fontWeight: FontWeight.w700
+                ),
                 overflow: TextOverflow.clip,
                 textAlign: TextAlign.center,
               ),
@@ -312,7 +312,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
               elevation: 10,
               automaticallyImplyLeading: false,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                icon: Icon(Icons.arrow_back, color:Theme.of(context).textTheme.bodyText1!.color),
                 onPressed: () {
                   id.isNotEmpty?VRouter.of(context).to('/classDetails', queryParameters: {"id": id}): context.vRouter.to("/newclass");
                 },
@@ -372,7 +372,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                       maxLength: 50,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        hintText: "Optional: City",
+                        hintText: "Optional: City, State",
                         hintStyle: TextStyle().copyWith(
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontSize: 14),
@@ -555,7 +555,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                 onSubmitted: (String? value) {},
                 decoration: InputDecoration(
                   hintText:
-                      "What should prospective students know\nabout your class? Potential exchange\nteachers?",
+                      "Class Description",
                   hintStyle: TextStyle().copyWith(
                       color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 14),

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -9,7 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:matrix/src/room.dart';
 import 'package:pangea_choreographer/choreographer/widgets/it_shimmer.dart';
 import 'package:pangeachat/pages/google_classroom/google_classroom.dart';
-import 'package:pangeachat/services/controllers.dart';
+import 'package:pangeachat/controllers/controllers.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
@@ -37,7 +36,8 @@ class _InviteStudentState extends State<InviteStudent> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon:  Icon(Icons.arrow_back,
+                color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
               VRouter.of(context).to('/classDetails', queryParameters: {"id": roomId});
             },

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -39,68 +38,46 @@ import 'api_exception.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-import 'controllers.dart';
+import '../controllers/controllers.dart';
 
 class PangeaServices {
   static final box = GetStorage();
+
   static SearchViewController searchViewController =
       Get.put(SearchViewController());
+
 
   PangeaServices._init() {
     accessTokenStatus();
   }
-  static accessTokenStatus() async {
-    try {
-      if (box.read("access") != null) {
-        if (box.read("clientID") != null && box.read("accessToken") != null) {
-          if (JwtDecoder.isExpired(box.read("access"))) {
-            await fetchUserTokenAndInfo(
-                box.read("clientID"), box.read("accessToken"));
-          }
-        } else {
-          print("Matrix UserId and Token not found");
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
-  static joinRoom(BuildContext context, String roomAlias) async {
-    final client = Matrix.of(context).client;
-    final result = await showFutureLoadingDialog<String>(
-      context: context,
-      future: () => client.joinRoom(roomAlias),
-    );
-    if (result.error == null) {
-      if (client.getRoomById(result.result!) == null) {
-        await client.onSync.stream.firstWhere(
-            (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
-      }
-      // Fluttertoast.showToast(msg: "Class Joined Successfully", webBgColor: "#00ff00",backgroundColor: Colors.red);
-      // VRouter.of(context).toSegments(['rooms', result.result!]);
-      Navigator.of(context, rootNavigator: false).pop();
-      return;
-    }
-  }
 
-  static Future<bool?> userExitInClass(String classId) async {
+  static SearchViewController searchViewController = Get.put(SearchViewController());
+
+
+  static Future<bool> userExitInClass(String classId) async {
     ///fetch the list of participants of the class
     try {
-      final FetchClassParticipants users = await fetchParticipants(classId);
+      if(classId.isNotEmpty){
+        final FetchClassParticipants users = await fetchParticipants(classId);
 
-      ///check user exist in the class or not
-      final List exit = users.roomMembers!.members!
-          .where((element) => element == box.read("clientID"))
-          .toList();
-      if (exit.isEmpty) {
+        ///check user exist in the class or not
+        final List exit = users.roomMembers!.members!
+            .where((element) => element == box.read("clientID"))
+            .toList();
+
+        if (exit.isEmpty) {
+          return false;
+        } else {
+          return true;
+        }
+      }else{
         return false;
-      } else {
-        return true;
       }
+
     } catch (e) {
-      PangeaControllers.toastMsg(msg: "Error: $e");
-      return null;
+      PangeaControllers.toastMsg(msg: "UserExistInClass: $e");
+      return false;
     }
   }
 
@@ -120,15 +97,51 @@ class PangeaServices {
         final data = searchViewModelFromJson(result.body);
 
         searchViewController.searchList.value = data.results!;
+
       } else {
         ApiException.exception(
             statusCode: result.statusCode, body: result.body);
+
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
       PangeaControllers.toastMsg(msg: "Error: $e");
+    }
+  }
+  static accessTokenStatus() async {
+    try {
+      if (box.read("access") != null) {
+        if (box.read("clientID") != null && box.read("accessToken") != null) {
+          if (JwtDecoder.isExpired(box.read("access"))) {
+            await fetchUserTokenAndInfo(
+                box.read("clientID"), box.read("accessToken"));
+          }
+        } else {
+          print("Matrix UserId and Token not found");
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static joinClass(BuildContext context, String roomAlias) async {
+    final client = Matrix.of(context).client;
+    final result = await showFutureLoadingDialog<String>(
+      context: context,
+      future: () => client.joinRoom(roomAlias),
+    );
+    if (result.error == null) {
+      if (client.getRoomById(result.result!) == null) {
+        await client.onSync.stream.firstWhere(
+            (sync) => sync.rooms?.join?.containsKey(result.result) ?? false);
+      }
+      // Fluttertoast.showToast(msg: "Class Joined Successfully", webBgColor: "#00ff00",backgroundColor: Colors.red);
+      // VRouter.of(context).toSegments(['rooms', result.result!]);
+      Navigator.of(context, rootNavigator: false).pop();
+      return;
     }
   }
 
@@ -150,23 +163,29 @@ class PangeaServices {
         final ClassCodeModel data =
             ClassCodeModel.fromJson(jsonDecode(value.body));
         if (data.pangeaClassRoomId != null) {
+
           final bool? exit = await userExitInClass(data.pangeaClassRoomId!);
           if (exit != null) {
             if (!exit) {
               ///join the room with class Id
-              joinRoom(context, data.pangeaClassRoomId!);
+              joinClass(context, data.pangeaClassRoomId!);
               PangeaControllers.toastMsg(
                   msg: "Class Joined Successfully", success: true);
             } else {
               PangeaControllers.toastMsg(
                   msg: "You have already joined this class", success: true);
             }
+
           }
         } else {
           PangeaControllers.toastMsg(
               msg: "Unable to find User Information", success: false);
         }
-      } else {
+      }
+      else if(value.statusCode ==400){
+        PangeaControllers.toastMsg(msg: "Invalid class code", success: false);
+      }
+      else {
         ApiException.exception(statusCode: value.statusCode, body: value.body);
       }
     } catch (e) {
@@ -254,7 +273,8 @@ class PangeaServices {
             success: true);
       }
     } else {
-      PangeaControllers.toastMsg(msg: "Unable to Fetch Room", success: false);
+      PangeaControllers.toastMsg(msg: "Unable to Fetch Chat", success: false);
+
     }
   }
 
@@ -516,7 +536,8 @@ class PangeaServices {
   }) async {
     PangeaServices._init();
     if (classRoom == null) {
-      PangeaControllers.toastMsg(msg: "Token expired or unable to find room ");
+      PangeaControllers.toastMsg(msg: "Token expired or unable to find chat ");
+
       return;
     }
     try {
@@ -809,7 +830,7 @@ class PangeaServices {
           throw Exception("${value.statusCode}");
         }
       } else {
-        throw Exception("Room ID is empty".toString());
+        throw "Room ID is empty";
       }
     } catch (e) {
       throw Exception(e.toString());

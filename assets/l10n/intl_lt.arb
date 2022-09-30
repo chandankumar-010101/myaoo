@@ -2532,7 +2532,7 @@
       "username": {}
     }
   },
-  "changedTheRoomAliases": "{username} changed the room aliases",
+  "changedTheRoomAliases": "{username} changed the chat aliases",
   "@changedTheRoomAliases": {
     "type": "text",
     "placeholders": {

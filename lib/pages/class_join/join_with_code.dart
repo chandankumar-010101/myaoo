@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pangeachat/services/services.dart';
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 
 class JoinClassWithCode extends StatefulWidget {
   const JoinClassWithCode({Key? key}) : super(key: key);
@@ -91,7 +90,7 @@ class _JoinClassWithCodeState extends State<JoinClassWithCode> {
                   if (codeController.text.length == 6) {
                     PangeaServices.joinClassWithCode(codeController.text, context);
                   } else {
-                    PangeaControllers.toastMsg(msg: "length is short!!!!!!",);
+                    PangeaControllers.toastMsg(msg: "Class code length is short!",);
                   }
                 },
                 child: Container(

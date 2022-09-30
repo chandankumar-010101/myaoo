@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/model/class_code_model.dart';
@@ -8,7 +7,7 @@ import 'package:pangeachat/services/services.dart';
 
 import 'package:vrouter/vrouter.dart';
 
-import '../../services/controllers.dart';
+import '../../controllers/controllers.dart';
 import '../../widgets/matrix.dart';
 
 class JoinClassWithLink extends StatefulWidget {
@@ -39,7 +38,7 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
     if( usertype !=null && usertype !=2){
       final bool? exist = await PangeaServices.userExitInClass(classId);
       if(exist !=null && !exist){
-        PangeaServices.joinRoom(context, classId);
+        PangeaServices.joinClass(context, classId);
       }else{
         PangeaControllers.toastMsg(msg: "You are already a part of this class");
       }
