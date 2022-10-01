@@ -602,7 +602,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "contactHasBeenInvitedToTheGroup": "Contact has been invited to the group",
+  "contactHasBeenInvitedToTheGroup": "Contact has been invited to the group.",
   "@contactHasBeenInvitedToTheGroup": {
     "type": "text",
     "placeholders": {}
