@@ -46,6 +46,7 @@ class ClassAnalyticsController extends State<ClassAnalytics> {
   }
 
   String? get spaceId => context.vRouter.pathParameters['spaceid'];
+
   SpaceSpacesEntry? _selectedSpacesEntry;
   SpaceSpacesEntry get selectedSpacesEntry {
     if (_selectedSpacesEntry == null) {
@@ -80,8 +81,12 @@ class ClassAnalyticsController extends State<ClassAnalytics> {
         throw Exception();
       }
       final String classId = spaceId!;
-      classAnalyticsModel =
-          await PangeaServices.classAnalyticsFromClassId(classId: classId);
+      final classInfo = await PangeaServices.fetchClassInfo(context, classId);
+
+      final targetLanguage = classInfo.targetLanguage;
+      classAnalyticsModel = await PangeaServices.classAnalyticsFromClassId(
+          classId: classId, targetLanguage: targetLanguage);
+
       await _populateUsers(context);
       _mapTableEntries(classAnalyticsModel!);
     } catch (err) {
