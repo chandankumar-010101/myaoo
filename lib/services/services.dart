@@ -52,9 +52,67 @@ class PangeaServices {
   }
 
 
-  static SearchViewController searchViewController = Get.put(SearchViewController());
+  static searchClass(String text) async {
+    try {
+      PangeaServices._init();
 
+      if(text.isEmpty){
+        final value = await http.get(Uri.parse(ApiUrls.class_list +"?p=${searchViewController.pageNo.value.toString()}&page_size=10"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+        );
+        if (value.statusCode == 200) {
 
+          final data = searchViewModelFromJson(value.body);
+          data.next != null ?  searchViewController.next.value = true :  searchViewController.next.value = false;
+          data.previous != null ?  searchViewController.previous.value = true :  searchViewController.previous.value =
+          false;
+          searchViewController.classList.value = data.results!;
+          searchViewController.loading.value = false;
+        }
+
+        else {
+          searchViewController.loading.value = false;
+          if (kDebugMode) {
+            print(value.body);
+          }
+          PangeaControllers.toastMsg(msg: "Error: Unable to fetch list of classes");
+        }
+
+      }else{
+        final result = await http.get(
+          Uri.parse(ApiUrls.class_search + "?q=$text"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${box.read("access")}",
+          },
+        );
+
+        if (result.statusCode == 200 || result.statusCode == 201) {
+
+          final data = searchViewModelFromJson(result.body);
+          data.next != null ?  searchViewController.next.value = true :  searchViewController.next.value = false;
+          data.previous != null ?  searchViewController.previous.value = true :  searchViewController.previous.value =
+          false;
+          searchViewController.classList.value = data.results!;
+          searchViewController.loading.value = false;
+        }
+        else {
+          searchViewController.loading.value = false;
+          PangeaControllers.toastMsg(msg: "Error: Unable to fetch list of classes");
+
+        }
+      }
+
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      PangeaControllers.toastMsg(msg: "Error: $e");
+    }
+  }
   static Future<bool> userExitInClass(String classId) async {
     ///fetch the list of participants of the class
     try {
@@ -81,35 +139,8 @@ class PangeaServices {
     }
   }
 
-  static searchClass(String text) async {
-    try {
-      PangeaServices._init();
-      final result = await http.get(
-        Uri.parse(ApiUrls.class_search + "?q=$text"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${box.read("access")}",
-        },
-      );
 
-      if (result.statusCode == 200 || result.statusCode == 201) {
-        searchViewController.loading.value = false;
-        final data = searchViewModelFromJson(result.body);
 
-        searchViewController.searchList.value = data.results!;
-
-      } else {
-        ApiException.exception(
-            statusCode: result.statusCode, body: result.body);
-
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      PangeaControllers.toastMsg(msg: "Error: $e");
-    }
-  }
   static accessTokenStatus() async {
     try {
       if (box.read("access") != null) {
