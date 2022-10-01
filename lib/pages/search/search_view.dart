@@ -239,180 +239,204 @@ class _SearchViewState extends State<SearchView> {
                   child:  Obx(() =>  searchController.loading.value?
                   Center(
                     child: CircularProgressIndicator(),
-                  ): GridView.builder(
-                    //controller: searchController.controller,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(12),
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.75,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: searchController.classList.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      //  if(searchController.classList[i])
-                      return Material(
-                        elevation: 15,
-                        color: const Color(0xffF6F6F6),
-                        borderRadius: BorderRadius.circular(16),
-                        child: InkWell(
-                          onTap: () async {
-                            id = searchController.classList[i].pangea_class_room_id.toString();
-                            firstTime.value?classProfile(id):VRouter.of(context).to(
-                                '',
-                                queryParameters: {
-                                  "id": id
-                                });
-                            firstTime.value=false;
-                            print("value of 2 ${firstTime}");
-
-
-                            // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
-                          },
+                  ):
+                  SingleChildScrollView(
+                    physics: ScrollPhysics(),
+                    child: GridView.builder(
+                      //controller: searchController.controller,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(12),
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: searchController.classList.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        //  if(searchController.classList[i])
+                        return Material(
+                          elevation: 15,
+                          color: const Color(0xffF6F6F6),
                           borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.0),
-                                boxShadow: const [
-                                  BoxShadow(color: Colors.black12, blurRadius: 1.0, offset: Offset(2.0, 2.0), spreadRadius: 1.0)
-                                ],
-                                color: Theme.of(context).colorScheme.background),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        child: searchController.classList[i].profilePic != null
-                                            ? Avatar(
-                                          mxContent: Uri.parse("${searchController.classList[i].profilePic}"),
-                                        )
-                                            : const Padding(
-                                          padding: EdgeInsets.all(5.0),
-                                          child: Icon(
-                                            Icons.people,
-                                            size: 40,
-                                          ),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(color:  Theme.of(context).colorScheme.onPrimary == Colors.white
-                                                ? Colors.black
-                                                : Colors.white, width: 2.0),
-                                            shape: BoxShape.circle),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(2.0),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Theme.of(context).colorScheme.onPrimary,
-                                              border: Border.all(color: Colors.white, width: 2)),
-                                          child: const Icon(
-                                            Icons.school,
-                                            size: 15.0,
-                                          ),
-                                        ),
+                          child: InkWell(
+                            onTap: () async {
+                              id = searchController.classList[i].pangea_class_room_id.toString();
+                              firstTime.value?classProfile(id):VRouter.of(context).to(
+                                  '',
+                                  queryParameters: {
+                                    "id": id
+                                  });
+                              firstTime.value=false;
+                              print("value of 2 ${firstTime}");
 
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Text(
-                                      searchController.classList[i].classAuthor != Null
-                                          ? "${searchController.classList[i].classAuthor}"
-                                          : "Na",
-                                      overflow: TextOverflow.fade,
-                                      maxLines: 1,
-                                      softWrap: false,
-                                      style: TextStyle().copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1!.color,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                      )),
-                                  Text(
-                                      searchController.classList[i].className != Null
-                                          ? "${searchController.classList[i].className}"
-                                          : "Na",
-                                      overflow: TextOverflow.fade,
-                                      maxLines: 1,
-                                      softWrap: false,
-                                      style: TextStyle().copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1!.color,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                      )),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.location_pin, size: 12),
-                                      const SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Container(
-                                        width:50,
-                                        child:  searchController.classList[i].city!.isNotEmpty
-                                            ? Text("${searchController.classList[i].city}",
+
+                              // VRouter.of(context).to("/allclassDetails", queryParameters: {"id": id});
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  boxShadow: const [
+                                    BoxShadow(color: Colors.black12, blurRadius: 1.0, offset: Offset(2.0, 2.0), spreadRadius: 1.0)
+                                  ],
+                                  color: Theme.of(context).colorScheme.background),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          child: searchController.classList[i].profilePic != null
+                                              ? Avatar(
+                                            mxContent: Uri.parse("${searchController.classList[i].profilePic}"),
+                                          )
+                                              : const Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Icon(
+                                              Icons.people,
+                                              size: 40,
+                                            ),
+                                          ),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(color:  Theme.of(context).colorScheme.onPrimary == Colors.white
+                                                  ? Colors.black
+                                                  : Colors.white, width: 2.0),
+                                              shape: BoxShape.circle),
+                                        ),
+                                        Positioned(
+                                          bottom: 0,
+                                          right: 0,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(2.0),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Theme.of(context).colorScheme.onPrimary,
+                                                border: Border.all(color: Colors.white, width: 2)),
+                                            child: const Icon(
+                                              Icons.school,
+                                              size: 15.0,
+                                            ),
+                                          ),
+
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Text(
+                                        searchController.classList[i].classAuthor != Null
+                                            ? "${searchController.classList[i].classAuthor}"
+                                            : "Na",
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: TextStyle().copyWith(
+                                          color: Theme.of(context).textTheme.bodyText1!.color,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                    Text(
+                                        searchController.classList[i].className != Null
+                                            ? "${searchController.classList[i].className}"
+                                            : "Na",
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: TextStyle().copyWith(
+                                          color: Theme.of(context).textTheme.bodyText1!.color,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.location_pin, size: 12),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Container(
+                                          width:50,
+                                          child:  searchController.classList[i].city!.isNotEmpty
+                                              ? Text("${searchController.classList[i].city}",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+
+                                              ))
+                                              : Text("N/A",
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                        ),
+                                        const Icon(Icons.star, size: 12),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        searchController.classList[i].rating.toString().isNotEmpty
+                                            ? Expanded(child: Text(
+                                            searchController.classList[i].rating.toString() != Null
+                                                ? "${searchController.classList[i].rating.toString()}"
+                                                : "Na",
                                             overflow: TextOverflow.fade,
                                             maxLines: 1,
                                             softWrap: false,
                                             style: TextStyle().copyWith(
                                               color: Theme.of(context).textTheme.bodyText1!.color,
-                                              fontSize: 10,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w400,
-
-                                            ))
+                                            )))
                                             : Text("N/A",
                                             style: TextStyle().copyWith(
                                               color: Theme.of(context).textTheme.bodyText1!.color,
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
                                             )),
-                                      ),
-                                      const Icon(Icons.star, size: 12),
-                                      const SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      searchController.classList[i].rating.toString().isNotEmpty
-                                          ? Expanded(child: Text(
-                                          searchController.classList[i].rating.toString() != Null
-                                              ? "${searchController.classList[i].rating.toString()}"
-                                              : "Na",
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 1,
-                                          softWrap: false,
-                                          style: TextStyle().copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                          )))
-                                          : Text("N/A",
-                                          style: TextStyle().copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                          )),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.supervisor_account_sharp, size: 12),
-                                      const SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                            searchController.classList[i].total_student.toString() != 0
-                                                ? "${searchController.classList[i].total_student.toString()} Students"
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.supervisor_account_sharp, size: 12),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                              searchController.classList[i].total_student.toString() != 0
+                                                  ? "${searchController.classList[i].total_student.toString()} Students"
+                                                  : "Na",
+                                              overflow: TextOverflow.fade,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: TextStyle().copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.query_stats, size: 12),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Expanded(child:  Text(
+                                            searchController.classList[i].languageLevel.toString() != Null
+                                                ? level(searchController.classList[i].languageLevel.toString())
                                                 : "Na",
                                             overflow: TextOverflow.fade,
                                             maxLines: 1,
@@ -421,86 +445,66 @@ class _SearchViewState extends State<SearchView> {
                                               color: Theme.of(context).textTheme.bodyText1!.color,
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
-                                            )),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.query_stats, size: 12),
-                                      const SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Expanded(child:  Text(
-                                          searchController.classList[i].languageLevel.toString() != Null
-                                              ? level(searchController.classList[i].languageLevel.toString())
-                                              : "Na",
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 1,
-                                          softWrap: false,
-                                          style: TextStyle().copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                          )))
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.account_balance, size: 12),
-                                      const SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Expanded(child: Text(
-                                          searchController.classList[i].schoolName != ""
-                                              ? "${searchController.classList[i].schoolName}"
-                                              : "Not disclosed",
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 1,
-                                          softWrap: false,
-                                          style: TextStyle().copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                          )))
+                                            )))
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.account_balance, size: 12),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Expanded(child: Text(
+                                            searchController.classList[i].schoolName != ""
+                                                ? "${searchController.classList[i].schoolName}"
+                                                : "Not disclosed",
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            style: TextStyle().copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1!.color,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                            )))
 
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      fetchFlag(url, i),
-                                      const SizedBox(
-                                        width: 5.0,
-                                      ),
-                                      const Icon(Icons.arrow_right_alt_outlined, size: 17),
-                                      const SizedBox(
-                                        width: 5.0,
-                                      ),
-                                      Avatar(
-                                        mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
-                                        name: "publicRoomsResponse.chunk[i].name",
-                                        size: 15,
-                                      ),
-                                      const Spacer(),
-                                      Text("free",
-                                          style: TextStyle().copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1!.color,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                          ))
-                                    ],
-                                  )
-                                ],
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Spacer(),
+                                        fetchFlag(url, i),
+                                        const SizedBox(
+                                          width: 5.0,
+                                        ),
+                                        const Icon(Icons.arrow_right_alt_outlined, size: 17),
+                                        const SizedBox(
+                                          width: 5.0,
+                                        ),
+                                        Avatar(
+                                          mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
+                                          name: "publicRoomsResponse.chunk[i].name",
+                                          size: 15,
+                                        ),
+                                        const Spacer(),
+                                        Text("free",
+                                            style: TextStyle().copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1!.color,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                            ))
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   )
 
                   ),
