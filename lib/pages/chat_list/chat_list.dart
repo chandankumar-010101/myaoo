@@ -322,7 +322,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
   @override
   void initState() {
     _initReceiveSharingIntent();
-
     scrollController.addListener(_onScroll);
     _waitForFirstSync();
     _hackyWebRTCFixForWeb();

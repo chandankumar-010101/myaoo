@@ -60,6 +60,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     icon: Icon(controller.anySelectedRoomNotFavorite ? Icons.push_pin_outlined : Icons.push_pin),
                     onPressed: controller.toggleFavouriteRoom,
                   ),
+
                   IconButton(
                     icon: Icon(controller.anySelectedRoomNotMuted ? Icons.notifications_off_outlined : Icons.notifications_outlined),
                     tooltip: L10n.of(context)!.toggleMuted,
@@ -110,61 +111,96 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
         //     );
         //   },
         // )
-        IconButton(
-          icon: const Icon(Icons.notifications),
-          tooltip: "",
-          onPressed: () {
-            showDialog<void>(
-                context: context,
-                barrierDismissible: true,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width *0.5,
-                        height: MediaQuery.of(context).size.height *0.6,
-                        child:   ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        key: ValueKey(Matrix.of(context)
-                            .client
-                            .userID
-                            .toString() +
-                            controller.activeSpaceId.toString() + controller.activeSpacesEntry.runtimeType
-                                .toString()),
-                        controller: controller.scrollController,
-                        // add +1 space below in order to properly scroll below the spaces bar
-                        itemCount: inviteRooms.length + (displayStoriesHeader ? 2 : 1),
-                        itemBuilder: (BuildContext context, int i) {
-                          if (i >= inviteRooms.length) {
-                            return Container();
-                          }
-                          if (inviteRooms[i].id.isEmpty) {
-                            return Container();
-                          }
-                          return ChatListItem(
-                            inviteRooms[i],
-                            selected: controller.selectedRoomIds
-                                .contains(inviteRooms[i].id),
-                            onTap: controller.selectMode ==
-                                SelectMode.select
-                                ? () => controller
-                                .toggleSelection(inviteRooms[i].id)
-                                : null,
-                            onLongPress: () => controller
-                                .toggleSelection(inviteRooms[i].id),
-                            activeChat: controller.activeChat ==
-                                inviteRooms[i].id,
-                          );
-                        },
-                      )
-                    ),
-                  );
-                });
+        Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              tooltip: "",
+              onPressed: () {
+                showDialog<void>(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width *0.5,
+                            height: MediaQuery.of(context).size.height *0.6,
+                            child:   Scaffold(
+                              appBar: AppBar(
+                                leading: IconButton(icon:Icon(Icons.close), onPressed: ()=>Navigator.of(context).pop(),),
+                                title: Text("Invitations"),
+                              ),
+                              body: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                key: ValueKey(Matrix.of(context)
+                                    .client
+                                    .userID
+                                    .toString() +
+                                    controller.activeSpaceId.toString() + controller.activeSpacesEntry.runtimeType
+                                    .toString()),
+                                controller: controller.scrollController,
+                                // add +1 space below in order to properly scroll below the spaces bar
+                                itemCount: inviteRooms.length + (displayStoriesHeader ? 2 : 1),
+                                itemBuilder: (BuildContext context, int i) {
+                                  if (i >= inviteRooms.length) {
+                                    return Container();
+                                  }
+                                  if (inviteRooms[i].id.isEmpty) {
+                                    return Container();
+                                  }
+                                  return ChatListItem(
+                                    inviteRooms[i],
+                                    selected: controller.selectedRoomIds
+                                        .contains(inviteRooms[i].id),
+                                    onTap: controller.selectMode ==
+                                        SelectMode.select
+                                        ? () => controller
+                                        .toggleSelection(inviteRooms[i].id)
+                                        : null,
+                                    onLongPress: () => controller
+                                        .toggleSelection(inviteRooms[i].id),
+                                    activeChat: controller.activeChat ==
+                                        inviteRooms[i].id,
+                                  );
+                                },
+                              ),
+                            )
+                        ),
+                      );
+                    });
 
-          },
+              },
+            ),
+            inviteRooms.isNotEmpty ?  Positioned(
+              right: 5,
+              top: 8,
+              child: new Container(
+                padding: EdgeInsets.all(2),
+                decoration: new BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                constraints: BoxConstraints(
+                  minWidth: 14,
+                  minHeight: 14,
+                ),
+                child: Text(
+                  '${inviteRooms.length}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ) : new Container()
+          ],
         ),
+
                   KeyBoardShortcuts(
                     keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyF},
                     onKeysPressed: () => VRouter.of(context).to('/search'),
