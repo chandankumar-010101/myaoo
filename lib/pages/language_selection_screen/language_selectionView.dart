@@ -130,16 +130,28 @@ class LanguageSelectionView extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Center(
-                      child: Text(
-                        "What is your first language",
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "What is your base language",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Obx(() =>
+                            Tooltip(
+                              message:   controller.getxController.role.value =="Teacher"?"Base language is the language through which you wish to teach.":"Base language is the language through which you wish to learn.",
+                              child: const Text("?",  style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500),),
+                            ))
 
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500),
-                      ),
+                      ],
                     ),
+
                     const SizedBox(
                       height: 10,
                     ),
@@ -255,14 +267,14 @@ class LanguageSelectionView extends StatelessWidget {
                       child: Obx(() =>
                           controller.getxController.role.value == "Teacher"
                               ? const Text(
-                                  "What do you want to teach",
+                                  "What language are you interested in teaching?",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w500),
                                 )
                               : const Text(
-                                  "What do you want to learn",
+                                  "What language are you interested in learning?",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16.0,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
@@ -299,9 +300,14 @@ class PangeaServices {
         future: () => room.invite(id),
       );
       if (success.error == null) {
+
         PangeaControllers.toastMsg(
             msg: L10n.of(context)!.contactHasBeenInvitedToTheGroup,
             success: true);
+        PangeaControllers.toastMsg(
+            msg: "You can close this widow now",
+            success: true);
+
       }
     } else {
       PangeaControllers.toastMsg(msg: "Unable to Fetch Chat", success: false);
@@ -374,11 +380,13 @@ class PangeaServices {
   //------------------------------------Authentication-----------------------------------//
   static logoutUser(
       {required BuildContext context, required Client client}) async {
+
     await showFutureLoadingDialog(
       context: context,
       future: () => client.logout(),
     ).then((value) {
       box.erase();
+
       PangeaControllers.toastMsg(msg: "Log out successfully", success: true);
     }).catchError((e) {
       if (kDebugMode) {

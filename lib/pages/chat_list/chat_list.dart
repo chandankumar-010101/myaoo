@@ -250,7 +250,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
             room.spaceParents.isNotEmpty &&
             room.spaceParents.first.roomId == space!.id)
         .toList();
-    print(rooms.map((e) => e.displayname).toList().toString());
+   // print(rooms.map((e) => e.displayname).toList().toString());
     final List<Room> room = rooms.where((element) => element.displayname.contains(
         user.displayName!.replaceAll(" ", "_") + "-" + Matrix.of(context).client.userID.toString().split(":").first.replaceAll("@", "") + "#")).toList();
 

@@ -237,7 +237,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                     ),
                   ],
                 )),
-                body:Obx(()=> widget.controller.chatListController.participants.value.isEmpty  ? SizedBox(
+                body:Obx(()=> widget.controller.chatListController.participants.value.isEmpty  ? const SizedBox(
                   height: 200,
                   child: Center(
                       child: Text(" No Participants in class",
@@ -278,7 +278,7 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                           } else {
                             PangeaControllers.toastMsg(
                                 msg:
-                                "Not allowed to create private rooms");
+                                "Not allowed to create private chat");
                           }
                         });
                   },
