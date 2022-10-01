@@ -30,16 +30,24 @@ class PangeaControllers extends GetxController {
     success?Fluttertoast.showToast(
         msg: msg,
         fontSize: 16.0,
-        backgroundColor: Colors.green,
-        webBgColor: "#00ff00",
-        textColor: Colors.white
+        backgroundColor: Color(0xFF228C22),
+        webBgColor: "#228C22",
+        textColor: Colors.white,
+      timeInSecForIosWeb: 2
     ):Fluttertoast.showToast(
       msg: msg,
       fontSize: 16.0,
+      timeInSecForIosWeb: 2,
       webBgColor: "#ff0000",
       backgroundColor: Colors.red,
       textColor: Colors.white,
     );
 
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

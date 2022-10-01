@@ -54,29 +54,29 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
       return false;
     }
-    if (classNameController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "Class name length should below 50");
-      return false;
-    }
-    if (cityController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "City length should below 50");
-      return false;
-    }
-    if (schoolController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "School length should below 50");
-
-      return false;
-    }
-    if (countryController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "Country length should below 50");
-
-      return false;
-    }
-    if (discriptionController.text.length >= 2000) {
-      PangeaControllers.toastMsg(msg:  "Description length should below  2000");
-
-      return false;
-    }
+    // if (classNameController.text.length > 50) {
+    //   PangeaControllers.toastMsg(msg:  "Class name length should below 51");
+    //   return false;
+    // }
+    // if (cityController.text.length > 50) {
+    //   PangeaControllers.toastMsg(msg:  "City length should below 51");
+    //   return false;
+    // }
+    // if (schoolController.text.length > 50) {
+    //   PangeaControllers.toastMsg(msg:  "School length should below 51");
+    //
+    //   return false;
+    // }
+    // if (countryController.text.length > 50) {
+    //   PangeaControllers.toastMsg(msg:  "Country length should below 50");
+    //
+    //   return false;
+    // }
+    // if (discriptionController.text.length >= 2000) {
+    //   PangeaControllers.toastMsg(msg:  "Description length should below  2000");
+    //
+    //   return false;
+    // }
     return true;
   }
 
@@ -189,28 +189,28 @@ class _ClassLanguageState extends State<ClassLanguage> {
       PangeaControllers.toastMsg(msg: "Language must be selected!",success: false);
       return;
     }
-    if (classNameController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "Class name length should below 50",success: false);
-      return;
-    }
-    if (cityController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "City length should below 50",success: false);
-
-      return;
-    }
-    if (schoolController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg:  "School length should below 50",success: false);
-      return;
-    }
-    if (countryController.text.length >= 50) {
-      PangeaControllers.toastMsg(msg: "Country length should below 50",success: false);
-      return;
-    }
-    if (discriptionController.text.length >= 2000) {
-      PangeaControllers.toastMsg(msg: "Description length should below  2000",success: false);
-
-      return;
-    }
+    // if (classNameController.text.length >= 50) {
+    //   PangeaControllers.toastMsg(msg:  "Class name length should below 50",success: false);
+    //   return;
+    // }
+    // if (cityController.text.length >= 50) {
+    //   PangeaControllers.toastMsg(msg:  "City length should below 50",success: false);
+    //
+    //   return;
+    // }
+    // if (schoolController.text.length >= 50) {
+    //   PangeaControllers.toastMsg(msg:  "School length should below 50",success: false);
+    //   return;
+    // }
+    // if (countryController.text.length >= 50) {
+    //   PangeaControllers.toastMsg(msg: "Country length should below 50",success: false);
+    //   return;
+    // }
+    // if (discriptionController.text.length >= 2000) {
+    //   PangeaControllers.toastMsg(msg: "Description length should below  2000",success: false);
+    //
+    //   return;
+    // }
     box.write("className", classNameController.text);
     box.write("cityName", cityController.text);
     box.write("countryName", countryController.text);
@@ -924,24 +924,24 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                 PangeaControllers.toastMsg(msg:  "Class Description is required!");
                                 return;
                               }
-                              if (cityController.text.length >= 50) {
-                                PangeaControllers.toastMsg(msg:  "City length should below 20");
-
-                                return;
-                              }
-                              if (schoolController.text.length >= 50) {
-                                PangeaControllers.toastMsg(msg:  "School length should below 20");
-
-                                return;
-                              }
-                              if (countryController.text.length >= 50) {
-                                PangeaControllers.toastMsg(msg:  "Country length should below 12");
-                                return;
-                              }
-                              if (discriptionController.text.length >= 2000) {
-                                PangeaControllers.toastMsg(msg:  "Description length should below 2000");
-                                return;
-                              }
+                              // if (cityController.text.length >= 50) {
+                              //   PangeaControllers.toastMsg(msg:  "City length should below 20");
+                              //
+                              //   return;
+                              // }
+                              // if (schoolController.text.length >= 50) {
+                              //   PangeaControllers.toastMsg(msg:  "School length should below 20");
+                              //
+                              //   return;
+                              // }
+                              // if (countryController.text.length >= 50) {
+                              //   PangeaControllers.toastMsg(msg:  "Country length should below 12");
+                              //   return;
+                              // }
+                              // if (discriptionController.text.length >= 2000) {
+                              //   PangeaControllers.toastMsg(msg:  "Description length should below 2000");
+                              //   return;
+                              // }
                               final result = await showFutureLoadingDialog(
                                 context: context,
                                 future: () => PangeaServices.updateClassDetails(
