@@ -30,8 +30,8 @@ class PangeaControllers extends GetxController {
     success?Fluttertoast.showToast(
         msg: msg,
         fontSize: 16.0,
-        backgroundColor: const Color(0xFF5625BA),
-        webBgColor: "#5625BA",
+        backgroundColor: Colors.green,
+        webBgColor: "#00ff00",
         textColor: Colors.white
     ):Fluttertoast.showToast(
       msg: msg,
