@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
+import 'package:pangeachat/config/environment.dart';
 import 'package:pangeachat/controllers/chat_list_controller.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -26,34 +27,35 @@ class NewGroupController extends State<NewGroup> {
 
   ChatListControllerGet controllerGet = Get.put(ChatListControllerGet());
   void submitAction([_]) async {
-
+    final List<String> value  =[];
     if(GetStorage().read("usertype") !=2){
-      final value =  controllerGet.listOfClassModel.firstWhere((value) => value.activeClassId == spaceId);
-      final client = Matrix.of(context).client;
-      final roomID = await showFutureLoadingDialog(
-        context: context,
-        future: () async {
-          final roomId = await client.createGroupChat(
-            invite: [value.classModel.classAuthorId] ,
-            initialState: spaceId.isNotEmpty? [
-              sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
-              sdk.StateEvent(content: {
-                "via": ["matrix.staging.pangea.chat"],
-                "canonical": true
-              },
-                  type: EventTypes.spaceParent, stateKey: spaceId),
-            ]
-                : [],
-            preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
-            groupName: controller.text.isNotEmpty ? controller.text : null,
-            enableEncryption: false,
-          );
-          return roomId;
-        },
-      );
-      if (roomID.error == null) {
-        VRouter.of(context).toSegments(['rooms', roomID.result!, 'invite']);
-      }
+      final classModel =  controllerGet.listOfClassModel.firstWhere((value) => value.activeClassId == spaceId);
+       value.add(classModel.classModel.classAuthorId);
+    }
+    final client = Matrix.of(context).client;
+    final roomID = await showFutureLoadingDialog(
+      context: context,
+      future: () async {
+        final roomId = await client.createGroupChat(
+          invite: value,
+          initialState: spaceId.isNotEmpty? [
+            sdk.StateEvent(content: {"guest_access": "can_join"}, type: EventTypes.GuestAccess, stateKey: ""),
+            sdk.StateEvent(content: {
+              "via": [Environment.synapsURL],
+              "canonical": true
+            },
+                type: EventTypes.spaceParent, stateKey: spaceId),
+          ]
+              : [],
+          preset: publicGroup ? sdk.CreateRoomPreset.publicChat : sdk.CreateRoomPreset.privateChat,
+          groupName: controller.text.isNotEmpty ? controller.text : null,
+          enableEncryption: false,
+        );
+        return roomId;
+      },
+    );
+    if (roomID.error == null) {
+      VRouter.of(context).toSegments(['rooms', roomID.result!, 'invite']);
     }
 
 

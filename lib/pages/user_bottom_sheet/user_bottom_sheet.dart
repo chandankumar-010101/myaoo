@@ -9,6 +9,7 @@ import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'package:pangeachat/widgets/permission_slider_dialog.dart';
+import '../../config/environment.dart';
 import '../../model/report_user_model.dart';
 import '../../controllers/controllers.dart';
 import '../../services/services.dart';
@@ -192,7 +193,7 @@ class UserBottomSheetController extends State<UserBottomSheet> {
                 stateKey: "",
               ),
               StateEvent(content: {
-                "via": ["matrix.staging.pangea.chat"],
+                "via": [Environment.synapsURL],
                 "canonical": true
               }, type: EventTypes.spaceParent, stateKey: spaceid != null && spaceid != "" ? spaceid : ""),
             ],
