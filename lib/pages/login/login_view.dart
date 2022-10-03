@@ -189,9 +189,9 @@ class LoginView extends StatelessWidget {
                                               fillColor:
                                               const Color(0xFFDADDE2),
                                               filled: true,
-                                              prefixIcon: SvgPicture.asset(
-                                                "assets/newAssets/userIcon.svg",
-                                                fit: BoxFit.scaleDown,
+                                              prefixIcon: const Icon(
+                                                Icons.person,
+                                                color: Colors.black,
                                               ),
                                               errorText:
                                               controller.usernameError,
@@ -255,9 +255,9 @@ class LoginView extends StatelessWidget {
                                               fillColor:
                                               const Color(0xFFDADDE2),
                                               filled: true,
-                                              prefixIcon: SvgPicture.asset(
-                                                "assets/newAssets/lockIcon.svg",
-                                                fit: BoxFit.scaleDown,
+                                              prefixIcon: const Icon(
+                                                Icons.lock,
+                                                color: Colors.black,
                                               ),
                                               errorText:
                                               controller.passwordError,
@@ -270,7 +270,7 @@ class LoginView extends StatelessWidget {
                                                       .visibility_off_outlined
                                                       : Icons
                                                       .visibility_outlined,
-                                                  color: Colors.white,
+                                                  color: Colors.black,
                                                 ),
                                                 onPressed: controller
                                                     .toggleShowPassword,

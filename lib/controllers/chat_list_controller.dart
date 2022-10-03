@@ -30,6 +30,7 @@ class ChatListControllerGet extends GetxController {
   RxList<User> participantsList = RxList<User>();
 
 
+
   //-------------------------------Functions-----------------------------------//
   ///fetch class permissions and store them into List of class Model.
   getClassPermissions(String? activeSpaceId, BuildContext context) async {
@@ -125,5 +126,14 @@ class ChatListControllerGet extends GetxController {
       finalUsers.removeWhere((element) => element.id == Matrix.of(context).client.userID);
       participants.value = finalUsers;
     }
+  }
+
+  @override
+  void dispose() {
+    listOfClassModel.clear();
+    participants.clear();
+    participantsList.clear();
+    // TODO: implement dispose
+    super.dispose();
   }
 }

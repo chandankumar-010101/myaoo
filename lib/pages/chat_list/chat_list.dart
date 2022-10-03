@@ -750,18 +750,6 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
     snappingSheetController.snapToPosition(
       const SnappingPosition.factor(positionFactor: 0.5),
     );
-
-    // getxController.isPublic.value = true;
-    // getxController.isOpenEnrollment.value = true;
-    // getxController.isOpenExchange.value = true;
-    // getxController.oneToOneChatClass.value = true;
-    // getxController.isCreateRooms.value = true;
-    // getxController.isCreateRoomsExchange.value = true;
-    // getxController.isSharePhoto.value = true;
-    // getxController.isShareLocation.value = true;
-    // getxController.isShareVideo.value = true;
-    // getxController.isShareFiles.value = true;
-    // getxController.isCreateStories.value = true;
     //getxController.oneToOneChatClass.value = true;
   }
 }

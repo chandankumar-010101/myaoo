@@ -90,7 +90,9 @@ class SignupPageView extends StatelessWidget {
                                                 controller: controller.passwordController,
                                                 obscureText: !controller.showPassword,
                                                 validator: controller.password1TextFieldValidator,
-                                                decoration: FluffyThemes.loginTextFieldDecoration(
+                                                decoration: InputDecoration(
+                                                    contentPadding:
+                                                  EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                                   border: OutlineInputBorder(
                                                       borderRadius:
                                                       BorderRadius.circular(
@@ -135,6 +137,9 @@ class SignupPageView extends StatelessWidget {
                                                     onPressed: controller.toggleShowPassword,
                                                   ),
                                                   hintText: L10n.of(context)!.chooseAStrongPassword,
+                                                  hintStyle: const TextStyle(
+                                                    color: Color(0x35204880),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -150,7 +155,9 @@ class SignupPageView extends StatelessWidget {
                                                   controller: controller.password2Controller,
                                                   obscureText: !controller.showPassword,
                                                   validator: controller.password2TextFieldValidator,
-                                                  decoration: FluffyThemes.loginTextFieldDecoration(
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                    EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                                     border: OutlineInputBorder(
                                                         borderRadius:
                                                         BorderRadius.circular(
@@ -185,6 +192,9 @@ class SignupPageView extends StatelessWidget {
                                                       color: Colors.black,
                                                     ),
                                                     hintText: L10n.of(context)!.repeatPassword,
+                                                    hintStyle: const TextStyle(
+                                                      color: Color(0x35204880),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -198,7 +208,9 @@ class SignupPageView extends StatelessWidget {
                                                 autofillHints:
                                                 controller.loading ? null : [AutofillHints.username],
                                                 validator: controller.emailTextFieldValidator,
-                                                decoration: FluffyThemes.loginTextFieldDecoration(
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                  EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                                   border: OutlineInputBorder(
                                                       borderRadius:
                                                       BorderRadius.circular(
@@ -214,7 +226,8 @@ class SignupPageView extends StatelessWidget {
                                                           .circular(25.0),
                                                       borderSide:
                                                       const BorderSide(
-                                                          color: Colors.white)),
+                                                          color: Colors
+                                                              .white)),
                                                   focusedBorder:
                                                   OutlineInputBorder(
                                                       borderRadius:
@@ -233,9 +246,9 @@ class SignupPageView extends StatelessWidget {
                                                   ),
                                                   hintText: L10n.of(context)!.enterAnEmailAddress,
                                                   errorText: controller.error,
-                                                  errorColor: controller.emailController.text.isEmpty
-                                                      ? Colors.orangeAccent
-                                                      : null,
+                                                  // errorColor: controller.emailController.text.isEmpty
+                                                  //     ? Colors.orangeAccent
+                                                  //     : null,
                                                 ),
                                               ),
                                             ),
