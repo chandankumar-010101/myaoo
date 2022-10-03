@@ -22,6 +22,7 @@ import 'package:pangeachat/widgets/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../config/app_config.dart';
+import '../../config/environment.dart';
 import '../../model/class_detail_model.dart';
 import '../../controllers/controllers.dart';
 import '../chat_list/spaces_entry.dart';
@@ -117,7 +118,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
             stateKey: "",
           ),
           sdk.StateEvent(content: {
-            "via": ["matrix.staging.pangea.chat"],
+            "via": [Environment.synapsURL],
             "canonical": true
           }, type: EventTypes.spaceParent, stateKey: classId),
           sdk.StateEvent(
