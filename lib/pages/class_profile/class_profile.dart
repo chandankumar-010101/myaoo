@@ -38,6 +38,7 @@ class RequestScreenState extends State<RequestScreen> {
   //---------------------------Functions----------------------------//
   ///load flag to the UI
   fetchFlag(FetchClassInfoModel data, String url) {
+
     try {
       String path = url + data.flags[0].languageFlag ?? "";
 
