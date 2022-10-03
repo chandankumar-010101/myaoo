@@ -1028,21 +1028,21 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                   onPressed: () {
                                     if (roomAlias.isNotEmpty) {
                                       widget.controller.box
-                                          .write("class_name", data.className);
+                                          .write("className", data.className);
                                       widget.controller.box
-                                          .write("city_name", data.city);
+                                          .write("cityName", data.city);
                                       widget.controller.box
-                                          .write("country_name", data.country);
+                                          .write("countryName", data.country);
                                       widget.controller.box.write(
-                                          "language_level", data.languageLevel);
+                                          "languageLevel", data.languageLevel);
                                       widget.controller.box.write(
-                                          "school_name", data.schoolName);
+                                          "scoolName", data.schoolName);
                                       widget.controller.box
                                           .write("disc", data.description);
                                       widget.controller.box.write(
-                                          "source_lang", data.dominantLanguage);
+                                          "sourceLanage", data.dominantLanguage);
                                       widget.controller.box.write(
-                                          "target_lang", data.targetLanguage);
+                                          "targetLanguage", data.targetLanguage);
                                       context.vRouter.to(
                                           "/classDetails/update_language",
                                           queryParameters: {
