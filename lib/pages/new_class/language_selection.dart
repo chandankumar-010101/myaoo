@@ -54,29 +54,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
       return false;
     }
-    // if (classNameController.text.length > 50) {
-    //   PangeaControllers.toastMsg(msg:  "Class name length should below 51");
-    //   return false;
-    // }
-    // if (cityController.text.length > 50) {
-    //   PangeaControllers.toastMsg(msg:  "City length should below 51");
-    //   return false;
-    // }
-    // if (schoolController.text.length > 50) {
-    //   PangeaControllers.toastMsg(msg:  "School length should below 51");
-    //
-    //   return false;
-    // }
-    // if (countryController.text.length > 50) {
-    //   PangeaControllers.toastMsg(msg:  "Country length should below 50");
-    //
-    //   return false;
-    // }
-    // if (discriptionController.text.length >= 2000) {
-    //   PangeaControllers.toastMsg(msg:  "Description length should below  2000");
-    //
-    //   return false;
-    // }
+
     return true;
   }
 
@@ -109,7 +87,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
 
   fetchSourceLanguage() {
     List<LanguageFlag> list = languageFlag2List
-        .where((element) => element.languageName == box.read("source_lang"))
+        .where((element) => element.languageName == box.read("sourceLanage"))
         .toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -137,7 +115,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
   }
   fetchTargetLanguage() {
     List<LanguageFlag> list = languageFlagList
-        .where((element) => element.languageName == box.read("target_lang"))
+        .where((element) => element.languageName == box.read("targetLanguage"))
         .toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -189,28 +167,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
       PangeaControllers.toastMsg(msg: "Language must be selected!",success: false);
       return;
     }
-    // if (classNameController.text.length >= 50) {
-    //   PangeaControllers.toastMsg(msg:  "Class name length should below 50",success: false);
-    //   return;
-    // }
-    // if (cityController.text.length >= 50) {
-    //   PangeaControllers.toastMsg(msg:  "City length should below 50",success: false);
-    //
-    //   return;
-    // }
-    // if (schoolController.text.length >= 50) {
-    //   PangeaControllers.toastMsg(msg:  "School length should below 50",success: false);
-    //   return;
-    // }
-    // if (countryController.text.length >= 50) {
-    //   PangeaControllers.toastMsg(msg: "Country length should below 50",success: false);
-    //   return;
-    // }
-    // if (discriptionController.text.length >= 2000) {
-    //   PangeaControllers.toastMsg(msg: "Description length should below  2000",success: false);
-    //
-    //   return;
-    // }
+
     box.write("className", classNameController.text);
     box.write("cityName", cityController.text);
     box.write("countryName", countryController.text);
@@ -237,64 +194,60 @@ class _ClassLanguageState extends State<ClassLanguage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final String id = context.vRouter.queryParameters['class_id'] ?? "";
-
-    if (id.isNotEmpty) {
-      box.read("class_name") != null
-          ? classNameController.text = box.read("class_name")
-          : null;
-      box.read("city_name") != null
-          ? cityController.text = box.read("city_name")
-          : null;
-      box.read("country_name") != null
-          ? countryController.text = box.read("country_name")
-          : null;
-      box.read("school_name") != null
-          ? schoolController.text = box.read("school_name")
-          : null;
-      box.read("disc") != null
-          ? discriptionController.text = box.read("disc")
-          : null;
-      if (box.read("language_level") != null) {
-        switch (box.read("language_level")) {
-          case 1:
-            setState(() {
-              languageLevelDropdownValue = 'A1';
-            });
-            break;
-          case 2:
-            setState(() {
-              languageLevelDropdownValue = 'A2';
-            });
-            break;
-          case 3:
-            setState(() {
-              languageLevelDropdownValue = 'B1';
-            });
-            break;
-          case 4:
-            setState(() {
-              languageLevelDropdownValue = 'B2';
-            });
-            break;
-          case 5:
-            setState(() {
-              languageLevelDropdownValue = 'C1';
-            });
-            break;
-          case 6:
-            setState(() {
-              languageLevelDropdownValue = 'C2';
-            });
-            break;
-        }
+    box.read("className") != null
+        ? classNameController.text = box.read("className")
+        : null;
+    box.read("cityName") != null
+        ? cityController.text = box.read("cityName")
+        : null;
+    box.read("countryName") != null
+        ? countryController.text = box.read("countryName")
+        : null;
+    box.read("scoolName") != null
+        ? schoolController.text = box.read("scoolName")
+        : null;
+    box.read("disc") != null
+        ? discriptionController.text = box.read("disc")
+        : null;
+    if (box.read("languageLevel") != null) {
+      switch (box.read("language_level")) {
+        case 1:
+          setState(() {
+            languageLevelDropdownValue = 'A1';
+          });
+          break;
+        case 2:
+          setState(() {
+            languageLevelDropdownValue = 'A2';
+          });
+          break;
+        case 3:
+          setState(() {
+            languageLevelDropdownValue = 'B1';
+          });
+          break;
+        case 4:
+          setState(() {
+            languageLevelDropdownValue = 'B2';
+          });
+          break;
+        case 5:
+          setState(() {
+            languageLevelDropdownValue = 'C1';
+          });
+          break;
+        case 6:
+          setState(() {
+            languageLevelDropdownValue = 'C2';
+          });
+          break;
       }
-      box.remove("class_name");
-      box.remove("city_name");
-      box.remove("school_name");
-      box.remove("country_name");
-      box.remove("disc");
     }
-
+    box.remove("className");
+    box.remove("cityName");
+    box.remove("countryName");
+    box.remove("scoolName");
+    box.remove("disc");
     return Scaffold(
       appBar:  AppBar(
               backgroundColor: Theme.of(context).backgroundColor,
@@ -924,24 +877,7 @@ class _ClassLanguageState extends State<ClassLanguage> {
                                 PangeaControllers.toastMsg(msg:  "Class Description is required!");
                                 return;
                               }
-                              // if (cityController.text.length >= 50) {
-                              //   PangeaControllers.toastMsg(msg:  "City length should below 20");
-                              //
-                              //   return;
-                              // }
-                              // if (schoolController.text.length >= 50) {
-                              //   PangeaControllers.toastMsg(msg:  "School length should below 20");
-                              //
-                              //   return;
-                              // }
-                              // if (countryController.text.length >= 50) {
-                              //   PangeaControllers.toastMsg(msg:  "Country length should below 12");
-                              //   return;
-                              // }
-                              // if (discriptionController.text.length >= 2000) {
-                              //   PangeaControllers.toastMsg(msg:  "Description length should below 2000");
-                              //   return;
-                              // }
+
                               final result = await showFutureLoadingDialog(
                                 context: context,
                                 future: () => PangeaServices.updateClassDetails(
