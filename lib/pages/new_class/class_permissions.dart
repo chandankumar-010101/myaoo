@@ -54,33 +54,14 @@ class _ClassPermissionsState extends State<ClassPermissions> {
     Size size = MediaQuery.of(context).size;
     String id = context.vRouter.queryParameters['id'] ?? "";
     return Scaffold(
-        appBar: id.isEmpty
-            ? AppBar(
-                backgroundColor: Theme.of(context).backgroundColor,
-                title: Text(
-                  "Create a Class",
-
-                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
-
-                  overflow: TextOverflow.clip,
-                  textAlign: TextAlign.center,
-                ),
-                centerTitle: true,
-                elevation: 10,
-                automaticallyImplyLeading: false,
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back,
-                      color: Theme.of(context).textTheme.bodyText1!.color),
-                  onPressed: () {
-                    context.vRouter.to("/newclass/language");
-                  },
-                ),
-              )
-            : AppBar(
+        appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
-            "Update class permissions",
-            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 18, fontWeight: FontWeight.w700),
+            id.isEmpty ? "Create a Class" : "Update class permissions",
+            style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                fontSize: 18,
+                fontWeight: FontWeight.w700),
             overflow: TextOverflow.clip,
             textAlign: TextAlign.center,
           ),
@@ -88,13 +69,16 @@ class _ClassPermissionsState extends State<ClassPermissions> {
           elevation: 10,
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyText1!.color),
+            icon: Icon(Icons.arrow_back,
+                color: Theme.of(context).textTheme.bodyText1!.color),
             onPressed: () {
-              VRouter.of(context).to('/classDetails', queryParameters: {"id": id});
+              id.isEmpty
+                  ? context.vRouter.to("/newclass/language")
+                  : VRouter.of(context)
+                      .to('/classDetails', queryParameters: {"id": id});
             },
           ),
         ),
-
         body: Container(
           width: size.width,
           height: size.height,
