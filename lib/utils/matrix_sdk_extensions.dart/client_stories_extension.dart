@@ -6,6 +6,8 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pangeachat/widgets/matrix.dart';
 
+import '../../config/environment.dart';
+
 extension ClientStoriesExtension on Client {
   static const String storiesRoomType = 'msc3588.stories.stories-room';
   static const String storiesBlockListType = 'msc3588.stories.block-list';
@@ -69,7 +71,7 @@ extension ClientStoriesExtension on Client {
           },
         ),
         StateEvent(content: {
-          "via": ["matrix.staging.pangea.chat"],
+          "via": [Environment.synapsURL],
           "canonical": true
         }, type: EventTypes.spaceParent, stateKey: spaceId),
       ],

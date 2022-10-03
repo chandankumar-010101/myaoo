@@ -24,6 +24,7 @@ import 'package:uni_links/uni_links.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../../utils/account_bundles.dart';
+import '../../config/environment.dart';
 import '../../main.dart';
 import '../../model/class_detail_model.dart';
 import '../../controllers/controllers.dart';
@@ -275,7 +276,7 @@ class ChatListController extends State<ChatList> with TickerProviderStateMixin {
                 ),
                 StateEvent(
                     content: {
-                      "via": ["matrix.staging.pangea.chat"],
+                      "via": [Environment.synapsURL],
                       "canonical": true
                     },
                     type: EventTypes.spaceParent,
