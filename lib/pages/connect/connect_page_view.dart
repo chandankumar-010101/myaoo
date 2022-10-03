@@ -169,9 +169,9 @@ class ConnectPageView extends StatelessWidget {
                                                 .chooseAUsername,
                                             hintStyle: const TextStyle(
                                                 color: Color(0x35204880)),
-                                            prefixIcon: SvgPicture.asset(
-                                              "assets/newAssets/userIcon.svg",
-                                              fit: BoxFit.scaleDown,
+                                            prefixIcon: const Icon(
+                                              Icons.person,
+                                              color: Colors.black,
                                             ),
                                             border: OutlineInputBorder(
                                               borderRadius:
