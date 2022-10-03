@@ -95,7 +95,7 @@ class SignupPageController extends State<SignupPage> {
           0,
         );
         print("look at me");
-        print( Matrix.of(context).currentThreepidCreds);
+        print(Matrix.of(context).currentThreepidCreds);
 
       }
 
