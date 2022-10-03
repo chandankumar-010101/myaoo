@@ -15,6 +15,8 @@ import '../../model/class_detail_model.dart';
 import '../../services/services.dart';
 import '../../widgets/matrix.dart';
 
+import 'package:universal_html/html.dart' as html;
+
 class RequestScreenView extends StatefulWidget {
   final RequestScreenState controller;
 
@@ -37,6 +39,9 @@ class _RequestScreenViewState extends State<RequestScreenView> {
 
     final String roomAlias = VRouter.of(context).queryParameters['id'] ?? "";
     widget.controller.classController.isUserExist(roomAlias);
+   // final String initial_url = kIsWeb ? html.window.origin! : ;
+    bool isStaging =  Environment.frontendURL.contains("staging");
+
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -372,7 +377,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                widget.controller.fetchFlag2(data, url),
+                                isStaging? widget.controller.fetchFlag2(data, url): widget.controller.fetchFlag(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),
@@ -404,7 +409,7 @@ class _RequestScreenViewState extends State<RequestScreenView> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                widget.controller.fetchFlag(data, url),
+                                isStaging? widget.controller.fetchFlag(data, url): widget.controller.fetchFlag2(data, url),
                                 const SizedBox(
                                   width: 5,
                                 ),

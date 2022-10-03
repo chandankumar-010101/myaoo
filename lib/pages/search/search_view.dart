@@ -78,6 +78,8 @@ class _SearchViewState extends State<SearchView> {
       widget.controller.lastServer = server;
       widget.controller.publicRoomsResponse = null;
     }
+    bool isStaging =  Environment.frontendURL.contains("staging");
+
     widget.controller.publicRoomsResponse ??= Matrix.of(context)
         .client
         .queryPublicRooms(
@@ -475,7 +477,11 @@ class _SearchViewState extends State<SearchView> {
                                     Row(
                                       children: [
                                         const Spacer(),
-                                        fetchFlag(url, i),
+                                        isStaging? fetchFlag(url, i): Avatar(
+                        mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
+                        name: "publicRoomsResponse.chunk[i].name",
+                        size: 15,
+                        ),
                                         const SizedBox(
                                           width: 5.0,
                                         ),
@@ -483,11 +489,11 @@ class _SearchViewState extends State<SearchView> {
                                         const SizedBox(
                                           width: 5.0,
                                         ),
-                                        Avatar(
+                                        isStaging?  Avatar(
                                           mxContent: Uri.parse(url + "${searchController.classList[i].flags![0].languageFlag}"),
                                           name: "publicRoomsResponse.chunk[i].name",
                                           size: 15,
-                                        ),
+                                        ):fetchFlag(url, i),
                                         const Spacer(),
                                         Text("free",
                                             style: TextStyle().copyWith(

@@ -19,6 +19,8 @@ import '../../widgets/matrix.dart';
 import '../chat_list/spaces_entry.dart';
 import 'package:matrix/matrix.dart' as sdk;
 
+import 'package:universal_html/html.dart' as html;
+
 class ConfirmExchange extends StatefulWidget {
   const ConfirmExchange({Key? key}) : super(key: key);
 
@@ -166,7 +168,8 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
     final String basePath = Environment.baseAPI;
     final List<String> data = basePath.split("/api/v1");
     final String url = data[0];
-
+    //final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
+    bool isStaging =  Environment.frontendURL.contains("staging");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -505,7 +508,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(children: [
-                                        fetchFlag2(data, url),
+                                        isStaging?fetchFlag2(data, url):fetchFlag(data, url),
                                         const SizedBox(
                                           width: 5,
                                         ),
@@ -536,7 +539,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        fetchFlag(data, url),
+                                        isStaging?fetchFlag(data, url):fetchFlag2(data, url),
                                         const SizedBox(
                                           width: 5,
                                         ),
