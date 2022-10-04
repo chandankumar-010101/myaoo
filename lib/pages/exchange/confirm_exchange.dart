@@ -35,7 +35,8 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
       List<String> listOfParticipants = [];
       final client = Matrix.of(context).client;
       if (senderId == client.userID) {
-        PangeaControllers.toastMsg(msg: "You don't have permission for this action.",success: false);
+        PangeaControllers.toastMsg(
+            msg: "You don't have permission for this action.", success: false);
         return null;
       }
       final FetchClassParticipants data =
@@ -65,22 +66,24 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
       final FetchClassInfoModel receiverClassInfo =
           await PangeaServices.fetchClassInfo(context, receiverClassId);
 
-      final String className = receiverClassInfo.className +
-          " - " +
-          senderClassInfo.className;
-      final String city = receiverClassInfo.city.isNotEmpty?
-      senderClassInfo.city.isNotEmpty?
-      "${receiverClassInfo.city} - ${senderClassInfo.city}": receiverClassInfo.city:
-      senderClassInfo.city;
-      final String country = receiverClassInfo.country.isNotEmpty?
-      senderClassInfo.country.isNotEmpty?
-      "${receiverClassInfo.country} - ${senderClassInfo.country}": receiverClassInfo.country:
-      senderClassInfo.country;
+      final String className =
+          receiverClassInfo.className + " - " + senderClassInfo.className;
+      final String city = receiverClassInfo.city.isNotEmpty
+          ? senderClassInfo.city.isNotEmpty
+              ? "${receiverClassInfo.city} - ${senderClassInfo.city}"
+              : receiverClassInfo.city
+          : senderClassInfo.city;
+      final String country = receiverClassInfo.country.isNotEmpty
+          ? senderClassInfo.country.isNotEmpty
+              ? "${receiverClassInfo.country} - ${senderClassInfo.country}"
+              : receiverClassInfo.country
+          : senderClassInfo.country;
 
-      final String school = receiverClassInfo.schoolName.isNotEmpty?
-      senderClassInfo.schoolName.isNotEmpty?
-      "${receiverClassInfo.schoolName} - ${senderClassInfo.schoolName}": receiverClassInfo.schoolName:
-      senderClassInfo.schoolName;
+      final String school = receiverClassInfo.schoolName.isNotEmpty
+          ? senderClassInfo.schoolName.isNotEmpty
+              ? "${receiverClassInfo.schoolName} - ${senderClassInfo.schoolName}"
+              : receiverClassInfo.schoolName
+          : senderClassInfo.schoolName;
 
       String exchangeId = await client.createRoom(
         preset: sdk.CreateRoomPreset.publicChat,
@@ -169,7 +172,7 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
     final List<String> data = basePath.split("/api/v1");
     final String url = data[0];
     //final String initial_url = kIsWeb ? html.window.origin! : Environment.frontendURL;
-    bool isStaging =  Environment.frontendURL.contains("staging");
+    bool isStaging = Environment.frontendURL.contains("staging");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -233,9 +236,14 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                                 Theme.of(context).primaryColor,
                                           ),
                                     decoration: BoxDecoration(
-                                        border: Border.all(color:  Theme.of(context).colorScheme.onPrimary == Colors.white
-                                            ? Colors.black
-                                            : Colors.white, width: 2.0),
+                                        border: Border.all(
+                                            color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary ==
+                                                    Colors.white
+                                                ? Colors.black
+                                                : Colors.white,
+                                            width: 2.0),
                                         shape: BoxShape.circle),
                                   ),
                                   Positioned(
@@ -245,8 +253,11 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                         padding: const EdgeInsets.all(2.0),
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Theme.of(context).colorScheme.onPrimary,
-                                            border: Border.all(color: Colors.white, width: 2)),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                            border: Border.all(
+                                                color: Colors.white, width: 2)),
                                         child: const Icon(
                                           Icons.school,
                                           size: 15.0,
@@ -261,50 +272,54 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  data.className.isNotEmpty?
-                                  Row(
-                                    children: [
-
-                                      Icon(
-                                        Icons.school,
-                                        color: Colors.black,
-                                        size: 15.0,
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        data.className.capitalizeFirst!,
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      )
-
-                                    ],
-                                  ):Container(),
-                                  data.classAuthor.isNotEmpty?
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.person,
-                                        color: Colors.black,
-                                        size: 15.0,
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        data.classAuthor.capitalizeFirst.toString(),
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: 15),
-                                      ),
-                                    ],
-                                  ):Container(),
-
+                                  data.className.isNotEmpty
+                                      ? Row(
+                                          children: [
+                                            Icon(
+                                              Icons.school,
+                                              color: Colors.black,
+                                              size: 15.0,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              data.className.capitalizeFirst!,
+                                              style: const TextStyle().copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        )
+                                      : Container(),
+                                  data.classAuthor.isNotEmpty
+                                      ? Row(
+                                          children: [
+                                            Icon(
+                                              Icons.person,
+                                              color: Colors.black,
+                                              size: 15.0,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              data.classAuthor.capitalizeFirst
+                                                  .toString(),
+                                              style: const TextStyle().copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontSize: 15),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -315,34 +330,42 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                             .onPrimaryContainer,
                                         size: 20.0,
                                       ),
-                                      data.city.isNotEmpty?
-                                      Text(
-                                        data.city.capitalizeFirst!,
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: 12),
-                                      ):Container(),
-                                      data.country.isNotEmpty?data.city.isNotEmpty?
-                                      Text(
-                                        " , ${data.country.capitalizeFirst}",
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: 12),
-                                      ):Text(
-                                        "${data.country.capitalizeFirst}",
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: 12),
-                                      ):Container()
+                                      data.city.isNotEmpty
+                                          ? Text(
+                                              data.city.capitalizeFirst!,
+                                              style: const TextStyle().copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .color,
+                                                  fontSize: 12),
+                                            )
+                                          : Container(),
+                                      data.country.isNotEmpty
+                                          ? data.city.isNotEmpty
+                                              ? Text(
+                                                  " , ${data.country.capitalizeFirst}",
+                                                  style: const TextStyle()
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color,
+                                                          fontSize: 12),
+                                                )
+                                              : Text(
+                                                  "${data.country.capitalizeFirst}",
+                                                  style: const TextStyle()
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color,
+                                                          fontSize: 12),
+                                                )
+                                          : Container()
                                     ],
                                   ),
                                 ],
@@ -508,12 +531,15 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(children: [
-                                        isStaging?fetchFlag2(data, url):fetchFlag(data, url),
+                                        isStaging
+                                            ? fetchFlag2(data, url)
+                                            : fetchFlag(data, url),
                                         const SizedBox(
                                           width: 5,
                                         ),
                                         Text(
-                                          data.targetLanguage,
+                                          data.targetLanguage.capitalizeFirst ??
+                                              "",
                                           style: const TextStyle().copyWith(
                                               color: Theme.of(context)
                                                   .textTheme
@@ -522,11 +548,9 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                               fontWeight: FontWeight.w400,
                                               fontSize: 14),
                                         ),
-
                                         const SizedBox(
                                           width: 10,
                                         ),
-
                                         Icon(
                                           Icons.arrow_right_alt_outlined,
                                           size: 20,
@@ -535,16 +559,19 @@ class _ConfirmExchangeState extends State<ConfirmExchange> {
                                               .bodyText1!
                                               .color,
                                         ),
-
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        isStaging?fetchFlag(data, url):fetchFlag2(data, url),
+                                        isStaging
+                                            ? fetchFlag(data, url)
+                                            : fetchFlag2(data, url),
                                         const SizedBox(
                                           width: 5,
                                         ),
                                         Text(
-                                          data.dominantLanguage,
+                                          data.dominantLanguage
+                                                  .capitalizeFirst ??
+                                              "",
                                           style: const TextStyle().copyWith(
                                               color: Theme.of(context)
                                                   .textTheme

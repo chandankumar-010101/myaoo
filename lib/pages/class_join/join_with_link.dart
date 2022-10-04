@@ -20,7 +20,6 @@ class JoinClassWithLink extends StatefulWidget {
 class _JoinClassWithLinkState extends State<JoinClassWithLink> {
   String classCode = "";
 
-
   storeData() {
     if (classCode.isNotEmpty) {
       final box = GetStorage();
@@ -29,30 +28,27 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
         VRouter.of(context).to('/home');
       });
     } else {
-
       PangeaControllers.toastMsg(msg: "Unable to find class code");
-      }
+    }
   }
+
   joinTheClass(String classId) async {
-    final int? usertype =  GetStorage().read("usertype");
-    if( usertype !=null && usertype !=2){
+    final int? usertype = GetStorage().read("usertype");
+    if (usertype != null && usertype != 2) {
       final bool? exist = await PangeaServices.userExitInClass(classId);
-      if(exist !=null && !exist){
+      if (exist != null && !exist) {
         PangeaServices.joinClass(context, classId);
-      }else{
+      } else {
         PangeaControllers.toastMsg(msg: "You are already a part of this class");
       }
-    }else{
+    } else {
       PangeaControllers.toastMsg(msg: "Teacher are not allowed to join class");
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     classCode = VRouter.of(context).queryParameters['code'] ?? "";
-
 
     if (Matrix.of(context).client.loginState == LoginState.loggedOut) {
       storeData();
@@ -97,13 +93,12 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        const SizedBox(
-                        ),
+                        const SizedBox(),
                         const Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Text(
-                            "By pressing Join you will be added to the class",
+                            "By clicking Join Class you will be added to the class.",
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -123,14 +118,12 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
                     ),
                   ),
                 );
-              }
-              else if (snapshot.hasError) {
+              } else if (snapshot.hasError) {
                 if (kDebugMode) {
                   print(snapshot.error);
                 }
                 return CircularProgressIndicator();
-              }
-              else {
+              } else {
                 return const CircularProgressIndicator();
               }
             },
@@ -138,6 +131,5 @@ class _JoinClassWithLinkState extends State<JoinClassWithLink> {
         );
       }
     }
-
   }
 }
