@@ -60,12 +60,11 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final reversed = !_animationReversed();
 
-   // List<User> peoplerooms = widget.controller.chatListController.participants;
+    // List<User> peoplerooms = widget.controller.chatListController.participants;
 
     final rooms = widget.controller.activeSpacesEntry.getRooms(context);
     final inviteRooms =
@@ -204,171 +203,197 @@ class _ChatListViewBodyState extends State<ChatListViewBody> {
                 )
               : Container(),
           ExpansionPanelList(
-            expandedHeaderPadding: EdgeInsets.all(8),
-            elevation: 2,
-            animationDuration: Duration(milliseconds: 400),
-            expansionCallback: (panelIndex, isExpanded) =>
-             setState(() {
-                        if (panelIndex == 0) {
-                          isPeopleExpanded = !isExpanded;
-                          isInvitationExpanded = false;
-                          isRoomExpanded = false;
-                        }
-                        if (panelIndex == 1) {
-                          isRoomExpanded = !isExpanded;
-                          isPeopleExpanded = false;
-                          isInvitationExpanded = false;
-                        }
-                      }),
-
-            children:<ExpansionPanel>[
-              ExpansionPanel(
-                canTapOnHeader: true,
-                isExpanded: isPeopleExpanded,
-                headerBuilder: ((context, isExpanded) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        "People",
-                      ),
-                    ),
-                  ],
-                )),
-                body:Obx(()=> widget.controller.chatListController.participants.value.isEmpty  ? const SizedBox(
-                  height: 200,
-                  child: Center(
-                      child: Text(" No Participants in class",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500))),
-                )
-                    : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  key: ValueKey(Matrix.of(context)
-                      .client
-                      .userID
-                      .toString() +
-                      widget.controller.activeSpaceId.toString() +
-                      widget
-                          .controller.activeSpacesEntry.runtimeType
-                          .toString()),
-                  controller: widget.controller.scrollController,
-                  // add +1 space below in order to properly scroll below the spaces bar
-                  itemCount: widget.controller.chatListController.participants.value.length +
-                      (displayStoriesHeader ? 2 : 1),
-                  itemBuilder: (BuildContext context, int i) {
-
-                    if (i >= widget.controller.chatListController.participants.value.length) {
-                      return Container();
+              expandedHeaderPadding: EdgeInsets.all(8),
+              elevation: 2,
+              animationDuration: Duration(milliseconds: 400),
+              expansionCallback: (panelIndex, isExpanded) => setState(() {
+                    if (panelIndex == 0) {
+                      isPeopleExpanded = !isExpanded;
+                      isInvitationExpanded = false;
+                      isRoomExpanded = false;
                     }
-
-                    return PeopleListItem(widget.controller.chatListController.participants.value[i],
-                        selected: widget.controller.selectedRoomIds
-                            .contains(widget.controller.chatListController.participants.value[i].id),
-                        onTap: () async {
-                          if (widget.controller.userType == 2) {
-                            widget.controller.createOneToOneRooms(widget.controller.chatListController.participants.value[i]);
-                          }
-                          else if (widget.controller.chatListController.permissions.value!.oneToOneChatClass) {
-                            widget.controller.createOneToOneRooms(widget.controller.chatListController.participants.value[i],);
-                          } else {
-                            PangeaControllers.toastMsg(
-                                msg:
-                                "Not allowed to create private chat");
-                          }
-                        });
-                  },
-                )),
-              ),
-              ExpansionPanel(
-                canTapOnHeader: true,
-                isExpanded: isRoomExpanded,
-                headerBuilder: ((context, isExpanded) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        "Rooms",
-                        // Todo: Style needs to be updated
-                      ),
-                    ),
-                    widget.controller.userType ==2?IconButton(
-                        onPressed: () {
-                          widget.controller.activeSpacesEntry.getSpace(context) == null
-                              ? VRouter.of(context).to('/newroom')
-                              : VRouter.of(context).to('/newroom', queryParameters: {
-                            "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
-                          });
-                        },
-                        icon: const Icon(Icons.add)):Obx(()=>widget.controller.chatListController.permissions.value!.isCreateRooms?
-                    IconButton(
-                        onPressed: () {
-                          widget.controller.activeSpacesEntry.getSpace(context) == null
-                              ? VRouter.of(context).to('/newroom')
-                              : VRouter.of(context).to('/newroom', queryParameters: {
-                            "spaceId": widget.controller.activeSpacesEntry.getSpace(context)!.id,
-                          });
-                        },
-                        icon: const Icon(Icons.add)):Container()),
-
-                  ],
-                )),
-                body: rooms.length == 0
-                    ? Container(
-                  height: 200,
-                  child: Center(
-                      child: Text(" No Rooms in class",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500))),
-                )
-                    : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  key: ValueKey(Matrix.of(context)
-                      .client
-                      .userID
-                      .toString() +
-                      widget.controller.activeSpaceId.toString() +
-                      widget
-                          .controller.activeSpacesEntry.runtimeType
-                          .toString()),
-                  controller: widget.controller.scrollController,
-                  // add +1 space below in order to properly scroll below the spaces bar
-                  itemCount:
-                  rooms.length + (displayStoriesHeader ? 2 : 1),
-                  itemBuilder: (BuildContext context, int i) {
-                    if (i >= rooms.length) {
-                      return Container();
+                    if (panelIndex == 1) {
+                      isRoomExpanded = !isExpanded;
+                      isPeopleExpanded = false;
+                      isInvitationExpanded = false;
                     }
-                    if (rooms[i].id.isEmpty) {
-                      return Container();
-                    }
-                    return ChatListItem(
-                      rooms[i],
-                      selected: widget.controller.selectedRoomIds
-                          .contains(rooms[i].id),
-                      onTap: widget.controller.selectMode ==
-                          SelectMode.select
-                          ? () => widget.controller
-                          .toggleSelection(rooms[i].id)
-                          : null,
-                      onLongPress: () => widget.controller
-                          .toggleSelection(rooms[i].id),
-                      activeChat: widget.controller.activeChat ==
-                          rooms[i].id,
-                    );
-                  },
+                  }),
+              children: <ExpansionPanel>[
+                ExpansionPanel(
+                  canTapOnHeader: true,
+                  isExpanded: isPeopleExpanded,
+                  headerBuilder: ((context, isExpanded) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              "People",
+                            ),
+                          ),
+                        ],
+                      )),
+                  body: Obx(() => widget.controller.chatListController
+                          .participants.value.isEmpty
+                      ? const SizedBox(
+                          height: 200,
+                          child: Center(
+                              child: Text(" No participants in class",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500))),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          key: ValueKey(Matrix.of(context)
+                                  .client
+                                  .userID
+                                  .toString() +
+                              widget.controller.activeSpaceId.toString() +
+                              widget.controller.activeSpacesEntry.runtimeType
+                                  .toString()),
+                          controller: widget.controller.scrollController,
+                          // add +1 space below in order to properly scroll below the spaces bar
+                          itemCount: widget.controller.chatListController
+                                  .participants.value.length +
+                              (displayStoriesHeader ? 2 : 1),
+                          itemBuilder: (BuildContext context, int i) {
+                            if (i >=
+                                widget.controller.chatListController
+                                    .participants.value.length) {
+                              return Container();
+                            }
+
+                            return PeopleListItem(
+                                widget.controller.chatListController
+                                    .participants.value[i],
+                                selected: widget.controller.selectedRoomIds
+                                    .contains(widget
+                                        .controller
+                                        .chatListController
+                                        .participants
+                                        .value[i]
+                                        .id), onTap: () async {
+                              if (widget.controller.userType == 2) {
+                                widget.controller.createOneToOneRooms(widget
+                                    .controller
+                                    .chatListController
+                                    .participants
+                                    .value[i]);
+                              } else if (widget.controller.chatListController
+                                  .permissions.value!.oneToOneChatClass) {
+                                widget.controller.createOneToOneRooms(
+                                  widget.controller.chatListController
+                                      .participants.value[i],
+                                );
+                              } else {
+                                PangeaControllers.toastMsg(
+                                    msg: "Not allowed to create private chat");
+                              }
+                            });
+                          },
+                        )),
                 ),
-              ),
-            ]
-          ),
+                ExpansionPanel(
+                  canTapOnHeader: true,
+                  isExpanded: isRoomExpanded,
+                  headerBuilder: ((context, isExpanded) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              "Chats",
+                              // Todo: Style needs to be updated
+                            ),
+                          ),
+                          widget.controller.userType == 2
+                              ? IconButton(
+                                  onPressed: () {
+                                    widget.controller.activeSpacesEntry
+                                                .getSpace(context) ==
+                                            null
+                                        ? VRouter.of(context).to('/newroom')
+                                        : VRouter.of(context)
+                                            .to('/newroom', queryParameters: {
+                                            "spaceId": widget
+                                                .controller.activeSpacesEntry
+                                                .getSpace(context)!
+                                                .id,
+                                          });
+                                  },
+                                  icon: const Icon(Icons.add))
+                              : Obx(() => widget.controller.chatListController
+                                      .permissions.value!.isCreateRooms
+                                  ? IconButton(
+                                      onPressed: () {
+                                        widget.controller.activeSpacesEntry
+                                                    .getSpace(context) ==
+                                                null
+                                            ? VRouter.of(context).to('/newroom')
+                                            : VRouter.of(context).to('/newroom',
+                                                queryParameters: {
+                                                    "spaceId": widget.controller
+                                                        .activeSpacesEntry
+                                                        .getSpace(context)!
+                                                        .id,
+                                                  });
+                                      },
+                                      icon: const Icon(Icons.add))
+                                  : Container()),
+                        ],
+                      )),
+                  body: rooms.length == 0
+                      ? Container(
+                          height: 200,
+                          child: Center(
+                              child: Text(" No chats in class",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500))),
+                        )
+                      : ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          key: ValueKey(Matrix.of(context)
+                                  .client
+                                  .userID
+                                  .toString() +
+                              widget.controller.activeSpaceId.toString() +
+                              widget.controller.activeSpacesEntry.runtimeType
+                                  .toString()),
+                          controller: widget.controller.scrollController,
+                          // add +1 space below in order to properly scroll below the spaces bar
+                          itemCount:
+                              rooms.length + (displayStoriesHeader ? 2 : 1),
+                          itemBuilder: (BuildContext context, int i) {
+                            if (i >= rooms.length) {
+                              return Container();
+                            }
+                            if (rooms[i].id.isEmpty) {
+                              return Container();
+                            }
+                            return ChatListItem(
+                              rooms[i],
+                              selected: widget.controller.selectedRoomIds
+                                  .contains(rooms[i].id),
+                              onTap: widget.controller.selectMode ==
+                                      SelectMode.select
+                                  ? () => widget.controller
+                                      .toggleSelection(rooms[i].id)
+                                  : null,
+                              onLongPress: () => widget.controller
+                                  .toggleSelection(rooms[i].id),
+                              activeChat:
+                                  widget.controller.activeChat == rooms[i].id,
+                            );
+                          },
+                        ),
+                ),
+              ]),
           const SizedBox(
             height: 50,
           ),
