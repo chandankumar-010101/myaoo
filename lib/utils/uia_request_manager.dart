@@ -19,8 +19,8 @@ extension UiaRequestManager on MatrixState {
       //   print("stages");
       //   print(element);
       // });
-      // final stage = uiaRequest.nextStages.first;
-     final stage = uiaRequest.nextStages.elementAt(1);
+       final stage = uiaRequest.nextStages.first;
+    // final stage = uiaRequest.nextStages.elementAt(1);
       Logs().d('Uia Request Stage: $stage');
       switch (stage) {
         case AuthenticationTypes.password:
